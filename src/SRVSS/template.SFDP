@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<sfdp version="1.0">
+<scenario_feature type="topographic_map">
+	<distribution>uniform_int_discrete</distribution>
+	<dist_param_1>1</dist_param_1>
+	<dist_param_2>1</dist_param_2>
+</scenario_feature>
+<scenario_feature type="number_of_objects">
+	<distribution>uniform_int_discrete</distribution>
+	<dist_param_1>1</dist_param_1>
+	<dist_param_2>20</dist_param_2>
+</scenario_feature>
+<scenario_feature type="object_i_type">
+	<distribution>uniform_int_discrete</distribution>
+	<dist_param_1>1</dist_param_1>
+	<dist_param_2>2</dist_param_2>
+	<feature_dependency type="roll_number">number_of_objects</feature_dependency>
+</scenario_feature>
+<scenario_feature type="object_i_scaling_factor">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>0.7</dist_param_1>
+	<dist_param_2>1.3</dist_param_2>
+	<feature_dependency type="roll_number">number_of_objects</feature_dependency>
+</scenario_feature>
+<scenario_feature type="object_i_location_on_the_X_axis">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>0.05</dist_param_1>
+	<dist_param_2>0.95</dist_param_2>
+	<feature_dependency type="roll_number">number_of_objects</feature_dependency>
+</scenario_feature>
+<scenario_feature type="object_i_location_on_the_Y_axis">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>0.05</dist_param_1>
+	<dist_param_2>0.95</dist_param_2>
+	<feature_dependency type="roll_number">number_of_objects</feature_dependency>
+</scenario_feature>
+<scenario_feature type="object_i_location_on_the_Z_axis">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>-0.1</dist_param_1>
+	<dist_param_2>-0.03</dist_param_2>
+	<feature_dependency type="roll_number">number_of_objects</feature_dependency>
+</scenario_feature>
+<scenario_feature type="object_i_location_Roll">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>0</dist_param_1>
+	<dist_param_2>1</dist_param_2>
+	<feature_dependency type="roll_number">number_of_objects</feature_dependency>
+</scenario_feature>
+<scenario_feature type="object_i_location_Pitch">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>0</dist_param_1>
+	<dist_param_2>1</dist_param_2>
+	<feature_dependency type="roll_number">number_of_objects</feature_dependency>
+</scenario_feature>
+<scenario_feature type="object_i_location_Yaw">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>0</dist_param_1>
+	<dist_param_2>1</dist_param_2>
+	<feature_dependency type="roll_number">number_of_objects</feature_dependency>
+</scenario_feature>
+<scenario_feature type="number_of_light_sources">
+	<distribution>uniform_int_discrete</distribution>
+	<dist_param_1>1</dist_param_1>
+	<dist_param_2>5</dist_param_2>
+</scenario_feature>
+<scenario_feature type="light_source_i_type">
+	<distribution>uniform_int_discrete</distribution>
+	<dist_param_1>1</dist_param_1>
+	<dist_param_2>3</dist_param_2>
+	<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
+</scenario_feature>
+<scenario_feature type="light_source_i_location_on_the_X_axis">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>0.05</dist_param_1>
+	<dist_param_2>0.95</dist_param_2>
+	<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
+</scenario_feature>
+<scenario_feature type="light_source_i_location_on_the_Y_axis">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>0.05</dist_param_1>
+	<dist_param_2>0.95</dist_param_2>
+	<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
+</scenario_feature>
+<scenario_feature type="light_source_i_location_on_the_Z_axis">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>5</dist_param_1>
+	<dist_param_2>2</dist_param_2>
+	<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
+</scenario_feature>
+<scenario_feature type="light_source_i_range">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>40</dist_param_1>
+	<dist_param_2>5</dist_param_2>
+	<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
+</scenario_feature>
+<scenario_feature type="light_source_i_direction_on_X_axis">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>-0.5</dist_param_1>
+	<dist_param_2>0.5</dist_param_2>
+	<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
+</scenario_feature>
+<scenario_feature type="light_source_i_direction_on_Y_axis">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>-0.5</dist_param_1>
+	<dist_param_2>0.5</dist_param_2>
+	<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
+</scenario_feature>
+<scenario_feature type="light_source_i_light_cone">
+	<distribution>uniform_real_discrete</distribution>
+	<dist_param_1>0</dist_param_1>
+	<dist_param_2>90</dist_param_2>
+	<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
+</scenario_feature>
+</sfdp>
