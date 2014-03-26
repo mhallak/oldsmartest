@@ -13,11 +13,11 @@
 #include <map>
 #include <tinyxml.h>
 
-class ScenarioFeature;
-class ScenarioFeatureType;
-class ScenarioFeatureDistributionType;
-class NumberSampler;
-class SFVComponent;
+#include "SFDP/ScenarioFeatureGroup.h"
+#include "SFDP/ScenarioFeatureType.h"
+#include "ScenarioFeatureDistributionType.h"
+#include "utils/NumberSampler.h"
+#include "SFV/SFVComponent.h"
 
 /**
  * A data handling class.
@@ -31,18 +31,7 @@ class SDFPComponent {
 	 */
 	NumberSampler* m_sampler;
 
-	/**
-	 * A hash map.
-	 * Used for handling all the different features according to their type
-	 */
-	std::map<ScenarioFeatureType,ScenarioFeature*>* m_features;
-
-	/**
-	 * An auxiliary method to match features to their dependencies
-	* @see rollDice()
-	* @return returns true if dependencies are met and false otherwise
-	*/
-	bool sovleDependecies();
+	std::vector<ScenarioFeatureGroup*> *m_featureGroups;
 
 	/**
 	* An auxiliary method to sample a number according to the desired distribution
@@ -62,7 +51,7 @@ class SDFPComponent {
 	 * @see rollDice()
 	 * @see ScenarioFeature
 	 */
-	void rollForFeature(ScenarioFeature* feature,SFVComponent *sfvComp);
+	void rollForFeature(ScenarioFeature* feature,std::vector<RolledValue*> *groupFeatures);
 public:
 
 	/**
@@ -81,13 +70,20 @@ public:
 	 * @throw string exception is thrown if the feature is already in the list
 	 * @see ScenarioFeature
 	 */
-	void addScenarioFeature (ScenarioFeature *feature) throw (std::string);
+	void addScenarioFeatureGroup (ScenarioFeatureGroup *featureGroup) throw (std::string);
 
 	/**
 	 * generate a SFVObject by rolling all the features according to their dependencies
 	 * @return a SFVObject
 	 */
 	SFVComponent* rollDice();
+
+	/**
+	 * An auxiliary method to match features to their dependencies
+	* @see rollDice()
+	* @return returns true if dependencies are met and false otherwise
+	*/
+	bool sovleDependecies() throw (std::string);
 };
 
 #endif /* SDFPCOMPONENT_H_ */

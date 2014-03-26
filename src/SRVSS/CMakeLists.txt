@@ -36,6 +36,7 @@ add_library(NumberSampler src/utils/NumberSampler.cpp)
 add_library(ScenarioFeatureDependecyType src/SFDP/ScenarioFeatureDependecyType.cpp)
 add_library(ScenarioFeatureDistributionType src/SFDP/ScenarioFeatureDistributionType.cpp)
 add_library(ScenarioFeatureType src/SFDP/ScenarioFeatureType.cpp)
+add_library(ScenarioFeatureGroupType src/SFDP/ScenarioFeatureGroupType.cpp)
 add_library(ScenarioFeature src/SFDP/ScenarioFeature.cpp)
 
 add_library(ScenarioFeatureDependecy src/SFDP/ScenarioFeatureDependecy.cpp)
@@ -56,6 +57,7 @@ target_link_libraries(SDFPComponent ${catkin_LIBRARIES}
 ScenarioFeatureDependecyType
 ScenarioFeatureDistributionType
 ScenarioFeatureType
+ScenarioFeatureGroupType
 ScenarioFeature
 ScenarioFeatureDependecy
 NumberSampler

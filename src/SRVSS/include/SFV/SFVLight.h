@@ -7,8 +7,10 @@
 
 #ifndef SFVLIGHT_H_
 #define SFVLIGHT_H_
+#include "SFV/SFVInterface.h"
+#include "utils/ParsableInterface.h"
 
-class SFVLight {
+class SFVLight : public SFVInterface , public ParsableInterface{
 
 	int m_Id;
 	int m_Type;
@@ -22,6 +24,9 @@ class SFVLight {
 public:
 	SFVLight();
 	virtual ~SFVLight();
+	void setRolledValue(RolledValue * value);
+	TiXmlElement *toXMLElement();
+	void fromXMLElement(TiXmlElement * node);
 
 	double getCone() const;
 	void setCone(double cone);

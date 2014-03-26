@@ -61,7 +61,24 @@ public:
 		light_source_i_range,
 		light_source_i_direction_on_X_axis,
 		light_source_i_direction_on_Y_axis,
-		light_source_i_light_cone
+		light_source_i_light_cone,
+		mass_link_i_mass,
+		mass_link_i_inertia_Ixx_component,
+		mass_link_i_inertia_Iyy_component,
+		mass_link_i_inertia_Izz_component,
+		mass_link_i_location_deviation_X,
+		mass_link_i_location_deviation_Y,
+		mass_link_i_location_deviation_Z,
+		mass_link_i_location_deviation_Roll,
+		mass_link_i_location_deviation_Pitch,
+		mass_link_i_location_deviation_Yaw,
+		friction_link_friction_deviation,
+		sensor_link_i_location_deviation_X,
+		sensor_link_i_location_deviation_Y,
+		sensor_link_i_location_deviation_Z,
+		sensor_link_i_location_deviation_Roll,
+		sensor_link_i_location_deviation_Pitch,
+		sensor_link_i_location_deviation_Yaw
 	};
 
 	/**

@@ -6,65 +6,75 @@
  */
 
 #include "SFDP/SDFPComponent.h"
-#include "SFDP/ScenarioFeature.h"
-#include "SFV/SFVComponent.h"
-#include "utils/NumberSampler.h"
 #include <iostream>
 #include <sstream>
 
 SDFPComponent::SDFPComponent()
 {
-	m_features=new std::map<ScenarioFeatureType,ScenarioFeature*>;
 	m_sampler=new NumberSampler;
+	m_featureGroups=new std::vector<ScenarioFeatureGroup*>;
 }
 
 
 
 SDFPComponent::~SDFPComponent()
 {
-	for (std::map<ScenarioFeatureType,ScenarioFeature *>::iterator it=m_features->begin();
-																			it!=m_features->end();
-																								++it)
-	{
-		delete it->second;
-	}
-	delete m_features;
 	delete m_sampler;
 }
 
 
-void SDFPComponent::addScenarioFeature (ScenarioFeature *feature) throw (std::string)
+void SDFPComponent::addScenarioFeatureGroup (ScenarioFeatureGroup *feature) throw (std::string)
 {
-	std::map<ScenarioFeatureType,ScenarioFeature *>::iterator it;
+	m_featureGroups->push_back(feature);
+	/*std::map<ScenarioFeatureType,ScenarioFeature *>::iterator it;
 	it=m_features->find(feature->get_featureType());
 	if(it != m_features->end())
 		throw std::string("multiple instances of the same feature\n");
 
-	m_features->insert(std::pair<ScenarioFeatureType,ScenarioFeature *>(feature->get_featureType(),feature) );
+	m_features->insert(std::pair<ScenarioFeatureType,ScenarioFeature *>(feature->get_featureType(),feature) );*/
 }
 
-bool SDFPComponent::sovleDependecies()
+bool SDFPComponent::sovleDependecies() throw (std::string)
 {
-	bool flag=true;
-
-	for (std::map<ScenarioFeatureType,ScenarioFeature *>::iterator it1=m_features->begin();
-																		it1!=m_features->end();
-																							++it1)
+	for(size_t j=0;j<m_featureGroups->size();j++)
 	{
-		for (size_t i=0;i<it1->second->get_featureDependecies()->size();i++)
+		//load group features into a hashmap
+		std::map<ScenarioFeatureType,ScenarioFeature *> * features=new std::map<ScenarioFeatureType,ScenarioFeature *>;
+		std::vector<ScenarioFeature *>::iterator vec_it;
+		for(vec_it=m_featureGroups->at(j)->get_features()->begin();vec_it!=m_featureGroups->at(j)->get_features()->end();vec_it++)
 		{
 			std::map<ScenarioFeatureType,ScenarioFeature *>::iterator it;
-			it=m_features->find(it1->second->get_featureDependecies()->at(i)->get_supportingFeatureType());
-			if(it != m_features->end()){
-				it1->second->set_supportingFeature(it->second);
-			}else
+			it=features->find((*vec_it)->get_featureType());
+			if(it != features->end())
+				throw std::string("multiple instances of the same feature in the same group\n");
+
+			features->insert(std::pair<ScenarioFeatureType,ScenarioFeature *>((*vec_it)->get_featureType(),*vec_it) );
+		}
+
+		bool flag=true;
+
+		for (std::map<ScenarioFeatureType,ScenarioFeature *>::iterator it1=features->begin();
+																			it1!=features->end();
+																								++it1)
+		{
+			for (size_t i=0;i<it1->second->get_featureDependecies()->size();i++)
 			{
-				flag=false;
-				break;
+				std::map<ScenarioFeatureType,ScenarioFeature *>::iterator it;
+				it=features->find(it1->second->get_featureDependecies()->at(i)->get_supportingFeatureType());
+				if(it != features->end()){
+					it1->second->set_supportingFeature(it->second);
+				}else
+				{
+					throw std::string(ScenarioFeatureType::toString(it1->second->get_featureType())+" in group " +m_featureGroups->at(j)->get_name() +" dependencies not met\n");
+					flag=false;
+					break;
+				}
 			}
 		}
+		if(flag==false)
+			return false;
 	}
-	return flag;
+	return true;
 }
 
 
@@ -86,7 +96,7 @@ float SDFPComponent::rollForDistType(ScenarioFeatureDistributionType distType,fl
 }
 
 
-void SDFPComponent::rollForFeature(ScenarioFeature* feature,SFVComponent *sfvComp)
+void SDFPComponent::rollForFeature(ScenarioFeature* feature,std::vector<RolledValue*> *groupFeatures)
 {
 	int rollingNumber=1;
 	float distParam1=feature->get_dist_param_1();
@@ -102,7 +112,7 @@ void SDFPComponent::rollForFeature(ScenarioFeature* feature,SFVComponent *sfvCom
 		{
 			if(!(*iter)->get_supportingFeature()->isCalculated())
 			{
-				rollForFeature((*iter)->get_supportingFeature(),sfvComp);
+				rollForFeature((*iter)->get_supportingFeature(),groupFeatures);
 			}
 			switch((*iter)->get_dependecyType()._type)
 			{
@@ -130,15 +140,20 @@ void SDFPComponent::rollForFeature(ScenarioFeature* feature,SFVComponent *sfvCom
 					}
 					break;
 				case ScenarioFeatureDependecyType::unknown_dependecy:
-					throw std::string("unknown feature dependecy cannot be handled");
+					throw std::string("unknown feature dependency cannot be handled");
 			}
 		}
 	}
 	for(int i=0;i<rollingNumber;i++){
 		float res=rollForDistType(feature->get_distType(),feature->get_dist_param_1(),feature->get_dist_param_2());
 		feature->set_rolledValue(res);
-		sfvComp->addRolledValue(feature->get_featureType(),res,i);
-		//std::cout<<feature->get_featureType()<<"_"<< feature->get_group()<<i<<" value:"<<res<<std::endl;
+		RolledValue* result=new RolledValue;
+		result->setRollNumber(i);
+		result->setValue(res);
+		result->setType(feature->get_featureType());
+		groupFeatures->push_back(result);
+		//sfvComp->addRolledValue(group->get_name(),feature->get_featureType(),res,i);
+		//std::cout<<feature->get_featureType()<<"_"<< group->get_name()<<i<<" value:"<<res<<std::endl;
 	}
 }
 
@@ -151,21 +166,30 @@ SFVComponent* SDFPComponent::rollDice()
 		throw std::string("not all feature dependencies are met");
 	}
 
-	for (std::map<ScenarioFeatureType,ScenarioFeature *>::iterator it=m_features->begin();
-																		it!=m_features->end();
-																							++it)
+	for (std::vector<ScenarioFeatureGroup*>::iterator group_it=m_featureGroups->begin();
+			group_it!=m_featureGroups->end();
+			group_it++)
 	{
-		it->second->reset();
-	}
+		std::vector<RolledValue*> * groupFeatures=new std::vector<RolledValue*>;
 
-	for (std::map<ScenarioFeatureType,ScenarioFeature *>::iterator it=m_features->begin();
-																		it!=m_features->end();
-																							++it)
-	{
-		if(!it->second->isCalculated())
+		for (std::vector<ScenarioFeature*>::iterator feature_it=(*group_it)->get_features()->begin();
+				feature_it!=(*group_it)->get_features()->end();
+				feature_it++)
 		{
-			rollForFeature(it->second,sfvComp);
+			(*feature_it)->reset();
 		}
+
+		for (std::vector<ScenarioFeature*>::iterator feature_it=(*group_it)->get_features()->begin();
+				feature_it!=(*group_it)->get_features()->end();
+				feature_it++)
+		{
+			if(!(*feature_it)->isCalculated())
+			{
+				rollForFeature((*feature_it),groupFeatures);
+			}
+		}
+
+		sfvComp->addRolledValues((*group_it),groupFeatures);
 	}
 
 	return sfvComp;

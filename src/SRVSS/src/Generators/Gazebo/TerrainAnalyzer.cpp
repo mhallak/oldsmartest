@@ -5,7 +5,7 @@
  *      Author: userws1
  */
 
-#include "Generators/TerrainAnalyzer.h"
+#include "Generators/Gazebo/TerrainAnalyzer.h"
 
 #include <opencv2/highgui/highgui.hpp>
 #include <fstream>

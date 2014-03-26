@@ -6,8 +6,6 @@
  */
 
 #include "SFDP/ScenarioFeatureDependecy.h"
-#include "SFDP/ScenarioFeatureDependecyType.h"
-#include "SFDP/ScenarioFeatureType.h"
 
 
 ScenarioFeatureDependecy::ScenarioFeatureDependecy():
