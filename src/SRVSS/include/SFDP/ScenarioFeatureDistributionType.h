@@ -16,7 +16,11 @@ public:
 	enum ScenarioFeatureDistributionTypeE{
 		unknown_distribution,
 		uniform_int_discrete,
-		uniform_real_discrete
+		uniform_real_discrete,
+		uniform_int_continuous,
+		uniform_real_continuous,
+		normal_int_continuous,
+		normal_real_continuous
 	};
 
 

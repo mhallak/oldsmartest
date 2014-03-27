@@ -9,7 +9,7 @@
 #define SDFPPARSER_H_
 #include <string>
 
-class SDFPComponent;
+#include "SDFPComponent.h"
 
 /**
  * An object generator class.

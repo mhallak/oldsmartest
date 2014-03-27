@@ -16,6 +16,22 @@ ScenarioFeatureDistributionType ScenarioFeatureDistributionType::stringToDistrib
 	{
 		return uniform_real_discrete;
 	}
+	else if(val.compare("uniform_int_continuous")==0)
+	{
+		return uniform_int_continuous;
+	}
+	else if(val.compare("uniform_real_continuous")==0)
+	{
+		return uniform_real_continuous;
+	}
+	else if(val.compare("normal_int_continuous")==0)
+	{
+		return normal_int_continuous;
+	}
+	else if(val.compare("normal_real_continuous")==0)
+	{
+		return normal_real_continuous;
+	}
 	else
 		throw val+"is an unknown distribution type!";
 }

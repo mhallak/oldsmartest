@@ -7,8 +7,10 @@
 
 #ifndef SFVOBJECT_H_
 #define SFVOBJECT_H_
+#include "SFV/SFVInterface.h"
+#include "utils/ParsableInterface.h"
 
-class SFVObject {
+class SFVObject : public SFVInterface , public ParsableInterface{
 public:
 	int m_Id;
 	int m_Type;
@@ -24,6 +26,9 @@ public:
 	SFVObject();
 	virtual ~SFVObject();
 
+	void setRolledValue(RolledValue * value);
+	TiXmlElement *toXMLElement();
+	void fromXMLElement(TiXmlElement * node);
 	double getPitch() const;
 	void setPitch(double pitch);
 	double getRoll() const;

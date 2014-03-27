@@ -6,9 +6,6 @@
  */
 
 #include "SFDP/ScenarioFeature.h"
-#include "SFDP/ScenarioFeatureType.h"
-#include "SFDP/ScenarioFeatureDistributionType.h"
-#include "SFDP/ScenarioFeatureDependecy.h"
 #include <string>
 #include <stdlib.h>
 

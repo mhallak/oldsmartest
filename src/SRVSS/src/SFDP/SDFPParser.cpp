@@ -68,6 +68,44 @@ void parseScenarioFeature(ScenarioFeature *feature,TiXmlNode* xmlNode) throw (st
 }
 
 
+
+
+
+
+void parseScenarioFeatureGroup(ScenarioFeatureGroup *featureGroup,TiXmlNode* xmlNode) throw (std::string)
+{
+	TiXmlNode* pChild;
+
+	TiXmlAttribute* pAttrib;
+	//search for an sdfp element to parse
+	for ( pChild = xmlNode->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
+	{
+	if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("scenario_feature")==0)
+	{
+	ScenarioFeature *feature=0;
+	for ( pAttrib = pChild->ToElement()->FirstAttribute(); pAttrib != 0; pAttrib = pAttrib->Next())
+	{
+	if(pAttrib->NameTStr().compare("type")==0)
+	{
+	feature=new ScenarioFeature(pAttrib->ValueStr());
+	parseScenarioFeature(feature,pChild);
+	featureGroup->addFeature(feature);
+	}
+	/*else if (pAttrib->NameTStr().compare("group")==0)
+	{
+	if(feature==0)
+	throw std::string("type must be set before group");
+	feature->set_group(pAttrib->ValueStr());
+	}*/
+	else{
+	throw pAttrib->NameTStr()+" is not a valid scenario_feature type";
+	}
+	}
+	}
+	}
+}
+
+
 void parseSDFP(SDFPComponent *sdfpComp,TiXmlNode* xmlNode) throw (std::string)
 {
 	TiXmlNode* pChild;
@@ -75,27 +113,25 @@ void parseSDFP(SDFPComponent *sdfpComp,TiXmlNode* xmlNode) throw (std::string)
 	//search for an sdfp element to parse
 	for ( pChild = xmlNode->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
 	{
-		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("scenario_feature")==0)
+		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("scenario_feature_group")==0)
 		{
-			ScenarioFeature *feature=0;
+			ScenarioFeatureGroup *featureGroup=new ScenarioFeatureGroup();
 			for ( pAttrib = pChild->ToElement()->FirstAttribute(); pAttrib != 0; pAttrib = pAttrib->Next())
 			{
 				if(pAttrib->NameTStr().compare("type")==0)
 				{
-					feature=new ScenarioFeature(pAttrib->ValueStr());
-					parseScenarioFeature(feature,pChild);
-					sdfpComp->addScenarioFeature(feature);
+					featureGroup->set_featureGroupType(ScenarioFeatureGroupType::stringToFeatureGroupType(pAttrib->ValueStr()));
 				}
-				/*else if (pAttrib->NameTStr().compare("group")==0)
+				else if(pAttrib->NameTStr().compare("name")==0)
 				{
-					if(feature==0)
-						throw std::string("type must be set before group");
-					feature->set_group(pAttrib->ValueStr());
-				}*/
+					featureGroup->set_name(pAttrib->ValueStr());
+				}
 				else{
-					throw pAttrib->NameTStr()+" is not a valid scenario_feature type";
+					throw pAttrib->NameTStr()+" is not a scenario_feature_group type";
 				}
 			}
+			parseScenarioFeatureGroup(featureGroup,pChild);
+			sdfpComp->addScenarioFeatureGroup(featureGroup);
 		}
 	}
 }
