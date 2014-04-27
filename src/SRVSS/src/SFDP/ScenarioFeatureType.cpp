@@ -160,6 +160,34 @@ ScenarioFeatureType ScenarioFeatureType::stringToFeatureType(std::string val) th
 	{
     	return sensor_link_i_location_deviation_Yaw;
 	}
+    else if(val.compare("initial_platform_position_on_map_X_axis")==0)
+	{
+    	return initial_platform_position_on_map_X_axis;
+	}
+    else if(val.compare("initial_platform_position_on_map_Y_axis")==0)
+    {
+    	return initial_platform_position_on_map_Y_axis;
+    }
+    else if(val.compare("initial_platform_azimut_on_map")==0)
+    {
+        return initial_platform_azimut_on_map;
+    }
+    else if(val.compare("number_of_way_points")==0)
+    {
+        return number_of_way_points;
+    }
+    else if(val.compare("wp_i_distance_i")==0)
+    {
+        return wp_i_distance_i;
+   	}
+    else if(val.compare("relative_angle_teta")==0)
+    {
+        return relative_angle_teta;
+    }
+    else if(val.compare("wp_velocity")==0)
+    {
+        return wp_velocity;
+    }
 	else
 		throw val+" is an unknown feature!";
 }
@@ -280,6 +308,27 @@ std::string  ScenarioFeatureType::toString(ScenarioFeatureType type)
 			break;
 		case ScenarioFeatureType::sensor_link_i_location_deviation_Yaw:
 			str= "sensor_link_i_location_deviation_Yaw";
+			break;
+		case ScenarioFeatureType::initial_platform_position_on_map_X_axis:
+			str= "initial_platform_position_on_map_X_axis";
+			break;
+		case ScenarioFeatureType::initial_platform_position_on_map_Y_axis:
+			str= "initial_platform_position_on_map_Y_axis";
+			break;
+		case ScenarioFeatureType::initial_platform_azimut_on_map:
+			str= "initial_platform_azimut_on_map";
+			break;
+		case ScenarioFeatureType::number_of_way_points:
+			str= "number_of_way_points";
+			break;
+		case ScenarioFeatureType::wp_i_distance_i:
+			str= "wp_i_distance_i";
+			break;
+		case ScenarioFeatureType::relative_angle_teta:
+			str= "relative_angle_teta";
+			break;
+		case ScenarioFeatureType::wp_velocity:
+			str= "wp_velocity";
 			break;
 	}
 	return str;

@@ -18,6 +18,8 @@ SFVComponent::SFVComponent() {
 	m_objects=new std::vector<SFVObject *>;
 	m_lights=new std::vector<SFVLight *>;
 	m_terrains=new std::vector<SFVTerrain*>;
+	m_platformPoses=new std::vector<SFVPlatformPose*>;
+	m_waypoints=new std::vector<SFVWaypoint*>;
 }
 
 std::vector<SFVMassLink *>* SFVComponent::getMassLinks()
@@ -47,6 +49,15 @@ std::vector<SFVObject*>* SFVComponent::getObjects()
 std::vector<SFVTerrain*>* SFVComponent::getTerrains()
 {
 	return m_terrains;
+}
+
+std::vector<SFVPlatformPose*> * SFVComponent::getPlatformPoses()
+{
+	return m_platformPoses;
+}
+std::vector<SFVWaypoint*> * SFVComponent::getWaypoints()
+{
+	return m_waypoints;
 }
 
 void SFVComponent::addTerrain(SFVTerrain* terrain) {
@@ -79,6 +90,11 @@ void SFVComponent::addRolledValues(ScenarioFeatureGroup* group,std::vector<Rolle
 			m_sensorLinks->push_back(new SFVSensorLink);
 			m_sensorLinks->back()->setLinkName(group->get_name());
 			m_sensorLinks->back()->setId(m_sensorLinks->size()-1);
+			break;
+		case ScenarioFeatureGroupType::platform_pose:
+			m_platformPoses->push_back(new SFVPlatformPose);
+			m_platformPoses->back()->setPlatformName(group->get_name());
+			m_platformPoses->back()->setId(m_platformPoses->size()-1);
 			break;
 	}
 	//set values
@@ -148,6 +164,23 @@ void SFVComponent::addRolledValues(ScenarioFeatureGroup* group,std::vector<Rolle
 			case ScenarioFeatureType::friction_link_friction_deviation:
 				m_frictionLinks->back()->setRolledValue((*valueItter));
 				break;
+			case ScenarioFeatureType::initial_platform_position_on_map_X_axis:
+			case ScenarioFeatureType::initial_platform_position_on_map_Y_axis:
+			case ScenarioFeatureType::initial_platform_azimut_on_map:
+				m_platformPoses->back()->setRolledValue((*valueItter));
+				break;
+			case ScenarioFeatureType::number_of_way_points:
+				for(int i=0;i<(*valueItter)->getValue();i++)
+				{
+					m_waypoints->push_back(new SFVWaypoint);
+					m_waypoints->at(i)->setId(i);
+				}
+				break;
+			case ScenarioFeatureType::wp_i_distance_i:
+			case ScenarioFeatureType::relative_angle_teta:
+			case ScenarioFeatureType::wp_velocity:
+				m_waypoints->at((*valueItter)->getRollNumber())->setRolledValue((*valueItter));
+				break;
 
 			}
 		valueItter++;
@@ -181,6 +214,14 @@ TiXmlElement *SFVComponent::toXMLElement()
 	for(size_t i=0;i<m_sensorLinks->size();i++)
 	{
 		element->LinkEndChild(m_sensorLinks->at(i)->toXMLElement());
+	}
+	for(size_t i=0;i<m_platformPoses->size();i++)
+	{
+		element->LinkEndChild(m_platformPoses->at(i)->toXMLElement());
+	}
+	for(size_t i=0;i<m_waypoints->size();i++)
+	{
+		element->LinkEndChild(m_waypoints->at(i)->toXMLElement());
 	}
 	return element;
 }
@@ -226,6 +267,18 @@ void SFVComponent::fromXMLElement(TiXmlElement * node)
 			SFVSensorLink *sensor_link = new SFVSensorLink;
 			sensor_link->fromXMLElement(pChild->ToElement());
 			getSensorLinks()->push_back(sensor_link);
+		}
+		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("platform_pose")==0)
+		{
+			SFVPlatformPose*platform_pose = new SFVPlatformPose;
+			platform_pose->fromXMLElement(pChild->ToElement());
+			getPlatformPoses()->push_back(platform_pose);
+		}
+		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("waypoint")==0)
+		{
+			SFVWaypoint *waypoint = new SFVWaypoint;
+			waypoint->fromXMLElement(pChild->ToElement());
+			getWaypoints()->push_back(waypoint);
 		}
 	}
 }

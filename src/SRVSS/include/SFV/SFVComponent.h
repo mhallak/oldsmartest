@@ -15,6 +15,8 @@
 #include "SFVMassLink.h"
 #include "SFVFrictionLink.h"
 #include "SFVSensorLink.h"
+#include "SFVPlatformPose.h"
+#include "SFVWaypoint.h"
 #include "SFDP/ScenarioFeatureGroup.h"
 #include "utils/ParsableInterface.h"
 
@@ -26,6 +28,8 @@ public:
 	std::vector<SFVObject *>* m_objects;
 	std::vector<SFVLight *>* m_lights;
 	std::vector<SFVTerrain*> * m_terrains;
+	std::vector<SFVPlatformPose*> * m_platformPoses;
+	std::vector<SFVWaypoint*> * m_waypoints;
 
 
 	SFVComponent();
@@ -59,6 +63,8 @@ public:
 	std::vector<SFVLight*>* getLights();
 	std::vector<SFVObject*>* getObjects();
 	std::vector<SFVTerrain*> * getTerrains();
+	std::vector<SFVPlatformPose*> * getPlatformPoses();
+	std::vector<SFVWaypoint*> * getWaypoints();
 
 	void addTerrain(SFVTerrain* terrain);
 };

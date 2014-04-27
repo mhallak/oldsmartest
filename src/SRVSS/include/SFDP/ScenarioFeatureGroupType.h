@@ -48,7 +48,9 @@ public:
 		objects,
 		mass_link_i,
 		friction_link_i,
-		sensor_link_i
+		sensor_link_i,
+		platform_pose,
+		waypoints
 	};
 
 	/**

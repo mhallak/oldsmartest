@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<resource version="1.0" dirPath="/home/userws1/.gazebo/models">
+<resource version="1.0" dirPath="/home/userws1/.gazebo/models" platform="bobcat">
 <terrain id="1">terrain</terrain>
 <object id="1">tree1</object>
 <object id="2">barrel1</object>

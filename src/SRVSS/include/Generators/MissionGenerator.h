@@ -7,8 +7,9 @@
 
 #ifndef MISSIONGENERATOR_H_
 #define MISSIONGENERATOR_H_
+#include "GeneratorInterface.h"
 
-class MissionGenerator {
+class MissionGenerator : public GeneratorInterface{
 public:
 	MissionGenerator();
 	virtual ~MissionGenerator();

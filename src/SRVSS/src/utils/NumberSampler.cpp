@@ -9,6 +9,7 @@
 #include <boost/random/linear_congruential.hpp>
 #include <boost/random/uniform_int.hpp>
 #include <boost/random/uniform_real.hpp>
+#include <boost/random/normal_distribution.hpp>
 #include <boost/random/variate_generator.hpp>
 #include <boost/generator_iterator.hpp>
 
@@ -19,18 +20,34 @@ NumberSampler::NumberSampler() {
 NumberSampler::~NumberSampler() {
 }
 
+void setMinimumMaximum(int &mini,int& maxi,int &param1,int &param2)
+{
+	if(param1>param2)
+	{
+		mini=param2;
+		maxi=param1;
+	}else{
+		mini=param1;
+		maxi=param2;
+	}
+}
 
-int NumberSampler::uniformIntDistribution(int distParam1, int distParam2)
+void setMinimumMaximum(float& mini,float& maxi,float param1,float param2)
+{
+	if(param1>param2)
+	{
+		mini=param2;
+		maxi=param1;
+	}else{
+		mini=param1;
+		maxi=param2;
+	}
+}
+
+int NumberSampler::uniformDiscreteDistribution(int distParam1, int distParam2)
 {
 	int mini,maxi;
-	if(distParam1>distParam2)
-	{
-		mini=distParam2;
-		maxi=distParam1;
-	}else{
-		mini=distParam1;
-		maxi=distParam2;
-	}
+	setMinimumMaximum(mini,maxi,distParam1,distParam2);
 	boost::uniform_int<> dist(mini,maxi);
 
 	gen.seed((++seed) + time(NULL));
@@ -38,20 +55,23 @@ int NumberSampler::uniformIntDistribution(int distParam1, int distParam2)
 	return generator();
 }
 
-float NumberSampler::uniformRealDistribution(float distParam1, float distParam2)
+float NumberSampler::uniformContinuousDistribution(float distParam1, float distParam2)
 {
-	float mini,maxi;
-	if(distParam1>distParam2)
-	{
-		mini=distParam2;
-		maxi=distParam1;
-	}else{
-		mini=distParam1;
-		maxi=distParam2;
-	}
+	float mini=0,maxi=0;
+	setMinimumMaximum(mini,maxi,distParam1,distParam2);
 	boost::uniform_real<> dist(mini,maxi);
 	gen.seed((++seed) + time(NULL));
 	boost::variate_generator<boost::mt19937&, boost::uniform_real<> > generator(gen, dist);
 	return generator();
 }
 
+
+float NumberSampler::normalContinuousDistribution(float distParam1, float distParam2)
+{
+	float mini=0,maxi=0;
+	setMinimumMaximum(mini,maxi,distParam1,distParam2);
+	boost::normal_distribution<> dist(mini,maxi);
+	gen.seed((++seed) + time(NULL));
+	boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > generator(gen, dist);
+	return generator();
+}

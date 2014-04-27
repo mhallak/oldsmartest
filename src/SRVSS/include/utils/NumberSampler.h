@@ -52,7 +52,7 @@ public:
 	* @see uniformRealDistribution()
 	* @return an integer sampled uniformly between bounds
 	*/
-	int uniformIntDistribution(int distParam1, int distParam2);
+	int uniformDiscreteDistribution(int distParam1, int distParam2);
 
 	 /**
 	* a number sampling method that takes the distribution bounds and samples a real number in a uniform fashion.
@@ -61,7 +61,18 @@ public:
 	* @see uniformIntDistribution()
 	* @return a a real number sampled uniformly between bounds
 	*/
-	float uniformRealDistribution(float distParam1, float distParam2);
+	float uniformContinuousDistribution(float distParam1, float distParam2);
+
+
+	 /**
+	* a number sampling method that takes the distribution bounds and samples a real number in a normal fashion.
+	* @param distParam1 a real number argument, a lower bound for the distribution
+	* @param distParam2 a real number argument, an upper bound for the distribution
+	* @see uniformIntDistribution()
+	* @return a a real number sampled uniformly between bounds
+	*/
+	float normalContinuousDistribution(float distParam1, float distParam2);
+
 };
 
 #endif /* NUMBERSAMPLER_H_ */

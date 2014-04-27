@@ -278,7 +278,7 @@ void SFVMassLink::fromXMLElement(TiXmlElement * xmlElement)
 	}
 }
 
-const std::string& SFVMassLink::getLinkName() const {
+ std::string& SFVMassLink::getLinkName() {
 	return m_link_name;
 }
 

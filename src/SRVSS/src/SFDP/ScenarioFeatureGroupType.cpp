@@ -40,6 +40,14 @@ ScenarioFeatureGroupType ScenarioFeatureGroupType::stringToFeatureGroupType(std:
 	{
 		return sensor_link_i;
 	}
+	else if(val.compare("platform_pose")==0)
+	{
+		return platform_pose;
+	}
+	else if(val.compare("waypoints")==0)
+	{
+		return waypoints;
+	}
 	else
 		throw val+" is an unknown feature group!";
 }
@@ -67,6 +75,12 @@ std::string  ScenarioFeatureGroupType::toString(ScenarioFeatureGroupType type)
 			break;
 		case ScenarioFeatureGroupType::sensor_link_i:
 			str= "sensor_link_i";
+			break;
+		case ScenarioFeatureGroupType::platform_pose:
+			str= "platform_pose";
+			break;
+		case ScenarioFeatureGroupType::waypoints:
+			str= "waypoints";
 			break;
 	}
 	return str;

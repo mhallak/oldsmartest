@@ -81,3 +81,26 @@ TerrainAnalyzer::~TerrainAnalyzer() {
 	// TODO Auto-generated destructor stub
 }
 
+float TerrainAnalyzer::getHeight() const {
+	return m_height;
+}
+
+void TerrainAnalyzer::setHeight(float height) {
+	m_height = height;
+}
+
+float TerrainAnalyzer::getLength() const {
+	return m_length;
+}
+
+void TerrainAnalyzer::setLength(float length) {
+	m_length = length;
+}
+
+float TerrainAnalyzer::getWidth() const {
+	return m_width;
+}
+
+void TerrainAnalyzer::setWidth(float width) {
+	m_width = width;
+}
