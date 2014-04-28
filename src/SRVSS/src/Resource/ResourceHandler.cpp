@@ -27,7 +27,7 @@ ResourceHandler::ResourceHandler() {
 	m_resourceMap->insert(std::pair<std::string,std::map<int,std::string> *>(std::string("object"),new std::map<int,std::string>));
 	m_resourceMap->insert(std::pair<std::string,std::map<int,std::string> *>(std::string("light"),new std::map<int,std::string>));
 
-	TiXmlDocument doc("resource.xml");
+	TiXmlDocument doc("/home/userws1/Desktop/srvss_ws/src/SRVSS/resource.xml");
 		if (!doc.LoadFile())
 		{
 			std::string error("Failed to load file \"");
@@ -45,7 +45,12 @@ ResourceHandler::ResourceHandler() {
 				{
 					if(pAttrib->NameTStr().compare("dirPath")==0)
 					{
-						m_resourcePath=pAttrib->ValueStr();
+						m_modelsPath=pAttrib->ValueStr();
+					}
+					else if(pAttrib->NameTStr().compare("platform")==0)
+					{
+						m_platformModel=pAttrib->ValueStr();
+						m_platformPath=m_modelsPath+"/"+pAttrib->ValueStr()+"/model.sdf";
 					}
 				}
 				parseResource(pChild,m_resourceMap);
@@ -83,6 +88,14 @@ std::string ResourceHandler::getLightById(int id) {
 	return getResource(std::string("light"),id);
 }
 
-const std::string& ResourceHandler::getResourcePath() const {
-	return m_resourcePath;
+const std::string& ResourceHandler::getModelsPath() const {
+	return m_modelsPath;
+}
+
+const std::string& ResourceHandler::getPlatformPath() const {
+	return m_platformPath;
+}
+
+const std::string& ResourceHandler::getPlatformModel() const {
+	return m_platformModel;
 }

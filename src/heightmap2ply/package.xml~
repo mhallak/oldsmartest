@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package>
+  <name>heightmap2ply</name>
+  <version>0.0.0</version>
+  <description>The heightmap2ply package</description>
+
+  <maintainer email="yder@iai.co.il">Yuval</maintainer>
+
+
+  <license>TODO</license>
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+</package>

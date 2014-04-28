@@ -8,29 +8,17 @@ _type(newType)
 
 ScenarioFeatureDistributionType ScenarioFeatureDistributionType::stringToDistributionType(std::string val) throw (std::string)
 {
-	if(val.compare("uniform_int_discrete")==0)
+	if(val.compare("uniform_discrete")==0)
 	{
-		return uniform_int_discrete;
+		return uniform_discrete;
 	}
-	else if(val.compare("uniform_real_discrete")==0)
+	else if(val.compare("uniform_continuous")==0)
 	{
-		return uniform_real_discrete;
+		return uniform_continuous;
 	}
-	else if(val.compare("uniform_int_continuous")==0)
+	else if(val.compare("normal_continuous")==0)
 	{
-		return uniform_int_continuous;
-	}
-	else if(val.compare("uniform_real_continuous")==0)
-	{
-		return uniform_real_continuous;
-	}
-	else if(val.compare("normal_int_continuous")==0)
-	{
-		return normal_int_continuous;
-	}
-	else if(val.compare("normal_real_continuous")==0)
-	{
-		return normal_real_continuous;
+		return normal_continuous;
 	}
 	else
 		throw val+"is an unknown distribution type!";

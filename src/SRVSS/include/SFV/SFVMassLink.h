@@ -63,7 +63,7 @@ public:
 
 	double getMass() const;
 	void setMass(double mass);
-	const std::string& getLinkName() const;
+	std::string& getLinkName();
 	void setLinkName(const std::string& linkName);
 };
 

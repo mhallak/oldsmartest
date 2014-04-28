@@ -28,6 +28,12 @@ public:
 	void getXYZCoord(float xPrecentage,float yPrecentage,float& xPos,float& yPos,float& zPos);
 
 	virtual ~TerrainAnalyzer();
+	float getHeight() const;
+	void setHeight(float height);
+	float getLength() const;
+	void setLength(float length);
+	float getWidth() const;
+	void setWidth(float width);
 };
 
 #endif /* TERRAINANALYZER_H_ */

@@ -15,8 +15,9 @@ class ResourceHandler {
 private:
 
 	std::map <std::string, std::map<int,std::string>*>* m_resourceMap;
-	std::string m_resourcePath;
-
+	std::string m_modelsPath;
+	std::string m_platformPath;
+	std::string m_platformModel;
 	std::string getResource(std::string name,int id);
     // Private Constructor
 	ResourceHandler();
@@ -35,7 +36,9 @@ public:
     std::string getTerrainById(int id);
     std::string getObjectById(int id);
     std::string getLightById(int id);
-	const std::string& getResourcePath() const;
+	const std::string& getModelsPath() const;
+	const std::string& getPlatformPath() const;
+	const std::string& getPlatformModel() const;
 };
 
 #endif /* RESOURCEHANDLER_H_ */

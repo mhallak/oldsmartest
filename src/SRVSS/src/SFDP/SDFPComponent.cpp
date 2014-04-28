@@ -83,11 +83,14 @@ float SDFPComponent::rollForDistType(ScenarioFeatureDistributionType distType,fl
 	float res;
 	switch(distType._type)
 	{
-		case ScenarioFeatureDistributionType::uniform_int_discrete:
-			res= m_sampler->uniformIntDistribution(distParam1,distParam2);
+		case ScenarioFeatureDistributionType::uniform_discrete:
+			res= m_sampler->uniformDiscreteDistribution(distParam1,distParam2);
 			break;
-		case ScenarioFeatureDistributionType::uniform_real_discrete:
-			res=m_sampler->uniformRealDistribution(distParam1,distParam2);
+		case ScenarioFeatureDistributionType::uniform_continuous:
+			res=m_sampler->uniformContinuousDistribution(distParam1,distParam2);
+			break;
+		case ScenarioFeatureDistributionType::normal_continuous:
+			res=m_sampler->normalContinuousDistribution(distParam1,distParam2);
 			break;
 		case ScenarioFeatureDistributionType::unknown_distribution:
 			throw std::string("unknown_distribution cannot be rolled");
@@ -153,7 +156,7 @@ void SDFPComponent::rollForFeature(ScenarioFeature* feature,std::vector<RolledVa
 		result->setType(feature->get_featureType());
 		groupFeatures->push_back(result);
 		//sfvComp->addRolledValue(group->get_name(),feature->get_featureType(),res,i);
-		//std::cout<<feature->get_featureType()<<"_"<< group->get_name()<<i<<" value:"<<res<<std::endl;
+		//std::cout<<feature->get_featureType()<<"_"<<i<<" value:"<<res<<std::endl;
 	}
 }
 
@@ -170,6 +173,7 @@ SFVComponent* SDFPComponent::rollDice()
 			group_it!=m_featureGroups->end();
 			group_it++)
 	{
+
 		std::vector<RolledValue*> * groupFeatures=new std::vector<RolledValue*>;
 
 		for (std::vector<ScenarioFeature*>::iterator feature_it=(*group_it)->get_features()->begin();

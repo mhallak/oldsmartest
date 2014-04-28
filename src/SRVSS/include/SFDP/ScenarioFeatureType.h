@@ -78,7 +78,14 @@ public:
 		sensor_link_i_location_deviation_Z,
 		sensor_link_i_location_deviation_Roll,
 		sensor_link_i_location_deviation_Pitch,
-		sensor_link_i_location_deviation_Yaw
+		sensor_link_i_location_deviation_Yaw,
+		initial_platform_position_on_map_X_axis,
+		initial_platform_position_on_map_Y_axis,
+		initial_platform_azimut_on_map,
+		number_of_way_points,
+		wp_i_distance_i,
+		relative_angle_teta,
+		wp_velocity
 	};
 
 	/**

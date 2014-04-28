@@ -68,11 +68,36 @@ void GazeboEnvironmentGenerator::spawnTerrain(SFVTerrain* sfvTerrain,TiXmlElemen
 	include->LinkEndChild(url);
 }
 
+void GazeboEnvironmentGenerator::spawnPlatformPose(SFVPlatformPose* sfvPlatformPose,TiXmlElement * element)
+{
+	/*TiXmlElement * include = new TiXmlElement( "include" );
+	element->LinkEndChild(include);
+	TiXmlElement * url = new TiXmlElement( "uri" );
+	TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance().getPlatformModel());
+	url->LinkEndChild(url_text);
+	include->LinkEndChild(url);
+	TiXmlElement * pose = new TiXmlElement( "pose" );
+	std::stringstream ss;
+	float x,y,z;
+	m_terrainAnalyzer->getXYZCoord(sfvPlatformPose->getLocationX(),sfvPlatformPose->getLocationY(),x,y,z);
+
+	ss<<x <<" " << y <<" "<< z << " ";
+	ss<<0 <<" " << 0 <<" "<< 0;
+	TiXmlText * pose_text = new TiXmlText(ss.str());
+	ss.str("");
+	pose->LinkEndChild(pose_text);
+	include->LinkEndChild(pose);
+
+	TiXmlElement * name = new TiXmlElement( "name" );
+	name->LinkEndChild(new TiXmlText(sfvPlatformPose->getPlatformName()));
+	include->LinkEndChild(name);*/
+}
+
 void GazeboEnvironmentGenerator::genEnvFromSFV(SFVComponent* sfvComp,std::string filename)
 {
 	//load terrain
 	std::string terrain=ResourceHandler::getInstance().getTerrainById(sfvComp->getTerrains()->at(0)->getTerrainId());
-	std::string path = ResourceHandler::getInstance().getResourcePath();
+	std::string path = ResourceHandler::getInstance().getModelsPath();
 
 	m_terrainAnalyzer->loadFile(path+"/"+terrain);
 

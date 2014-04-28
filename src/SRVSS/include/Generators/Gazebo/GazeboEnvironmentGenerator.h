@@ -19,6 +19,7 @@ class GazeboEnvironmentGenerator : public EnvironmentGenerator {
 
 	void spawnObject(SFVObject* sfvObj,TiXmlElement * element);
 	void spawnTerrain(SFVTerrain* sfvTerrain,TiXmlElement * element);
+	void spawnPlatformPose(SFVPlatformPose* sfvPlatformPose,TiXmlElement * element);
 public:
 
 	GazeboEnvironmentGenerator();
