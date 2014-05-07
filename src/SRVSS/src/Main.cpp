@@ -16,7 +16,7 @@ void printUsage()
 {
 	std::cout << "usage:" <<std:: endl;
 	std::cout <<"(1) <srvss> -gen <sdfp file> <sfv output> # will generate a sfv file according to the sfdp input" <<std:: endl;
-	std::cout <<"(2) <srvss> -run <sfv output>  #will generate the scenario and launch it" <<std:: endl;
+	std::cout <<"(2) <srvss> -run <sfv output> <distanetion folder>  #will generate the scenario and launch it" <<std:: endl;
 	exit(1);
 }
 int main(int argc, char** argv)
@@ -62,23 +62,24 @@ int main(int argc, char** argv)
 	if(std::string(argv[1]).compare("-run")==0)
 	{
 		SDFPParser SDFPpars;
+		std::string scenarios_folder_path = PATH + argv[3];
 		try
 		{
 			SFVComponent *sfvComp=new SFVComponent();
 			sfvComp->genSFVFromFile(argv[2]);
 
 			GazeboMissionGenerator * missionGen=new GazeboMissionGenerator();
-			missionGen->generateMission(sfvComp,"myMission.txt");
+     		missionGen->generateMission(sfvComp,scenarios_folder_path+"myMission.txt");
 
 			GazeboPlatformGenerator * platGen=new GazeboPlatformGenerator();
-			platGen->generatePlatform(sfvComp,"platform.sdf");
+			platGen->generatePlatform(sfvComp,scenarios_folder_path+"platform.sdf");
 
-			//GazeboEnvironmentGenerator * envGen=new GazeboEnvironmentGenerator();
-			//envGen->genEnvFromSFV(sfvComp,"env.world");
+			GazeboEnvironmentGenerator * envGen=new GazeboEnvironmentGenerator();
+			envGen->genEnvFromSFV(sfvComp,scenarios_folder_path+"env.world");
 
-			SRVSSSyncronizer * sync=new SRVSSSyncronizer();
-			sync->runSimulation("env.world");
-			sync->spawnModel("platform.sdf",missionGen->getLastPlatformName(),missionGen->getLastXPose(),missionGen->getLastYPose(),missionGen->getLastZPose(),missionGen->getLastYawPose());
+	//		SRVSSSyncronizer * sync=new SRVSSSyncronizer();
+	//		sync->runSimulation("env.world");
+	//		sync->spawnModel("platform.sdf",missionGen->getLastPlatformName(),missionGen->getLastXPose(),missionGen->getLastYPose(),missionGen->getLastZPose(),missionGen->getLastYawPose());
 		}
 		catch(std::string &err)
 		{

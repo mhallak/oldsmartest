@@ -15,7 +15,8 @@
 void SRVSSSyncronizer::startServer(std::vector<std::string> args)
 {
 	std::stringstream ss;
-	ss<<"gzserver";
+	//ss<<"gzserver";
+	ss<<"/opt/ros/hydro/lib/gazebo_ros/gzserver";
 	for(int i=0;i<args.size();i++)
 	{
 		ss<<" ";
@@ -28,7 +29,8 @@ void SRVSSSyncronizer::startServer(std::vector<std::string> args)
 void SRVSSSyncronizer::startGui(std::vector<std::string> args)
 {
 	std::stringstream ss;
-	ss<<"gzclient";
+	//ss<<"gzclient";
+	ss<<"/opt/ros/hydro/lib/gazebo_ros/gzclient";
 	for(int i=0;i<args.size();i++)
 	{
 		ss<<" ";
@@ -84,11 +86,25 @@ SRVSSSyncronizer::~SRVSSSyncronizer() {
 
 void SRVSSSyncronizer::runSimulation(std::string sfvfileName)
 {
+
 	boost::filesystem::path p(sfvfileName);
 	boost::filesystem::path full_p = boost::filesystem::absolute(p);
 	std::vector<std::string> args;
 	//args.push_back("quiet");
 	args.push_back(full_p.c_str());
+
+	std::stringstream ss;
+
+//	ss<<"roslaunch srvss_pkg srvss_bobcat_world.launch";
+//	RunCommand(ss.str().c_str());
+
+//	ss<<"roslaunch srvss_pkg srvss_bobcat_controllers.launch";
+//	RunCommand(ss.str().c_str());
+
+//	ss<<"rosrun gazebo_ros gazebo ";
+//	std::cout << ss.str() << std::endl;
+//	RunCommand(ss.str().c_str());
+
 	startServer(args);
 	startGui(args);
 }
@@ -99,7 +115,6 @@ void stopSimulation()
 
 void SRVSSSyncronizer::spawnModel(std::string sdffileName,std::string modelname,float x,float y,float z,float yaw)
 {
-
 	boost::filesystem::path p(sdffileName);
 	boost::filesystem::path full_p = boost::filesystem::absolute(p);
 	std::stringstream ss;

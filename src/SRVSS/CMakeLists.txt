@@ -6,13 +6,14 @@ find_package(catkin REQUIRED COMPONENTS
 cmake_modules
 )
 
-find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost REQUIRED COMPONENTS system thread)
 
 find_package(TinyXML REQUIRED)
 
 find_package(OpenCV REQUIRED)
                             
 find_package(Gazebo REQUIRED)
+
 
 catkin_package(
     #LIBRARIES  
@@ -173,4 +174,12 @@ GazeboPlatformGenerator
 GazeboMissionGenerator
 SRVSSSyncronizer
 )
+
+###############
+#### grader ###
+###############
+# add_executable(grader_node src/Grader/grader_node.cpp)
+# target_link_libraries(grader_node
+#   ${catkin_LIBRARIES}
+#)
 

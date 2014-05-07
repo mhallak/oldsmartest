@@ -14,6 +14,8 @@
 #include "Resource/ResourceHandler.h"
 #include <sstream>
 #include <stdlib.h>
+#include <sdf/sdf.hh>
+
 GazeboEnvironmentGenerator::GazeboEnvironmentGenerator() {
 	m_terrainAnalyzer=new TerrainAnalyzer();
 	 m_objectCount=0;
@@ -70,7 +72,7 @@ void GazeboEnvironmentGenerator::spawnTerrain(SFVTerrain* sfvTerrain,TiXmlElemen
 
 void GazeboEnvironmentGenerator::spawnPlatformPose(SFVPlatformPose* sfvPlatformPose,TiXmlElement * element)
 {
-	/*TiXmlElement * include = new TiXmlElement( "include" );
+	TiXmlElement * include = new TiXmlElement( "include" );
 	element->LinkEndChild(include);
 	TiXmlElement * url = new TiXmlElement( "uri" );
 	TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance().getPlatformModel());
@@ -81,6 +83,7 @@ void GazeboEnvironmentGenerator::spawnPlatformPose(SFVPlatformPose* sfvPlatformP
 	float x,y,z;
 	m_terrainAnalyzer->getXYZCoord(sfvPlatformPose->getLocationX(),sfvPlatformPose->getLocationY(),x,y,z);
 
+	z=z+0.5;  // compensation for the wheels height
 	ss<<x <<" " << y <<" "<< z << " ";
 	ss<<0 <<" " << 0 <<" "<< 0;
 	TiXmlText * pose_text = new TiXmlText(ss.str());
@@ -89,8 +92,8 @@ void GazeboEnvironmentGenerator::spawnPlatformPose(SFVPlatformPose* sfvPlatformP
 	include->LinkEndChild(pose);
 
 	TiXmlElement * name = new TiXmlElement( "name" );
-	name->LinkEndChild(new TiXmlText(sfvPlatformPose->getPlatformName()));
-	include->LinkEndChild(name);*/
+	name->LinkEndChild(new TiXmlText("SRVSS_BobCat"));
+	include->LinkEndChild(name);
 }
 
 void GazeboEnvironmentGenerator::genEnvFromSFV(SFVComponent* sfvComp,std::string filename)
@@ -111,7 +114,48 @@ void GazeboEnvironmentGenerator::genEnvFromSFV(SFVComponent* sfvComp,std::string
 	world->SetAttribute("name","default");
 	element->LinkEndChild(world);
 
+
+	// addition of sunlight
+	TiXmlElement * include = new TiXmlElement( "include" );
+	world->LinkEndChild(include);
+	TiXmlElement * uri = new TiXmlElement( "uri" );
+	TiXmlText * sun_url = new TiXmlText("model://sun");
+	uri->LinkEndChild(sun_url);
+	include->LinkEndChild(uri);
+
+	// addition of sky to the environment
+	TiXmlElement * scene = new TiXmlElement( "scene" );
+	world->LinkEndChild(scene);
+	TiXmlElement * sky = new TiXmlElement( "sky" );
+	scene->LinkEndChild(sky);
+
+	TiXmlElement * time = new TiXmlElement( "time" );
+	sky->LinkEndChild(time);
+	TiXmlText * time_value = new TiXmlText("10");
+	time->LinkEndChild(time_value);
+
+	// addition of clouds
+	TiXmlElement * clouds = new TiXmlElement( "clouds" );
+	sky->LinkEndChild(clouds);
+
+	TiXmlElement * speed = new TiXmlElement( "speed" );
+	clouds->LinkEndChild(speed);
+	TiXmlText * speed_value = new TiXmlText("5");
+	speed->LinkEndChild(speed_value);
+
+	TiXmlElement * direction = new TiXmlElement( "direction" );
+	clouds->LinkEndChild(direction);
+	TiXmlText * direction_value = new TiXmlText("1.14");
+	direction->LinkEndChild(direction_value);
+	TiXmlElement * humidity = new TiXmlElement( "humidity" );
+	clouds->LinkEndChild(humidity);
+	TiXmlText * humidity_value = new TiXmlText("0.3");
+	humidity->LinkEndChild(humidity_value);
+
+
 	spawnTerrain( sfvComp->getTerrains()->at(0),world);
+
+	spawnPlatformPose(sfvComp->m_platformPoses->at(0),world);
 
 	std::vector<SFVObject*> *objects=sfvComp->getObjects();
 	for(int i=0;i<objects->size();i++)

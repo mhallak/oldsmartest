@@ -15,10 +15,6 @@
 #include <tinyxml.h>
 #include "PolygonMaker.h"
 
-#include <assimp/Importer.hpp>
-#include <assimp/Exporter.hpp>
-#include <assimp/postprocess.h>
-
 PolygonMaker::PolygonMaker(float lengthFactor,float widthFactor,float heightFactor):
 	_lengthFactor(lengthFactor),
 	_widthFactor(widthFactor),

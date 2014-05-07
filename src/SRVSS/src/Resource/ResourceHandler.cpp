@@ -27,7 +27,8 @@ ResourceHandler::ResourceHandler() {
 	m_resourceMap->insert(std::pair<std::string,std::map<int,std::string> *>(std::string("object"),new std::map<int,std::string>));
 	m_resourceMap->insert(std::pair<std::string,std::map<int,std::string> *>(std::string("light"),new std::map<int,std::string>));
 
-	TiXmlDocument doc("/home/userws1/Desktop/srvss_ws/src/SRVSS/resource.xml");
+	TiXmlDocument doc("/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/resource/resource.xml");
+
 		if (!doc.LoadFile())
 		{
 			std::string error("Failed to load file \"");

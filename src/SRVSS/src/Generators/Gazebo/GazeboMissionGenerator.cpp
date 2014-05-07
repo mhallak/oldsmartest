@@ -37,8 +37,9 @@ void GazeboMissionGenerator::setLastPlatformName(
 
 void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string filename)
 {
-	std::string terrain=ResourceHandler::getInstance().getTerrainById(sfvcomp->getTerrains()->at(0)->getTerrainId());
+	std::string terrain = ResourceHandler::getInstance().getTerrainById(sfvcomp->getTerrains()->at(0)->getTerrainId());
 	std::string path = ResourceHandler::getInstance().getModelsPath();
+
 	m_terrainAnalyzer->loadFile(path+"/"+terrain);
 
 
