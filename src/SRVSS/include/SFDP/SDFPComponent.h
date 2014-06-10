@@ -16,7 +16,7 @@
 #include "SFDP/ScenarioFeatureGroup.h"
 #include "SFDP/ScenarioFeatureType.h"
 #include "ScenarioFeatureDistributionType.h"
-#include "utils/NumberSampler.h"
+
 #include "SFV/SFVComponent.h"
 
 /**
@@ -25,11 +25,7 @@
  */
 class SDFPComponent {
 
-	/**
-	 * A random number sampler.
-	 * Used when rolling a number according to a distribution and a bound
-	 */
-	NumberSampler* m_sampler;
+
 
 	std::vector<ScenarioFeatureGroup*> *m_featureGroups;
 
@@ -51,7 +47,7 @@ class SDFPComponent {
 	 * @see rollDice()
 	 * @see ScenarioFeature
 	 */
-	void rollForFeature(ScenarioFeature* feature,std::vector<RolledValue*> *groupFeatures);
+
 public:
 
 	/**
@@ -76,14 +72,10 @@ public:
 	 * generate a SFVObject by rolling all the features according to their dependencies
 	 * @return a SFVObject
 	 */
-	SFVComponent* rollDice();
+	SFVComponent* genSFV();
 
-	/**
-	 * An auxiliary method to match features to their dependencies
-	* @see rollDice()
-	* @return returns true if dependencies are met and false otherwise
-	*/
-	bool sovleDependecies() throw (std::string);
+
+	std::vector<ScenarioFeatureGroup*> * getFeatureGroups();
 };
 
 #endif /* SDFPCOMPONENT_H_ */

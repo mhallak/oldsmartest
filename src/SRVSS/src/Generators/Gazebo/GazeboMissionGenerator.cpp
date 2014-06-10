@@ -9,6 +9,7 @@
 #include <iostream>
 #include <fstream>
 #include <Resource/ResourceHandler.h>
+#include <boost/foreach.hpp>
 GazeboMissionGenerator::GazeboMissionGenerator() {
 	m_terrainAnalyzer=new TerrainAnalyzer;
 
@@ -63,17 +64,19 @@ void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string 
 	m_last_z_pose=z;
 	m_last_yaw_pose=azimut;
 
-	file<< "WAYPOINTS"<<std::endl;
-	for(std::vector<SFVWaypoint*>::iterator it=sfvcomp->getWaypoints()->begin();
-		it!=sfvcomp->getWaypoints()->end();
-		it++)
+	BOOST_FOREACH(SFVWaypoints* waypoints,*(sfvcomp->getWaypoints()))
 	{
-		azimut+=(*it)->getRelativeAngle();
-		x+=(*it)->getWpIDistanceI()*cos(azimut);
-		y+=(*it)->getWpIDistanceI()*sin(azimut);
-		file<< x <<" " <<y << " " << (*it)->getWpVelocity() << std::endl;
+		file<< "WAYPOINTS"<<std::endl;
+		BOOST_FOREACH(SFVWaypoint* waypoint,*(waypoints->m_objects))
+		{
+			azimut+=waypoint->getRelativeAngle();
+			x+=waypoint->getWpIDistanceI()*cos(azimut);
+			y+=waypoint->getWpIDistanceI()*sin(azimut);
+			file<< x <<" " <<y << " " << waypoint->getWpVelocity() << std::endl;
+		}
 	}
 	file.close();
+
 }
 
 void GazeboMissionGenerator::generate(SFVComponent * sfvcomp)

@@ -6,22 +6,17 @@
  */
 #ifndef SFVPLATFORMPOSE_H_
 #define SFVPLATFORMPOSE_H_
-
-#include "SFV/SFVInterface.h"
 #include "utils/ParsableInterface.h"
+#include "SFVBase.h"
 
-class SFVPlatformPose : public SFVInterface , public ParsableInterface{
-	int m_Id;
-	std::string m_platform_name;
-	double m_locationX;
-	double m_locationY;
-	double m_locationAzimut;
+class SFVPlatformPose : public SFVBase{
+
 public:
-	SFVPlatformPose();
+	void setStructure();
+
+	SFVPlatformPose(DPGroup * dpGroup);
 	virtual ~SFVPlatformPose();
-	void setRolledValue(RolledValue * value);
-	TiXmlElement *toXMLElement();
-	void fromXMLElement(TiXmlElement * node);
+
 	int getId() const;
 	void setId(int id);
 	double getLocationAzimut() const;

@@ -7,28 +7,22 @@
 
 #ifndef SFVOBJECT_H_
 #define SFVOBJECT_H_
-#include "SFV/SFVInterface.h"
 #include "utils/ParsableInterface.h"
+#include "SFV/DPGroup.h"
+#include "SFV/DPObject.h"
+#include "SFV/SFVBase.h"
 
-class SFVObject : public SFVInterface , public ParsableInterface{
+class SFVObject : public SFVBase
+{
+	DPGroup* m_dpGroup;
 public:
-	int m_Id;
-	int m_Type;
-	double m_X;
-	double m_Y;
-	double m_Z;
-	double m_Roll;
-	double m_Pitch;
-	double m_Yaw;
-	double m_Scale;
+
+	void setStructure();
 
 
-	SFVObject();
+	SFVObject(DPGroup* dpGroup);
 	virtual ~SFVObject();
 
-	void setRolledValue(RolledValue * value);
-	TiXmlElement *toXMLElement();
-	void fromXMLElement(TiXmlElement * node);
 	double getPitch() const;
 	void setPitch(double pitch);
 	double getRoll() const;

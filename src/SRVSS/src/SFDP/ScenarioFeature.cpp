@@ -11,18 +11,15 @@
 
 
 ScenarioFeature::ScenarioFeature(std::string featureType):
-	m_featureType(ScenarioFeatureType::stringToFeatureType(featureType)),
+	m_featureType(ScenarioFeatureType::parseString(featureType.c_str())),
 	m_distType(ScenarioFeatureDistributionType::unknown_distribution),
 	m_dist_param_1(0),
 	m_dist_param_2(0)
 {
-	m_featureDependecies=(new std::vector<ScenarioFeatureDependecy *>);
-	set_featureType(ScenarioFeatureType::stringToFeatureType(featureType));
 }
 
 ScenarioFeature::~ScenarioFeature()
 {
-	delete m_featureDependecies;
 }
 
 
@@ -65,10 +62,6 @@ void ScenarioFeature::set_featureType(ScenarioFeatureType type)
 }
 
 
-void ScenarioFeature::addFeatureDependency(ScenarioFeatureDependecy * featureDepend)
-{
-	m_featureDependecies->push_back(featureDepend);
-}
 
 
 void ScenarioFeature::set_distributionType(ScenarioFeatureDistributionType type)
@@ -76,52 +69,3 @@ void ScenarioFeature::set_distributionType(ScenarioFeatureDistributionType type)
 	m_distType=type;
 }
 
-
-std::vector<ScenarioFeatureDependecy *> * ScenarioFeature::get_featureDependecies()
-{
-	return m_featureDependecies;
-}
-
-void ScenarioFeature::set_supportingFeature(ScenarioFeature * suppFeature){
-	for(size_t i=0;i<m_featureDependecies->size();i++)
-	{
-		if(m_featureDependecies->at(i)->get_supportingFeatureType()==suppFeature->get_featureType())
-		{
-			m_featureDependecies->at(i)->set_supportingFeature(suppFeature);
-		}
-	}
-}
-
-bool ScenarioFeature::isDependentOn(ScenarioFeature * other)
-{
-	for(size_t i=0;i<m_featureDependecies->size();i++)
-	{
-		if(m_featureDependecies->at(i)->get_supportingFeatureType()==other->get_featureType())
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-
-float ScenarioFeature::get_rolledValue()
-{
-	return m_rolledValue;
-}
-
-bool ScenarioFeature::isCalculated()
-{
-	return m_isCalculated;
-}
-
-void ScenarioFeature::set_rolledValue(float val)
-{
-	m_rolledValue=val;
-	m_isCalculated=true;
-}
-
-void ScenarioFeature::reset()
-{
-	m_isCalculated=false;
-}

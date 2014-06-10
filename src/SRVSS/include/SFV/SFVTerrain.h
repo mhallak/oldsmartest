@@ -7,18 +7,15 @@
 
 #ifndef SFVTERRAIN_H_
 #define SFVTERRAIN_H_
-#include "SFV/SFVInterface.h"
 #include "utils/ParsableInterface.h"
+#include "SFVBase.h"
 
-class SFVTerrain: public SFVInterface, public ParsableInterface{
-	int m_Id;
-	int m_TerrainId;
+class SFVTerrain:  public SFVBase{
 public:
-	SFVTerrain();
+	void setStructure();
+	SFVTerrain(DPGroup * dpGroup);
 	virtual ~SFVTerrain();
-	void setRolledValue(RolledValue * value);
-	TiXmlElement *toXMLElement();
-	void fromXMLElement(TiXmlElement * node);
+
 	int getId() const;
 	void setId(int id);
 	int getTerrainId() const;

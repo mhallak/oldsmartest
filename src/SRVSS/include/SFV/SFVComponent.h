@@ -19,23 +19,40 @@
 #include "SFVWaypoint.h"
 #include "SFDP/ScenarioFeatureGroup.h"
 #include "utils/ParsableInterface.h"
+#include "SFV/SFVGeneric.h"
+#include "SFV/DPGroup.h"
+#include "Rules/Rule.h"
+#include <map>
+
+typedef SFVGeneric<SFVLight,ScenarioFeatureType::number_of_light_sources> SFVLights;
+typedef SFVGeneric<SFVObject,ScenarioFeatureType::number_of_objects> SFVObjects;
+typedef SFVGeneric<SFVWaypoint,ScenarioFeatureType::number_of_way_points> SFVWaypoints;
 
 class SFVComponent: public ParsableInterface{
+
+	template<class T> void fromXMLElementAUX(std::string text,TiXmlElement * node,std::vector<T*> * vec);
+	template<class T> void initAUX(ScenarioFeatureGroupType type,std::vector<T*> * vec);
 public:
+
+	std::map<ScenarioFeatureGroupType,std::vector<DPGroup*>*> * m_DPObjectMap;
+	std::vector<SFVObjects *> *m_objects;
+	std::vector<SFVLights *> * m_lights;
 	std::vector<SFVMassLink *>* m_massLinks;
 	std::vector<SFVFrictionLink *>* m_frictionLinks;
 	std::vector<SFVSensorLink *>* m_sensorLinks;
-	std::vector<SFVObject *>* m_objects;
-	std::vector<SFVLight *>* m_lights;
 	std::vector<SFVTerrain*> * m_terrains;
 	std::vector<SFVPlatformPose*> * m_platformPoses;
-	std::vector<SFVWaypoint*> * m_waypoints;
+	std::vector<SFVWaypoints *> * m_waypoints;
+	std::vector<Rule*> * m_rules;
 
-
+	bool calc();
+	bool checkRules();
+	void init();
 	SFVComponent();
 	virtual ~SFVComponent();
 
-	void addRolledValues(ScenarioFeatureGroup* group,std::vector<RolledValue*>* values);
+	void addDPObjects(ScenarioFeatureGroupType groupType,DPGroup* values);
+
 
 	 /**
 	* a base method that writes an xml file that fits the SFVComponent description
@@ -57,14 +74,15 @@ public:
 
 	TiXmlElement *toXMLElement();
 	void fromXMLElement(TiXmlElement * node);
+
 	std::vector<SFVMassLink *>* getMassLinks();
 	std::vector<SFVFrictionLink *>* getFrictionLinks();
 	std::vector<SFVSensorLink *>* getSensorLinks();
-	std::vector<SFVLight*>* getLights();
-	std::vector<SFVObject*>* getObjects();
+	std::vector<SFVLights*>* getLights();
+	std::vector<SFVObjects*>* getObjects();
 	std::vector<SFVTerrain*> * getTerrains();
 	std::vector<SFVPlatformPose*> * getPlatformPoses();
-	std::vector<SFVWaypoint*> * getWaypoints();
+	std::vector<SFVWaypoints*> * getWaypoints();
 
 	void addTerrain(SFVTerrain* terrain);
 };

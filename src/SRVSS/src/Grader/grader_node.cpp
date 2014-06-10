@@ -80,10 +80,10 @@ void model_statesCallback(const gazebo_msgs::ModelStates::ConstPtr &msg)
    reset_pub_.publish(reset_flag);
 }
 
-
+/*
 int main(int argc, char **argv)
 {
-   ros::init(argc, argv, "greader_node");
+  / ros::init(argc, argv, "greader_node");
 
    ros::NodeHandle n;
 
@@ -97,3 +97,4 @@ int main(int argc, char **argv)
 
    return 0;
 }
+*/
