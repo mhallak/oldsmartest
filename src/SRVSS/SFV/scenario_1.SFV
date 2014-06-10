@@ -1,0 +1,127 @@
+<?xml version="1.0" ?>
+<sfv version="1.0">
+    <terrain id="0">
+        <terrainId>1</terrainId>
+    </terrain>
+    <object id="0">
+        <type>1</type>
+        <X>0.255473</X>
+        <Y>0.131754</Y>
+        <Z>-0.095867</Z>
+        <roll>0.0495667</roll>
+        <pitch>-0.037114</pitch>
+        <yaw>-0.0436132</yaw>
+        <scale>1.17024</scale>
+    </object>
+    <object id="1">
+        <type>3</type>
+        <X>0.132905</X>
+        <Y>0.728294</Y>
+        <Z>-0.0583349</Z>
+        <roll>-0.0427854</roll>
+        <pitch>-0.0836141</pitch>
+        <yaw>-0.0385041</yaw>
+        <scale>1.78311</scale>
+    </object>
+    <object id="2">
+        <type>3</type>
+        <X>0.670177</X>
+        <Y>0.307837</Y>
+        <Z>-0.0842777</Z>
+        <roll>-0.0905632</roll>
+        <pitch>0.0599333</pitch>
+        <yaw>0.0414693</yaw>
+        <scale>4.7608</scale>
+    </object>
+    <light id="0">
+        <type>1</type>
+        <X>0.310205</X>
+        <Y>0.859438</Y>
+        <Z>4.72126</Z>
+        <directionX>0.409087</directionX>
+        <directionY>-0.489605</directionY>
+        <cone>40.7327</cone>
+        <range>6.36628</range>
+    </light>
+    <light id="1">
+        <type>3</type>
+        <X>0.79436</X>
+        <Y>0.635158</Y>
+        <Z>2.62641</Z>
+        <directionX>0.0156802</directionX>
+        <directionY>0.0615673</directionY>
+        <cone>49.0129</cone>
+        <range>20.7466</range>
+    </light>
+    <mass_link id="0" name="body">
+        <mass>26.8298</mass>
+        <inertiaIxxComponent>0.211401</inertiaIxxComponent>
+        <inertiaIyyComponent>0.108251</inertiaIyyComponent>
+        <inertiaIzzComponent>0.131538</inertiaIzzComponent>
+        <locationXDeviation>0.0843421</locationXDeviation>
+        <locationYDeviation>-0.0731386</locationYDeviation>
+        <locationZDeviation>0.0147501</locationZDeviation>
+        <locationRollDeviation>-26.4826</locationRollDeviation>
+        <locationPitchDeviation>-9.53799</locationPitchDeviation>
+        <locationYawDeviation>38.9206</locationYawDeviation>
+    </mass_link>
+    <mass_link id="1" name="body">
+        <mass>19.5537</mass>
+        <inertiaIxxComponent>0.167631</inertiaIxxComponent>
+        <inertiaIyyComponent>0.137726</inertiaIyyComponent>
+        <inertiaIzzComponent>0.252791</inertiaIzzComponent>
+        <locationXDeviation>-0.0517102</locationXDeviation>
+        <locationYDeviation>0.0261093</locationYDeviation>
+        <locationZDeviation>0.0256151</locationZDeviation>
+        <locationRollDeviation>-19.3424</locationRollDeviation>
+        <locationPitchDeviation>34.3656</locationPitchDeviation>
+        <locationYawDeviation>-6.31251</locationYawDeviation>
+    </mass_link>
+    <friction_link id="0" name="body">
+        <frictionDeviation>99.3433</frictionDeviation>
+    </friction_link>
+    <friction_link id="1" name="body">
+        <frictionDeviation>124.553</frictionDeviation>
+    </friction_link>
+    <sensor_link id="0" name="ibeo::link">
+        <locationXDeviation>-0.00032794</locationXDeviation>
+        <locationYDeviation>0.00117151</locationYDeviation>
+        <locationZDeviation>0.00580766</locationZDeviation>
+        <locationRollDeviation>0.265701</locationRollDeviation>
+        <locationPitchDeviation>0.507072</locationPitchDeviation>
+        <locationYawDeviation>-0.853672</locationYawDeviation>
+    </sensor_link>
+    <sensor_link id="1" name="right_sick::link">
+        <locationXDeviation>-0.0010909</locationXDeviation>
+        <locationYDeviation>0.00446822</locationYDeviation>
+        <locationZDeviation>0.0126111</locationZDeviation>
+        <locationRollDeviation>0.700852</locationRollDeviation>
+        <locationPitchDeviation>0.17934</locationPitchDeviation>
+        <locationYawDeviation>0.122039</locationYawDeviation>
+    </sensor_link>
+    <platform_pose id="0" name="bobcat">
+        <X>0.248324</X>
+        <Y>0.266771</Y>
+        <Azimut>1.56577</Azimut>
+    </platform_pose>
+    <waypoint id="0">
+        <i_distance>17.539</i_distance>
+        <relative_angle>-0.324055</relative_angle>
+        <wp_velocity>5.46872</wp_velocity>
+    </waypoint>
+    <waypoint id="1">
+        <i_distance>12.0332</i_distance>
+        <relative_angle>0.277985</relative_angle>
+        <wp_velocity>6.76388</wp_velocity>
+    </waypoint>
+    <waypoint id="2">
+        <i_distance>13.3214</i_distance>
+        <relative_angle>-0.134061</relative_angle>
+        <wp_velocity>6.11911</wp_velocity>
+    </waypoint>
+    <waypoint id="3">
+        <i_distance>19.7422</i_distance>
+        <relative_angle>0.0670412</relative_angle>
+        <wp_velocity>5.95151</wp_velocity>
+    </waypoint>
+</sfv>

@@ -80,12 +80,13 @@ void GazeboEnvironmentGenerator::spawnPlatformPose(SFVPlatformPose* sfvPlatformP
 	include->LinkEndChild(url);
 	TiXmlElement * pose = new TiXmlElement( "pose" );
 	std::stringstream ss;
-	float x,y,z;
+	float x,y,z, azi;
 	m_terrainAnalyzer->getXYZCoord(sfvPlatformPose->getLocationX(),sfvPlatformPose->getLocationY(),x,y,z);
+    azi = sfvPlatformPose->getLocationAzimut();
 
 	z=z+0.5;  // compensation for the wheels height
 	ss<<x <<" " << y <<" "<< z << " ";
-	ss<<0 <<" " << 0 <<" "<< 0;
+	ss<<0 <<" " << 0 <<" "<< azi;
 	TiXmlText * pose_text = new TiXmlText(ss.str());
 	ss.str("");
 	pose->LinkEndChild(pose_text);
