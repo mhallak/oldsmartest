@@ -33,7 +33,6 @@ class NumberSampler {
 	* the seed is updated after each roll in order to minimize the possibility of sampling of the distribution from the same spot.
 	*/
 	unsigned int seed;
-public:
 
 	 /**
 	* A constructor.
@@ -44,6 +43,17 @@ public:
 	* A destructor.
 	*/
 	virtual ~NumberSampler();
+    // Stop the compiler generating methods of copy the object
+	NumberSampler(NumberSampler const& copy);            // Not Implemented
+	NumberSampler& operator=(NumberSampler const& copy); // Not Implemented
+
+public:
+    static NumberSampler& getInstance()
+    {
+        static NumberSampler instance;
+        return instance;
+    }
+
 
 	 /**
 	* a number sampling method that takes the distribution bounds and samples an integer in a uniform fashion.

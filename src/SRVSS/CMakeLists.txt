@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(SRVSS)
 
+SET(CMAKE_CXX_FLAGS "-std=c++0x")
 
 find_package(catkin REQUIRED COMPONENTS
 cmake_modules
@@ -29,7 +30,6 @@ include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${Tiny
 
 
 add_library(NumberSampler src/utils/NumberSampler.cpp)
-add_library(RolledValue src/utils/RolledValue.cpp)
 
 
 
@@ -37,27 +37,10 @@ add_library(RolledValue src/utils/RolledValue.cpp)
 #############
 ### SFDP ####
 #############
-add_library(ScenarioFeatureDependecyType src/SFDP/ScenarioFeatureDependecyType.cpp)
-add_library(ScenarioFeatureDistributionType src/SFDP/ScenarioFeatureDistributionType.cpp)
-add_library(ScenarioFeatureType src/SFDP/ScenarioFeatureType.cpp)
-add_library(ScenarioFeatureGroupType src/SFDP/ScenarioFeatureGroupType.cpp)
+add_library(ScenarioFeatureGroup src/SFDP/ScenarioFeatureGroup.cpp)
 add_library(ScenarioFeature src/SFDP/ScenarioFeature.cpp)
 
-add_library(ScenarioFeatureDependecy src/SFDP/ScenarioFeatureDependecy.cpp)
-target_link_libraries(ScenarioFeatureDependecy ${catkin_LIBRARIES}
-ScenarioFeatureDependecyType
-ScenarioFeatureType
-)
-
-target_link_libraries(ScenarioFeature ${catkin_LIBRARIES}
-ScenarioFeatureDependecyType
-ScenarioFeatureDistributionType
-ScenarioFeatureType
-ScenarioFeatureDependecy
-RolledValue
-)
-
-add_library(ScenarioFeatureGroup src/SFDP/ScenarioFeatureGroup.cpp)
+target_link_libraries(ScenarioFeature ${catkin_LIBRARIES})
 
 target_link_libraries(ScenarioFeatureGroup  ${catkin_LIBRARIES}
 ScenarioFeature
@@ -66,29 +49,51 @@ ScenarioFeature
 
 add_library(SDFPComponent src/SFDP/SDFPComponent.cpp)
 target_link_libraries(SDFPComponent ${catkin_LIBRARIES}
-ScenarioFeatureDependecyType
-ScenarioFeatureDistributionType
-ScenarioFeatureType
-ScenarioFeatureGroupType
 ScenarioFeatureGroup
 ScenarioFeature
-ScenarioFeatureDependecy
-NumberSampler
-RolledValue
 )
+
 add_library(SDFPParser src/SFDP/SDFPParser.cpp)
 target_link_libraries(SDFPParser ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
-ScenarioFeatureDependecyType
-ScenarioFeatureDistributionType
-ScenarioFeatureType
-ScenarioFeature
 SDFPComponent
 )
 
+#############
+#### DP #####
+#############
+add_library(DPGroup src/SFV/DPGroup.cpp)
+add_library(DPObject src/SFV/DPObject.cpp)
 
+target_link_libraries(DPObject ${catkin_LIBRARIES}
+NumberSampler
+)
+target_link_libraries(DPGroup ${catkin_LIBRARIES}
+DPObject
+)
+
+##############
+## RESOURCE ##
+##############
+add_library(ResourceHandler src/Resource/ResourceHandler.cpp)
+target_link_libraries(ResourceHandler ${catkin_LIBRARIES} ${TinyXML_LIBRARIES})
+
+add_library(TerrainAnalyzer src/Generators/Gazebo/TerrainAnalyzer.cpp)
+target_link_libraries(TerrainAnalyzer ${catkin_LIBRARIES} ${OpenCV_LIBS})
+
+
+#############
+#### RULES ##
+#############
+add_library(TerrainBoundRule src/Rules/TerrainBoundsRule.cpp)
+target_link_libraries(TerrainBoundRule ${catkin_LIBRARIES}
+TerrainAnalyzer
+)
 #############
 #### SFV ####
 #############
+
+add_library(SFVBase src/SFV/SFVBase.cpp)
+add_library(SFVGeneric src/SFV/SFVGeneric.cpp)
 add_library(SFVObject src/SFV/SFVObject.cpp)
 add_library(SFVLight src/SFV/SFVLight.cpp)
 add_library(SFVTerrain src/SFV/SFVTerrain.cpp)
@@ -97,7 +102,42 @@ add_library(SFVSensorLink src/SFV/SFVSensorLink.cpp)
 add_library(SFVMassLink src/SFV/SFVMassLink.cpp)
 add_library(SFVPlatformPose src/SFV/SFVPlatformPose.cpp)
 add_library(SFVWaypoint src/SFV/SFVWaypoint.cpp)
+
 add_library(SFVComponent src/SFV/SFVComponent.cpp)
+
+target_link_libraries(SFVBase ${catkin_LIBRARIES}
+DPGroup
+)
+
+target_link_libraries(SFVGeneric ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
+SFVGeneric
+)
+
+target_link_libraries(SFVObject ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
+SFVBase
+)
+target_link_libraries(SFVLight ${catkin_LIBRARIES}
+SFVBase
+)
+target_link_libraries(SFVTerrain ${catkin_LIBRARIES}
+SFVBase
+)
+target_link_libraries(SFVFrictionLink ${catkin_LIBRARIES}
+SFVBase
+)
+target_link_libraries(SFVSensorLink ${catkin_LIBRARIES}
+SFVBase
+)
+target_link_libraries(SFVMassLink ${catkin_LIBRARIES}
+SFVBase
+)
+target_link_libraries(SFVPlatformPose ${catkin_LIBRARIES}
+SFVBase
+)
+target_link_libraries(SFVWaypoint ${catkin_LIBRARIES}
+SFVBase
+)
+
 
 target_link_libraries(SFVComponent ${catkin_LIBRARIES}
 SFVLight
@@ -108,21 +148,13 @@ SFVSensorLink
 SFVMassLink
 SFVPlatformPose
 SFVWaypoint
-RolledValue
+SFVGeneric
+TerrainBoundRule
 )
-
-##############
-## RESOURCE ##
-##############
-add_library(ResourceHandler src/Resource/ResourceHandler.cpp)
-target_link_libraries(ResourceHandler ${catkin_LIBRARIES} ${TinyXML_LIBRARIES})
 
 ##############
 # GENERATORS #
 ##############
-add_library(TerrainAnalyzer src/Generators/Gazebo/TerrainAnalyzer.cpp)
-target_link_libraries(TerrainAnalyzer ${catkin_LIBRARIES} ${OpenCV_LIBS})
-
 
 add_library(EnvironmentGenerator src/Generators/EnvironmentGenerator.cpp)
 add_library(MissionGenerator src/Generators/MissionGenerator.cpp)

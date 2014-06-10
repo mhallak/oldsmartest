@@ -9,6 +9,7 @@
 #define SCENARIOFEATUREGROUP_H_
 
 #include "ScenarioFeatureGroupType.h"
+#include "ScenarioFeature.h"
 #include <string>
 #include <vector>
 

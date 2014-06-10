@@ -7,32 +7,20 @@
 
 #ifndef SFVMASSLINK_H_
 #define SFVMASSLINK_H_
-#include "SFV/SFVInterface.h"
 #include "utils/ParsableInterface.h"
-class SFVMassLink : public SFVInterface , public ParsableInterface{
-	int m_Id;
-	std::string m_link_name;
-	double m_mass;
-	double m_inertiaIxxComponent;
-	double m_inertiaIyyComponent;
-	double m_inertiaIzzComponent;
-	double m_locationXDeviation;
-	double m_locationYDeviation;
-	double m_locationZDeviation;
-	double m_locationRollDeviation;
-	double m_locationPitchDeviation;
-	double m_locationYawDeviation;
+#include "SFVBase.h"
+class SFVMassLink : public SFVBase{
+
 public:
-	SFVMassLink();
+	void setStructure();
+
+	SFVMassLink(DPGroup *);
 	virtual ~SFVMassLink();
 
 
 	int getId() const;
 	void setId(int id);
 
-	void setRolledValue(RolledValue * value);
-	TiXmlElement *toXMLElement();
-	void fromXMLElement(TiXmlElement * node);
 
 	double getInertiaIxxComponent() const;
 	void setInertiaIxxComponent(double inertiaIxxComponent);

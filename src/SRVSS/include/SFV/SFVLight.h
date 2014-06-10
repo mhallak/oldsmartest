@@ -7,26 +7,16 @@
 
 #ifndef SFVLIGHT_H_
 #define SFVLIGHT_H_
-#include "SFV/SFVInterface.h"
 #include "utils/ParsableInterface.h"
-
-class SFVLight : public SFVInterface , public ParsableInterface{
-
-	int m_Id;
-	int m_Type;
-	double m_X;
-	double m_Y;
-	double m_Z;
-	double m_DirectionX;
-	double m_DirectionY;
-	double m_Cone;
-	double m_Range;
+#include "SFVBase.h"
+class SFVLight : public SFVBase
+{
 public:
-	SFVLight();
+
+	void setStructure();
+
+	SFVLight(DPGroup * dpGroup);
 	virtual ~SFVLight();
-	void setRolledValue(RolledValue * value);
-	TiXmlElement *toXMLElement();
-	void fromXMLElement(TiXmlElement * node);
 
 	double getCone() const;
 	void setCone(double cone);

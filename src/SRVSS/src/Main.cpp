@@ -16,12 +16,11 @@ void printUsage()
 {
 	std::cout << "usage:" <<std:: endl;
 	std::cout <<"(1) <srvss> -gen <sdfp file> <sfv output> # will generate a sfv file according to the sfdp input" <<std:: endl;
-	std::cout <<"(2) <srvss> -run <sfv output> <distanetion folder>  #will generate the scenario and launch it" <<std:: endl;
+	std::cout <<"(2) <srvss> -run <sfv output> <destination folder>  #will generate the scenario and launch it" <<std:: endl;
 	exit(1);
 }
 int main(int argc, char** argv)
 {
-	//check for bad input
 	if(argc<2)
 	{
 		std::cout << "ERROR : not enough parameters" <<std:: endl;
@@ -50,7 +49,9 @@ int main(int argc, char** argv)
 			try
 			{
 				SDFPComponent *sfdpComp=SDFPpars.genSDFPFromFile(PATH+argv[2]);
-				SFVComponent *sfvComp=sfdpComp->rollDice();
+				SFVComponent *sfvComp=sfdpComp->genSFV();
+				sfvComp->init();
+				sfvComp->calc();
 				sfvComp->genFileFromSFV(argv[3]);
 			}
 			catch(std::string &err)
@@ -67,7 +68,7 @@ int main(int argc, char** argv)
 		{
 			SFVComponent *sfvComp=new SFVComponent();
 			sfvComp->genSFVFromFile(argv[2]);
-
+			sfvComp->genFileFromSFV("testRun.sfv");
 			GazeboMissionGenerator * missionGen=new GazeboMissionGenerator();
      		missionGen->generateMission(sfvComp,scenarios_folder_path+"myMission.txt");
 
@@ -86,7 +87,6 @@ int main(int argc, char** argv)
 			std::cout<<err<<std::endl;
 		}
 	}
-	while(1){}
 
 	return 0;
 }

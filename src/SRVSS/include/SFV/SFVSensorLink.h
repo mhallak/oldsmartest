@@ -7,26 +7,19 @@
 
 #ifndef SFVSENSORLINK_H_
 #define SFVSENSORLINK_H_
-#include "SFV/SFVInterface.h"
 #include "utils/ParsableInterface.h"
-class SFVSensorLink : public SFVInterface , public ParsableInterface{
-	int m_Id;
-	std::string m_link_name;
-	double m_locationXDeviation;
-	double m_locationYDeviation;
-	double m_locationZDeviation;
-	double m_locationRollDeviation;
-	double m_locationPitchDeviation;
-	double m_locationYawDeviation;
-public:
-	SFVSensorLink();
-	virtual ~SFVSensorLink();
+#include "SFV/SFVBase.h"
 
+class SFVSensorLink : public SFVBase{
+
+public:
+	void setStructure();
+
+	SFVSensorLink(DPGroup *dpGroup);
+	virtual ~SFVSensorLink();
 	int getId() const;
 	void setId(int id);
-	void setRolledValue(RolledValue * value);
-	TiXmlElement *toXMLElement();
-	void fromXMLElement(TiXmlElement * node);
+
 	double getLocationPitchDeviation() const;
 	void setLocationPitchDeviation(double locationPitchDeviation);
 

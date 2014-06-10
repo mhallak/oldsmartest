@@ -7,10 +7,16 @@
 
 #include "SFV/SFVTerrain.h"
 
-SFVTerrain::SFVTerrain():
-m_Id(-1),
-m_TerrainId(-1)
+SFVTerrain::SFVTerrain(DPGroup * dpGroup): SFVBase(dpGroup)
 {
+	setStructure();
+	init(dpGroup);
+}
+
+void SFVTerrain::setStructure()
+{
+	m_objectType="Terrain";
+	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::topographic_map,0));
 }
 
 int SFVTerrain::getId() const {
@@ -22,59 +28,13 @@ void SFVTerrain::setId(int id) {
 }
 
 int SFVTerrain::getTerrainId() const {
-	return m_TerrainId;
+	return m_objects->at(ScenarioFeatureType::topographic_map)->getResult();
 }
 
 void SFVTerrain::setTerrainId(int terrainId) {
-	m_TerrainId = terrainId;
+	m_objects->at(ScenarioFeatureType::topographic_map)->setResult(terrainId);
 }
 
-void SFVTerrain::setRolledValue(RolledValue * value)
-{
-	switch(value->getType()._type)
-	{
-		case ScenarioFeatureType::topographic_map:
-			setId(value->getRollNumber());
-			setTerrainId(value->getValue());
-	}
-}
-
-TiXmlElement * SFVTerrain::toXMLElement()
-{
-	std::stringstream ss;
-	TiXmlElement * terrain= new TiXmlElement( "terrain" );
-	ss << getId();
-	terrain->SetAttribute("id",ss.str());
-	ss.str("");
-	TiXmlElement * terrainId= new TiXmlElement( "terrainId" );
-	ss << getTerrainId();
-	TiXmlText * terrainIdVal= new TiXmlText( ss.str() );
-	ss.str("");
-	terrainId->LinkEndChild(terrainIdVal);
-	terrain->LinkEndChild(terrainId);
-	return terrain;
-}
-
-void SFVTerrain::fromXMLElement(TiXmlElement * xmlElement)
-{
-	TiXmlNode* pChild;
-	TiXmlAttribute* pAttrib;
-
-	for ( pAttrib = xmlElement->ToElement()->FirstAttribute(); pAttrib != 0; pAttrib = pAttrib->Next())
-	{
-		if(pAttrib->NameTStr().compare("id")==0)
-		{
-			setId(atoi(pAttrib->ValueStr().c_str()));
-		}
-	}
-
-	for ( pChild = xmlElement->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
-	{
-		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("terrainId")==0){
-			setTerrainId(atof(pChild->FirstChild()->ToText()->ValueStr().c_str()));
-		}
-	}
-}
 
 SFVTerrain::~SFVTerrain() {
 	// TODO Auto-generated destructor stub

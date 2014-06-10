@@ -7,19 +7,16 @@
 
 #ifndef SFVFRICTIONLINK_H_
 #define SFVFRICTIONLINK_H_
-#include "SFV/SFVInterface.h"
 #include "utils/ParsableInterface.h"
+#include "SFVBase.h"
+class SFVFrictionLink : public SFVBase
+{
 
-class SFVFrictionLink : public SFVInterface , public ParsableInterface{
-	int m_id;
-	std::string m_link_name;
-	double m_frictionDeviation;
 public:
-	SFVFrictionLink();
+	void setStructure();
+
+	SFVFrictionLink(DPGroup * dpGroup);
 	virtual ~SFVFrictionLink();
-	void setRolledValue(RolledValue * value);
-	TiXmlElement *toXMLElement();
-	void fromXMLElement(TiXmlElement * node);
 
 	double getFrictionDeviation() const;
 	void setFrictionDeviation(double frictionDeviation);

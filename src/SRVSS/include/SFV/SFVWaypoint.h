@@ -8,20 +8,17 @@
 #ifndef SFVWAYPOINT_H_
 #define SFVWAYPOINT_H_
 
-#include "SFV/SFVInterface.h"
 #include "utils/ParsableInterface.h"
+#include "SFV/SFVBase.h"
 
-class SFVWaypoint : public SFVInterface , public ParsableInterface{
-	int m_id;
-	float m_wp_i_distance_i;
-	float m_relative_angle;
-	float m_wp_velocity;
+class SFVWaypoint : public SFVBase{
+
 public:
-	SFVWaypoint();
+	void setStructure();
+	SFVWaypoint(DPGroup * dpGroup);
 	virtual ~SFVWaypoint();
-	void setRolledValue(RolledValue * value);
-	TiXmlElement *toXMLElement();
-	void fromXMLElement(TiXmlElement * node);
+
+
 	int getId() const;
 	void setId(int id);
 	float getRelativeAngle() const;

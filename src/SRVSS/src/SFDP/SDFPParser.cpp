@@ -47,19 +47,9 @@ void parseScenarioFeature(ScenarioFeature *feature,TiXmlNode* xmlNode) throw (st
 			dist_param_2=pChild->FirstChild()->ToText()->ValueStr();
 			dist_param_2Found=true;
 		}
-		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("feature_dependency")==0){
-			TiXmlAttribute* pAttrib=pChild->ToElement()->FirstAttribute();
-			if(pAttrib->NameTStr().compare("type")==0){
-				ScenarioFeatureDependecy *dependecy=new ScenarioFeatureDependecy(pAttrib->ValueStr());
-				dependecy->set_supportingFeatureType(ScenarioFeatureType::stringToFeatureType(pChild->FirstChild()->ToText()->ValueStr()));
-				feature->addFeatureDependency(dependecy);
-			}else{
-				throw pAttrib->NameTStr()+" is not a valid scenario_feature type";
-			}
-		}
 	}
 	if(distributionFound && dist_param_1Found && dist_param_2Found){
-		feature->set_distributionType(ScenarioFeatureDistributionType::stringToDistributionType(distribution));
+		feature->set_distributionType(ScenarioFeatureDistributionType::parseString(distribution.c_str()));
 		feature->set_dist_param_1(atof(dist_param_1.c_str()));
 		feature->set_dist_param_2(atof(dist_param_2.c_str()));
 	}else{
@@ -79,30 +69,30 @@ void parseScenarioFeatureGroup(ScenarioFeatureGroup *featureGroup,TiXmlNode* xml
 	TiXmlAttribute* pAttrib;
 	//search for an sdfp element to parse
 	for ( pChild = xmlNode->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
-	{
-	if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("scenario_feature")==0)
-	{
-	ScenarioFeature *feature=0;
-	for ( pAttrib = pChild->ToElement()->FirstAttribute(); pAttrib != 0; pAttrib = pAttrib->Next())
-	{
-	if(pAttrib->NameTStr().compare("type")==0)
-	{
-	feature=new ScenarioFeature(pAttrib->ValueStr());
-	parseScenarioFeature(feature,pChild);
-	featureGroup->addFeature(feature);
-	}
-	/*else if (pAttrib->NameTStr().compare("group")==0)
-	{
-	if(feature==0)
-	throw std::string("type must be set before group");
-	feature->set_group(pAttrib->ValueStr());
-	}*/
-	else{
-	throw pAttrib->NameTStr()+" is not a valid scenario_feature type";
-	}
-	}
-	}
-	}
+		{
+		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("scenario_feature")==0)
+			{
+			ScenarioFeature *feature=0;
+			for ( pAttrib = pChild->ToElement()->FirstAttribute(); pAttrib != 0; pAttrib = pAttrib->Next())
+				{
+				if(pAttrib->NameTStr().compare("type")==0)
+					{
+					feature=new ScenarioFeature(pAttrib->ValueStr());
+					parseScenarioFeature(feature,pChild);
+					featureGroup->addFeature(feature);
+					}
+				/*else if (pAttrib->NameTStr().compare("group")==0)
+					{
+					if(feature==0)
+						throw std::string("type must be set before group");
+					feature->set_group(pAttrib->ValueStr());
+					}*/
+				else{
+					throw pAttrib->NameTStr()+" is not a valid scenario_feature type";
+					}
+				}
+			}
+		}
 }
 
 
@@ -120,7 +110,7 @@ void parseSDFP(SDFPComponent *sdfpComp,TiXmlNode* xmlNode) throw (std::string)
 			{
 				if(pAttrib->NameTStr().compare("type")==0)
 				{
-					featureGroup->set_featureGroupType(ScenarioFeatureGroupType::stringToFeatureGroupType(pAttrib->ValueStr()));
+					featureGroup->set_featureGroupType(ScenarioFeatureGroupType::parseString(pAttrib->Value()));
 				}
 				else if(pAttrib->NameTStr().compare("name")==0)
 				{
