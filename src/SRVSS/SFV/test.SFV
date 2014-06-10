@@ -4,204 +4,324 @@
         <terrainId>1</terrainId>
     </terrain>
     <object id="0">
-        <type>1</type>
-        <X>0.171617</X>
-        <Y>0.333876</Y>
-        <Z>-0.0605461</Z>
-        <roll>-0.0555217</roll>
-        <pitch>-0.0797407</pitch>
-        <yaw>-0.00617484</yaw>
-        <scale>1.88679</scale>
+        <type>4</type>
+        <X>0.633952</X>
+        <Y>0.251867</Y>
+        <Z>-0.054225</Z>
+        <roll>-0.0846254</roll>
+        <pitch>-0.0777853</pitch>
+        <yaw>0.0719297</yaw>
+        <scale>4.60065</scale>
     </object>
     <object id="1">
         <type>1</type>
-        <X>0.0905541</X>
-        <Y>0.434826</Y>
-        <Z>-0.0547483</Z>
-        <roll>0.072155</roll>
-        <pitch>-0.0715069</pitch>
-        <yaw>0.00546558</yaw>
-        <scale>2.09765</scale>
+        <X>0.200848</X>
+        <Y>0.510988</Y>
+        <Z>-0.0853169</Z>
+        <roll>-0.0672159</roll>
+        <pitch>-0.0348295</pitch>
+        <yaw>0.0630134</yaw>
+        <scale>1.76187</scale>
     </object>
     <object id="2">
-        <type>1</type>
-        <X>0.581575</X>
-        <Y>0.245769</Y>
-        <Z>-0.0755257</Z>
-        <roll>-0.00688002</roll>
-        <pitch>-0.0816256</pitch>
-        <yaw>0.00904712</yaw>
-        <scale>2.15247</scale>
+        <type>4</type>
+        <X>0.323243</X>
+        <Y>0.12197</Y>
+        <Z>-0.0951391</Z>
+        <roll>-0.00193956</roll>
+        <pitch>0.0550562</pitch>
+        <yaw>-0.0479191</yaw>
+        <scale>4.93399</scale>
     </object>
     <object id="3">
-        <type>1</type>
-        <X>0.431677</X>
-        <Y>0.577353</Y>
-        <Z>-0.096788</Z>
-        <roll>0.0672224</roll>
-        <pitch>0.0922674</pitch>
-        <yaw>-0.0290649</yaw>
-        <scale>4.06658</scale>
+        <type>4</type>
+        <X>0.457719</X>
+        <Y>0.422941</Y>
+        <Z>-0.061256</Z>
+        <roll>0.0549402</roll>
+        <pitch>0.0971341</pitch>
+        <yaw>-0.0300998</yaw>
+        <scale>2.39783</scale>
     </object>
     <object id="4">
-        <type>1</type>
-        <X>0.764897</X>
-        <Y>0.420197</Y>
-        <Z>-0.097741</Z>
-        <roll>-0.0690401</roll>
-        <pitch>0.00115669</pitch>
-        <yaw>-0.0816229</yaw>
-        <scale>2.82003</scale>
+        <type>2</type>
+        <X>0.634883</X>
+        <Y>0.240245</Y>
+        <Z>-0.0949124</Z>
+        <roll>0.0505517</roll>
+        <pitch>-0.048568</pitch>
+        <yaw>-0.00428254</yaw>
+        <scale>4.32413</scale>
     </object>
     <object id="5">
-        <type>1</type>
-        <X>0.274175</X>
-        <Y>0.589257</Y>
-        <Z>-0.0895617</Z>
-        <roll>0.0629845</roll>
-        <pitch>-0.019124</pitch>
-        <yaw>-0.0194547</yaw>
-        <scale>4.98144</scale>
+        <type>3</type>
+        <X>0.0789131</X>
+        <Y>0.757041</Y>
+        <Z>-0.0637342</Z>
+        <roll>-0.0302961</roll>
+        <pitch>-0.0608978</pitch>
+        <yaw>0.0455839</yaw>
+        <scale>1.95279</scale>
     </object>
     <object id="6">
-        <type>1</type>
-        <X>0.321439</X>
-        <Y>0.732221</Y>
-        <Z>-0.059788</Z>
-        <roll>-0.0285346</roll>
-        <pitch>-0.0366405</pitch>
-        <yaw>-0.0205364</yaw>
-        <scale>1.80558</scale>
+        <type>4</type>
+        <X>0.285441</X>
+        <Y>0.692358</Y>
+        <Z>-0.0795891</Z>
+        <roll>-0.0434866</roll>
+        <pitch>0.0412354</pitch>
+        <yaw>0.00808499</yaw>
+        <scale>1.60307</scale>
     </object>
     <object id="7">
-        <type>1</type>
-        <X>0.339254</X>
-        <Y>0.842675</Y>
-        <Z>-0.0776806</Z>
-        <roll>-0.0627555</roll>
-        <pitch>-0.0475826</pitch>
-        <yaw>0.0952173</yaw>
-        <scale>1.29336</scale>
+        <type>3</type>
+        <X>0.736478</X>
+        <Y>0.451784</Y>
+        <Z>-0.0909409</Z>
+        <roll>-0.0563778</roll>
+        <pitch>0.0151596</pitch>
+        <yaw>-0.0396664</yaw>
+        <scale>4.13244</scale>
     </object>
     <object id="8">
-        <type>1</type>
-        <X>0.663563</X>
-        <Y>0.319457</Y>
-        <Z>-0.0846521</Z>
-        <roll>-0.0229751</roll>
-        <pitch>-0.0794001</pitch>
-        <yaw>0.0982302</yaw>
-        <scale>4.97342</scale>
+        <type>3</type>
+        <X>0.944858</X>
+        <Y>0.189948</Y>
+        <Z>-0.0759991</Z>
+        <roll>0.0356886</roll>
+        <pitch>0.094568</pitch>
+        <yaw>0.035673</yaw>
+        <scale>4.09273</scale>
     </object>
     <object id="9">
         <type>1</type>
-        <X>0.122284</X>
-        <Y>0.273428</Y>
-        <Z>-0.0655343</Z>
-        <roll>0.060649</roll>
-        <pitch>-0.0502428</pitch>
-        <yaw>-0.0760508</yaw>
-        <scale>2.56967</scale>
+        <X>0.755722</X>
+        <Y>0.309382</Y>
+        <Z>-0.0920454</Z>
+        <roll>0.0178799</roll>
+        <pitch>0.0341458</pitch>
+        <yaw>0.0856316</yaw>
+        <scale>3.35589</scale>
     </object>
     <object id="10">
+        <type>3</type>
+        <X>0.325489</X>
+        <Y>0.0840634</Y>
+        <Z>-0.0969758</Z>
+        <roll>0.00857219</roll>
+        <pitch>-0.0732106</pitch>
+        <yaw>-0.0548223</yaw>
+        <scale>4.0891</scale>
+    </object>
+    <object id="11">
+        <type>4</type>
+        <X>0.876486</X>
+        <Y>0.679062</Y>
+        <Z>-0.0568131</Z>
+        <roll>0.085776</roll>
+        <pitch>-0.05169</pitch>
+        <yaw>-0.0908782</yaw>
+        <scale>4.22135</scale>
+    </object>
+    <object id="12">
+        <type>4</type>
+        <X>0.940046</X>
+        <Y>0.66095</Y>
+        <Z>-0.0914548</Z>
+        <roll>0.0429961</roll>
+        <pitch>-0.05367</pitch>
+        <yaw>0.0189085</yaw>
+        <scale>3.4968</scale>
+    </object>
+    <object id="13">
+        <type>4</type>
+        <X>0.655364</X>
+        <Y>0.177614</Y>
+        <Z>-0.0560474</Z>
+        <roll>-0.0103547</roll>
+        <pitch>0.0512819</pitch>
+        <yaw>0.0445504</yaw>
+        <scale>4.01344</scale>
+    </object>
+    <object id="14">
+        <type>3</type>
+        <X>0.260501</X>
+        <Y>0.874098</Y>
+        <Z>-0.0714481</Z>
+        <roll>0.0559326</roll>
+        <pitch>0.0500812</pitch>
+        <yaw>0.00710357</yaw>
+        <scale>4.20296</scale>
+    </object>
+    <object id="15">
+        <type>3</type>
+        <X>0.870768</X>
+        <Y>0.836064</Y>
+        <Z>-0.0511222</Z>
+        <roll>0.0121408</roll>
+        <pitch>0.0244305</pitch>
+        <yaw>-0.0706818</yaw>
+        <scale>2.40721</scale>
+    </object>
+    <object id="16">
+        <type>2</type>
+        <X>0.172924</X>
+        <Y>0.410684</Y>
+        <Z>-0.0552376</Z>
+        <roll>0.0212887</roll>
+        <pitch>-0.0672937</pitch>
+        <yaw>-0.0890661</yaw>
+        <scale>1.13313</scale>
+    </object>
+    <object id="17">
+        <type>4</type>
+        <X>0.635352</X>
+        <Y>0.606359</Y>
+        <Z>-0.0932628</Z>
+        <roll>-0.00370577</roll>
+        <pitch>-0.0894926</pitch>
+        <yaw>-0.0624788</yaw>
+        <scale>3.23407</scale>
+    </object>
+    <object id="18">
+        <type>4</type>
+        <X>0.294268</X>
+        <Y>0.593916</Y>
+        <Z>-0.095667</Z>
+        <roll>-0.0223025</roll>
+        <pitch>-0.0306296</pitch>
+        <yaw>0.0757744</yaw>
+        <scale>2.68038</scale>
+    </object>
+    <object id="19">
         <type>1</type>
-        <X>0.922744</X>
-        <Y>0.920094</Y>
-        <Z>-0.0568623</Z>
-        <roll>-0.0655445</roll>
-        <pitch>0.0891016</pitch>
-        <yaw>-0.000247911</yaw>
-        <scale>1.77934</scale>
+        <X>0.238484</X>
+        <Y>0.599889</Y>
+        <Z>-0.0848145</Z>
+        <roll>0.0290195</roll>
+        <pitch>0.0326673</pitch>
+        <yaw>-0.000474688</yaw>
+        <scale>2.78019</scale>
     </object>
     <light id="0">
-        <type>2</type>
-        <X>0.594996</X>
-        <Y>0.149677</Y>
-        <Z>2.52891</Z>
-        <directionX>-0.442012</directionX>
-        <directionY>-0.0329776</directionY>
-        <cone>62.6948</cone>
-        <range>22.8515</range>
+        <type>3</type>
+        <X>0.800794</X>
+        <Y>0.101629</Y>
+        <Z>2.96678</Z>
+        <directionX>0.1748</directionX>
+        <directionY>-0.222164</directionY>
+        <cone>60.9591</cone>
+        <range>7.95431</range>
     </light>
     <light id="1">
+        <type>1</type>
+        <X>0.0703471</X>
+        <Y>0.404494</Y>
+        <Z>3.63406</Z>
+        <directionX>-0.0726769</directionX>
+        <directionY>-0.0755644</directionY>
+        <cone>83.7149</cone>
+        <range>23.7456</range>
+    </light>
+    <light id="2">
         <type>3</type>
-        <X>0.570627</X>
-        <Y>0.745559</Y>
-        <Z>3.65126</Z>
-        <directionX>-0.0171073</directionX>
-        <directionY>0.344832</directionY>
-        <cone>13.4406</cone>
-        <range>19.1988</range>
+        <X>0.244718</X>
+        <Y>0.695471</Y>
+        <Z>2.86024</Z>
+        <directionX>-0.296486</directionX>
+        <directionY>0.138486</directionY>
+        <cone>34.6725</cone>
+        <range>10.0058</range>
+    </light>
+    <light id="3">
+        <type>2</type>
+        <X>0.860726</X>
+        <Y>0.0635898</Y>
+        <Z>4.67198</Z>
+        <directionX>0.0288726</directionX>
+        <directionY>0.113868</directionY>
+        <cone>56.5763</cone>
+        <range>39.3157</range>
+    </light>
+    <light id="4">
+        <type>2</type>
+        <X>0.813782</X>
+        <Y>0.506629</Y>
+        <Z>2.80512</Z>
+        <directionX>0.138478</directionX>
+        <directionY>0.264338</directionY>
+        <cone>64.7374</cone>
+        <range>10.8849</range>
     </light>
     <mass_link id="0" name="body">
-        <mass>13.5653</mass>
-        <inertiaIxxComponent>0.130137</inertiaIxxComponent>
-        <inertiaIyyComponent>0.204294</inertiaIyyComponent>
-        <inertiaIzzComponent>0.210077</inertiaIzzComponent>
-        <locationXDeviation>0.00625668</locationXDeviation>
-        <locationYDeviation>-0.0253734</locationYDeviation>
-        <locationZDeviation>0.0508762</locationZDeviation>
-        <locationRollDeviation>-31.7379</locationRollDeviation>
-        <locationPitchDeviation>43.3567</locationPitchDeviation>
-        <locationYawDeviation>-20.0706</locationYawDeviation>
+        <mass>27.9524</mass>
+        <inertiaIxxComponent>0.193301</inertiaIxxComponent>
+        <inertiaIyyComponent>0.104386</inertiaIyyComponent>
+        <inertiaIzzComponent>0.168737</inertiaIzzComponent>
+        <locationXDeviation>-0.0722388</locationXDeviation>
+        <locationYDeviation>0.0386596</locationYDeviation>
+        <locationZDeviation>-0.0554087</locationZDeviation>
+        <locationRollDeviation>16.4451</locationRollDeviation>
+        <locationPitchDeviation>-41.7437</locationPitchDeviation>
+        <locationYawDeviation>-7.62205</locationYawDeviation>
     </mass_link>
     <mass_link id="1" name="body">
-        <mass>11.2829</mass>
-        <inertiaIxxComponent>0.214415</inertiaIxxComponent>
-        <inertiaIyyComponent>0.108297</inertiaIyyComponent>
-        <inertiaIzzComponent>0.141711</inertiaIzzComponent>
-        <locationXDeviation>-0.0860697</locationXDeviation>
-        <locationYDeviation>0.0419023</locationYDeviation>
-        <locationZDeviation>0.0742035</locationZDeviation>
-        <locationRollDeviation>5.74315</locationRollDeviation>
-        <locationPitchDeviation>28.9877</locationPitchDeviation>
-        <locationYawDeviation>8.90583</locationYawDeviation>
+        <mass>4.77733</mass>
+        <inertiaIxxComponent>0.136846</inertiaIxxComponent>
+        <inertiaIyyComponent>0.199636</inertiaIyyComponent>
+        <inertiaIzzComponent>0.143186</inertiaIzzComponent>
+        <locationXDeviation>-0.0221676</locationXDeviation>
+        <locationYDeviation>-0.014857</locationYDeviation>
+        <locationZDeviation>-0.0767251</locationZDeviation>
+        <locationRollDeviation>-44.9233</locationRollDeviation>
+        <locationPitchDeviation>-26.7703</locationPitchDeviation>
+        <locationYawDeviation>28.4374</locationYawDeviation>
     </mass_link>
     <friction_link id="0" name="body">
-        <frictionDeviation>106.578</frictionDeviation>
+        <frictionDeviation>92.5283</frictionDeviation>
     </friction_link>
     <friction_link id="1" name="body">
-        <frictionDeviation>75.0457</frictionDeviation>
+        <frictionDeviation>127.927</frictionDeviation>
     </friction_link>
     <sensor_link id="0" name="ibeo::link">
-        <locationXDeviation>-0.00269153</locationXDeviation>
-        <locationYDeviation>0.00220552</locationYDeviation>
-        <locationZDeviation>-0.00907209</locationZDeviation>
-        <locationRollDeviation>0.250402</locationRollDeviation>
-        <locationPitchDeviation>0.493559</locationPitchDeviation>
-        <locationYawDeviation>-0.176995</locationYawDeviation>
+        <locationXDeviation>-0.00371733</locationXDeviation>
+        <locationYDeviation>0.0138216</locationYDeviation>
+        <locationZDeviation>0.00692677</locationZDeviation>
+        <locationRollDeviation>-0.295834</locationRollDeviation>
+        <locationPitchDeviation>-0.501668</locationPitchDeviation>
+        <locationYawDeviation>0.0461898</locationYawDeviation>
     </sensor_link>
     <sensor_link id="1" name="right_sick::link">
-        <locationXDeviation>-0.0103985</locationXDeviation>
-        <locationYDeviation>0.00931192</locationYDeviation>
-        <locationZDeviation>8.27855e-05</locationZDeviation>
-        <locationRollDeviation>0.280766</locationRollDeviation>
-        <locationPitchDeviation>0.30908</locationPitchDeviation>
-        <locationYawDeviation>-0.505628</locationYawDeviation>
+        <locationXDeviation>-0.000619445</locationXDeviation>
+        <locationYDeviation>-0.00657497</locationYDeviation>
+        <locationZDeviation>-0.00386541</locationZDeviation>
+        <locationRollDeviation>0.255223</locationRollDeviation>
+        <locationPitchDeviation>-0.612016</locationPitchDeviation>
+        <locationYawDeviation>1.05385</locationYawDeviation>
     </sensor_link>
     <platform_pose id="0" name="bobcat">
-        <X>0.0931811</X>
-        <Y>0.637985</Y>
-        <Azimut>-0.0922667</Azimut>
+        <X>0.332453</X>
+        <Y>0.285461</Y>
+        <Azimut>1.70875</Azimut>
     </platform_pose>
     <waypoint id="0">
-        <i_distance>16.0794</i_distance>
-        <relative_angle>-0.285141</relative_angle>
-        <wp_velocity>4.08456</wp_velocity>
+        <i_distance>13.6784</i_distance>
+        <relative_angle>0.310814</relative_angle>
+        <wp_velocity>5.75119</wp_velocity>
     </waypoint>
     <waypoint id="1">
-        <i_distance>16.2794</i_distance>
-        <relative_angle>0.326015</relative_angle>
-        <wp_velocity>6.64881</wp_velocity>
+        <i_distance>13.847</i_distance>
+        <relative_angle>0.171498</relative_angle>
+        <wp_velocity>3.7833</wp_velocity>
     </waypoint>
     <waypoint id="2">
-        <i_distance>11.4947</i_distance>
-        <relative_angle>-0.164063</relative_angle>
-        <wp_velocity>6.95473</wp_velocity>
+        <i_distance>10.7984</i_distance>
+        <relative_angle>-0.165238</relative_angle>
+        <wp_velocity>6.07188</wp_velocity>
     </waypoint>
     <waypoint id="3">
-        <i_distance>13.6478</i_distance>
-        <relative_angle>-0.0348444</relative_angle>
-        <wp_velocity>6.43948</wp_velocity>
+        <i_distance>11.8926</i_distance>
+        <relative_angle>-0.0127138</relative_angle>
+        <wp_velocity>6.62194</wp_velocity>
     </waypoint>
 </sfv>

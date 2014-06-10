@@ -4,5 +4,8 @@
 <terrain id="2">srvss_terrain2</terrain>
 <object id="1">barrel1</object>
 <object id="2">tree1</object>
+<object id="3">rock1</object>
+<object id="4">cube1</object>
+
 <light id="1">no</light>
 </resource>
