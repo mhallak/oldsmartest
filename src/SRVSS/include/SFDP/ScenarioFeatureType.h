@@ -57,6 +57,16 @@ BOOST_ENUM(ScenarioFeatureType,
 		(relative_angle_teta)
 		(wp_velocity)
 		(clouds)
+
+		(number_of_obstacles_on_path)
+		(obstacle_on_path_i_type)
+		(obstacle_on_path_i_scaling_factor)
+		(obstacle_on_path_i_location_along_the_path)
+		(obstacle_on_path_i_location_perpendicular_to_the_path)
+		(obstacle_on_path_i_location_on_the_Z_axis)
+		(obstacle_on_path_i_location_Roll)
+		(obstacle_on_path_i_location_Pitch)
+		(obstacle_on_path_i_location_Yaw)
 )
 
 
