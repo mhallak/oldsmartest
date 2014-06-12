@@ -1,17 +1,17 @@
 <sdf version='1.4'>
   <model name='bobcat'>
     <link name='body'>
-      <pose>0.0141787 0.000971285 -0.00127125 -0.506666 0.278641 0.216855</pose>
+      <pose>-0.00282386 0.00805984 0.0105927 0.501234 -0.917109 0.345046</pose>
       <inertial>
         <pose>-0.849719 0.000149152 0.585738 0 -0 0</pose>
-        <mass>7.30247</mass>
+        <mass>10.7444</mass>
         <inertia>
-          <ixx>0.195418</ixx>
+          <ixx>0.186891</ixx>
           <ixy>0.345421</ixy>
           <ixz>-2.61801</ixz>
-          <iyy>0.242577</iyy>
+          <iyy>0.183561</iyy>
           <iyz>-0.0538623</iyz>
-          <izz>0.13752</izz>
+          <izz>0.196938</izz>
         </inertia>
       </inertial>
       <collision name='body_collision'>
@@ -28,8 +28,8 @@
           </contact>
           <friction>
             <ode>
-              <mu>245.034</mu>
-              <mu2>245.034</mu2>
+              <mu>227.887</mu>
+              <mu2>227.887</mu2>
             </ode>
           </friction>
         </surface>
