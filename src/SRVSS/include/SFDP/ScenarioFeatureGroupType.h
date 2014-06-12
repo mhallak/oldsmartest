@@ -22,6 +22,7 @@ BOOST_ENUM(ScenarioFeatureGroupType,
 		(sensor_link_i)
 		(platform_pose)
 		(waypoints)
+		(obstacles_on_path)
 	)
 
 

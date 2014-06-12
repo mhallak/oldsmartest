@@ -21,10 +21,12 @@ SFVComponent::SFVComponent() {
 	m_frictionLinks=new std::vector<SFVFrictionLink *>;
 	m_sensorLinks=new std::vector<SFVSensorLink *>;
 	m_objects=new std::vector<SFVObjects *>;
+	m_obstaclesOnPath=new std::vector<SFVObstaclesOnPath *>;
 	m_lights=new std::vector<SFVLights *>;
 	m_terrains=new std::vector<SFVTerrain*>;
 	m_platformPoses=new std::vector<SFVPlatformPose*>;
-	m_waypoints=new std::vector<SFVWaypoints *>;
+	m_paths=new std::vector<SFVPath*>;
+
 	m_rules=new std::vector<Rule*>;
 	m_rules->push_back(new TerrainBoundsRule);
 }
@@ -45,24 +47,27 @@ void SFVComponent::init()
 {
 	initAUX<SFVTerrain>(ScenarioFeatureGroupType::map,m_terrains);
 	initAUX<SFVObjects>(ScenarioFeatureGroupType::objects,m_objects);
+	initAUX<SFVObstaclesOnPath>(ScenarioFeatureGroupType::obstacles_on_path,m_obstaclesOnPath);
 	initAUX<SFVLights>(ScenarioFeatureGroupType::lights,m_lights);
 	initAUX<SFVMassLink>(ScenarioFeatureGroupType::mass_link_i,m_massLinks);
 	initAUX<SFVFrictionLink>(ScenarioFeatureGroupType::friction_link_i,m_frictionLinks);
 	initAUX<SFVSensorLink>(ScenarioFeatureGroupType::sensor_link_i,m_sensorLinks);
 	initAUX<SFVPlatformPose>(ScenarioFeatureGroupType::platform_pose,m_platformPoses);
-	initAUX<SFVWaypoints>(ScenarioFeatureGroupType::waypoints,m_waypoints);
+	initAUX<SFVPath>(ScenarioFeatureGroupType::waypoints,m_paths);
 }
 
 bool SFVComponent::calc()
 {
-	for(auto  tr : *m_terrains)  	  { tr->calc(this); }
-	for(auto  tr : *m_objects)   	  { tr->calc(this); }
-	for(auto  tr : *m_lights)   	  { tr->calc(this); }
-	for(auto  tr : *m_massLinks) 	  { tr->calc(this); }
-	for(auto  tr : *m_frictionLinks) { tr->calc(this); }
-	for(auto  tr : *m_sensorLinks)   { tr->calc(this); }
-	for(auto  tr : *m_platformPoses) { tr->calc(this); }
-	for(auto  tr : *m_waypoints)     { tr->calc(this); }
+	for(auto  tr : *m_terrains)  	 		{ tr->calc(this); }
+	for(auto  tr : *m_objects)   			{ tr->calc(this); }
+	for(auto  tr : *m_obstaclesOnPath)   	{ tr->calc(this); }
+	for(auto  tr : *m_lights)   			{ tr->calc(this); }
+	for(auto  tr : *m_massLinks) 	 	    { tr->calc(this); }
+	for(auto  tr : *m_frictionLinks) 		{ tr->calc(this); }
+	for(auto  tr : *m_sensorLinks)	        { tr->calc(this); }
+	for(auto  tr : *m_platformPoses) 		{ tr->calc(this); }
+	for(auto  tr : *m_paths)     			{ tr->calc(this); }
+	m_paths->at(0)->getPathLength();
 	return true;
 }
 
@@ -103,6 +108,12 @@ std::vector<SFVObjects*>* SFVComponent::getObjects()
 {
 	return m_objects;
 }
+
+std::vector<SFVObstaclesOnPath*>* SFVComponent::getObstaclesOnPath()
+{
+	return m_obstaclesOnPath;
+}
+
 std::vector<SFVTerrain*>* SFVComponent::getTerrains()
 {
 	return m_terrains;
@@ -112,9 +123,9 @@ std::vector<SFVPlatformPose*> * SFVComponent::getPlatformPoses()
 {
 	return m_platformPoses;
 }
-std::vector<SFVWaypoints*> * SFVComponent::getWaypoints()
+std::vector<SFVPath*> * SFVComponent::getPaths()
 {
-	return m_waypoints;
+	return m_paths;
 }
 
 void SFVComponent::addTerrain(SFVTerrain* terrain) {
@@ -136,14 +147,15 @@ TiXmlElement *SFVComponent::toXMLElement()
 {
 	TiXmlElement * element = new TiXmlElement( "sfv" );
 	element->SetAttribute("version","1.0");
-	for(auto  tr : *m_terrains)  	  { element->LinkEndChild(tr->toXMLElement()); }
-	for(auto  tr : *m_objects)   	  { element->LinkEndChild(tr->toXMLElement()); }
-	for(auto  tr : *m_lights)   	  { element->LinkEndChild(tr->toXMLElement()); }
-	for(auto  tr : *m_massLinks) 	  { element->LinkEndChild(tr->toXMLElement()); }
-	for(auto  tr : *m_frictionLinks) { element->LinkEndChild(tr->toXMLElement()); }
-	for(auto  tr : *m_sensorLinks)   { element->LinkEndChild(tr->toXMLElement()); }
-	for(auto  tr : *m_platformPoses) { element->LinkEndChild(tr->toXMLElement()); }
-	for(auto  tr : *m_waypoints)     { element->LinkEndChild(tr->toXMLElement()); }
+	for(auto  tr : *m_terrains)  	  	 { element->LinkEndChild(tr->toXMLElement()); }
+	for(auto  tr : *m_objects)   	  	 { element->LinkEndChild(tr->toXMLElement()); }
+	for(auto  tr : *m_obstaclesOnPath)  { element->LinkEndChild(tr->toXMLElement()); }
+	for(auto  tr : *m_lights)   	 	 { element->LinkEndChild(tr->toXMLElement()); }
+	for(auto  tr : *m_massLinks) 	 	 { element->LinkEndChild(tr->toXMLElement()); }
+	for(auto  tr : *m_frictionLinks)	 { element->LinkEndChild(tr->toXMLElement()); }
+	for(auto  tr : *m_sensorLinks)   	 { element->LinkEndChild(tr->toXMLElement()); }
+	for(auto  tr : *m_platformPoses) 	 { element->LinkEndChild(tr->toXMLElement()); }
+	for(auto  tr : *m_paths)     	     { element->LinkEndChild(tr->toXMLElement()); }
 
 	return element;
 }
@@ -178,6 +190,12 @@ void SFVComponent::fromXMLElement(TiXmlElement * node)
 					{
 						fromXMLElementAUX<SFVObjects>("Generic",pChild->ToElement(),getObjects());
 					}
+
+					break;
+					case ScenarioFeatureGroupType::obstacles_on_path:
+					{
+						fromXMLElementAUX<SFVObstaclesOnPath>("Generic",pChild->ToElement(),getObstaclesOnPath());
+					}
 					break;
 					case ScenarioFeatureGroupType::lights:
 					{
@@ -186,7 +204,7 @@ void SFVComponent::fromXMLElement(TiXmlElement * node)
 					break;
 					case ScenarioFeatureGroupType::waypoints:
 					{
-						fromXMLElementAUX<SFVWaypoints>("Generic",pChild->ToElement(),getWaypoints());
+						fromXMLElementAUX<SFVPath>("Generic",pChild->ToElement(),getPaths());
 					}
 					break;
 				}

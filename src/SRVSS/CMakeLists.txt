@@ -95,6 +95,7 @@ TerrainAnalyzer
 add_library(SFVBase src/SFV/SFVBase.cpp)
 add_library(SFVGeneric src/SFV/SFVGeneric.cpp)
 add_library(SFVObject src/SFV/SFVObject.cpp)
+add_library(SFVObstacleOnPath src/SFV/SFVObstacleOnPath.cpp)
 add_library(SFVLight src/SFV/SFVLight.cpp)
 add_library(SFVTerrain src/SFV/SFVTerrain.cpp)
 add_library(SFVFrictionLink src/SFV/SFVFrictionLink.cpp)
@@ -103,6 +104,7 @@ add_library(SFVMassLink src/SFV/SFVMassLink.cpp)
 add_library(SFVPlatformPose src/SFV/SFVPlatformPose.cpp)
 add_library(SFVWaypoint src/SFV/SFVWaypoint.cpp)
 
+add_library(SFVPath src/SFV/SFVPath.cpp)
 add_library(SFVComponent src/SFV/SFVComponent.cpp)
 
 target_link_libraries(SFVBase ${catkin_LIBRARIES}
@@ -116,6 +118,11 @@ SFVGeneric
 target_link_libraries(SFVObject ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
 SFVBase
 )
+
+target_link_libraries(SFVObstacleOnPath ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
+SFVBase
+)
+
 target_link_libraries(SFVLight ${catkin_LIBRARIES}
 SFVBase
 )
@@ -138,10 +145,15 @@ target_link_libraries(SFVWaypoint ${catkin_LIBRARIES}
 SFVBase
 )
 
+target_link_libraries(SFVPath ${catkin_LIBRARIES}
+SFVWaypoint
+SFVGeneric
+)
 
 target_link_libraries(SFVComponent ${catkin_LIBRARIES}
 SFVLight
 SFVObject
+SFVObstacleOnPath
 SFVTerrain
 SFVFrictionLink
 SFVSensorLink
@@ -149,6 +161,7 @@ SFVMassLink
 SFVPlatformPose
 SFVWaypoint
 SFVGeneric
+SFVPath
 TerrainBoundRule
 )
 

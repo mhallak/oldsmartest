@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "SFVObject.h"
+#include "SFVObstacleOnPath.h"
 #include "SFVLight.h"
 #include "SFVTerrain.h"
 #include "SFVMassLink.h"
@@ -17,6 +18,7 @@
 #include "SFVSensorLink.h"
 #include "SFVPlatformPose.h"
 #include "SFVWaypoint.h"
+#include "SFVPath.h"
 #include "SFDP/ScenarioFeatureGroup.h"
 #include "utils/ParsableInterface.h"
 #include "SFV/SFVGeneric.h"
@@ -24,9 +26,15 @@
 #include "Rules/Rule.h"
 #include <map>
 
+
+
+
 typedef SFVGeneric<SFVLight,ScenarioFeatureType::number_of_light_sources> SFVLights;
 typedef SFVGeneric<SFVObject,ScenarioFeatureType::number_of_objects> SFVObjects;
 typedef SFVGeneric<SFVWaypoint,ScenarioFeatureType::number_of_way_points> SFVWaypoints;
+typedef SFVGeneric<SFVObstacleOnPath,ScenarioFeatureType::number_of_obstacles_on_path> SFVObstaclesOnPath;
+
+
 
 class SFVComponent: public ParsableInterface{
 
@@ -36,13 +44,14 @@ public:
 
 	std::map<ScenarioFeatureGroupType,std::vector<DPGroup*>*> * m_DPObjectMap;
 	std::vector<SFVObjects *> *m_objects;
+	std::vector<SFVObstaclesOnPath *> *m_obstaclesOnPath;
 	std::vector<SFVLights *> * m_lights;
 	std::vector<SFVMassLink *>* m_massLinks;
 	std::vector<SFVFrictionLink *>* m_frictionLinks;
 	std::vector<SFVSensorLink *>* m_sensorLinks;
 	std::vector<SFVTerrain*> * m_terrains;
 	std::vector<SFVPlatformPose*> * m_platformPoses;
-	std::vector<SFVWaypoints *> * m_waypoints;
+	std::vector<SFVPath *> * m_paths;
 	std::vector<Rule*> * m_rules;
 
 	bool calc();
@@ -80,9 +89,10 @@ public:
 	std::vector<SFVSensorLink *>* getSensorLinks();
 	std::vector<SFVLights*>* getLights();
 	std::vector<SFVObjects*>* getObjects();
+	std::vector<SFVObstaclesOnPath*>* getObstaclesOnPath();
 	std::vector<SFVTerrain*> * getTerrains();
 	std::vector<SFVPlatformPose*> * getPlatformPoses();
-	std::vector<SFVWaypoints*> * getWaypoints();
+	std::vector<SFVPath*> * getPaths();
 
 	void addTerrain(SFVTerrain* terrain);
 };

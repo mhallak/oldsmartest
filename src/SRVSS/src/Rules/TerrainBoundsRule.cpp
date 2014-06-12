@@ -38,7 +38,7 @@ bool TerrainBoundsRule::isRuleValid(SFVComponent *comp)
 
 		for(SFVPlatformPose* platformPose : *(comp->getPlatformPoses()))
 		{
-			for(SFVWaypoints* waypoints:*(comp->getWaypoints()))
+			for(SFVPath* waypoints:*(comp->getPaths()))
 			{
 				float x,y,z;
 				terrainA->getXYZCoord(platformPose->getLocationX(),platformPose->getLocationY(),x,y,z);

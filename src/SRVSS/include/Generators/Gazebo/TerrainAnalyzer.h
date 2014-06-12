@@ -26,6 +26,8 @@ public:
 	TerrainAnalyzer();
 
 	void getXYZCoord(float xPrecentage,float yPrecentage,float& xPos,float& yPos,float& zPos);
+	void getZCoord(float xMeters,float yMeters,float& zPos);
+
 
 	virtual ~TerrainAnalyzer();
 	float getHeight() const;
