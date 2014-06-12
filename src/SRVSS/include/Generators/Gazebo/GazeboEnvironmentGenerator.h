@@ -10,10 +10,10 @@
 
 #include <string>
 #include <utils/TinyXmlDef.h>
-#include <Generators/EnvironmentGenerator.h>
+#include <Generators/GeneratorInterface.h>
 #include <Generators/Gazebo/TerrainAnalyzer.h>
 
-class GazeboEnvironmentGenerator : public EnvironmentGenerator {
+class GazeboEnvironmentGenerator : public GeneratorInterface {
 	TerrainAnalyzer* m_terrainAnalyzer;
 	int m_objectCount;
 

@@ -7,9 +7,9 @@
 
 #ifndef GAZEBOMISSIONGENERATOR_H_
 #define GAZEBOMISSIONGENERATOR_H_
-#include <Generators/MissionGenerator.h>
+#include <Generators/GeneratorInterface.h>
 #include <Generators/Gazebo/TerrainAnalyzer.h>
-class GazeboMissionGenerator : public MissionGenerator{
+class GazeboMissionGenerator : public GeneratorInterface{
 	TerrainAnalyzer * m_terrainAnalyzer;
 	float m_last_x_pose;
 	float m_last_y_pose;

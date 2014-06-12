@@ -14,7 +14,6 @@
 
 class SFVObject : public SFVBase
 {
-	DPGroup* m_dpGroup;
 public:
 
 	void setStructure();

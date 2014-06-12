@@ -158,11 +158,11 @@ void GazeboEnvironmentGenerator::genEnvFromSFV(SFVComponent* sfvComp,std::string
 	spawnPlatformPose(sfvComp->m_platformPoses->at(0),world);
 
 	std::vector<SFVObjects*> *objects=sfvComp->getObjects();
-	for(int i=0;i<objects->size();i++)
+	for(auto it1: *sfvComp->getObjects())
 	{
-		for(int j=0;j<(*objects)[i]->m_objects->size();j++)
+		for(auto it2: *it1->m_objects)
 		{
-			spawnObject((*objects)[i]->m_objects->at(i),world);
+			spawnObject(it2,world);
 		}
 	}
 
