@@ -77,6 +77,14 @@ void TerrainAnalyzer::getXYZCoord(float xPrecentage,float yPrecentage,float& xPo
 	zPos=m_heightmap.at<uchar>(j, i, 0)*m_heightFactor;
 }
 
+void TerrainAnalyzer::getZCoord(float xMeters,float yMeters,float& zPos)
+{
+	int i=xMeters/m_widthFactor;
+	int j=yMeters/m_lengthFactor;
+	zPos=m_heightmap.at<uchar>(j, i, 0)*m_heightFactor;
+}
+
+
 TerrainAnalyzer::~TerrainAnalyzer() {
 	// TODO Auto-generated destructor stub
 }

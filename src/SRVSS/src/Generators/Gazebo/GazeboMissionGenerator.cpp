@@ -58,25 +58,25 @@ void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string 
 	file<< x <<" "<< y <<" "<< z<< " " <<platformPose->getLocationAzimut() << std::endl;
 	float azimut = platformPose->getLocationAzimut();
 
-
 	m_last_x_pose=x;
 	m_last_y_pose=y;
 	m_last_z_pose=z;
 	m_last_yaw_pose=azimut;
 
-	BOOST_FOREACH(SFVWaypoints* waypoints,*(sfvcomp->getWaypoints()))
+	double plat_init_azi = platformPose->getLocationAzimut();
+
+	BOOST_FOREACH(SFVPath* waypoints,*(sfvcomp->getPaths()))
 	{
 		file<< "WAYPOINTS"<<std::endl;
 		BOOST_FOREACH(SFVWaypoint* waypoint,*(waypoints->m_objects))
 		{
-			azimut+=waypoint->getRelativeAngle();
+			azimut= plat_init_azi + waypoint->getRelativeAngle();
 			x+=waypoint->getWpIDistanceI()*cos(azimut);
 			y+=waypoint->getWpIDistanceI()*sin(azimut);
 			file<< x <<" " <<y << " " << waypoint->getWpVelocity() << std::endl;
 		}
 	}
 	file.close();
-
 }
 
 void GazeboMissionGenerator::generate(SFVComponent * sfvcomp)

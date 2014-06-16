@@ -10,15 +10,22 @@
 #include "SFV/SFVComponent.h"
 #include "SFV/SFVObject.h"
 #include "SFV/SFVTerrain.h"
+#include "SFV/SFVPath.h"
+
+
 #include "utils/TinyXmlDef.h"
 #include "Resource/ResourceHandler.h"
 #include <sstream>
 #include <stdlib.h>
 #include <sdf/sdf.hh>
 
+#include <iostream>
+
 GazeboEnvironmentGenerator::GazeboEnvironmentGenerator() {
 	m_terrainAnalyzer=new TerrainAnalyzer();
 	 m_objectCount=0;
+	 m_ObstacleOnPathCounter=0;
+	 m_WpMarkCounter=0;
 }
 
 GazeboEnvironmentGenerator::~GazeboEnvironmentGenerator() {
@@ -59,6 +66,142 @@ void GazeboEnvironmentGenerator::spawnObject(SFVObject* sfvObj,TiXmlElement * el
 	name->LinkEndChild(new TiXmlText(ss.str()));
 	m_objectCount++;
 }
+
+void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFVComponent* sfvComp,TiXmlElement * element)
+{
+	SFVPlatformPose* platformPose=sfvComp->getPlatformPoses()->at(0);
+	float plat_x,plat_y,plat_z;
+	m_terrainAnalyzer->getXYZCoord(platformPose->getLocationX(),platformPose->getLocationY(),plat_x,plat_y,plat_z);
+    //std::cout <<  "plat_x = " << plat_x <<  "plat_y = " << plat_y << std::endl;
+	double plat_init_azi = platformPose->getLocationAzimut();
+
+    SFVPath* path=sfvComp->getPaths()->at(0);
+	double path_length = path->getPathLength();
+
+	SFVObstaclesOnPath *obsOnPath = sfvComp->getObstaclesOnPath()->at(0);
+	for (SFVObstacleOnPath *obs : *obsOnPath->m_objects)
+	{
+		TiXmlElement * include = new TiXmlElement( "include" );
+		element->LinkEndChild(include);
+		TiXmlElement * url = new TiXmlElement( "uri" );
+
+		TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance().getObjectById(obs->getType()));
+		url->LinkEndChild(url_text);
+		include->LinkEndChild(url);
+		TiXmlElement * pose = new TiXmlElement( "pose" );
+		std::stringstream ss;
+
+		double alo = obs->getAlong();
+		double per = obs->getPerpendicular();
+		double alo_path_pos = alo * path_length;
+	    //std::cout <<  "alo = " << alo <<  "  per = " << per << std::endl;
+	    double alon_path_dis = 0, azi = 0, dis = 0, x=plat_x, y=plat_y, next_x=plat_x, next_y=plat_y;
+	    for (SFVWaypoint *wp : *(path->m_objects) )
+	    {
+	    	azi = plat_init_azi + wp->getRelativeAngle();
+	    	dis = wp->getWpIDistanceI();
+	    	next_x = x + dis*cos(azi);
+	    	next_y = y + dis*sin(azi);
+
+	    	if ( (alon_path_dis + dis) < alo_path_pos  )
+	    	{
+	    		alon_path_dis = alon_path_dis + dis;
+	    		x = next_x;
+	    		y = next_y;
+	    	    //std::cout <<  "wp_x = " << x <<  "  wp_y = " << y << std::endl;
+	    	}
+	    	else
+	    	{
+	    		break;
+	    	}
+	    }
+	    double rem_alo = ((alo - alon_path_dis/path_length)*path_length)/dis;
+	    double obs_x = x + rem_alo * (next_x - x) - per*(next_y - y)/dis;
+	    double obs_y = y + rem_alo * (next_y - y) + per*(next_x - x)/dis;
+	   // std::cout <<  "obs_x = " << obs_x <<  "  obs_y = " << obs_y << std::endl;
+
+	float obs_z;
+	m_terrainAnalyzer->getZCoord(obs_x,obs_y,obs_z);
+
+	ss<<obs_x <<" " << obs_y <<" "<< obs_z+obs->getZ() << " ";
+    ss<<obs->getRoll() <<" " << obs->getPitch() <<" "<< obs->getYaw();
+
+    TiXmlText * pose_text = new TiXmlText(ss.str());
+	ss.str("");
+	pose->LinkEndChild(pose_text);
+	include->LinkEndChild(pose);
+
+	TiXmlElement * scale = new TiXmlElement( "scale" );
+	ss<<obs->getScale() <<" " << obs->getScale() <<" "<< obs->getScale();
+	TiXmlText * scale_text = new TiXmlText(ss.str());
+	ss.str("");
+	scale->LinkEndChild(scale_text);
+	include->LinkEndChild(scale);
+
+	TiXmlElement * name = new TiXmlElement( "name" );
+	include->LinkEndChild(name);
+	ss.str("");
+	ss<< "obstacle_on_path";
+	ss<<m_ObstacleOnPathCounter;
+
+	name->LinkEndChild(new TiXmlText(ss.str()));
+	m_ObstacleOnPathCounter++;
+	}
+}
+
+
+void GazeboEnvironmentGenerator::spawnPathWpMarks(SFVComponent* sfvComp,TiXmlElement * element)
+{
+	SFVPlatformPose* platformPose=sfvComp->getPlatformPoses()->at(0);
+	float plat_x,plat_y,plat_z;
+	m_terrainAnalyzer->getXYZCoord(platformPose->getLocationX(),platformPose->getLocationY(),plat_x,plat_y,plat_z);
+	double plat_init_azi = platformPose->getLocationAzimut();
+
+    SFVPath* path=sfvComp->getPaths()->at(0);
+
+    double azi = 0, dis = 0, wp_x=plat_x, wp_y=plat_y ;
+    for (SFVWaypoint *wp : *(path->m_objects) )
+	     {
+	    	azi = plat_init_azi + wp->getRelativeAngle();
+	    	dis = wp->getWpIDistanceI();
+	    	wp_x = wp_x + dis*cos(azi);
+	    	wp_y = wp_y + dis*sin(azi);
+
+	    std::cout <<  "wp_x = " << wp_x <<  "  wp_y = " << wp_y << std::endl;
+
+	    TiXmlElement * include = new TiXmlElement( "include" );
+		element->LinkEndChild(include);
+		TiXmlElement * url = new TiXmlElement( "uri" );
+
+		TiXmlText * url_text = new TiXmlText("model://wp_mark");
+		url->LinkEndChild(url_text);
+		include->LinkEndChild(url);
+
+		TiXmlElement * pose = new TiXmlElement( "pose" );
+		std::stringstream ss;
+		float mark_x = wp_x, mark_y = wp_y, mark_z;
+		m_terrainAnalyzer->getZCoord(mark_x,mark_y,mark_z);
+		ss<<mark_x <<" " << mark_y <<" "<< mark_z+3 << " ";
+		ss<<0 <<" " << 0 <<" "<< 0;
+		TiXmlText * pose_text = new TiXmlText(ss.str());
+		ss.str("");
+		pose->LinkEndChild(pose_text);
+		include->LinkEndChild(pose);
+
+		TiXmlElement * name = new TiXmlElement( "name" );
+		include->LinkEndChild(name);
+		ss.str("");
+		ss<< "wp_mark";
+		ss<<m_WpMarkCounter;
+
+		name->LinkEndChild(new TiXmlText(ss.str()));
+		m_WpMarkCounter++;
+	     }
+}
+
+
+
+
 
 void GazeboEnvironmentGenerator::spawnTerrain(SFVTerrain* sfvTerrain,TiXmlElement * element)
 {
@@ -158,14 +301,18 @@ void GazeboEnvironmentGenerator::genEnvFromSFV(SFVComponent* sfvComp,std::string
 
 	spawnPlatformPose(sfvComp->m_platformPoses->at(0),world);
 
-	std::vector<SFVObjects*> *objects=sfvComp->getObjects();
-	for(auto it1: *sfvComp->getObjects())
+
+	for(auto objs : *sfvComp->getObjects())
 	{
-		for(auto it2: *it1->m_objects)
+		for(auto obj : *objs->m_objects)
 		{
-			spawnObject(it2,world);
+			spawnObject(obj,world);
 		}
 	}
+
+	spawnObstacleOnPath(sfvComp, world);
+
+	spawnPathWpMarks(sfvComp, world);
 
 	doc.SaveFile(filename.c_str());
 }

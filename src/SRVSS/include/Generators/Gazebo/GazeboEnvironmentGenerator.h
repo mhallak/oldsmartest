@@ -16,10 +16,20 @@
 class GazeboEnvironmentGenerator : public GeneratorInterface {
 	TerrainAnalyzer* m_terrainAnalyzer;
 	int m_objectCount;
+	int m_ObstacleOnPathCounter;
+	int m_WpMarkCounter;
 
 	void spawnObject(SFVObject* sfvObj,TiXmlElement * element);
+
+	void spawnObstacleOnPath(SFVComponent* sfvComp,TiXmlElement * element);
+
+
 	void spawnTerrain(SFVTerrain* sfvTerrain,TiXmlElement * element);
 	void spawnPlatformPose(SFVPlatformPose* sfvPlatformPose,TiXmlElement * element);
+	void spawnPathWpMarks(SFVComponent* sfvComp,TiXmlElement * element);
+
+
+
 public:
 
 	GazeboEnvironmentGenerator();
