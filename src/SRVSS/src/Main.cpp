@@ -5,10 +5,10 @@
 #include <string>
 #include <stdio.h>
 #include <iostream>
-#include "Generators/Gazebo/SDFIterator.h"
 #include "Generators/Gazebo/GazeboPlatformGenerator.h"
 #include "Generators/Gazebo/GazeboMissionGenerator.h"
 #include "SRVSSSyncronizer.h"
+#include "Executor.h"
 #define PATH std::string("")
 
 
@@ -21,6 +21,12 @@ void printUsage()
 }
 int main(int argc, char** argv)
 {
+	//Executor * exe=new Executor("rosrun gazebo_ros gazebo");
+	//exe->executeCommand();
+	while(1)
+	{
+		//std::cout<< " executing "<<std::endl;
+	}
 	if(argc<2)
 	{
 		std::cout << "ERROR : not enough parameters" <<std:: endl;

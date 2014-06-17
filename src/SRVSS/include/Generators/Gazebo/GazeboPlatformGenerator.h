@@ -8,9 +8,9 @@
 #ifndef GAZEBOPLATFORMGENERATOR_H_
 #define GAZEBOPLATFORMGENERATOR_H_
 
-#include <Generators/PlatformGenerator.h>
+#include <Generators/GeneratorInterface.h>
 
-class GazeboPlatformGenerator : public PlatformGenerator{
+class GazeboPlatformGenerator : public GeneratorInterface{
 public:
 	GazeboPlatformGenerator();
 	virtual ~GazeboPlatformGenerator();

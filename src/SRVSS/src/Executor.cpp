@@ -41,8 +41,10 @@ void Executor::executeCommand()
 	pid1=fork();
 	if (pid1 == 0)
 	{
+		std::cout<< "cout:child proccess activated"<<std::endl;
 		execvp(argvs[0],argvs);
-		exit(0);
+		std::cout<< "cout:child proccess ended"<<std::endl;
+		//exit(0);
 	}
 }
 

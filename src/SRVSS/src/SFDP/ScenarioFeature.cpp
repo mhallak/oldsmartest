@@ -62,8 +62,6 @@ void ScenarioFeature::set_featureType(ScenarioFeatureType type)
 }
 
 
-
-
 void ScenarioFeature::set_distributionType(ScenarioFeatureDistributionType type)
 {
 	m_distType=type;
