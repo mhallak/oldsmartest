@@ -153,16 +153,16 @@ void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFVComponent* sfvComp,TiXml
 void GazeboEnvironmentGenerator::spawnPathWpMarks(SFVComponent* sfvComp,TiXmlElement * element)
 {
 	SFVPlatformPose* platformPose=sfvComp->getPlatformPoses()->at(0);
-	float plat_x,plat_y,plat_z;
+	float plat_x=0,plat_y=0,plat_z=0;
 	m_terrainAnalyzer->getXYZCoord(platformPose->getLocationX(),platformPose->getLocationY(),plat_x,plat_y,plat_z);
 	double plat_init_azi = platformPose->getLocationAzimut();
 
     SFVPath* path=sfvComp->getPaths()->at(0);
 
-    double azi = 0, dis = 0, wp_x=plat_x, wp_y=plat_y ;
+    double azi = plat_init_azi, dis = 0, wp_x=plat_x, wp_y=plat_y ;
     for (SFVWaypoint *wp : *(path->m_objects) )
 	     {
-	    	azi = plat_init_azi + wp->getRelativeAngle();
+	    	azi = azi + wp->getRelativeAngle();
 	    	dis = wp->getWpIDistanceI();
 	    	wp_x = wp_x + dis*cos(azi);
 	    	wp_y = wp_y + dis*sin(azi);
@@ -236,7 +236,7 @@ void GazeboEnvironmentGenerator::spawnPlatformPose(SFVPlatformPose* sfvPlatformP
 	include->LinkEndChild(pose);
 
 	TiXmlElement * name = new TiXmlElement( "name" );
-	name->LinkEndChild(new TiXmlText("SRVSS_BobCat"));
+	name->LinkEndChild(new TiXmlText(ResourceHandler::getInstance().getPlatformName()));
 	include->LinkEndChild(name);
 }
 

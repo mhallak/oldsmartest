@@ -20,6 +20,7 @@ public:
 	GazeboMissionGenerator();
 	virtual ~GazeboMissionGenerator();
 	void generateMission(SFVComponent * sfvcomp,std::string filename);
+	void generateMission_ROBIL2(SFVComponent * sfvcomp,std::string filename);
 	void generate(SFVComponent * sfvcomp);
 	float getLastXPose() const;
 	void setLastXPose(float lastXPose);
