@@ -5,7 +5,7 @@
     
      <arg name="SFDP_file_url" value="$(find SRVSS)/SFDP/test.SFDP"/>
      <arg name="SFV_file_url" value="$(find SRVSS)/SFV/$(arg scenario).SFV"/>
-     <arg name="scenarios_folder_url" value="$(find SRVSS)/scenarios/$(arg scenario)/"/>
+     <arg name="scenarios_folder_url" value="$(find SRVSS)/scenarios/$(arg scenario)"/>
 
 
      <node pkg="SRVSS" type="mainGen" name="SRVSS_gen_node" args="-gen $(arg SFDP_file_url) $(arg SFV_file_url)" />
@@ -31,20 +31,14 @@
     <arg name="world_name" value="$(arg scenarios_folder_url)/env.world"/>
   </include>
 
-<!-- -->
- <param name="robot_description" command="cat $(find srvss_pkg)/bobcat_model/BOBCAT.URDF" />
 
-
-  <!-- ros_control clam launch file -->
-  <include file="$(find srvss_pkg)/launch/srvss_bobcat_controllers.launch" />
-
-
-  <node pkg="srvss_pkg" type="srvss_rate2effort_node" name="srvss_RateToEffort_node"   cwd="node" output="screen" />
+  <include file="$(find srvss_bobcat)/launch/srvss_bobcat.launch"/>
 
   <node pkg="tf" type="static_transform_publisher" name="sick_link_broadcaster" args="1 0 0.2 0 0 0 body front_sick 100" />
 
-  <node pkg="srvss_pkg" type="srvss_wp_driver_node" name="srvss_wp_driver_node" args="-file $(arg scenarios_folder_url)/myMission.txt" />
+  <node pkg="srvss_wp_driver" type="srvss_wp_driver_node" name="srvss_wp_driver_node" args="-file $(arg scenarios_folder_url)/myMission.txt" />
 
-  <node pkg="srvss_pkg" type="srvss_greader_node" name="srvss_greader_node" />
- 
+<!--
+  <node pkg="srvss_wp_driver" type="srvss_greader_node" name="srvss_greader_node" />
+ -->
 </launch>

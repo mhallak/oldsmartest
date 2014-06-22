@@ -4,7 +4,12 @@ project(SRVSS)
 SET(CMAKE_CXX_FLAGS "-std=c++0x")
 
 find_package(catkin REQUIRED COMPONENTS
-cmake_modules
+  cmake_modules
+  roscpp
+  rospy
+  std_msgs
+  rosbag
+  robil_msgs 
 )
 
 find_package(Boost REQUIRED COMPONENTS system thread)
@@ -22,6 +27,9 @@ catkin_package(
       include
     DEPENDS
       TinyXML
+  CATKIN_DEPENDS      
+      message_runtime 
+      robil_msgs 
 )
 
                                                                                                                                                  

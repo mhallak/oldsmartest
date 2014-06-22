@@ -10,6 +10,24 @@
 #include <fstream>
 #include <Resource/ResourceHandler.h>
 #include <boost/foreach.hpp>
+
+#include "std_msgs/String.h"
+#include "std_msgs/Header.h"
+#include "nav_msgs/Path.h"
+#include "geometry_msgs/Pose.h"
+
+#include "std_msgs/Time.h"
+#include "ros/ros.h"
+
+#include <iostream>
+#include <sstream>
+
+#include <rosbag/bag.h>
+#include <rosbag/view.h>
+
+#include "robil_msgs/Path.h"
+
+
 GazeboMissionGenerator::GazeboMissionGenerator() {
 	m_terrainAnalyzer=new TerrainAnalyzer;
 
@@ -78,6 +96,58 @@ void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string 
 	}
 	file.close();
 }
+
+void GazeboMissionGenerator::generateMission_ROBIL2(SFVComponent * sfvComp,std::string fileName)
+{
+	std::string path_to_terrain_file_name = ResourceHandler::getInstance().getTerrainById(sfvComp->getTerrains()->at(0)->getTerrainId());
+	std::string path_to_terrain_folder = ResourceHandler::getInstance().getModelsPath();
+	m_terrainAnalyzer->loadFile(path_to_terrain_folder+"/"+path_to_terrain_file_name);
+
+	nav_msgs::Path wp_path;
+	geometry_msgs::PoseStamped pose;
+
+	SFVPlatformPose* platformPose=sfvComp->getPlatformPoses()->at(0);
+	double plat_init_azi = platformPose->getLocationAzimut();
+	float wp_x=0, wp_y=0, wp_z=0;
+	//m_terrainAnalyzer->getXYZCoord(platformPose->getLocationX(),platformPose->getLocationY(), wp_x, wp_y, wp_z);
+
+	double azi = plat_init_azi, dis = 0;
+	SFVPath* path=sfvComp->getPaths()->at(0);
+	for (SFVWaypoint *wp : *(path->m_objects) )
+	{
+    	azi = azi + wp->getRelativeAngle();
+		dis = wp->getWpIDistanceI();
+    	wp_x = wp_x + dis*cos(azi);
+    	wp_y = wp_y + dis*sin(azi);
+
+		pose.pose.position.x = wp_x;
+		pose.pose.position.y = wp_y;
+
+		wp_path.poses.push_back(pose);
+	}
+
+
+	robil_msgs::Path Robil2_path;
+	Robil2_path.waypoints = wp_path;
+
+	std::stringstream ss;
+	ss<<Robil2_path;
+	std::cout<< ss.str() << std::endl;
+
+	ros::Time play_time(10,0);
+	rosbag::Bag bag;
+	bag.open(fileName + ".bag", rosbag::bagmode::Write);
+	bag.write("/SMME/GlobalPath",play_time,Robil2_path);
+	bag.close();
+
+
+	std::ofstream file;
+	file.open(fileName + ".yaml");
+	file << ss.str();
+	file.close();
+}
+
+
 
 void GazeboMissionGenerator::generate(SFVComponent * sfvcomp)
 {

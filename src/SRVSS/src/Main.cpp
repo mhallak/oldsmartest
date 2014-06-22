@@ -76,13 +76,14 @@ int main(int argc, char** argv)
 			sfvComp->genSFVFromFile(argv[2]);
 			sfvComp->genFileFromSFV("testRun.sfv");
 			GazeboMissionGenerator * missionGen=new GazeboMissionGenerator();
-     		missionGen->generateMission(sfvComp,scenarios_folder_path+"myMission.txt");
+     		missionGen->generateMission(sfvComp,scenarios_folder_path+"/myMission.txt");
+     		missionGen->generateMission_ROBIL2(sfvComp,scenarios_folder_path+"/myMission_robil2");
 
 			GazeboPlatformGenerator * platGen=new GazeboPlatformGenerator();
-			platGen->generatePlatform(sfvComp,scenarios_folder_path+"platform.sdf");
+			platGen->generatePlatform(sfvComp,scenarios_folder_path+"/platform.sdf");
 
 			GazeboEnvironmentGenerator * envGen=new GazeboEnvironmentGenerator();
-			envGen->genEnvFromSFV(sfvComp,scenarios_folder_path+"env.world");
+			envGen->genEnvFromSFV(sfvComp,scenarios_folder_path+"/env.world");
 
 	//		SRVSSSyncronizer * sync=new SRVSSSyncronizer();
 	//		sync->runSimulation("env.world");

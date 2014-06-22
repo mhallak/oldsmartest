@@ -53,6 +53,10 @@ ResourceHandler::ResourceHandler() {
 						m_platformModel=pAttrib->ValueStr();
 						m_platformPath=m_modelsPath+"/"+pAttrib->ValueStr()+"/model.sdf";
 					}
+					else if(pAttrib->NameTStr().compare("name")==0)
+					{
+						m_platformName =pAttrib->ValueStr();
+					}
 				}
 				parseResource(pChild,m_resourceMap);
 				break;
@@ -99,4 +103,8 @@ const std::string& ResourceHandler::getPlatformPath() const {
 
 const std::string& ResourceHandler::getPlatformModel() const {
 	return m_platformModel;
+}
+
+const std::string& ResourceHandler::getPlatformName() const {
+	return m_platformName;
 }
