@@ -28,10 +28,9 @@ void SDFPComponent::addScenarioFeatureGroup (ScenarioFeatureGroup *feature) thro
 }
 
 
-SFVComponent* SDFPComponent::genSFV()
+SFVComponent* SDFPComponent::genSFV(std::string resource_file_path)
 {
-	SFVComponent * sfvComp=new SFVComponent;
-
+	SFVComponent * sfvComp=new SFVComponent(resource_file_path);
 
 	std::vector<ScenarioFeatureGroup*>* featureGroups=getFeatureGroups();
 	std::vector<ScenarioFeatureGroup*>::iterator it;
@@ -46,7 +45,6 @@ SFVComponent* SDFPComponent::genSFV()
 		}
 		sfvComp->addDPObjects((*it)->get_featureGroupType(),new DPGroup((*it)->get_name(),(*it)->get_featureGroupType(),dpMap));
 	}
-
 	return sfvComp;
 }
 

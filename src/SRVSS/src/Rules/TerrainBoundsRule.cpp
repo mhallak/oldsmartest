@@ -11,6 +11,7 @@
 #include "SFV/SFVComponent.h"
 #include "SFV/SFVTerrain.h"
 #include <boost/foreach.hpp>
+
 TerrainBoundsRule::TerrainBoundsRule() {
 	// TODO Auto-generated constructor stub
 
@@ -26,8 +27,8 @@ bool TerrainBoundsRule::isRuleValid(SFVComponent *comp)
 	for(SFVTerrain* terrain :*(comp->getTerrains()))
 	{
 		//load terrain
-		std::string terrain_name=ResourceHandler::getInstance().getTerrainById(terrain->getTerrainId());
-		std::string path = ResourceHandler::getInstance().getModelsPath();
+		std::string terrain_name=ResourceHandler::getInstance(comp->m_resource_file_path).getTerrainById(terrain->getTerrainId());
+		std::string path = ResourceHandler::getInstance(comp->m_resource_file_path).getModelsPath();
 		TerrainAnalyzer* terrainA=new TerrainAnalyzer();
 		terrainA->loadFile(path+"/"+terrain_name);
 

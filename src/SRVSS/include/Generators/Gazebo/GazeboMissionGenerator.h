@@ -19,8 +19,8 @@ class GazeboMissionGenerator : public GeneratorInterface{
 public:
 	GazeboMissionGenerator();
 	virtual ~GazeboMissionGenerator();
-	void generateMission(SFVComponent * sfvcomp,std::string filename);
-	void generateMission_ROBIL2(SFVComponent * sfvcomp,std::string filename);
+	void generateMission(SFVComponent * sfvcomp,std::string filename, std::string resources_file_path);
+	void generateMission_ROBIL2(SFVComponent * sfvcomp,std::string filename, std::string resources_file_path);
 	void generate(SFVComponent * sfvcomp);
 	float getLastXPose() const;
 	void setLastXPose(float lastXPose);

@@ -32,12 +32,12 @@ GazeboEnvironmentGenerator::~GazeboEnvironmentGenerator() {
 	// TODO Auto-generated destructor stub
 }
 
-void GazeboEnvironmentGenerator::spawnObject(SFVObject* sfvObj,TiXmlElement * element)
+void GazeboEnvironmentGenerator::spawnObject(SFVObject* sfvObj,TiXmlElement * element, std::string resources_file_path)
 {
 	TiXmlElement * include = new TiXmlElement( "include" );
 	element->LinkEndChild(include);
 	TiXmlElement * url = new TiXmlElement( "uri" );
-	TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance().getObjectById(sfvObj->getType()));
+	TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance(resources_file_path).getObjectById(sfvObj->getType()));
 	url->LinkEndChild(url_text);
 	include->LinkEndChild(url);
 	TiXmlElement * pose = new TiXmlElement( "pose" );
@@ -67,7 +67,7 @@ void GazeboEnvironmentGenerator::spawnObject(SFVObject* sfvObj,TiXmlElement * el
 	m_objectCount++;
 }
 
-void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFVComponent* sfvComp,TiXmlElement * element)
+void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFVComponent* sfvComp,TiXmlElement * element, std::string resources_file_path)
 {
 	SFVPlatformPose* platformPose=sfvComp->getPlatformPoses()->at(0);
 	float plat_x,plat_y,plat_z;
@@ -85,7 +85,7 @@ void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFVComponent* sfvComp,TiXml
 		element->LinkEndChild(include);
 		TiXmlElement * url = new TiXmlElement( "uri" );
 
-		TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance().getObjectById(obs->getType()));
+		TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance(resources_file_path).getObjectById(obs->getType()));
 		url->LinkEndChild(url_text);
 		include->LinkEndChild(url);
 		TiXmlElement * pose = new TiXmlElement( "pose" );
@@ -95,10 +95,10 @@ void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFVComponent* sfvComp,TiXml
 		double per = obs->getPerpendicular();
 		double alo_path_pos = alo * path_length;
 	    //std::cout <<  "alo = " << alo <<  "  per = " << per << std::endl;
-	    double alon_path_dis = 0, azi = 0, dis = 0, x=plat_x, y=plat_y, next_x=plat_x, next_y=plat_y;
+	    double alon_path_dis = 0, azi = plat_init_azi, dis = 0, x=plat_x, y=plat_y, next_x=plat_x, next_y=plat_y;
 	    for (SFVWaypoint *wp : *(path->m_objects) )
 	    {
-	    	azi = plat_init_azi + wp->getRelativeAngle();
+	    	azi = azi + wp->getRelativeAngle();
 	    	dis = wp->getWpIDistanceI();
 	    	next_x = x + dis*cos(azi);
 	    	next_y = y + dis*sin(azi);
@@ -203,22 +203,22 @@ void GazeboEnvironmentGenerator::spawnPathWpMarks(SFVComponent* sfvComp,TiXmlEle
 
 
 
-void GazeboEnvironmentGenerator::spawnTerrain(SFVTerrain* sfvTerrain,TiXmlElement * element)
+void GazeboEnvironmentGenerator::spawnTerrain(SFVTerrain* sfvTerrain,TiXmlElement * element, std::string resources_file_path)
 {
 	TiXmlElement * include = new TiXmlElement( "include" );
 	element->LinkEndChild(include);
 	TiXmlElement * url = new TiXmlElement( "uri" );
-	TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance().getTerrainById(sfvTerrain->getTerrainId()));
+	TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance(resources_file_path).getTerrainById(sfvTerrain->getTerrainId()));
 	url->LinkEndChild(url_text);
 	include->LinkEndChild(url);
 }
 
-void GazeboEnvironmentGenerator::spawnPlatformPose(SFVPlatformPose* sfvPlatformPose,TiXmlElement * element)
+void GazeboEnvironmentGenerator::spawnPlatformPose(SFVPlatformPose* sfvPlatformPose,TiXmlElement * element, std::string resources_file_path)
 {
 	TiXmlElement * include = new TiXmlElement( "include" );
 	element->LinkEndChild(include);
 	TiXmlElement * url = new TiXmlElement( "uri" );
-	TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance().getPlatformModel());
+	TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance(resources_file_path).getPlatformModel());
 	url->LinkEndChild(url_text);
 	include->LinkEndChild(url);
 	TiXmlElement * pose = new TiXmlElement( "pose" );
@@ -236,15 +236,15 @@ void GazeboEnvironmentGenerator::spawnPlatformPose(SFVPlatformPose* sfvPlatformP
 	include->LinkEndChild(pose);
 
 	TiXmlElement * name = new TiXmlElement( "name" );
-	name->LinkEndChild(new TiXmlText(ResourceHandler::getInstance().getPlatformName()));
+	name->LinkEndChild(new TiXmlText(ResourceHandler::getInstance(resources_file_path).getPlatformName()));
 	include->LinkEndChild(name);
 }
 
-void GazeboEnvironmentGenerator::genEnvFromSFV(SFVComponent* sfvComp,std::string filename)
+void GazeboEnvironmentGenerator::genEnvFromSFV(SFVComponent* sfvComp,std::string filename, std::string resources_file_path)
 {
 	//load terrain
-	std::string terrain=ResourceHandler::getInstance().getTerrainById(sfvComp->getTerrains()->at(0)->getTerrainId());
-	std::string path = ResourceHandler::getInstance().getModelsPath();
+	std::string terrain=ResourceHandler::getInstance(resources_file_path).getTerrainById(sfvComp->getTerrains()->at(0)->getTerrainId());
+	std::string path = ResourceHandler::getInstance(resources_file_path).getModelsPath();
 
 	m_terrainAnalyzer->loadFile(path+"/"+terrain);
 
@@ -297,20 +297,20 @@ void GazeboEnvironmentGenerator::genEnvFromSFV(SFVComponent* sfvComp,std::string
 	humidity->LinkEndChild(humidity_value);
 
 
-	spawnTerrain( sfvComp->getTerrains()->at(0),world);
+	spawnTerrain( sfvComp->getTerrains()->at(0),world, resources_file_path);
 
-	spawnPlatformPose(sfvComp->m_platformPoses->at(0),world);
+	spawnPlatformPose(sfvComp->m_platformPoses->at(0),world, resources_file_path);
 
 
 	for(auto objs : *sfvComp->getObjects())
 	{
 		for(auto obj : *objs->m_objects)
 		{
-			spawnObject(obj,world);
+			spawnObject(obj,world,resources_file_path);
 		}
 	}
 
-	spawnObstacleOnPath(sfvComp, world);
+	spawnObstacleOnPath(sfvComp, world, resources_file_path);
 
 	spawnPathWpMarks(sfvComp, world);
 

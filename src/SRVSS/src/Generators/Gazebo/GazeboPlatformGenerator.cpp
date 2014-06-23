@@ -38,12 +38,12 @@ sdf::ElementPtr findElementWithAttribute(sdf::ElementPtr modelPtr,std::string el
 	return res;
 }
 
-void GazeboPlatformGenerator::generatePlatform(SFVComponent * sfvcomp,std::string filename)
+void GazeboPlatformGenerator::generatePlatform(SFVComponent * sfvcomp,std::string filename, std::string resources_file_path)
 {
 	sdf::SDFPtr sdfptr(new sdf::SDF());
 	init(sdfptr);
-	sdf::addURIPath("model://", ResourceHandler::getInstance().getModelsPath());
-	sdf::readFile(ResourceHandler::getInstance().getPlatformPath(),sdfptr);
+	sdf::addURIPath("model://", ResourceHandler::getInstance(resources_file_path).getModelsPath());
+	sdf::readFile(ResourceHandler::getInstance(resources_file_path).getPlatformPath(),sdfptr);
 	sdf::ElementPtr modelPtr=sdfptr->root->GetElement("model");
 	sdf::ElementPtr link;
 	// set mass links
