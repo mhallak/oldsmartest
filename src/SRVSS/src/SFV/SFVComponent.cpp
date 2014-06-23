@@ -15,7 +15,7 @@
 #include <boost/foreach.hpp>
 
 
-SFVComponent::SFVComponent() {
+SFVComponent::SFVComponent(std::string resource_file_path) {
 	m_DPObjectMap=new std::map<ScenarioFeatureGroupType,std::vector<DPGroup*>*>;
 	m_massLinks=new std::vector<SFVMassLink *>;
 	m_frictionLinks=new std::vector<SFVFrictionLink *>;
@@ -29,6 +29,8 @@ SFVComponent::SFVComponent() {
 
 	m_rules=new std::vector<Rule*>;
 	m_rules->push_back(new TerrainBoundsRule);
+
+	m_resource_file_path = resource_file_path;
 }
 
 template<class T>

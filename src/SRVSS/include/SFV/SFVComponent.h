@@ -54,10 +54,12 @@ public:
 	std::vector<SFVPath *> * m_paths;
 	std::vector<Rule*> * m_rules;
 
+	std::string m_resource_file_path;
+
 	bool calc();
 	bool checkRules();
 	void init();
-	SFVComponent();
+	SFVComponent(std::string resource_file_path);
 	virtual ~SFVComponent();
 
 	void addDPObjects(ScenarioFeatureGroupType groupType,DPGroup* values);

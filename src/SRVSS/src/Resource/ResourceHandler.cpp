@@ -20,14 +20,14 @@ void parseResource(TiXmlNode* node,std::map<std::string,std::map<int,std::string
 }
 
 
-ResourceHandler::ResourceHandler() {
+ResourceHandler::ResourceHandler(std::string resources_file_path) {
 
 	m_resourceMap=new std::map<std::string,std::map<int,std::string> *>;
 	m_resourceMap->insert(std::pair<std::string,std::map<int,std::string> *>(std::string("terrain"),new std::map<int,std::string>));
 	m_resourceMap->insert(std::pair<std::string,std::map<int,std::string> *>(std::string("object"),new std::map<int,std::string>));
 	m_resourceMap->insert(std::pair<std::string,std::map<int,std::string> *>(std::string("light"),new std::map<int,std::string>));
 
-	TiXmlDocument doc("/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/resource/resource.xml");
+	TiXmlDocument doc(resources_file_path);
 
 		if (!doc.LoadFile())
 		{

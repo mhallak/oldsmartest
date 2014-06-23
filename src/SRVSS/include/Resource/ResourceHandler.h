@@ -21,16 +21,16 @@ private:
 	std::string m_platformName;
 	std::string getResource(std::string name,int id);
     // Private Constructor
-	ResourceHandler();
+	ResourceHandler(std::string resources_file_path);
 	virtual ~ResourceHandler();
     // Stop the compiler generating methods of copy the object
 	ResourceHandler(ResourceHandler const& copy);            // Not Implemented
-	ResourceHandler& operator=(ResourceHandler const& copy); // Not Implemented
+	ResourceHandler& operator=(ResourceHandler const& copy);  // Not Implemented
 
 public:
-    static ResourceHandler& getInstance()
+    static ResourceHandler& getInstance(std::string resources_file_path)
     {
-        static ResourceHandler instance;
+        static ResourceHandler instance(resources_file_path);
         return instance;
     }
 

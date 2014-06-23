@@ -72,7 +72,7 @@ public:
 	 * generate a SFVObject by rolling all the features according to their dependencies
 	 * @return a SFVObject
 	 */
-	SFVComponent* genSFV();
+	SFVComponent* genSFV(std::string resources_file_path);
 
 
 	std::vector<ScenarioFeatureGroup*> * getFeatureGroups();

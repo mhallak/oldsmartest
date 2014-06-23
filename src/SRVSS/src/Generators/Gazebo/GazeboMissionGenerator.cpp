@@ -54,10 +54,10 @@ void GazeboMissionGenerator::setLastPlatformName(
 	m_last_platform_name = lastPlatformName;
 }
 
-void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string filename)
+void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string filename, std::string resources_file_path)
 {
-	std::string terrain = ResourceHandler::getInstance().getTerrainById(sfvcomp->getTerrains()->at(0)->getTerrainId());
-	std::string path = ResourceHandler::getInstance().getModelsPath();
+	std::string terrain = ResourceHandler::getInstance(resources_file_path).getTerrainById(sfvcomp->getTerrains()->at(0)->getTerrainId());
+	std::string path = ResourceHandler::getInstance(resources_file_path).getModelsPath();
 
 	m_terrainAnalyzer->loadFile(path+"/"+terrain);
 
@@ -88,7 +88,7 @@ void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string 
 		file<< "WAYPOINTS"<<std::endl;
 		BOOST_FOREACH(SFVWaypoint* waypoint,*(waypoints->m_objects))
 		{
-			azimut= plat_init_azi + waypoint->getRelativeAngle();
+			azimut= azimut + waypoint->getRelativeAngle();
 			x+=waypoint->getWpIDistanceI()*cos(azimut);
 			y+=waypoint->getWpIDistanceI()*sin(azimut);
 			file<< x <<" " <<y << " " << waypoint->getWpVelocity() << std::endl;
@@ -97,10 +97,10 @@ void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string 
 	file.close();
 }
 
-void GazeboMissionGenerator::generateMission_ROBIL2(SFVComponent * sfvComp,std::string fileName)
+void GazeboMissionGenerator::generateMission_ROBIL2(SFVComponent * sfvComp,std::string fileName, std::string resources_file_path)
 {
-	std::string path_to_terrain_file_name = ResourceHandler::getInstance().getTerrainById(sfvComp->getTerrains()->at(0)->getTerrainId());
-	std::string path_to_terrain_folder = ResourceHandler::getInstance().getModelsPath();
+	std::string path_to_terrain_file_name = ResourceHandler::getInstance(resources_file_path).getTerrainById(sfvComp->getTerrains()->at(0)->getTerrainId());
+	std::string path_to_terrain_folder = ResourceHandler::getInstance(resources_file_path).getModelsPath();
 	m_terrainAnalyzer->loadFile(path_to_terrain_folder+"/"+path_to_terrain_file_name);
 
 	nav_msgs::Path wp_path;
