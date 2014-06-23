@@ -6,7 +6,7 @@
     
      <arg name="SFDP_file_url" value="$(find SRVSS)/SFDP/test.SFDP"/>
      <arg name="SFV_file_url" value="$(find SRVSS)/SFV/$(arg scenario).SFV"/>
-     <arg name="resource_file_url" value="$(find SRVSS)/resource/resource.xml"/>
+     <arg name="resource_file_url" value="$(find SRVSS)/resource/resource_robil2.xml"/>
      <arg name="scenarios_folder_url" value="$(find SRVSS)/scenarios/$(arg scenario)"/>
 
 
