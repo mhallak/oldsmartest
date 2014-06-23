@@ -177,28 +177,21 @@ TerrainBoundRule
 # GENERATORS #
 ##############
 
-add_library(EnvironmentGenerator src/Generators/EnvironmentGenerator.cpp)
-add_library(MissionGenerator src/Generators/MissionGenerator.cpp)
-add_library(PlatformGenerator src/Generators/PlatformGenerator.cpp)
-
 
 add_library(GazeboEnvironmentGenerator src/Generators/Gazebo/GazeboEnvironmentGenerator.cpp)
 target_link_libraries(GazeboEnvironmentGenerator ${catkin_LIBRARIES}
-EnvironmentGenerator
 ResourceHandler
 TerrainAnalyzer
 )
 
 add_library(GazeboMissionGenerator src/Generators/Gazebo/GazeboMissionGenerator.cpp)
 target_link_libraries(GazeboMissionGenerator ${catkin_LIBRARIES}
-MissionGenerator
 ResourceHandler
 TerrainAnalyzer
 )
 
 add_library(GazeboPlatformGenerator src/Generators/Gazebo/GazeboPlatformGenerator.cpp)
 target_link_libraries(GazeboPlatformGenerator ${catkin_LIBRARIES}
-PlatformGenerator
 ResourceHandler
 /usr/lib/libsdformat.so
 )
