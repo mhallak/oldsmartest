@@ -40,6 +40,8 @@ class SFVComponent: public ParsableInterface{
 
 	template<class T> void fromXMLElementAUX(std::string text,TiXmlElement * node,std::vector<T*> * vec);
 	template<class T> void initAUX(ScenarioFeatureGroupType type,std::vector<T*> * vec);
+	template<class T> void rollAUX(std::vector<T*> * vec,bool & state);
+
 public:
 
 	std::map<ScenarioFeatureGroupType,std::vector<DPGroup*>*> * m_DPObjectMap;

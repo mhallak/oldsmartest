@@ -24,7 +24,7 @@ double SFVPath::getPathLength()
 	{
 		path_length = path_length + wp->getWpIDistanceI();
 	}
-	std::cout << "path_length = " << path_length << std::endl;
+	//std::cout << "path_length = " << path_length << std::endl;
 
  return path_length;
 }

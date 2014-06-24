@@ -10,9 +10,12 @@
 #include "SFV/SFVTerrain.h"
 #include "SFV/SFVObject.h"
 #include "SFV/SFVLight.h"
-#include "Rules/TerrainBoundsRule.h"
+#include "Rules/RULE_wp_path_inside_map.h"
+#include "Rules/RULE_platform_init_pose_with_no_obj_colisions.h"
 #include "SFV/SFVGeneric.h"
 #include <boost/foreach.hpp>
+
+#include <iostream>
 
 
 SFVComponent::SFVComponent(std::string resource_file_path) {
@@ -26,9 +29,9 @@ SFVComponent::SFVComponent(std::string resource_file_path) {
 	m_terrains=new std::vector<SFVTerrain*>;
 	m_platformPoses=new std::vector<SFVPlatformPose*>;
 	m_paths=new std::vector<SFVPath*>;
-
 	m_rules=new std::vector<Rule*>;
-	m_rules->push_back(new TerrainBoundsRule);
+	m_rules->push_back(new Rule_wp_path_inside_map);
+	m_rules->push_back(new Rule_platform_init_pose_with_no_obj_colisions);
 
 	m_resource_file_path = resource_file_path;
 }
@@ -45,6 +48,7 @@ void SFVComponent::initAUX(ScenarioFeatureGroupType type,std::vector<T*> * vec)
 	}
 }
 
+
 void SFVComponent::init()
 {
 	initAUX<SFVTerrain>(ScenarioFeatureGroupType::map,m_terrains);
@@ -58,23 +62,45 @@ void SFVComponent::init()
 	initAUX<SFVPath>(ScenarioFeatureGroupType::waypoints,m_paths);
 }
 
+
+template<class T>
+void SFVComponent::rollAUX(std::vector<T*> * vec,bool & state)
+{
+	if(!state)
+		return;
+	for(auto  tr : *vec)
+	    {
+		state = tr->calc(this);
+	    if (! state)
+	    	break;
+	    }
+}
+
+
 bool SFVComponent::calc()
 {
-	for(auto  tr : *m_terrains)  	 		{ tr->calc(this); }
-	for(auto  tr : *m_objects)   			{ tr->calc(this); }
-	for(auto  tr : *m_obstaclesOnPath)   	{ tr->calc(this); }
-	for(auto  tr : *m_lights)   			{ tr->calc(this); }
-	for(auto  tr : *m_massLinks) 	 	    { tr->calc(this); }
-	for(auto  tr : *m_frictionLinks) 		{ tr->calc(this); }
-	for(auto  tr : *m_sensorLinks)	        { tr->calc(this); }
-	for(auto  tr : *m_platformPoses) 		{ tr->calc(this); }
-	for(auto  tr : *m_paths)     			{ tr->calc(this); }
+	std::cout << " ######## starting roll of SFV ######## " << std::endl;
+	bool SFV_roll_success = true;
+
+	rollAUX(m_terrains,SFV_roll_success);
+	rollAUX(m_objects,SFV_roll_success);
+	rollAUX(m_lights,SFV_roll_success);
+	rollAUX(m_massLinks,SFV_roll_success);
+	rollAUX(m_frictionLinks,SFV_roll_success);
+	rollAUX(m_sensorLinks,SFV_roll_success);
+	rollAUX(m_platformPoses,SFV_roll_success);
+	rollAUX(m_paths,SFV_roll_success);
+	rollAUX(m_obstaclesOnPath,SFV_roll_success);
+
 	m_paths->at(0)->getPathLength();
-	return true;
+
+    std::cout << " ######## ending roll of SFV ######## success = " << SFV_roll_success << std::endl;
+	return SFV_roll_success;
 }
 
 bool  SFVComponent::checkRules(){
 	bool ans=true;
+	std::cout << " !! checking rules : " << std::endl;
 	for(auto tr : *m_rules)
 	{
 		ans=tr->isRuleValid(this);

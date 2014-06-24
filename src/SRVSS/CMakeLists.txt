@@ -92,8 +92,13 @@ target_link_libraries(TerrainAnalyzer ${catkin_LIBRARIES} ${OpenCV_LIBS})
 #############
 #### RULES ##
 #############
-add_library(TerrainBoundRule src/Rules/TerrainBoundsRule.cpp)
-target_link_libraries(TerrainBoundRule ${catkin_LIBRARIES}
+add_library(RULE_wp_path_inside_map src/Rules/RULE_wp_path_inside_map.cpp)
+target_link_libraries(RULE_wp_path_inside_map ${catkin_LIBRARIES}
+TerrainAnalyzer
+)
+
+add_library(RULE_platform_init_pose_with_no_obj_colisions src/Rules/RULE_platform_init_pose_with_no_obj_colisions.cpp)
+target_link_libraries(RULE_platform_init_pose_with_no_obj_colisions ${catkin_LIBRARIES}
 TerrainAnalyzer
 )
 #############
@@ -170,7 +175,9 @@ SFVPlatformPose
 SFVWaypoint
 SFVGeneric
 SFVPath
-TerrainBoundRule
+
+RULE_wp_path_inside_map
+RULE_platform_init_pose_with_no_obj_colisions
 )
 
 ##############
