@@ -167,7 +167,7 @@ void GazeboEnvironmentGenerator::spawnPathWpMarks(SFVComponent* sfvComp,TiXmlEle
 	    	wp_x = wp_x + dis*cos(azi);
 	    	wp_y = wp_y + dis*sin(azi);
 
-	    std::cout <<  "wp_x = " << wp_x <<  "  wp_y = " << wp_y << std::endl;
+	   // std::cout <<  "wp_x = " << wp_x <<  "  wp_y = " << wp_y << std::endl;
 
 	    TiXmlElement * include = new TiXmlElement( "include" );
 		element->LinkEndChild(include);
@@ -198,8 +198,6 @@ void GazeboEnvironmentGenerator::spawnPathWpMarks(SFVComponent* sfvComp,TiXmlEle
 		m_WpMarkCounter++;
 	     }
 }
-
-
 
 
 

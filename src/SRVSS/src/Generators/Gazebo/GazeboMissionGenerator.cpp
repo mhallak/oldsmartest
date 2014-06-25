@@ -132,7 +132,7 @@ void GazeboMissionGenerator::generateMission_ROBIL2(SFVComponent * sfvComp,std::
 
 	std::stringstream ss;
 	ss<<Robil2_path;
-	std::cout<< ss.str() << std::endl;
+	//std::cout<< ss.str() << std::endl;
 
 	ros::Time play_time(10,0);
 	rosbag::Bag bag;

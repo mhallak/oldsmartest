@@ -53,9 +53,9 @@ BOOST_ENUM(ScenarioFeatureType,
 		(initial_platform_position_on_map_Y_axis)
 		(initial_platform_azimut_on_map)
 		(number_of_way_points)
-		(wp_i_distance_i)
-		(relative_angle_teta)
-		(wp_velocity)
+		(wp_i_relative_distance)
+		(wp_i_relative_angle)
+		(wp_i_velocity)
 		(clouds)
 
 		(number_of_obstacles_on_path)

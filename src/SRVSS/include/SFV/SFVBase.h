@@ -22,6 +22,7 @@ public:
 	void init(DPGroup * dpGroup);
 	virtual ~SFVBase();
 	bool calc(SFVComponent * sfvComp);
+	bool was_rolled;
 	virtual void setStructure();
 	DPGroup * m_dpGroup;
 

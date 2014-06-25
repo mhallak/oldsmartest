@@ -14,6 +14,7 @@ SFVBase::SFVBase(DPGroup * dpGroup):m_dpGroup(dpGroup)
 	m_name="";
 	m_objects=new std::map<ScenarioFeatureType,DPObject*>;
 	setStructure();
+	was_rolled=false;
 }
 
 void SFVBase::init(DPGroup * dpGroup)
@@ -25,16 +26,21 @@ void SFVBase::init(DPGroup * dpGroup)
 			(*m_objects)[it.first]=dpGroup->m_objects->at(it.first)->clone();
 	}
 }
+
 bool SFVBase::calc(SFVComponent * sfvComp)
 {
 	bool ans=false;
-	std::pair<ScenarioFeatureType,DPObject*> it;
-	for(int i=0;i<3 && !ans;i++){
-		BOOST_FOREACH(it,*m_objects)
-		{
+
+	for(int roll_attempt =1 ;roll_attempt <=100 && !ans; roll_attempt++)
+	{
+		std::cout << " ## rolling of " << m_objectType << " #" << m_Id << ", attempt #" << roll_attempt << std::endl;
+		for(std::pair<ScenarioFeatureType,DPObject*> it : *m_objects)
+			{
 			it.second->calc();
-		}
+			}
+		was_rolled = true;
 		ans=sfvComp->checkRules();
+    	std::cout << " ## rolling of " << m_objectType << " #" << m_Id << ", attempt #" << roll_attempt << ", success = " << ans << std::endl;
 	}
 	return ans;
 }

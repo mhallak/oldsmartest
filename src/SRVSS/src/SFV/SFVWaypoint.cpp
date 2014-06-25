@@ -16,9 +16,9 @@ SFVWaypoint::SFVWaypoint(DPGroup * dpGroup): SFVBase(dpGroup)
 void SFVWaypoint::setStructure()
 {
 	m_objectType="Waypoint";
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::relative_angle_teta,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::wp_i_distance_i,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::wp_velocity,0));
+	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::wp_i_relative_angle,0));
+	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::wp_i_relative_distance,0));
+	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::wp_i_velocity,0));
 }
 
 
@@ -35,27 +35,27 @@ void SFVWaypoint::setId(int id) {
 }
 
 float SFVWaypoint::getRelativeAngle() const {
-	return m_objects->at(ScenarioFeatureType::relative_angle_teta)->getResult();
+	return m_objects->at(ScenarioFeatureType::wp_i_relative_angle)->getResult();
 }
 
 void SFVWaypoint::setRelativeAngle(float relativeAngle) {
-	m_objects->at(ScenarioFeatureType::relative_angle_teta)->setResult(relativeAngle);
+	m_objects->at(ScenarioFeatureType::wp_i_relative_angle)->setResult(relativeAngle);
 }
 
 float SFVWaypoint::getWpIDistanceI() const {
-	return m_objects->at(ScenarioFeatureType::wp_i_distance_i)->getResult();
+	return m_objects->at(ScenarioFeatureType::wp_i_relative_distance)->getResult();
 }
 
 void SFVWaypoint::setWpIDistanceI(float wpIDistanceI) {
-	m_objects->at(ScenarioFeatureType::wp_i_distance_i)->setResult(wpIDistanceI);
+	m_objects->at(ScenarioFeatureType::wp_i_relative_distance)->setResult(wpIDistanceI);
 }
 
 
 float SFVWaypoint::getWpVelocity() const {
-	return m_objects->at(ScenarioFeatureType::wp_velocity)->getResult();
+	return m_objects->at(ScenarioFeatureType::wp_i_velocity)->getResult();
 }
 
 void SFVWaypoint::setWpVelocity(float wpVelocty) {
-	m_objects->at(ScenarioFeatureType::wp_velocity)->setResult(wpVelocty);
+	m_objects->at(ScenarioFeatureType::wp_i_velocity)->setResult(wpVelocty);
 }
 
