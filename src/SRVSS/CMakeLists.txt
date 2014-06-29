@@ -42,29 +42,7 @@ add_library(NumberSampler src/utils/NumberSampler.cpp)
 
 
 
-#############
-### SFDP ####
-#############
-add_library(ScenarioFeatureGroup src/SFDP/ScenarioFeatureGroup.cpp)
-add_library(ScenarioFeature src/SFDP/ScenarioFeature.cpp)
 
-target_link_libraries(ScenarioFeature ${catkin_LIBRARIES})
-
-target_link_libraries(ScenarioFeatureGroup  ${catkin_LIBRARIES}
-ScenarioFeature
-)
-
-
-add_library(SFDPComponent src/SFDP/SFDPComponent.cpp)
-target_link_libraries(SFDPComponent ${catkin_LIBRARIES}
-ScenarioFeatureGroup
-ScenarioFeature
-)
-
-add_library(SFDPParser src/SFDP/SFDPParser.cpp)
-target_link_libraries(SFDPParser ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
-SFDPComponent
-)
 
 #############
 #### DP #####
@@ -94,12 +72,12 @@ target_link_libraries(TerrainAnalyzer ${catkin_LIBRARIES} ${OpenCV_LIBS})
 #############
 add_library(RULE_wp_path_inside_map src/Rules/RULE_wp_path_inside_map.cpp)
 target_link_libraries(RULE_wp_path_inside_map ${catkin_LIBRARIES}
-TerrainAnalyzer
+TerrainAnalyzer ResourceHandler
 )
 
 add_library(RULE_platform_init_pose_with_no_obj_colisions src/Rules/RULE_platform_init_pose_with_no_obj_colisions.cpp)
 target_link_libraries(RULE_platform_init_pose_with_no_obj_colisions ${catkin_LIBRARIES}
-TerrainAnalyzer
+TerrainAnalyzer ResourceHandler
 )
 #############
 #### SFV ####
@@ -175,10 +153,38 @@ SFVPlatformPose
 SFVWaypoint
 SFVGeneric
 SFVPath
+DPGroup
 
 RULE_wp_path_inside_map
 RULE_platform_init_pose_with_no_obj_colisions
 )
+
+
+#############
+### SFDP ####
+#############
+add_library(ScenarioFeatureGroup src/SFDP/ScenarioFeatureGroup.cpp)
+add_library(ScenarioFeature src/SFDP/ScenarioFeature.cpp)
+
+target_link_libraries(ScenarioFeature ${catkin_LIBRARIES})
+
+target_link_libraries(ScenarioFeatureGroup  ${catkin_LIBRARIES}
+ScenarioFeature
+)
+
+
+add_library(SFDPComponent src/SFDP/SFDPComponent.cpp)
+target_link_libraries(SFDPComponent ${catkin_LIBRARIES}
+ScenarioFeatureGroup
+ScenarioFeature
+SFVComponent
+)
+
+add_library(SFDPParser src/SFDP/SFDPParser.cpp)
+target_link_libraries(SFDPParser ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
+SFDPComponent
+)
+
 
 ##############
 # GENERATORS #
@@ -227,6 +233,22 @@ GazeboPlatformGenerator
 GazeboMissionGenerator
 SRVSSSyncronizer
 )
+
+
+######################
+#### Sampling Algo ###
+######################
+add_executable(SamplingAlgo src/SamplingAlgo.cpp)
+target_link_libraries(SamplingAlgo ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
+SFVComponent
+SFDPParser
+#GazeboEnvironmentGenerator
+#GazeboPlatformGenerator
+#GazeboMissionGenerator
+#SRVSSSyncronizer
+)
+
+
 
 ###############
 #### grader ###
