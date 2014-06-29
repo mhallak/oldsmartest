@@ -5,30 +5,30 @@
  *      Author: userws1
  */
 
-#include "SFDP/SDFPComponent.h"
+#include "SFDP/SFDPComponent.h"
 #include <iostream>
 #include <sstream>
 
-SDFPComponent::SDFPComponent()
+SFDPComponent::SFDPComponent()
 {
 	m_featureGroups=new std::vector<ScenarioFeatureGroup*>;
 }
 
 
 
-SDFPComponent::~SDFPComponent()
+SFDPComponent::~SFDPComponent()
 {
 
 }
 
 
-void SDFPComponent::addScenarioFeatureGroup (ScenarioFeatureGroup *feature) throw (std::string)
+void SFDPComponent::addScenarioFeatureGroup (ScenarioFeatureGroup *feature) throw (std::string)
 {
 	m_featureGroups->push_back(feature);
 }
 
 
-SFVComponent* SDFPComponent::genSFV(std::string resource_file_path)
+SFVComponent* SFDPComponent::genSFV(std::string resource_file_path)
 {
 	SFVComponent * sfvComp=new SFVComponent(resource_file_path);
 
@@ -48,6 +48,6 @@ SFVComponent* SDFPComponent::genSFV(std::string resource_file_path)
 	return sfvComp;
 }
 
-std::vector<ScenarioFeatureGroup*>* SDFPComponent::getFeatureGroups(){
+std::vector<ScenarioFeatureGroup*>* SFDPComponent::getFeatureGroups(){
 	return m_featureGroups;
 }

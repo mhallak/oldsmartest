@@ -55,15 +55,15 @@ ScenarioFeature
 )
 
 
-add_library(SDFPComponent src/SFDP/SDFPComponent.cpp)
-target_link_libraries(SDFPComponent ${catkin_LIBRARIES}
+add_library(SFDPComponent src/SFDP/SFDPComponent.cpp)
+target_link_libraries(SFDPComponent ${catkin_LIBRARIES}
 ScenarioFeatureGroup
 ScenarioFeature
 )
 
-add_library(SDFPParser src/SFDP/SDFPParser.cpp)
-target_link_libraries(SDFPParser ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
-SDFPComponent
+add_library(SFDPParser src/SFDP/SFDPParser.cpp)
+target_link_libraries(SFDPParser ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
+SFDPComponent
 )
 
 #############
@@ -219,9 +219,9 @@ Executor
 #############
 add_executable(mainGen src/Main.cpp)
 target_link_libraries(mainGen ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
-SDFPComponent
+SFDPComponent
 SFVComponent
-SDFPParser
+SFDPParser
 GazeboEnvironmentGenerator
 GazeboPlatformGenerator
 GazeboMissionGenerator

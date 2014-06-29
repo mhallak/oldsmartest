@@ -1,5 +1,5 @@
-#include "SFDP/SDFPComponent.h"
-#include "SFDP/SDFPParser.h"
+#include "SFDP/SFDPComponent.h"
+#include "SFDP/SFDPParser.h"
 #include "Resource/ResourceHandler.h"
 #include "Generators/Gazebo/GazeboEnvironmentGenerator.h"
 #include <string>
@@ -49,10 +49,10 @@ int main(int argc, char** argv)
 	{
 		std::cout << " -gen is runing !!! " << std::endl;
 		std::string resources_file_path = PATH + argv[4];
-		SDFPParser SDFPpars;
+		SFDPParser SFDPpars;
 			try
 			{
-				SDFPComponent *sfdpComp=SDFPpars.genSDFPFromFile(PATH+argv[2]);
+				SFDPComponent *sfdpComp=SFDPpars.genSFDPFromFile(PATH+argv[2]);
 				SFVComponent *sfvComp=sfdpComp->genSFV(resources_file_path);
 				sfvComp->init();
 				bool sfv_roll_success = sfvComp->calc();
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
 	if(std::string(argv[1]).compare("-genSCEN")==0)
 	{
 		std::cout << " -run is runing !!! " << std::endl;
-		SDFPParser SDFPpars;
+		SFDPParser SFDPpars;
 		std::string scenarios_folder_path = PATH + argv[3];
 		std::string resources_file_path = PATH + argv[4];
 		try

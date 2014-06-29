@@ -5,8 +5,8 @@
  *      Author: userws1
  */
 
-#include "SFDP/SDFPParser.h"
-#include "SFDP/SDFPComponent.h"
+#include "SFDP/SFDPParser.h"
+#include "SFDP/SFDPComponent.h"
 #include "SFDP/ScenarioFeature.h"
 #include "utils/TinyXmlDef.h"
 #include <stdio.h>
@@ -14,11 +14,11 @@
 
 
 
-SDFPParser::SDFPParser() {
+SFDPParser::SFDPParser() {
 
 }
 
-SDFPParser::~SDFPParser() {
+SFDPParser::~SFDPParser() {
 }
 
 
@@ -96,7 +96,7 @@ void parseScenarioFeatureGroup(ScenarioFeatureGroup *featureGroup,TiXmlNode* xml
 }
 
 
-void parseSDFP(SDFPComponent *sdfpComp,TiXmlNode* xmlNode) throw (std::string)
+void parseSFDP(SFDPComponent *sdfpComp,TiXmlNode* xmlNode) throw (std::string)
 {
 	TiXmlNode* pChild;
 	TiXmlAttribute* pAttrib;
@@ -126,9 +126,9 @@ void parseSDFP(SDFPComponent *sdfpComp,TiXmlNode* xmlNode) throw (std::string)
 	}
 }
 
-SDFPComponent * SDFPParser::genSDFPFromFile(std::string filename) throw (std::string)
+SFDPComponent * SFDPParser::genSFDPFromFile(std::string filename) throw (std::string)
 {
-	SDFPComponent * sdfpComp=new SDFPComponent;
+	SFDPComponent * sdfpComp=new SFDPComponent;
 	TiXmlDocument doc(filename);
 	if (!doc.LoadFile())
 	{
@@ -142,7 +142,7 @@ SDFPComponent * SDFPParser::genSDFPFromFile(std::string filename) throw (std::st
 	for ( pChild = doc.FirstChild(); pChild != 0; pChild = pChild->NextSibling())
 	{
 		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("sfdp")==0){
-			parseSDFP(sdfpComp,pChild);
+			parseSFDP(sdfpComp,pChild);
 			break;
 		}
 	}
