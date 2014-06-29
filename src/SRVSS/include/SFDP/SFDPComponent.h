@@ -1,12 +1,12 @@
 /*
- * SDFPComponent.h
+ * SFDPComponent.h
  *
  *  Created on: Feb 3, 2014
  *      Author: userws1
  */
 
-#ifndef SDFPCOMPONENT_H_
-#define SDFPCOMPONENT_H_
+#ifndef SFDPCOMPONENT_H_
+#define SFDPCOMPONENT_H_
 
 #include <string>
 #include <vector>
@@ -23,7 +23,7 @@
  * A data handling class.
  * This class reviews all the given Scenario Features and generates an SFVcomponent according to them
  */
-class SDFPComponent {
+class SFDPComponent {
 
 
 
@@ -53,12 +53,12 @@ public:
 	/**
 	 * A constructor
 	 */
-	SDFPComponent();
+	SFDPComponent();
 
 	/**
 	 * A distructor
 	 */
-	virtual ~SDFPComponent();
+	virtual ~SFDPComponent();
 
 	/**
 	 * Adds a feature to the list of features
@@ -78,4 +78,4 @@ public:
 	std::vector<ScenarioFeatureGroup*> * getFeatureGroups();
 };
 
-#endif /* SDFPCOMPONENT_H_ */
+#endif /* SFDPCOMPONENT_H_ */

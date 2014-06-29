@@ -1,24 +1,24 @@
 /*
- * SDFPParser.h
+ * SFDPParser.h
  *
  *  Created on: Feb 3, 2014
  *      Author: userws1
  */
 
-#ifndef SDFPPARSER_H_
-#define SDFPPARSER_H_
+#ifndef SFDPPARSER_H_
+#define SFDPPARSER_H_
 #include <string>
 
-#include "SDFPComponent.h"
+#include "SFDPComponent.h"
 
 /**
  * An object generator class.
  * This class parses the SFDP file and generate an SFDP component according to it's data
  */
-class SDFPParser {
+class SFDPParser {
 
 
-	void parseSDFPFile(SDFPComponent * sdfpComp);
+	void parseSFDPFile(SFDPComponent * sdfpComp);
 
 
 public:
@@ -26,22 +26,22 @@ public:
 	/**
 	* A constructor.
 	*/
-	SDFPParser();
+	SFDPParser();
 
 	 /**
 	* A destructor.
 	*/
-	virtual ~SDFPParser();
+	virtual ~SFDPParser();
 
 	 /**
 	* a base method that loads the given xml file and attempts to parse the sfdp description in the first xml level
 	* @param filename a string argument, the path to the xml file
 	* @throw string exception in case of bad input
-	* @see SDFPComponent
-	* @return a SDFPComponent that fits the file description
+	* @see SFDPComponent
+	* @return a SFDPComponent that fits the file description
 	*/
-	SDFPComponent * genSDFPFromFile(std::string filename) throw (std::string);
+	SFDPComponent * genSFDPFromFile(std::string filename) throw (std::string);
 
 };
 
-#endif /* SDFPPARSER_H_ */
+#endif /* SFDPPARSER_H_ */

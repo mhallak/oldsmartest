@@ -381,19 +381,19 @@
 			<dist_param_1>10</dist_param_1>
 			<dist_param_2>10</dist_param_2>
 		</scenario_feature> 
-		<scenario_feature type="wp_i_distance_i">
+		<scenario_feature type="wp_i_relative_distance">
 			<distribution>uniform_continuous</distribution>
 			<dist_param_1>5</dist_param_1>
 			<dist_param_2>10</dist_param_2>
 			<feature_dependency type="roll_number">number_of_way_points</feature_dependency>
 		</scenario_feature> 
-		<scenario_feature type="relative_angle_teta">
+		<scenario_feature type="wp_i_relative_angle">
 			<distribution>normal_continuous</distribution>
 			<dist_param_1>0</dist_param_1>
 			<dist_param_2>0.45</dist_param_2>
 			<feature_dependency type="roll_number">number_of_way_points</feature_dependency>
 		</scenario_feature>
-		<scenario_feature type="wp_velocity">
+		<scenario_feature type="wp_i_velocity">
 			<distribution>uniform_continuous</distribution>
 			<dist_param_1>3</dist_param_1>
 			<dist_param_2>7</dist_param_2>
