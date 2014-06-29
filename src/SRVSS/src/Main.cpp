@@ -47,14 +47,16 @@ int main(int argc, char** argv)
 
 	if(std::string(argv[1]).compare("-genSFV")==0)
 	{
-		std::cout << " -gen is runing !!! " << std::endl;
+		std::cout << " -genSFV is runing !!! " << std::endl;
 		std::string resources_file_path = PATH + argv[4];
 		SFDPParser SFDPpars;
 			try
 			{
 				SFDPComponent *sfdpComp=SFDPpars.genSFDPFromFile(PATH+argv[2]);
 				SFVComponent *sfvComp=sfdpComp->genSFV(resources_file_path);
+
 				sfvComp->init();
+
 				bool sfv_roll_success = sfvComp->calc();
 				if (sfv_roll_success)
 					{
@@ -71,7 +73,7 @@ int main(int argc, char** argv)
 
 	if(std::string(argv[1]).compare("-genSCEN")==0)
 	{
-		std::cout << " -run is runing !!! " << std::endl;
+		std::cout << " -genSCEN is runing !!! " << std::endl;
 		SFDPParser SFDPpars;
 		std::string scenarios_folder_path = PATH + argv[3];
 		std::string resources_file_path = PATH + argv[4];
