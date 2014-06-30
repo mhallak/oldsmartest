@@ -209,6 +209,16 @@ ResourceHandler
 /usr/lib/libsdformat.so
 )
 
+
+add_library(GazeboScenarioGenerator src/Generators/Gazebo/GazeboScenarioGenerator.cpp)
+target_link_libraries(GazeboScenarioGenerator ${catkin_LIBRARIES}
+GazeboEnvironmentGenerator
+GazeboMissionGenerator
+GazeboPlatformGenerator
+)
+
+
+
 ################
 # synchronizer #
 ################
@@ -245,6 +255,7 @@ SFDPParser
 #GazeboEnvironmentGenerator
 #GazeboPlatformGenerator
 #GazeboMissionGenerator
+GazeboScenarioGenerator
 #SRVSSSyncronizer
 )
 
