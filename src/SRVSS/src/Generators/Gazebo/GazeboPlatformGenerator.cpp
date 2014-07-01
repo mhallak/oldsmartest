@@ -135,9 +135,12 @@ void GazeboPlatformGenerator::generatePlatform(SFVComponent * sfvcomp,std::strin
 }
 
 
-void GazeboPlatformGenerator::generate(SFVComponent * sfvcomp)
+void GazeboPlatformGenerator::generate(SFVComponent * sfvComp, std::string scenario_folder_url, std::string resource_file_url)
 {
+	std::string temp = scenario_folder_url+"scenarioPlatform.sdf";
+	std::cout << " Producing " << temp << std::endl;
 
+	generatePlatform(sfvComp, temp ,resource_file_url);
 }
 
 

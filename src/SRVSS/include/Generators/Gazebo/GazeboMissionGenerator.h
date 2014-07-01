@@ -21,7 +21,7 @@ public:
 	virtual ~GazeboMissionGenerator();
 	void generateMission(SFVComponent * sfvcomp,std::string filename, std::string resources_file_path);
 	void generateMission_ROBIL2(SFVComponent * sfvcomp,std::string filename, std::string resources_file_path);
-	void generate(SFVComponent * sfvcomp);
+	void generate(SFVComponent * sfvcomp, std::string scenario_folder_url, std::string resource_file_url);
 	float getLastXPose() const;
 	void setLastXPose(float lastXPose);
 	float getLastYPose() const;

@@ -36,7 +36,7 @@ public:
 	virtual ~GazeboEnvironmentGenerator();
 
 	void genEnvFromSFV(SFVComponent * sfvComp,std::string filename, std::string resources_file_path);
-	void generate(SFVComponent * sfvcomp);
+	void generate(SFVComponent * sfvcomp, std::string scenario_folder_url, std::string resource_file_url);
 };
 
 #endif /* GAZEBOENVIRONMENTGENERATOR_H_ */
