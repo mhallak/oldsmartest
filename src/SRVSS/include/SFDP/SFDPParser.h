@@ -7,9 +7,14 @@
 
 #ifndef SFDPPARSER_H_
 #define SFDPPARSER_H_
+
 #include <string>
+#include <vector>
 
 #include "SFDPComponent.h"
+#include "SFDPobj.h"
+
+#include "ScenarioFeatureGroup.h"
 
 /**
  * An object generator class.
@@ -41,6 +46,9 @@ public:
 	* @return a SFDPComponent that fits the file description
 	*/
 	SFDPComponent * genSFDPFromFile(std::string filename) throw (std::string);
+
+
+	std::vector <ScenarioFeatureGroup *> * genFeatureGroupVectorFromFile(std::string filename)  throw (std::string);
 
 };
 

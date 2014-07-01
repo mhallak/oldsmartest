@@ -41,12 +41,7 @@ class SFDPComponent {
 	*/
 	float rollForDistType(ScenarioFeatureDistributionType distType,float distParam1,float distParam2);
 
-	/**
-	 * An auxiliary method to sample a number for a given feature while taking it's dependencies into account
-	 * @param feature a feature object
-	 * @see rollDice()
-	 * @see ScenarioFeature
-	 */
+
 
 public:
 

@@ -180,10 +180,21 @@ ScenarioFeature
 SFVComponent
 )
 
+add_library(SFDPobj src/SFDP/SFDPobj.cpp)
+target_link_libraries(SFDPobj ${catkin_LIBRARIES}
+ScenarioFeatureGroup
+ScenarioFeature
+SFVComponent
+)
+
+
 add_library(SFDPParser src/SFDP/SFDPParser.cpp)
 target_link_libraries(SFDPParser ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
 SFDPComponent
+ScenarioFeatureGroup
 )
+
+
 
 
 ##############
@@ -251,12 +262,11 @@ SRVSSSyncronizer
 add_executable(SamplingAlgo src/SamplingAlgo.cpp)
 target_link_libraries(SamplingAlgo ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
 SFVComponent
+SFDPobj
 SFDPParser
-#GazeboEnvironmentGenerator
-#GazeboPlatformGenerator
-#GazeboMissionGenerator
+
 GazeboScenarioGenerator
-#SRVSSSyncronizer
+
 )
 
 
