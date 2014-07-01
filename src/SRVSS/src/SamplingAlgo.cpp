@@ -12,7 +12,7 @@
 
 #include "Generators/Gazebo/GazeboScenarioGenerator.h"
 
-
+#include "SFDP/SFDPobj.h"
 
 std::string SFDP_file_url = "/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/SFDP/test.SFDP";
 std::string SFVs_destination_folder_path = "/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/SFV/tests/";
@@ -25,6 +25,9 @@ int main(int argc, char** argv)
 
 	std::cout << " SampelingAlgo is runing !!! " << std::endl;
 
+	SFDPobj * sfdp_root = new SFDPobj(SFDP_file_url,resource_file_url,SFVs_destination_folder_path,0);
+
+	/*
 	std::cout << " SFDP_file_url = " << SFDP_file_url << std::endl;
 
 	SFDPParser SFDPpars;
@@ -38,7 +41,7 @@ int main(int argc, char** argv)
 
     SFVComponent *sfvComp = SFVs_vec->at(0);
     ScenGen->GenerateScenario(sfvComp,scenarios_destination_folder_url, resource_file_url);
-
+	*/
 
 
 	return 0;

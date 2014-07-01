@@ -6,12 +6,13 @@
  */
 
 #include "SFDP/SFDPParser.h"
-#include "SFDP/SFDPComponent.h"
 #include "SFDP/ScenarioFeature.h"
+
 #include "utils/TinyXmlDef.h"
 #include <stdio.h>
 
-
+#include "SFDP/SFDPComponent.h"
+#include "SFDP/SFDPobj.h"
 
 
 SFDPParser::SFDPParser() {
@@ -148,3 +149,66 @@ SFDPComponent * SFDPParser::genSFDPFromFile(std::string filename) throw (std::st
 	}
 	return sdfpComp;
 }
+
+
+
+
+
+
+
+void parseSFDPobjFeatureGroupsVector(std::vector <ScenarioFeatureGroup *> * ScenarioFeatureGroupsVector ,TiXmlNode* xmlNode)
+{
+	TiXmlNode* pChild;
+	TiXmlAttribute* pAttrib;
+	//search for an sdfp element to parse
+	for ( pChild = xmlNode->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
+	{
+		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("scenario_feature_group")==0)
+		{
+			ScenarioFeatureGroup *featureGroup=new ScenarioFeatureGroup();
+			for ( pAttrib = pChild->ToElement()->FirstAttribute(); pAttrib != 0; pAttrib = pAttrib->Next())
+			{
+				if(pAttrib->NameTStr().compare("type")==0)
+				{
+					featureGroup->set_featureGroupType(ScenarioFeatureGroupType::parseString(pAttrib->Value()));
+				}
+				else if(pAttrib->NameTStr().compare("name")==0)
+				{
+					featureGroup->set_name(pAttrib->ValueStr());
+				}
+				else{
+					throw pAttrib->NameTStr()+" is not a scenario_feature_group type";
+				}
+			}
+			parseScenarioFeatureGroup(featureGroup,pChild);
+			ScenarioFeatureGroupsVector->push_back(featureGroup);
+		}
+	}
+}
+
+
+
+std::vector <ScenarioFeatureGroup *> * SFDPParser::genFeatureGroupVectorFromFile(std::string filename)  throw (std::string)
+{
+	std::vector <ScenarioFeatureGroup *> * ScenarioFeatureGroupsVector = new std::vector <ScenarioFeatureGroup *>;
+
+	TiXmlDocument doc(filename);
+	if (!doc.LoadFile())
+	{
+		std::string error("Failed to load file \"");
+		error+=filename;
+		error+="\"\n";
+		throw error;
+	}
+	TiXmlNode* pChild;
+	//search for an sdfp element to parse
+	for ( pChild = doc.FirstChild(); pChild != 0; pChild = pChild->NextSibling())
+	{
+		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("sfdp")==0){
+			parseSFDPobjFeatureGroupsVector(ScenarioFeatureGroupsVector,pChild);
+			break;
+		}
+	}
+	return ScenarioFeatureGroupsVector;
+}
+
