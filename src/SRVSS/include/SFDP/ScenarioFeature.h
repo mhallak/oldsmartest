@@ -12,7 +12,7 @@
 #include "ScenarioFeatureDistributionType.h"
 #include <string>
 #include <vector>
-
+#include <tinyxml.h>
 
 class ScenarioFeature {
 
@@ -37,6 +37,8 @@ public:
 
 	float get_dist_param_2();
 	void set_dist_param_2(float val);
+
+	TiXmlElement *toXMLElement();
 };
 
 #endif /* SCENARIOFEATURE_H_ */

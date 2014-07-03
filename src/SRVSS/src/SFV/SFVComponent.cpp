@@ -34,6 +34,7 @@ SFVComponent::SFVComponent(std::string resource_file_path) {
 	m_rules->push_back(new Rule_platform_init_pose_with_no_obj_colisions);
 
 	m_resource_file_path = resource_file_path;
+
 }
 
 template<class T>
@@ -80,22 +81,23 @@ void SFVComponent::rollAUX(std::vector<T*> * vec,bool & state)
 bool SFVComponent::calc()
 {
 	std::cout << " ######## starting roll of SFV ######## " << std::endl;
-	bool SFV_roll_success = true;
+	bool roll_success = true;
 
-	rollAUX(m_terrains,SFV_roll_success);
-	rollAUX(m_objects,SFV_roll_success);
-	rollAUX(m_lights,SFV_roll_success);
-	rollAUX(m_massLinks,SFV_roll_success);
-	rollAUX(m_frictionLinks,SFV_roll_success);
-	rollAUX(m_sensorLinks,SFV_roll_success);
-	rollAUX(m_platformPoses,SFV_roll_success);
-	rollAUX(m_paths,SFV_roll_success);
-	rollAUX(m_obstaclesOnPath,SFV_roll_success);
+	rollAUX(m_terrains,roll_success);
+	rollAUX(m_objects,roll_success);
+	rollAUX(m_lights,roll_success);
+	rollAUX(m_massLinks,roll_success);
+	rollAUX(m_frictionLinks,roll_success);
+	rollAUX(m_sensorLinks,roll_success);
+	rollAUX(m_platformPoses,roll_success);
+	rollAUX(m_paths,roll_success);
+	rollAUX(m_obstaclesOnPath,roll_success);
 
 	m_paths->at(0)->getPathLength();
 
-    std::cout << " ######## ending roll of SFV ######## success = " << SFV_roll_success << std::endl;
-	return SFV_roll_success;
+    std::cout << " ######## ending roll of SFV ######## success = " << roll_success << std::endl;
+
+    return roll_success;
 }
 
 bool  SFVComponent::checkRules(){

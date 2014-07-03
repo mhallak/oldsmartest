@@ -2,12 +2,12 @@
 <launch>    
 
 
-     <arg name="scenario" default="scenario_1"/> 
+     <arg name="scen" default="scenario_1"/> 
     
      <arg name="SFDP_file_url" value="$(find SRVSS)/SFDP/test.SFDP"/>
-     <arg name="SFV_file_url" value="$(find SRVSS)/SFV/$(arg scenario).SFV"/>
+     <arg name="SFV_file_url" value="$(find SRVSS)/SFV/$(arg scen).SFV"/>
      <arg name="resource_file_url" value="$(find SRVSS)/resource/resource_srvssDumy.xml"/>
-     <arg name="scenarios_folder_url" value="$(find SRVSS)/scenarios/$(arg scenario)"/>
+     <arg name="scenarios_folder_url" value="$(find SRVSS)/scenarios/$(arg scen)"/>
 
 
      <node pkg="SRVSS" type="mainGen" name="SRVSS_gen_node" args="-genSFV $(arg SFDP_file_url) $(arg SFV_file_url) $(arg resource_file_url)" output="screen" />

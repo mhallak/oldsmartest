@@ -12,6 +12,8 @@
 #include "ScenarioFeature.h"
 #include <string>
 #include <vector>
+#include <tinyxml.h>
+
 
 
 class ScenarioFeatureGroup {
@@ -34,6 +36,8 @@ public:
 	std::vector<ScenarioFeature*> * get_features();
 
 	void addFeature(ScenarioFeature* feature);
+
+	TiXmlElement *toXMLElement();
 };
 
 #endif /* SCENARIOFEATUREGROUP_H_ */

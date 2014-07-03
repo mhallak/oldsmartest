@@ -15,8 +15,8 @@
 #include "SFDP/SFDPobj.h"
 
 std::string SFDP_file_url = "/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/SFDP/test.SFDP";
-std::string SFVs_destination_folder_path = "/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/SFV/tests/";
-std::string scenarios_destination_folder_url = "/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/scenarios/tests/";
+std::string SFVs_destination_folder_path = "/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/work_space/";
+std::string scenarios_destination_folder_url = "/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/work_space/";
 std::string resource_file_url = "/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/resource/resource_srvssDumy.xml";
 
 
@@ -27,21 +27,27 @@ int main(int argc, char** argv)
 
 	SFDPobj * sfdp_root = new SFDPobj(SFDP_file_url,resource_file_url,SFVs_destination_folder_path,0);
 
-	/*
-	std::cout << " SFDP_file_url = " << SFDP_file_url << std::endl;
+	if (! sfdp_root->ParseMeFromFile(sfdp_root->get_SFDP_file_url()))
+	{
+		std::cout << " I am !! " << std::endl;
 
-	SFDPParser SFDPpars;
-	SFDPComponent *sfdpComp=SFDPpars.genSFDPFromFile(SFDP_file_url);
-
-	std::vector<SFVComponent *> * SFVs_vec;
-	SFVs_vec = sfdpComp->genSFVs(10,SFVs_destination_folder_path,resource_file_url);
+		sfdp_root->PrintMeToFile("new_SFDP.SFDP");
 
 
-    GazeboScenarioGenerator * ScenGen=new GazeboScenarioGenerator();
+		std::cout << sfdp_root->GenMySFVs(5) << std::endl;
 
-    SFVComponent *sfvComp = SFVs_vec->at(0);
-    ScenGen->GenerateScenario(sfvComp,scenarios_destination_folder_url, resource_file_url);
-	*/
+
+
+
+/*
+		SFVComponent *sfvComp = sfdp_root->genSFVComp();
+		GazeboScenarioGenerator * ScenGen=new GazeboScenarioGenerator();
+     	ScenGen->GenerateScenario(sfvComp,scenarios_destination_folder_url, resource_file_url);
+*/
+	}
+
+
+
 
 
 	return 0;
