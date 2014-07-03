@@ -166,9 +166,11 @@ RULE_platform_init_pose_with_no_obj_colisions
 add_library(ScenarioFeatureGroup src/SFDP/ScenarioFeatureGroup.cpp)
 add_library(ScenarioFeature src/SFDP/ScenarioFeature.cpp)
 
-target_link_libraries(ScenarioFeature ${catkin_LIBRARIES})
+target_link_libraries(ScenarioFeature ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
+)
 
-target_link_libraries(ScenarioFeatureGroup  ${catkin_LIBRARIES}
+
+target_link_libraries(ScenarioFeatureGroup  ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
 ScenarioFeature
 )
 

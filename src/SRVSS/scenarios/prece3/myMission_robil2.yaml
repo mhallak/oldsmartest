@@ -1,0 +1,88 @@
+waypoints: 
+  header: 
+    seq: 0
+    stamp: 0.000000000
+    frame_id: 
+  poses[]
+    poses[0]: 
+        header: 
+        seq: 0
+        stamp: 0.000000000
+        frame_id: 
+      pose: 
+        position: 
+          x: 3.62439
+          y: 21.5398
+          z: 0
+        orientation: 
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    poses[1]: 
+        header: 
+        seq: 0
+        stamp: 0.000000000
+        frame_id: 
+      pose: 
+        position: 
+          x: 22.6383
+          y: 33.4811
+          z: 0
+        orientation: 
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    poses[2]: 
+        header: 
+        seq: 0
+        stamp: 0.000000000
+        frame_id: 
+      pose: 
+        position: 
+          x: 30.9502
+          y: 52.7179
+          z: 0
+        orientation: 
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    poses[3]: 
+        header: 
+        seq: 0
+        stamp: 0.000000000
+        frame_id: 
+      pose: 
+        position: 
+          x: 39.554
+          y: 73.1713
+          z: 0
+        orientation: 
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    poses[4]: 
+        header: 
+        seq: 0
+        stamp: 0.000000000
+        frame_id: 
+      pose: 
+        position: 
+          x: 61.6213
+          y: 80.8518
+          z: 0
+        orientation: 
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+is_ip_defined: 0
+ip: 
+  x: 0
+  y: 0
+  z: 0
+is_heading_defined: 0
+heading: 0

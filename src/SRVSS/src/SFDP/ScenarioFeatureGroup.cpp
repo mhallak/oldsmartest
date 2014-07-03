@@ -8,6 +8,8 @@
 #include "SFDP/ScenarioFeatureGroup.h"
 #include <string>
 #include <stdlib.h>
+#include <tinyxml.h>
+
 
 ScenarioFeatureGroup::ScenarioFeatureGroup() :
 m_featureGroupType(ScenarioFeatureGroupType::unknown_feature_group)
@@ -56,5 +58,19 @@ std::vector<ScenarioFeature*> * ScenarioFeatureGroup::get_features()
 void ScenarioFeatureGroup::addFeature(ScenarioFeature* feature)
 {
 	m_features->push_back(feature);
+}
+
+
+
+TiXmlElement *ScenarioFeatureGroup::toXMLElement()
+{
+	TiXmlElement * xml_featureRroup= new TiXmlElement("scenario_feature_group");
+	xml_featureRroup->SetAttribute("type",m_featureGroupType.str());
+	xml_featureRroup->SetAttribute("name",m_featureGroupType.str());
+	for (ScenarioFeature * feat_it : * m_features )
+	{
+		xml_featureRroup->LinkEndChild(feat_it->toXMLElement());
+	}
+	return(xml_featureRroup);
 }
 

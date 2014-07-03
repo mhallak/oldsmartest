@@ -80,6 +80,8 @@ SFVComponent* SFDPComponent::genSFV(std::string resource_file_url)
 		}
 		sfvComp->addDPObjects((*it)->get_featureGroupType(),new DPGroup((*it)->get_name(),(*it)->get_featureGroupType(),dpMap));
 	}
+
+
 	return sfvComp;
 }
 
