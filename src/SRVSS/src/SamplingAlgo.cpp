@@ -10,6 +10,8 @@
 #include "SRVSSSyncronizer.h"
 #include "Executor.h"
 
+#include "SFDP/ScenarioFeatureType.h"
+
 #include "Generators/Gazebo/GazeboScenarioGenerator.h"
 
 #include "SFDP/SFDPobj.h"
@@ -31,19 +33,19 @@ int main(int argc, char** argv)
 	{
 		std::cout << " I am !! " << std::endl;
 
-		sfdp_root->PrintMeToFile("new_SFDP.SFDP");
+		//sfdp_root->PrintMeToFile();
 
 
 		std::cout << sfdp_root->GenMySFVs(5) << std::endl;
 
 
+		sfdp_root->RunMySFVs();
+
+		sfdp_root->SplitkMe(ScenarioFeatureType::number_of_objects,0.5);
 
 
-/*
-		SFVComponent *sfvComp = sfdp_root->genSFVComp();
-		GazeboScenarioGenerator * ScenGen=new GazeboScenarioGenerator();
-     	ScenGen->GenerateScenario(sfvComp,scenarios_destination_folder_url, resource_file_url);
-*/
+
+
 	}
 
 

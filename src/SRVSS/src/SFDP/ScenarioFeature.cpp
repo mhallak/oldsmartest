@@ -19,6 +19,14 @@ ScenarioFeature::ScenarioFeature(std::string featureType):
 {
 }
 
+ScenarioFeature::ScenarioFeature(ScenarioFeature * source_ScenarioFeature)
+{
+	m_featureType=source_ScenarioFeature->get_featureType();
+	m_distType=source_ScenarioFeature->get_distType();
+	m_dist_param_1=source_ScenarioFeature->get_dist_param_1();
+	m_dist_param_2=source_ScenarioFeature->get_dist_param_2();
+}
+
 ScenarioFeature::~ScenarioFeature()
 {
 }

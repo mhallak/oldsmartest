@@ -25,6 +25,20 @@ ScenarioFeatureGroup::ScenarioFeatureGroup(std::string featureType):
 	set_featureGroupType(ScenarioFeatureGroupType::parseString(featureType.c_str()));
 }
 
+ScenarioFeatureGroup::ScenarioFeatureGroup(ScenarioFeatureGroup * source_ScenarioFeatureGroup)
+{
+	m_name = source_ScenarioFeatureGroup->m_name;
+	m_featureGroupType = source_ScenarioFeatureGroup->m_featureGroupType;
+	m_features=(new std::vector<ScenarioFeature *>);
+
+	ScenarioFeature * feature_temp;
+	for (ScenarioFeature * feature_it : *(source_ScenarioFeatureGroup->get_features()) )
+	{
+		feature_temp = new ScenarioFeature(feature_it);
+		m_features->push_back(feature_temp);
+	}
+}
+
 ScenarioFeatureGroup::~ScenarioFeatureGroup()
 {
 	delete m_features;

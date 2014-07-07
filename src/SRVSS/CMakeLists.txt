@@ -12,7 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   robil_msgs 
 )
 
-find_package(Boost REQUIRED COMPONENTS system thread)
+find_package(Boost REQUIRED COMPONENTS system thread filesystem)
 
 find_package(TinyXML REQUIRED)
 
@@ -183,7 +183,7 @@ SFVComponent
 )
 
 add_library(SFDPobj src/SFDP/SFDPobj.cpp)
-target_link_libraries(SFDPobj ${catkin_LIBRARIES}
+target_link_libraries(SFDPobj ${catkin_LIBRARIES} ${Boost_INCLUDE_DIR}
 ScenarioFeatureGroup
 ScenarioFeature
 SFVComponent
