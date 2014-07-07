@@ -31,21 +31,23 @@ int main(int argc, char** argv)
 
 	if (! sfdp_root->ParseMeFromFile(sfdp_root->get_SFDP_file_url()))
 	{
-		std::cout << " I am !! " << std::endl;
 
-		//sfdp_root->PrintMeToFile();
+		sfdp_root->ExploreMe();
 
-
+		/*
 		std::cout << sfdp_root->GenMySFVs(5) << std::endl;
 
 
 		sfdp_root->RunMySFVs();
 
-		sfdp_root->SplitkMe(ScenarioFeatureType::number_of_objects,0.5);
 
+		float grade_mean = sfdp_root->get_Garade_mean();
+		float grade_std = sfdp_root->get_Garade_std();
 
+		std::cout << "grade_mean = " << grade_mean << "  grade_std = " << grade_std << std::endl;
 
-
+		 */
+		//sfdp_root->SplitkMe(ScenarioFeatureType::wp_i_relative_angle,0.5);
 	}
 
 

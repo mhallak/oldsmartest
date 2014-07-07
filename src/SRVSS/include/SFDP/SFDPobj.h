@@ -19,6 +19,7 @@
 #include "SFV/SFVComponent.h"
 
 
+
 class SFDPobj {
 	private :
 		std::vector<ScenarioFeatureGroup*> * my_featureGroups; // stores the SFDP
@@ -26,7 +27,10 @@ class SFDPobj {
 		std::string my_SFDP_file_url;
 		std::string my_Resources_file_url;
 		std::string my_WS_url;     					  // all output files will be created in this folder
+		std::string my_Grades_file_url;
+
 		int my_division_level;
+		static const int division_limit = 5;
 
 		std::vector<SFVComponent *> * my_sampled_SFVs;   // vector of sampled SFVs
 
@@ -41,11 +45,15 @@ class SFDPobj {
 		SFDPobj(std::string SFDP_file_url, std::string Resources_file_url, std::string WS_url, int division_level);
 		~SFDPobj();
 
+		int ExploreMe();
+
 		int ParseMeFromFile(std::string SFDP_file_url);
 		int PrintMeToFile();
 
+		int PrintMyResultsToFile();
+
 		SFDPobj * ShrinkMe(ScenarioFeatureType * FeatureToShrink, float new_upper_bound_percents, float new_lower_bound_percents);
-		int SplitkMe(ScenarioFeatureType FeatureToSplit, float split_percents);
+		int SplitMe(ScenarioFeatureType FeatureToSplit, float split_percents);
 
 
 		SFVComponent* genSFVComp();
@@ -74,11 +82,13 @@ class SFDPobj {
 			{if (! my_featureGroups->empty() ) return my_featureGroups; else return 0; }
 
 
+		ScenarioFeature * finedScenrioFeature(ScenarioFeatureType FeatureToSplit);
+
+
 		inline int set_FeatureGroups(std::vector<ScenarioFeatureGroup*> * source_featureGroups)
 			{
 			my_featureGroups = new std::vector<ScenarioFeatureGroup*>;
 			ScenarioFeatureGroup * temp_group;
-
 			for ( ScenarioFeatureGroup * group_it : * source_featureGroups)
 				{
 					temp_group = new ScenarioFeatureGroup(group_it);
@@ -87,13 +97,11 @@ class SFDPobj {
 			}
 
 
-
 		inline std::vector<SFVComponent *> * get_Sampled_SFVs()
 			{if (! my_sampled_SFVs->empty() ) return my_sampled_SFVs; else return 0; }
 
 		inline std::vector<SFDPobj *> * get_Sub_SFDPs()
 			{if (! my_sub_SFDPs->empty() ) return my_sub_SFDPs; else return 0; }
-
 };
 
 
