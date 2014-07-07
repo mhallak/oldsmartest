@@ -75,6 +75,8 @@ void ScenarioFeature::set_distributionType(ScenarioFeatureDistributionType type)
 	m_distType=type;
 }
 
+
+
 /*
 void parseScenarioFeature(ScenarioFeature *feature,TiXmlNode* xmlNode) throw (std::string)
 {
@@ -120,7 +122,9 @@ TiXmlElement *ScenarioFeature::toXMLElement()
 
 		TiXmlElement * xml_dist= new TiXmlElement("distribution");
 		TiXmlText * dist_val= new TiXmlText( m_distType.str() );
+		xml_dist->LinkEndChild(dist_val);
 		xml_feature->LinkEndChild(xml_dist);
+
 
 		std::stringstream temp_ss;
 		temp_ss.str("");

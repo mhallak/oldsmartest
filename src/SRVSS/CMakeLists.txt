@@ -187,6 +187,7 @@ target_link_libraries(SFDPobj ${catkin_LIBRARIES} ${Boost_INCLUDE_DIR}
 ScenarioFeatureGroup
 ScenarioFeature
 SFVComponent
+GazeboExecutor
 )
 
 
@@ -195,7 +196,6 @@ target_link_libraries(SFDPParser ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
 SFDPComponent
 ScenarioFeatureGroup
 )
-
 
 
 
@@ -243,6 +243,14 @@ ResourceHandler
 Executor
 )
 
+############
+# Executor #
+############
+add_library(GazeboExecutor src/Executor/GazeboExecutor.cpp)
+target_link_libraries(GazeboExecutor ${catkin_LIBRARIES}
+)
+
+
 #############
 #### MAIN ###
 #############
@@ -256,6 +264,7 @@ GazeboPlatformGenerator
 GazeboMissionGenerator
 SRVSSSyncronizer
 )
+
 
 
 ######################
