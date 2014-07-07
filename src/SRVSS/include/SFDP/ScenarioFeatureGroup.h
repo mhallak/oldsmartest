@@ -25,6 +25,8 @@ class ScenarioFeatureGroup {
 public:
 	ScenarioFeatureGroup();
 	ScenarioFeatureGroup(std::string featureType);
+	ScenarioFeatureGroup(ScenarioFeatureGroup * source_ScenarioFeatureGroup);
+
 	virtual ~ScenarioFeatureGroup();
 
 	ScenarioFeatureGroupType get_featureGroupType();

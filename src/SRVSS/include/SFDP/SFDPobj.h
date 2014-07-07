@@ -42,10 +42,10 @@ class SFDPobj {
 		~SFDPobj();
 
 		int ParseMeFromFile(std::string SFDP_file_url);
-		int PrintMeToFile(std::string File_name);
+		int PrintMeToFile();
 
 		SFDPobj * ShrinkMe(ScenarioFeatureType * FeatureToShrink, float new_upper_bound_percents, float new_lower_bound_percents);
-		std::vector<SFDPobj *> * SplitkMe(ScenarioFeatureType * FeatureToSplit, float split_percents);
+		int SplitkMe(ScenarioFeatureType FeatureToSplit, float split_percents);
 
 
 		SFVComponent* genSFVComp();
@@ -72,6 +72,21 @@ class SFDPobj {
 
 		inline std::vector<ScenarioFeatureGroup*> * get_FeatureGroups()
 			{if (! my_featureGroups->empty() ) return my_featureGroups; else return 0; }
+
+
+		inline int set_FeatureGroups(std::vector<ScenarioFeatureGroup*> * source_featureGroups)
+			{
+			my_featureGroups = new std::vector<ScenarioFeatureGroup*>;
+			ScenarioFeatureGroup * temp_group;
+
+			for ( ScenarioFeatureGroup * group_it : * source_featureGroups)
+				{
+					temp_group = new ScenarioFeatureGroup(group_it);
+					my_featureGroups->push_back(temp_group);
+				}
+			}
+
+
 
 		inline std::vector<SFVComponent *> * get_Sampled_SFVs()
 			{if (! my_sampled_SFVs->empty() ) return my_sampled_SFVs; else return 0; }

@@ -23,6 +23,7 @@ class ScenarioFeature {
 
 public:
 	ScenarioFeature(std::string featureType);
+	ScenarioFeature(ScenarioFeature * source_ScenarioFeature);
 	virtual ~ScenarioFeature();
 
 
