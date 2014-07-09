@@ -47,13 +47,13 @@ class SFDPobj {
 
 		int ExploreMe();
 
-		int ParseMeFromFile(std::string SFDP_file_url);
+		int ParseMeFromXMLFile();
 		int PrintMeToFile();
 
 		int PrintMyResultsToFile();
 
 		SFDPobj * ShrinkMe(ScenarioFeatureType * FeatureToShrink, float new_upper_bound_percents, float new_lower_bound_percents);
-		int SplitMe(ScenarioFeatureType FeatureToSplit, float split_percents);
+		int SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,ScenarioFeatureType FeatureToSplit, float split_percents);
 
 
 		SFVComponent* genSFVComp();
@@ -82,7 +82,7 @@ class SFDPobj {
 			{if (! my_featureGroups->empty() ) return my_featureGroups; else return 0; }
 
 
-		ScenarioFeature * finedScenrioFeature(ScenarioFeatureType FeatureToSplit);
+		ScenarioFeature * finedScenrioFeature(ScenarioFeatureGroupType GroupTipe, std::string GroupName, ScenarioFeatureType FeatureToSplit);
 
 
 		inline int set_FeatureGroups(std::vector<ScenarioFeatureGroup*> * source_featureGroups)

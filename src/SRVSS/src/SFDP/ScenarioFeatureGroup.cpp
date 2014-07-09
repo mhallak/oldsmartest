@@ -6,6 +6,8 @@
  */
 
 #include "SFDP/ScenarioFeatureGroup.h"
+#include "utils/TinyXmlDef.h"
+
 #include <string>
 #include <stdlib.h>
 #include <tinyxml.h>
@@ -78,13 +80,70 @@ void ScenarioFeatureGroup::addFeature(ScenarioFeature* feature)
 
 TiXmlElement *ScenarioFeatureGroup::toXMLElement()
 {
-	TiXmlElement * xml_featureRroup= new TiXmlElement("scenario_feature_group");
-	xml_featureRroup->SetAttribute("type",m_featureGroupType.str());
-	xml_featureRroup->SetAttribute("name",m_featureGroupType.str());
+	TiXmlElement * xml_featureGroup= new TiXmlElement("scenario_feature_group");
+	xml_featureGroup->SetAttribute("type",m_featureGroupType.str());
+	xml_featureGroup->SetAttribute("name",m_name);
 	for (ScenarioFeature * feat_it : * m_features )
 	{
-		xml_featureRroup->LinkEndChild(feat_it->toXMLElement());
+		xml_featureGroup->LinkEndChild(feat_it->toXMLElement());
 	}
-	return(xml_featureRroup);
+	return(xml_featureGroup);
+}
+
+
+int ScenarioFeatureGroup::parseScenarioFeatureGroupFromXML(TiXmlNode* xmlFeatureGroup)
+{
+	if (! (xmlFeatureGroup->ValueStr().compare("scenario_feature_group")==0))
+	{
+		std::cout <<  " could not parse " << xmlFeatureGroup->ValueStr() << " because it is not a Scenario Feature Group " << std::endl;
+		return 0;
+	}
+
+	std::string GroupType = "";
+	std::string GroupName = "";
+
+	TiXmlAttribute* pAttrib;
+	for ( pAttrib = xmlFeatureGroup->ToElement()->FirstAttribute(); pAttrib != 0; pAttrib = pAttrib->Next())
+		{
+		if(pAttrib->NameTStr().compare("type")==0)
+			{
+			GroupType = pAttrib->ValueStr();
+			}
+		if(pAttrib->NameTStr().compare("name")==0)
+			{
+			GroupName = pAttrib->ValueStr();
+			}
+		}
+
+	if ( (GroupType=="" ) || (GroupName=="") )
+	{
+		std::cout <<  " could not parse " << xmlFeatureGroup->ValueStr() << " = " << GroupType << " its GroupType, or name are not valid " << std::endl;
+		return 0;
+	}
+
+	m_name = GroupName;
+	m_featureGroupType = ScenarioFeatureGroupType::parseString(GroupType.c_str());
+
+	ScenarioFeature *feature;
+	TiXmlNode* pChild;
+	for ( pChild = xmlFeatureGroup->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
+		{
+		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("scenario_feature")==0)
+			{
+			feature = new ScenarioFeature();
+			if (feature->parseScenarioFeatureFromXML(pChild))
+				{
+				addFeature(feature);
+				}
+			else
+				{
+				std::cout <<  " could not parse " << xmlFeatureGroup->ValueStr() << " = " << GroupType << " its one ore more of it's chide features is not valid " << std::endl;
+				return 0;
+				}
+			}
+		}
+
+
+	return 1;
 }
 

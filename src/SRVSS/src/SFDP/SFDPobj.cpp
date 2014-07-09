@@ -19,6 +19,9 @@
 
 #include <cmath> //sqrt()
 
+#include <tinyxml.h>
+#include "utils/TinyXmlDef.h"
+
 
 
 SFDPobj::SFDPobj(std::string SFDP_file_url, std::string Resources_file_url, std::string WS_url, int division_level)
@@ -36,19 +39,45 @@ SFDPobj::SFDPobj(std::string SFDP_file_url, std::string Resources_file_url, std:
 }
 
 
-int SFDPobj::ParseMeFromFile(std::string SFDP_file_url)
+int SFDPobj::ParseMeFromXMLFile()
 {
-	SFDPParser * SFDPpars = new SFDPParser;
-	try {
-		my_featureGroups = SFDPpars->genFeatureGroupVectorFromFile(SFDP_file_url);
-		}
-	catch(std::string err)
-		{
-		std::cout << err << std::endl;
-		return 1;
-		}
+	TiXmlDocument *XMLfile = new TiXmlDocument(my_SFDP_file_url);
+	if (!XMLfile->LoadFile())
+	{
+		std::cout << " failed to load file : " << my_SFDP_file_url << " it might not exist or be not valid XML " << std::endl;
+		return 0;
+	}
 
-	return 0;
+	TiXmlNode* XMLfile_Child;
+	for ( XMLfile_Child = XMLfile->FirstChild() ; XMLfile_Child != 0; XMLfile_Child = XMLfile_Child->NextSibling())
+	{
+		if ( (XMLfile_Child->Type()==XML_ELEMENT) && (XMLfile_Child->ValueStr().compare("sfdp")==0) )
+		{
+			break;
+		}
+	}
+
+	if (XMLfile_Child == 0)
+	{
+		std::cout << " the file " << my_SFDP_file_url << " has no SFDP element " << std::endl;
+		return 0;
+	}
+
+	TiXmlNode* SFDP_Child;
+	for ( SFDP_Child = XMLfile_Child->FirstChild() ; SFDP_Child != 0; SFDP_Child = SFDP_Child->NextSibling())
+		{
+			ScenarioFeatureGroup *featureGroup=new ScenarioFeatureGroup();
+			if ( featureGroup->parseScenarioFeatureGroupFromXML(SFDP_Child) )
+				{
+				my_featureGroups->push_back(featureGroup);
+				}
+			else
+				{
+				std::cout <<  " could not parse SDF file : " << my_SFDP_file_url  << " one or more of it's Scenario Feature Groups is not valid " << std::endl;
+				return 0;
+				}
+		}
+	return 1;
 }
 
 
@@ -244,25 +273,28 @@ int SFDPobj::PrintMyResultsToFile()
 
 
 
-ScenarioFeature * SFDPobj::finedScenrioFeature(ScenarioFeatureType FeatureToSplit)
+ScenarioFeature * SFDPobj::finedScenrioFeature(ScenarioFeatureGroupType GroupTipe, std::string GroupName, ScenarioFeatureType FeatureToSplit)
 {
 	for ( ScenarioFeatureGroup * group_it : * my_featureGroups )
 		{
-			for (ScenarioFeature * feature_it : *(group_it->get_features()) )
+			if ( (group_it->get_featureGroupType() == GroupTipe) && (group_it->get_name() == GroupName) )
 			{
-				if (feature_it->get_featureType() == FeatureToSplit)
+				for (ScenarioFeature * feature_it : *(group_it->get_features()) )
 				{
-				return feature_it;
+					if (feature_it->get_featureType() == FeatureToSplit)
+					{
+						return feature_it;
+					}
 				}
 			}
 		}
+	std::cout << "could not find GroupTipe " << GroupTipe << " = " << GroupName << " with feature " << FeatureToSplit << std::endl;
 	return 0;
 }
 
 
 
-
-int SFDPobj::SplitMe(ScenarioFeatureType FeatureToSplit, float split_percents)
+int SFDPobj::SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,ScenarioFeatureType FeatureToSplit, float split_percents)
 {
 	SFDPobj * sub_sfdp1;
 	SFDPobj * sub_sfdp2;
@@ -291,10 +323,16 @@ int SFDPobj::SplitMe(ScenarioFeatureType FeatureToSplit, float split_percents)
 	sub_sfdp2 = new SFDPobj(sub_sfdp_2_WS_url+"sub_sfdp",my_Resources_file_url,sub_sfdp_2_WS_url,my_division_level+1);
 	sub_sfdp2->set_FeatureGroups(this->get_FeatureGroups());
 
+	ScenarioFeature * feature_sourse = this->finedScenrioFeature(GroupTipe,GroupName,FeatureToSplit);
+	ScenarioFeature * feature_1 = sub_sfdp1->finedScenrioFeature(GroupTipe,GroupName,FeatureToSplit);
+	ScenarioFeature * feature_2 = sub_sfdp2->finedScenrioFeature(GroupTipe,GroupName,FeatureToSplit);
 
-	ScenarioFeature * feature_sourse = this->finedScenrioFeature(FeatureToSplit);
-	ScenarioFeature * feature_1 = sub_sfdp1->finedScenrioFeature(FeatureToSplit);
-	ScenarioFeature * feature_2 = sub_sfdp2->finedScenrioFeature(FeatureToSplit);
+	if ( (! feature_sourse) ||  (! feature_1) ||  (! feature_2) )
+		{
+			std::cout << "could not split because feature to split wasn't found" << std::endl;
+			return 0;
+		}
+
 
 	if ( feature_sourse->get_distType() == ScenarioFeatureDistributionType::uniform_continuous )
 		{
@@ -332,6 +370,7 @@ int SFDPobj::SplitMe(ScenarioFeatureType FeatureToSplit, float split_percents)
 	return 1;
 }
 
+
 int SFDPobj::ExploreMe()
 {
 	if ( my_division_level > division_limit )
@@ -340,14 +379,19 @@ int SFDPobj::ExploreMe()
 		return 0;
 	}
 
-	GenMySFVs(5);
+	if (! GenMySFVs(5) )
+	{
+		std::cout << "the generation of SFVs have failed " << std::endl;
+		return 0;
+	}
+
 	RunMySFVs();
 
 	if (my_division_level <= 2)
 	{
 		if (my_Grade_std > 0.25)
 			{
-				SplitMe(ScenarioFeatureType::object_i_location_on_the_X_axis, 0.5);
+				SplitMe(ScenarioFeatureGroupType::objects, "objects" ,ScenarioFeatureType::object_i_location_on_the_X_axis, 0.5);
 				for (SFDPobj * sub_SFDP_it : * my_sub_SFDPs)
 					{
 						sub_SFDP_it->ExploreMe();

@@ -14,6 +14,9 @@
 #include "SFDP/SFDPComponent.h"
 #include "SFDP/SFDPobj.h"
 
+#include <tinyxml.h>
+
+
 
 SFDPParser::SFDPParser() {
 
@@ -49,16 +52,18 @@ void parseScenarioFeature(ScenarioFeature *feature,TiXmlNode* xmlNode) throw (st
 			dist_param_2Found=true;
 		}
 	}
-	if(distributionFound && dist_param_1Found && dist_param_2Found){
+
+	if(distributionFound && dist_param_1Found && dist_param_2Found)
+	{
 		feature->set_distributionType(ScenarioFeatureDistributionType::parseString(distribution.c_str()));
 		feature->set_dist_param_1(atof(dist_param_1.c_str()));
 		feature->set_dist_param_2(atof(dist_param_2.c_str()));
-	}else{
+	}
+	else
+	{
 		throw "feature not complete!, missing distribution,dist_param_1 or dist_param_2";
 	}
 }
-
-
 
 
 
@@ -82,12 +87,6 @@ void parseScenarioFeatureGroup(ScenarioFeatureGroup *featureGroup,TiXmlNode* xml
 					parseScenarioFeature(feature,pChild);
 					featureGroup->addFeature(feature);
 					}
-				/*else if (pAttrib->NameTStr().compare("group")==0)
-					{
-					if(feature==0)
-						throw std::string("type must be set before group");
-					feature->set_group(pAttrib->ValueStr());
-					}*/
 				else{
 					throw pAttrib->NameTStr()+" is not a valid scenario_feature type";
 					}
@@ -107,6 +106,7 @@ void parseSFDP(SFDPComponent *sdfpComp,TiXmlNode* xmlNode) throw (std::string)
 		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("scenario_feature_group")==0)
 		{
 			ScenarioFeatureGroup *featureGroup=new ScenarioFeatureGroup();
+
 			for ( pAttrib = pChild->ToElement()->FirstAttribute(); pAttrib != 0; pAttrib = pAttrib->Next())
 			{
 				if(pAttrib->NameTStr().compare("type")==0)
@@ -122,6 +122,7 @@ void parseSFDP(SFDPComponent *sdfpComp,TiXmlNode* xmlNode) throw (std::string)
 				}
 			}
 			parseScenarioFeatureGroup(featureGroup,pChild);
+
 			sdfpComp->addScenarioFeatureGroup(featureGroup);
 		}
 	}

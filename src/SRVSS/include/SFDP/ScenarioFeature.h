@@ -23,6 +23,7 @@ class ScenarioFeature {
 
 public:
 	ScenarioFeature(std::string featureType);
+	ScenarioFeature();
 	ScenarioFeature(ScenarioFeature * source_ScenarioFeature);
 	virtual ~ScenarioFeature();
 
@@ -39,6 +40,7 @@ public:
 	float get_dist_param_2();
 	void set_dist_param_2(float val);
 
+	int parseScenarioFeatureFromXML(TiXmlNode* xmlFeature);
 	TiXmlElement *toXMLElement();
 };
 

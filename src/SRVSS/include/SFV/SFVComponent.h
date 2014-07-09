@@ -82,7 +82,7 @@ public:
 	* @throw string exception in case of bad input
 	* @see SFVComponent
 	*/
-	void genSFVFromFile(std::string filename) throw (std::string);
+	int genSFVFromFile(std::string filename) throw (std::string);
 
 
 	TiXmlElement *toXMLElement();
