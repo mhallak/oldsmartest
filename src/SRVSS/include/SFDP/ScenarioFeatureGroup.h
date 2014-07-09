@@ -40,6 +40,7 @@ public:
 	void addFeature(ScenarioFeature* feature);
 
 	TiXmlElement *toXMLElement();
+	int parseScenarioFeatureGroupFromXML(TiXmlNode* xmlFeature);
 };
 
 #endif /* SCENARIOFEATUREGROUP_H_ */

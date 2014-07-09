@@ -1,16 +1,13 @@
-#include "SFDP/SFDPComponent.h"
-#include "SFDP/SFDPParser.h"
-#include "Resource/ResourceHandler.h"
-#include "Generators/Gazebo/GazeboEnvironmentGenerator.h"
-#include <string>
-#include <stdio.h>
 #include <iostream>
-#include "Generators/Gazebo/GazeboPlatformGenerator.h"
-#include "Generators/Gazebo/GazeboMissionGenerator.h"
-#include "SRVSSSyncronizer.h"
-#include "Executor.h"
-#define PATH std::string("")
+#include <stdio.h>
 
+#include <string>
+
+#include "SFDP/SFDPobj.h"
+#include "Generators/Gazebo/GazeboScenarioGenerator.h"
+
+
+#define PATH std::string("")
 
 void printUsage()
 {
@@ -19,85 +16,62 @@ void printUsage()
 	std::cout <<"(2) <srvss> -genSCEN <sfv output> <destination folder> <resousc file> # will generate the scenario and launch it" <<std:: endl;
 	exit(1);
 }
+
 int main(int argc, char** argv)
 {
-	std::cout << " main is runing !!! " << std::endl;
 
+	std::cout << " Main is runing !!! " << std::endl;
 
-	if(argc<2)
-	{
-		std::cout << "ERROR : not enough parameters" <<std:: endl;
+	if(std::string(argv[1]).compare("-help")==0)
+		{
 		printUsage();
-	}else{
-		if(std::string(argv[1]).compare("-genSFV")==0){
-			if(argc<4){
-				std::cout << "ERROR : not enough parameters" <<std:: endl;
-				printUsage();
-			}
-		}else if(std::string(argv[1]).compare("-genSCEN")==0){
-			if(argc<3){
-				std::cout << "ERROR : not enough parameters" <<std:: endl;
-				printUsage();
-			}
-		}else{
-			std::cout << "ERROR : not a valid option" <<std:: endl;
-			printUsage();
 		}
-	}
 
 	if(std::string(argv[1]).compare("-genSFV")==0)
-	{
-		std::cout << " -genSFV is runing !!! " << std::endl;
-		std::string resources_file_path = PATH + argv[4];
-		SFDPParser SFDPpars;
-			try
-			{
-				SFDPComponent *sfdpComp=SFDPpars.genSFDPFromFile(PATH+argv[2]);
-				SFVComponent *sfvComp=sfdpComp->genSFV(resources_file_path);
+		{
+			std::cout << " -genSFV is runing !!! " << std::endl;
 
-				sfvComp->init();
+			std::string SFDP_file_path = PATH+argv[2];
+			std::string sfv_file_destanation_path = PATH + argv[3];
+			std::string resources_file_path = PATH + argv[4];
 
-				bool sfv_roll_success = sfvComp->calc();
-				if (sfv_roll_success)
-					{
-					sfvComp->genFileFromSFV(argv[3]);
-					}
-				else
-					std::cout << " rolling of SFV have failed " << std::endl;
-			}
-			catch(std::string &err)
+			SFDPobj * sfdp_root;
+			sfdp_root = new SFDPobj(SFDP_file_path,resources_file_path,sfv_file_destanation_path,0);
+
+			if (! sfdp_root->ParseMeFromXMLFile())
 			{
-					std::cout<<err<<std::endl;
+				std::cout << " failed parse SFDP from file " << std::endl;
+				return 0;
 			}
-	}
+
+			SFVComponent *sfvComp = sfdp_root->genSFVComp();
+			if (! sfvComp )
+			{
+				std::cout << " rolling of SFV have failed " << std::endl;
+				return 0;
+			}
+			sfvComp->genFileFromSFV(sfv_file_destanation_path);
+
+			return 0;
+		}
 
 	if(std::string(argv[1]).compare("-genSCEN")==0)
-	{
-		std::cout << " -genSCEN is runing !!! " << std::endl;
-		SFDPParser SFDPpars;
-		std::string scenarios_folder_path = PATH + argv[3];
-		std::string resources_file_path = PATH + argv[4];
-		try
 		{
+			std::cout << " -genSCEN is runing !!! " << std::endl;
+
+			std::string sfv_file_path = PATH+argv[2];
+			std::string scenarios_folder_path = PATH + argv[3] + "/";
+			std::string resources_file_path = PATH + argv[4];
+
 			SFVComponent *sfvComp=new SFVComponent(resources_file_path);
-			sfvComp->genSFVFromFile(argv[2]);
+			sfvComp->genSFVFromFile(sfv_file_path);
 			sfvComp->genFileFromSFV("testRun.sfv");
 
-			GazeboMissionGenerator * missionGen=new GazeboMissionGenerator();
-     		missionGen->generateMission(sfvComp,scenarios_folder_path+"/myMission.txt", resources_file_path);
-     		missionGen->generateMission_ROBIL2(sfvComp,scenarios_folder_path+"/myMission_robil2", resources_file_path);
+			GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(sfvComp, scenarios_folder_path, resources_file_path);
+			ScenGen->GenerateScenario();
 
-			GazeboPlatformGenerator * platGen=new GazeboPlatformGenerator();
-			platGen->generatePlatform(sfvComp,scenarios_folder_path+"/platform.sdf", resources_file_path);
-
-			GazeboEnvironmentGenerator * envGen=new GazeboEnvironmentGenerator();
-			envGen->genEnvFromSFV(sfvComp,scenarios_folder_path+"/env.world", resources_file_path);
+			return 0;
 		}
-		catch(std::string &err)
-		{
-			std::cout<<err<<std::endl;
-		}
-	}
 
 	return 0;
 }

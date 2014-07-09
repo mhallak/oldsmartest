@@ -274,25 +274,26 @@ void SFVComponent::genFileFromSFV(std::string filename)
 	doc.SaveFile(filename.c_str());
 }
 
-void SFVComponent::genSFVFromFile(std::string filename) throw (std::string)
+int SFVComponent::genSFVFromFile(std::string filename) throw (std::string)
 {
-	TiXmlDocument doc(filename);
-	if (!doc.LoadFile())
+	TiXmlDocument *SFVfile = new TiXmlDocument(filename);
+	if (!SFVfile->LoadFile())
 	{
-		std::string error("Failed to load file \"");
-		error+=filename;
-		error+="\"\n";
-		throw error;
+		std::cout << " failed to load file : " << filename << " it might not exist or be not valid XML " << std::endl;
+		return 0;
 	}
+
 	TiXmlNode* pChild;
-	//search for an sdfp element to parse
-	for ( pChild = doc.FirstChild(); pChild != 0; pChild = pChild->NextSibling())
+	//search for an sfv element to parse
+	for ( pChild = SFVfile->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
 	{
-		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("sfv")==0){
+		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("sfv")==0)
+		{
 			fromXMLElement(pChild->ToElement());
 			break;
 		}
 	}
+	return 1;
 }
 
 SFVComponent::~SFVComponent() {

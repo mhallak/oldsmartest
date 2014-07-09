@@ -1,9 +1,9 @@
 <!-- -*- mode: XML -*- -->
 <launch>    
 
-     <arg name="scen" default="scenario_1"/> 
+     <arg name="scen" default="scenarios/scenario_1"/> 
     
-     <arg name="scenarios_folder_url" value="$(find SRVSS)/scenarios/$(arg scen)"/>
+     <arg name="scenarios_folder_url" value="$(find SRVSS)/$(arg scen)"/>
 
 
  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
@@ -22,7 +22,7 @@
     <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="headless" value="$(arg headless)"/>
-    <arg name="world_name" value="$(arg scenarios_folder_url)/env.world"/>
+    <arg name="world_name" value="$(arg scenarios_folder_url)/scenarioEnv.world"/>
   </include>
 
 
@@ -30,7 +30,7 @@
 
   <node pkg="tf" type="static_transform_publisher" name="sick_link_broadcaster" args="1 0 0.2 0 0 0 body front_sick 100" />
 
-  <node pkg="srvss_wp_driver" type="srvss_wp_driver_node" name="srvss_wp_driver_node" args="-file $(arg scenarios_folder_url)/myMission.txt" output="screen" />
+  <node pkg="srvss_wp_driver" type="srvss_wp_driver_node" name="srvss_wp_driver_node" args="-file $(arg scenarios_folder_url)/scenarioMission.txt" output="screen" />
 
 <!--
   <node pkg="srvss_wp_driver" type="srvss_greader_node" name="srvss_greader_node" />
