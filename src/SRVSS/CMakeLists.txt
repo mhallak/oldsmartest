@@ -256,13 +256,11 @@ target_link_libraries(GazeboExecutor ${catkin_LIBRARIES}
 #############
 add_executable(mainGen src/Main.cpp)
 target_link_libraries(mainGen ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
-SFDPComponent
 SFVComponent
+SFDPobj
 SFDPParser
-GazeboEnvironmentGenerator
-GazeboPlatformGenerator
-GazeboMissionGenerator
-SRVSSSyncronizer
+SFDPobj
+GazeboScenarioGenerator
 )
 
 
@@ -275,9 +273,7 @@ target_link_libraries(SamplingAlgo ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
 SFVComponent
 SFDPobj
 SFDPParser
-
 GazeboScenarioGenerator
-
 )
 
 
