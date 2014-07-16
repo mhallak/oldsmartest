@@ -54,7 +54,7 @@ void GazeboMissionGenerator::setLastPlatformName(
 	m_last_platform_name = lastPlatformName;
 }
 
-void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string filename, std::string resources_file_path)
+void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string fileName, std::string resources_file_path)
 {
 
 	std::string terrain = ResourceHandler::getInstance(resources_file_path).getTerrainById(sfvcomp->getTerrains()->at(0)->getTerrainId());
@@ -68,7 +68,7 @@ void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string 
 
 
 	std::ofstream file;
-	file.open (filename.c_str());
+	file.open (fileName + ".txt");
 	file<< "PLATFORM" <<std::endl;
 	file<< platformPose->getPlatformName() <<std::endl;
 	file<< "START"<<std::endl;
@@ -131,6 +131,8 @@ void GazeboMissionGenerator::generateMission_ROBIL2(SFVComponent * sfvComp,std::
 
 	robil_msgs::Path Robil2_path;
 	Robil2_path.waypoints = wp_path;
+	Robil2_path.is_heading_defined = false;
+	Robil2_path.is_ip_defined = false;
 
 	std::stringstream ss;
 	ss<<Robil2_path;
@@ -153,10 +155,13 @@ void GazeboMissionGenerator::generateMission_ROBIL2(SFVComponent * sfvComp,std::
 
 void GazeboMissionGenerator::generate(SFVComponent * sfvComp , std::string scenario_folder_url, std::string resource_file_url)
 {
-	std::string temp = scenario_folder_url+"scenarioMission.txt";
-	std::cout << " Producing " << temp << std::endl;
+	std::string temp = scenario_folder_url+"scenarioMission";
 
+	std::cout << " Producing " << temp << ".txt" << std::endl;
 	generateMission(sfvComp, temp ,resource_file_url);
+
+	std::cout << " Producing " << temp << ".bag" << std::endl;
+	generateMission_ROBIL2(sfvComp, temp ,resource_file_url);
 }
 
 float GazeboMissionGenerator::getLastXPose() const {
