@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   rosbag
   robil_msgs 
+  gazebo_msgs
 )
 
 find_package(Boost REQUIRED COMPONENTS system thread filesystem)
@@ -274,6 +275,15 @@ SFVComponent
 SFDPobj
 SFDPParser
 GazeboScenarioGenerator
+)
+
+
+
+######################
+#### Replay Player ###
+######################
+add_executable(ReplayPlayer src/ReplayPlayer/ReplayPlayer.cpp)
+target_link_libraries(ReplayPlayer ${catkin_LIBRARIES} ${GAZEBO_INCLUDE_DIRS}
 )
 
 
