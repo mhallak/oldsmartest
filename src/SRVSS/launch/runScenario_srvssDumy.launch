@@ -1,38 +1,42 @@
 <!-- -*- mode: XML -*- -->
 <launch>    
 
-     <arg name="scen" default="scenarios/scenario_1"/> 
-    
-     <arg name="scenarios_folder_url" value="$(find SRVSS)/$(arg scen)"/>
+	<arg name="scen" default="scenarios/scenario_1"/> 
+
+	<arg name="scenarios_folder_url" value="$(find SRVSS)/$(arg scen)"/>
+	<arg name="world_name" value="$(arg scenarios_folder_url)/scenarioEnv.world"/>
+	<arg name="pause" value="-u"/>
+	<arg name="record" value="-r"/>
+	<arg name="record_file_path" value="-O $(arg scenarios_folder_url)/scen_rec.bag"/>
+
+<!-- setting gazebo path for scenario platform and sensors models -->
+	<env name="GAZEBO_MODEL_PATH" value="$(arg scenarios_folder_url)"/>
 
 
- <!-- these are the arguments you can pass this launch file, for example paused:=true -->
-  <arg name="paused" default="true"/>
-  <arg name="use_sim_time" default="true"/>
-  <arg name="gui" default="true"/>
-  <arg name="headless" default="false"/>
-  <arg name="debug" default="false"/>
+<!-- synchronizing ros to gazebo -->
+	<param name="/use_sim_time" value="true" />
 
 
-  <!-- We resume the logic in empty_world.launch -->
+<!-- start gazebo server-->
+	<node name="gazebo" pkg="gazebo_ros" type="gzserver" respawn="false" output="screen" args="$(arg pause) $(arg world_name)" />
 
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="debug" value="$(arg debug)" />
-    <arg name="gui" value="$(arg gui)" />
-    <arg name="paused" value="$(arg paused)"/>
-    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
-    <arg name="headless" value="$(arg headless)"/>
-    <arg name="world_name" value="$(arg scenarios_folder_url)/scenarioEnv.world"/>
-  </include>
+	
+<!-- start gazebo client -->
+	<node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
 
 
-  <include file="$(find srvss_bobcat)/launch/srvss_bobcat.launch"/>
+<!-- srvss_Dumy -->
+	<include file="$(find srvss_bobcat)/launch/srvss_bobcat.launch"/>
+	<node pkg="tf" type="static_transform_publisher" name="sick_link_broadcaster" args="1 0 0.2 0 0 0 body front_sick 100" />
+	<node pkg="srvss_wp_driver" type="srvss_wp_driver_node" name="srvss_wp_driver_node" args="-file $(arg scenarios_folder_url)/scenarioMission.txt" output="screen" />
 
-  <node pkg="tf" type="static_transform_publisher" name="sick_link_broadcaster" args="1 0 0.2 0 0 0 body front_sick 100" />
 
-  <node pkg="srvss_wp_driver" type="srvss_wp_driver_node" name="srvss_wp_driver_node" args="-file $(arg scenarios_folder_url)/scenarioMission.txt" output="screen" />
 
-<!--
-  <node pkg="srvss_wp_driver" type="srvss_greader_node" name="srvss_greader_node" />
- -->
+<!-- start RosBag recording -->
+	<node name="rosbag_recorder" pkg="rosbag" type="record" args="-a $(arg record_file_path)" />
+
+
+<!-- grader -->
+	<node pkg="SRVSS" type="grader_node" name="grader_node" output="screen"/>
+
 </launch>

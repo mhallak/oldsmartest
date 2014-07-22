@@ -11,14 +11,15 @@
 
 
 <!-- start gazebo server-->
-	<param name="robot_description" command="cat $(find srvss_bobcat)/urdf/BOBCAT.URDF" />
+	<param name="robot_description" command="cat $(find bobcat)/urdf/live_BOBCAT.URDF" />
 	<node name="gazebo" pkg="gazebo_ros" type="gzserver" respawn="false" output="screen" args="$(arg pause) $(arg world_name)" />
 	
 <!-- start gazebo client -->
 	<node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
 
-<!-- play RosBag recording -->
-	<node name="ros_scen_replay" pkg="rosbag" type="play"  output="screen" args="--pause --loop --clock $(arg ros_record_path)"/>
+<!-- run RosBag recording -->
+	<node name="ros_scen_replay" pkg="rosbag" type="play"  output="screen" args="--pause --loop --rate 1 --clock $(arg ros_record_path)"/>
+
 
 <!-- run translater for gazebo LinkStates -->
 	<node name="rosbag_to_gazebo_translater" pkg="SRVSS" type="ReplayPlayer" />	

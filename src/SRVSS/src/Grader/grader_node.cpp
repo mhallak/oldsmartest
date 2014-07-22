@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iostream>
 #include <cmath>      // std::abs()
+#include <string.h>
 
 #include "std_msgs/MultiArrayLayout.h"
 #include "std_msgs/MultiArrayDimension.h"
@@ -44,9 +45,12 @@ void model_statesCallback(const gazebo_msgs::ModelStates::ConstPtr &msg)
     // object distance
 	for (int i=2 ; i<obj_num ; i++)
 	{
+		if (msg->name[i].compare(0,7,"wp_mark") )
+		{
 		geometry_msgs::Point obj_pos = msg->pose[i].position;
         obj_dis = sqrt( (obj_pos.x - bobcat_pos.x)*(obj_pos.x - bobcat_pos.x) + (obj_pos.y - bobcat_pos.y)*(obj_pos.y - bobcat_pos.y) );
         obj_min_dist = std::min(obj_min_dist,obj_dis);
+		}
 	}
 		scenario_obj_min_dist = std::min(scenario_obj_min_dist , obj_min_dist);
 
@@ -61,8 +65,8 @@ void model_statesCallback(const gazebo_msgs::ModelStates::ConstPtr &msg)
 		scenario_pitch_max_ang = std::max( scenario_pitch_max_ang , std::abs((float)pitch) );
 
 
-     ROS_INFO(" vehicle stability grade : roll = %f   , pitch = %f " , scenario_roll_max_ang, scenario_pitch_max_ang);
-     ROS_INFO(" obstacle proximity grade : dis = %f " , scenario_obj_min_dist);
+  //   ROS_INFO(" vehicle stability grade : roll = %f   , pitch = %f " , scenario_roll_max_ang, scenario_pitch_max_ang);
+  //   ROS_INFO(" obstacle proximity grade : dis = %f " , scenario_obj_min_dist);
 
   	greads_array.data.clear();
     greads_array.data.push_back(scenario_obj_min_dist);
@@ -75,15 +79,15 @@ void model_statesCallback(const gazebo_msgs::ModelStates::ConstPtr &msg)
   	if (  (scenario_obj_min_dist <= MIN_ALLOWED_OBS_DIST)  || ( scenario_roll_max_ang >= MAX_ALLOWED_ROLL_ANG) || (scenario_pitch_max_ang >= MAX_ALLOWED_PITCH_ANG)  )
   	{
   		reset_flag.data = true;
-  		ROS_INFO(" vreset_flag = %d " , reset_flag.data);
+  		//ROS_INFO(" vreset_flag = %d " , reset_flag.data);
   	}
    reset_pub_.publish(reset_flag);
 }
 
-/*
+
 int main(int argc, char **argv)
 {
-  / ros::init(argc, argv, "greader_node");
+   ros::init(argc, argv, "greader_node");
 
    ros::NodeHandle n;
 
@@ -97,4 +101,4 @@ int main(int argc, char **argv)
 
    return 0;
 }
-*/
+
