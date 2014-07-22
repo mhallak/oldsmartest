@@ -1,40 +1,35 @@
 <!-- -*- mode: XML -*- -->
 <launch>    
 
-     <arg name="scen" default="scenarios/scenario_1"/> 
-    
-     <arg name="scenarios_folder_url" value="$(find SRVSS)/$(arg scen)"/>
+	<arg name="scen" default="scenarios/scenario_1"/> 
 
-     
- <!-- these are the arguments you can pass this launch file, for example paused:=true -->
-  <arg name="paused" default="true"/>
-  <arg name="use_sim_time" default="true"/>
-  <arg name="gui" default="true"/>
-  <arg name="headless" default="false"/>
-  <arg name="debug" default="false"/>
+	<arg name="scenarios_folder_url" value="$(find SRVSS)/$(arg scen)"/>
+	<arg name="world_name" value="$(arg scenarios_folder_url)/scenarioEnv.world"/>
+	<arg name="pause" value="-u"/>
+	<arg name="record" value="-r"/>
+	<arg name="record_file_path" value="-O $(arg scenarios_folder_url)/scen_rec.bag"/>
 
 
-  <!-- We resume the logic in empty_world.launch -->
+<!-- synchronizing ros to gazebo -->
+	<param name="/use_sim_time" value="true" />
 
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="debug" value="$(arg debug)" />
-    <arg name="gui" value="$(arg gui)" />
-    <arg name="paused" value="$(arg paused)"/>
-    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
-    <arg name="headless" value="$(arg headless)"/>
-    <arg name="world_name" value="$(arg scenarios_folder_url)/scenarioEnv.world"/>
-  </include>
+<!-- start gazebo server-->
+	<node name="gazebo" pkg="gazebo_ros" type="gzserver" respawn="false" output="screen" args="$(arg pause) $(arg world_name)" />
+	
+
+<!-- start gazebo client -->
+	<node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
 
 
 <!-- Robil2 -->
-  <param name="robot_description" command="cat $(find bobcat)/urdf/live_BOBCAT.URDF" />
-  <include file="$(find bobcat_gazebo)/launch/bobcat_gazebo_control.launch" />
-  <node name="RateToEffort" pkg="rate2effort" type="rate2effort" cwd="node" output="screen" />
-
-  <include file="$(find robil2conf)/frameworkInit.launch" />
+	<param name="robot_description" command="cat $(find bobcat)/urdf/live_BOBCAT.URDF" />
+	<include file="$(find bobcat_gazebo)/launch/bobcat_gazebo_control.launch" />
+	<node name="RateToEffort" pkg="rate2effort" type="rate2effort" cwd="node" output="screen" />
+	<include file="$(find robil2conf)/frameworkInit.launch" />
  
-<!--
-  <node pkg="rosbag" type="play" name="rosbag_mission_play_node" output="screen" args="--pause -l src/Simulation/srvss/src/SRVSS/scenarios/scenario_1/scenarioMission.bag"/>
--->
+
+<!-- start RosBag recording -->
+	<node name="rosbag_recorder" pkg="rosbag" type="record" args="-a $(arg record_file_path)" />
+
 
 </launch>

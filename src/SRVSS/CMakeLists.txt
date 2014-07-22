@@ -283,7 +283,7 @@ GazeboScenarioGenerator
 #### Replay Player ###
 ######################
 add_executable(ReplayPlayer src/ReplayPlayer/ReplayPlayer.cpp)
-target_link_libraries(ReplayPlayer ${catkin_LIBRARIES} ${GAZEBO_INCLUDE_DIRS}
+target_link_libraries(ReplayPlayer ${catkin_LIBRARIES}
 )
 
 
@@ -291,8 +291,8 @@ target_link_libraries(ReplayPlayer ${catkin_LIBRARIES} ${GAZEBO_INCLUDE_DIRS}
 ###############
 #### grader ###
 ###############
-# add_executable(grader_node src/Grader/grader_node.cpp)
-# target_link_libraries(grader_node
-#   ${catkin_LIBRARIES}
-#)
+add_executable(grader_node src/Grader/grader_node.cpp)
+target_link_libraries(grader_node
+   ${catkin_LIBRARIES}
+)
 
