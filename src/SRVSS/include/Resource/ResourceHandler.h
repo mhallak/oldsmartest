@@ -19,6 +19,9 @@ private:
 	std::string m_platformPath;
 	std::string m_platformModel;
 	std::string m_platformName;
+
+	std::string m_SysModelsPath;
+
 	std::string getResource(std::string name,int id);
     // Private Constructor
 	ResourceHandler(std::string resources_file_path);
@@ -41,6 +44,8 @@ public:
 	const std::string& getPlatformPath() const;
 	const std::string& getPlatformModel() const;
 	const std::string& getPlatformName() const;
+
+	const std::string& getSysModelsPath() const;
 };
 
 #endif /* RESOURCEHANDLER_H_ */

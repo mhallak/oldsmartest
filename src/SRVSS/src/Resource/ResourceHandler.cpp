@@ -41,7 +41,8 @@ ResourceHandler::ResourceHandler(std::string resources_file_path) {
 		//search for an sdfp element to parse
 		for ( pChild = doc.FirstChild(); pChild != 0; pChild = pChild->NextSibling())
 		{
-			if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("resource")==0){
+			if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("resource")==0)
+			{
 				for ( pAttrib = pChild->ToElement()->FirstAttribute(); pAttrib != 0; pAttrib = pAttrib->Next())
 				{
 					if(pAttrib->NameTStr().compare("dirPath")==0)
@@ -59,7 +60,27 @@ ResourceHandler::ResourceHandler(std::string resources_file_path) {
 					}
 				}
 				parseResource(pChild,m_resourceMap);
-				break;
+				//break;
+			}
+
+			if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("system_components")==0)
+			{
+				for ( pAttrib = pChild->ToElement()->FirstAttribute(); pAttrib != 0; pAttrib = pAttrib->Next())
+				{
+					if(pAttrib->NameTStr().compare("dirPath")==0)
+					{
+						m_SysModelsPath=pAttrib->ValueStr();
+						std::cout << " system_components dirPath = " << m_SysModelsPath << std::endl;
+					}
+					else if(pAttrib->NameTStr().compare("platform")==0)
+					{
+						m_platformModel=pAttrib->ValueStr();
+					}
+					else if(pAttrib->NameTStr().compare("name")==0)
+					{
+						m_platformName =pAttrib->ValueStr();
+					}
+				}
 			}
 		}
 }
@@ -108,3 +129,10 @@ const std::string& ResourceHandler::getPlatformModel() const {
 const std::string& ResourceHandler::getPlatformName() const {
 	return m_platformName;
 }
+
+const std::string& ResourceHandler::getSysModelsPath() const {
+	return m_SysModelsPath;
+}
+
+
+

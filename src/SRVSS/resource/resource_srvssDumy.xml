@@ -1,4 +1,7 @@
 <?xml version="1.0"?>
+
+<system_components dirPath="/home/userws3/dany_ws/src/Simulation/srvss_bobcat/sdf" platform="srvss_bobcat" name="srvss_bobcat" />
+
 <resource version="1.0" dirPath="/home/userws3/.gazebo/models" platform="srvss_bobcat" name="srvss_bobcat">
 
 	<terrain id="0">srvss_terrain0</terrain>
@@ -13,3 +16,5 @@
 
 	<light id="1">no</light>
 </resource>
+
+	

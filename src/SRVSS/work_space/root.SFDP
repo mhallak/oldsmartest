@@ -11,7 +11,7 @@
 		<scenario_feature type="number_of_objects">
 			<distribution>uniform_discrete</distribution>
 			<dist_param_1>5</dist_param_1>
-			<dist_param_2>20</dist_param_2>
+			<dist_param_2>5</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="object_i_type">
 			<distribution>uniform_discrete</distribution>
@@ -67,8 +67,8 @@
 	<scenario_feature_group type="obstacles_on_path" name="obstacles_on_path">
 		<scenario_feature type="number_of_obstacles_on_path">
 			<distribution>uniform_discrete</distribution>
-			<dist_param_1>1</dist_param_1>
-			<dist_param_2>2</dist_param_2>
+			<dist_param_1>3</dist_param_1>
+			<dist_param_2>3</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="obstacle_on_path_i_type">
 			<distribution>uniform_discrete</distribution>
@@ -176,68 +176,91 @@
 			<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
 		</scenario_feature>
 	</scenario_feature_group>
+
 	<scenario_feature_group type="mass_link_i" name="body">
-		<scenario_feature type="mass_link_i_mass">
+		<scenario_feature type="mass_link_i_mass_deviation">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0</dist_param_1>
-			<dist_param_2>30</dist_param_2>
+			<dist_param_1>0.95</dist_param_1>
+			<dist_param_2>1.05</dist_param_2>
 		</scenario_feature>
-		<scenario_feature type="mass_link_i_inertia_Ixx_component">
+		<scenario_feature type="mass_link_i_inertia_deviation_Ixx_component">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0.1</dist_param_1>
-			<dist_param_2>0.3</dist_param_2>
+			<dist_param_1>0.95</dist_param_1>
+			<dist_param_2>1.05</dist_param_2>
 		</scenario_feature>
-		<scenario_feature type="mass_link_i_inertia_Iyy_component">
+		<scenario_feature type="mass_link_i_inertia_deviation_Iyy_component">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0.1</dist_param_1>
-			<dist_param_2>0.3</dist_param_2>
+			<dist_param_1>0.95</dist_param_1>
+			<dist_param_2>1.05</dist_param_2>
 		</scenario_feature>
-	 	<scenario_feature type="mass_link_i_inertia_Izz_component">
+	 	<scenario_feature type="mass_link_i_inertia_deviation_Izz_component">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0.1</dist_param_1>
-			<dist_param_2>0.3</dist_param_2>
+			<dist_param_1>0.95</dist_param_1>
+			<dist_param_2>1.05</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="mass_link_i_location_deviation_X">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-0.1</dist_param_1>
-			<dist_param_2>0.1</dist_param_2>
+			<dist_param_1>0.0</dist_param_1>
+			<dist_param_2>0.0</dist_param_2>
 		</scenario_feature> 
 		<scenario_feature type="mass_link_i_location_deviation_Y">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-0.1</dist_param_1>
-			<dist_param_2>0.1</dist_param_2>
+			<dist_param_1>0.0</dist_param_1>
+			<dist_param_2>0.0</dist_param_2>
 		</scenario_feature> 
 		<scenario_feature type="mass_link_i_location_deviation_Z">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-0.1</dist_param_1>
-			<dist_param_2>0.1</dist_param_2>
+			<dist_param_1>0.0</dist_param_1>
+			<dist_param_2>0.0</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="mass_link_i_location_deviation_Roll">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-45</dist_param_1>
-			<dist_param_2>45</dist_param_2>
+			<dist_param_1>0.0</dist_param_1>
+			<dist_param_2>0.0</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="mass_link_i_location_deviation_Pitch">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-45</dist_param_1>
-			<dist_param_2>45</dist_param_2>
+			<dist_param_1>0.0</dist_param_1>
+			<dist_param_2>0.0</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="mass_link_i_location_deviation_Yaw">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-45</dist_param_1>
-			<dist_param_2>45</dist_param_2>
+			<dist_param_1>0.0</dist_param_1>
+			<dist_param_2>0.0</dist_param_2>
 		</scenario_feature>
 	 </scenario_feature_group>
-	 <scenario_feature_group type="friction_link_i" name="body">
+
+	 <scenario_feature_group type="friction_link_i" name="front_right_wheel">
 		<scenario_feature type="friction_link_friction_deviation">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>70</dist_param_1>
-			<dist_param_2>130</dist_param_2>
+			<dist_param_1>0.9</dist_param_1>
+			<dist_param_2>1.1</dist_param_2>
+		</scenario_feature>
+	 </scenario_feature_group>
+	 <scenario_feature_group type="friction_link_i" name="front_left_wheel">
+		<scenario_feature type="friction_link_friction_deviation">
+			<distribution>uniform_continuous</distribution>
+			<dist_param_1>0.9</dist_param_1>
+			<dist_param_2>1.1</dist_param_2>
+		</scenario_feature>
+	 </scenario_feature_group>
+	 <scenario_feature_group type="friction_link_i" name="back_right_wheel">
+		<scenario_feature type="friction_link_friction_deviation">
+			<distribution>uniform_continuous</distribution>
+			<dist_param_1>0.9</dist_param_1>
+			<dist_param_2>1.1</dist_param_2>
+		</scenario_feature>
+	 </scenario_feature_group>
+	 <scenario_feature_group type="friction_link_i" name="back_left_wheel">
+		<scenario_feature type="friction_link_friction_deviation">
+			<distribution>uniform_continuous</distribution>
+			<dist_param_1>0.9</dist_param_1>
+			<dist_param_2>1.1</dist_param_2>
 		</scenario_feature>
 	 </scenario_feature_group>
 
 
-	 <scenario_feature_group type="sensor_link_i" name="ibeo::link">
+	 <scenario_feature_group type="sensor_link_i" name="gps_ins::link">
 		<scenario_feature type="sensor_link_i_location_deviation_X">
 			<distribution>normal_continuous</distribution>
 			<dist_param_1>0</dist_param_1>
@@ -256,79 +279,52 @@
 		<scenario_feature type="sensor_link_i_location_deviation_Roll">
 			<distribution>normal_continuous</distribution>
 			<dist_param_1>0</dist_param_1>
-			<dist_param_2>0.5</dist_param_2>
+			<dist_param_2>0.01</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="sensor_link_i_location_deviation_Pitch">
 			<distribution>normal_continuous</distribution>
 			<dist_param_1>0</dist_param_1>
-			<dist_param_2>0.5</dist_param_2>
+			<dist_param_2>0.01</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="sensor_link_i_location_deviation_Yaw">
 			<distribution>normal_continuous</distribution>
 			<dist_param_1>0</dist_param_1>
-			<dist_param_2>0.5</dist_param_2>
+			<dist_param_2>0.01</dist_param_2>
 		</scenario_feature>
 	 </scenario_feature_group>
 
 
-	 <scenario_feature_group type="mass_link_i" name="body">
-		<scenario_feature type="mass_link_i_mass">
-			<distribution>uniform_continuous</distribution>
+
+	 <scenario_feature_group type="sensor_link_i" name="front_sick::link">
+		<scenario_feature type="sensor_link_i_location_deviation_X">
+			<distribution>normal_continuous</distribution>
 			<dist_param_1>0</dist_param_1>
-			<dist_param_2>30</dist_param_2>
-		</scenario_feature>
-		<scenario_feature type="mass_link_i_inertia_Ixx_component">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0.1</dist_param_1>
-			<dist_param_2>0.3</dist_param_2>
-		</scenario_feature>
-		<scenario_feature type="mass_link_i_inertia_Iyy_component">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0.1</dist_param_1>
-			<dist_param_2>0.3</dist_param_2>
-		</scenario_feature>
-	 	<scenario_feature type="mass_link_i_inertia_Izz_component">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0.1</dist_param_1>
-			<dist_param_2>0.3</dist_param_2>
-		</scenario_feature>
-		<scenario_feature type="mass_link_i_location_deviation_X">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-0.1</dist_param_1>
-			<dist_param_2>0.1</dist_param_2>
+			<dist_param_2>0.01</dist_param_2>
 		</scenario_feature> 
-		<scenario_feature type="mass_link_i_location_deviation_Y">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-0.1</dist_param_1>
-			<dist_param_2>0.1</dist_param_2>
+		<scenario_feature type="sensor_link_i_location_deviation_Y">
+			<distribution>normal_continuous</distribution>
+			<dist_param_1>0</dist_param_1>
+			<dist_param_2>0.01</dist_param_2>
 		</scenario_feature> 
-		<scenario_feature type="mass_link_i_location_deviation_Z">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-0.1</dist_param_1>
-			<dist_param_2>0.1</dist_param_2>
+		<scenario_feature type="sensor_link_i_location_deviation_Z">
+			<distribution>normal_continuous</distribution>
+			<dist_param_1>0</dist_param_1>
+			<dist_param_2>0.01</dist_param_2>
 		</scenario_feature>
-		<scenario_feature type="mass_link_i_location_deviation_Roll">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-45</dist_param_1>
-			<dist_param_2>45</dist_param_2>
+		<scenario_feature type="sensor_link_i_location_deviation_Roll">
+			<distribution>normal_continuous</distribution>
+			<dist_param_1>0</dist_param_1>
+			<dist_param_2>0.3</dist_param_2>
 		</scenario_feature>
-		<scenario_feature type="mass_link_i_location_deviation_Pitch">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-45</dist_param_1>
-			<dist_param_2>45</dist_param_2>
+		<scenario_feature type="sensor_link_i_location_deviation_Pitch">
+			<distribution>normal_continuous</distribution>
+			<dist_param_1>0</dist_param_1>
+			<dist_param_2>0.01</dist_param_2>
 		</scenario_feature>
-		<scenario_feature type="mass_link_i_location_deviation_Yaw">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-45</dist_param_1>
-			<dist_param_2>45</dist_param_2>
-		</scenario_feature>
-	 </scenario_feature_group>
-
-	 <scenario_feature_group type="friction_link_i" name="body">
-		<scenario_feature type="friction_link_friction_deviation">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>70</dist_param_1>
-			<dist_param_2>130</dist_param_2>
+		<scenario_feature type="sensor_link_i_location_deviation_Yaw">
+			<distribution>normal_continuous</distribution>
+			<dist_param_1>0</dist_param_1>
+			<dist_param_2>0.01</dist_param_2>
 		</scenario_feature>
 	 </scenario_feature_group>
 
@@ -357,13 +353,13 @@
 	 <scenario_feature_group type="waypoints" name="mission_waypoints">
 		<scenario_feature type="number_of_way_points">
 			<distribution>uniform_discrete</distribution>
-			<dist_param_1>10</dist_param_1>
-			<dist_param_2>10</dist_param_2>
+			<dist_param_1>7</dist_param_1>
+			<dist_param_2>7</dist_param_2>
 		</scenario_feature> 
 		<scenario_feature type="wp_i_relative_distance">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>5</dist_param_1>
-			<dist_param_2>10</dist_param_2>
+			<dist_param_1>15</dist_param_1>
+			<dist_param_2>20</dist_param_2>
 			<feature_dependency type="roll_number">number_of_way_points</feature_dependency>
 		</scenario_feature> 
 		<scenario_feature type="wp_i_relative_angle">

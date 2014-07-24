@@ -68,9 +68,7 @@ float NumberSampler::uniformContinuousDistribution(float distParam1, float distP
 
 float NumberSampler::normalContinuousDistribution(float distParam1, float distParam2)
 {
-	float mini=0,maxi=0;
-	setMinimumMaximum(mini,maxi,distParam1,distParam2);
-	boost::normal_distribution<> dist(mini,maxi);
+	boost::normal_distribution<> dist(distParam1,distParam2);
 	gen.seed((++seed) + time(NULL));
 	boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > generator(gen, dist);
 	return generator();

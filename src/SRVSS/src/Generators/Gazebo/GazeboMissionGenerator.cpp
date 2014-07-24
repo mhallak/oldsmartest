@@ -155,7 +155,7 @@ void GazeboMissionGenerator::generateMission_ROBIL2(SFVComponent * sfvComp,std::
 
 void GazeboMissionGenerator::generate(SFVComponent * sfvComp , std::string scenario_folder_url, std::string resource_file_url)
 {
-	std::string temp = scenario_folder_url+"scenarioMission";
+	std::string temp = scenario_folder_url+"/scenarioMission";
 
 	std::cout << " Producing " << temp << ".txt" << std::endl;
 	generateMission(sfvComp, temp ,resource_file_url);
