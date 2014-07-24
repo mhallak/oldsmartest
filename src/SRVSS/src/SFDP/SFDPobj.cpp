@@ -191,7 +191,7 @@ int SFDPobj::RunMySFVs()
 
 	for (SFVComponent * sfvComp_it : * my_sampled_SFVs )
 	{
-		folder_url = my_WS_url + "sampl_" + std::to_string(sfv_index) + "/";
+		folder_url = my_WS_url + "sampl_" + std::to_string(sfv_index);
 
 		if(! boost::filesystem::is_directory(folder_url))
 			{

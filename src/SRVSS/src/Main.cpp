@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 			std::cout << " -genSCEN is runing !!! " << std::endl;
 
 			std::string sfv_file_path = PATH+argv[2];
-			std::string scenarios_folder_path = PATH + argv[3] + "/";
+			std::string scenarios_folder_path = PATH + argv[3];
 			std::string resources_file_path = PATH + argv[4];
 
 			SFVComponent *sfvComp=new SFVComponent(resources_file_path);

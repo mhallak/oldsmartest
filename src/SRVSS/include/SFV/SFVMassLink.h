@@ -22,14 +22,14 @@ public:
 	void setId(int id);
 
 
-	double getInertiaIxxComponent() const;
-	void setInertiaIxxComponent(double inertiaIxxComponent);
+	double getInertiaDeviationIxxComponent() const;
+	void setInertiaDeviationIxxComponent(double inertiaIxxComponent);
 
-	double getInertiaIyyComponent() const;
-	void setInertiaIyyComponent(double inertiaIyyComponent);
+	double getInertiaDeviationIyyComponent() const;
+	void setInertiaDeviationIyyComponent(double inertiaIyyComponent);
 
-	double getInertiaIzzComponent() const;
-	void setInertiaIzzComponent(double inertiaIzzComponent);
+	double getInertiaDeviationIzzComponent() const;
+	void setInertiaDeviationIzzComponent(double inertiaIzzComponent);
 
 	double getLocationPitchDeviation() const;
 	void setLocationPitchDeviation(double locationPitchDeviation);
@@ -49,8 +49,8 @@ public:
 	double getLocationZDeviation() const;
 	void setLocationZDeviation(double locationZDeviation);
 
-	double getMass() const;
-	void setMass(double mass);
+	double getMassDeviation() const;
+	void setMassDeviation(double mass);
 	std::string& getLinkName();
 	void setLinkName(const std::string& linkName);
 };

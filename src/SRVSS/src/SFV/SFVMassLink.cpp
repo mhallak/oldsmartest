@@ -17,16 +17,16 @@ void SFVMassLink::setStructure()
 {
 	m_objectType="MassLink";
 
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_inertia_Ixx_component,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_inertia_Iyy_component,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_inertia_Izz_component,0));
+	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_inertia_deviation_Ixx_component,0));
+	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_inertia_deviation_Iyy_component,0));
+	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_inertia_deviation_Izz_component,0));
 	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_location_deviation_Roll,0));
 	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_location_deviation_Pitch,0));
 	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_location_deviation_Yaw,0));
 	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_location_deviation_X,0));
 	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_location_deviation_Y,0));
 	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_location_deviation_Z,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_mass,0));
+	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::mass_link_i_mass_deviation,0));
 
 }
 
@@ -38,28 +38,28 @@ void SFVMassLink::setId(int id) {
 	m_Id = id;
 }
 
-double SFVMassLink::getInertiaIxxComponent() const {
-	return m_objects->at(ScenarioFeatureType::mass_link_i_inertia_Ixx_component)->getResult();
+double SFVMassLink::getInertiaDeviationIxxComponent() const {
+	return m_objects->at(ScenarioFeatureType::mass_link_i_inertia_deviation_Ixx_component)->getResult();
 }
 
-void SFVMassLink::setInertiaIxxComponent(double inertiaIxxComponent) {
-	m_objects->at(ScenarioFeatureType::mass_link_i_inertia_Ixx_component)->setResult(inertiaIxxComponent);
+void SFVMassLink::setInertiaDeviationIxxComponent(double inertiaIxxComponent) {
+	m_objects->at(ScenarioFeatureType::mass_link_i_inertia_deviation_Ixx_component)->setResult(inertiaIxxComponent);
 }
 
-double SFVMassLink::getInertiaIyyComponent() const {
-	return m_objects->at(ScenarioFeatureType::mass_link_i_inertia_Iyy_component)->getResult();
+double SFVMassLink::getInertiaDeviationIyyComponent() const {
+	return m_objects->at(ScenarioFeatureType::mass_link_i_inertia_deviation_Iyy_component)->getResult();
 }
 
-void SFVMassLink::setInertiaIyyComponent(double inertiaIyyComponent) {
-	m_objects->at(ScenarioFeatureType::mass_link_i_inertia_Iyy_component)->setResult(inertiaIyyComponent);
+void SFVMassLink::setInertiaDeviationIyyComponent(double inertiaIyyComponent) {
+	m_objects->at(ScenarioFeatureType::mass_link_i_inertia_deviation_Iyy_component)->setResult(inertiaIyyComponent);
 }
 
-double SFVMassLink::getInertiaIzzComponent() const {
-	return m_objects->at(ScenarioFeatureType::mass_link_i_inertia_Izz_component)->getResult();
+double SFVMassLink::getInertiaDeviationIzzComponent() const {
+	return m_objects->at(ScenarioFeatureType::mass_link_i_inertia_deviation_Izz_component)->getResult();
 }
 
-void SFVMassLink::setInertiaIzzComponent(double inertiaIzzComponent) {
-	m_objects->at(ScenarioFeatureType::mass_link_i_inertia_Izz_component)->setResult(inertiaIzzComponent);
+void SFVMassLink::setInertiaDeviationIzzComponent(double inertiaIzzComponent) {
+	m_objects->at(ScenarioFeatureType::mass_link_i_inertia_deviation_Izz_component)->setResult(inertiaIzzComponent);
 }
 
 double SFVMassLink::getLocationPitchDeviation() const {
@@ -110,12 +110,12 @@ void SFVMassLink::setLocationZDeviation(double locationZDeviation) {
 	m_objects->at(ScenarioFeatureType::mass_link_i_location_deviation_Z)->setResult(locationZDeviation);
 }
 
-double SFVMassLink::getMass() const {
-	return m_objects->at(ScenarioFeatureType::mass_link_i_mass)->getResult();
+double SFVMassLink::getMassDeviation() const {
+	return m_objects->at(ScenarioFeatureType::mass_link_i_mass_deviation)->getResult();
 }
 
-void SFVMassLink::setMass(double mass) {
-	m_objects->at(ScenarioFeatureType::mass_link_i_mass)->setResult(mass);
+void SFVMassLink::setMassDeviation(double mass) {
+	m_objects->at(ScenarioFeatureType::mass_link_i_mass_deviation)->setResult(mass);
 }
 
 SFVMassLink::~SFVMassLink() {

@@ -317,7 +317,7 @@ void GazeboEnvironmentGenerator::genEnvFromSFV(SFVComponent* sfvComp,std::string
 
 void GazeboEnvironmentGenerator::generate(SFVComponent * sfvComp, std::string scenario_folder_url, std::string resource_file_url)
 {
-	std::string temp = scenario_folder_url+"scenarioEnv.world";
+	std::string temp = scenario_folder_url+"/scenarioEnv.world";
 	std::cout << " Producing " << temp << std::endl;
 
 	genEnvFromSFV(sfvComp, temp ,resource_file_url);
