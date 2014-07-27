@@ -1,0 +1,118 @@
+waypoints: 
+  header: 
+    seq: 0
+    stamp: 0.000000000
+    frame_id: 
+  poses[]
+    poses[0]: 
+        header: 
+        seq: 0
+        stamp: 0.000000000
+        frame_id: 
+      pose: 
+        position: 
+          x: 11.0713
+          y: 16.393
+          z: 0
+        orientation: 
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    poses[1]: 
+        header: 
+        seq: 0
+        stamp: 0.000000000
+        frame_id: 
+      pose: 
+        position: 
+          x: 19.9741
+          y: 33.1285
+          z: 0
+        orientation: 
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    poses[2]: 
+        header: 
+        seq: 0
+        stamp: 0.000000000
+        frame_id: 
+      pose: 
+        position: 
+          x: 27.9032
+          y: 49.1523
+          z: 0
+        orientation: 
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    poses[3]: 
+        header: 
+        seq: 0
+        stamp: 0.000000000
+        frame_id: 
+      pose: 
+        position: 
+          x: 32.9337
+          y: 68.109
+          z: 0
+        orientation: 
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    poses[4]: 
+        header: 
+        seq: 0
+        stamp: 0.000000000
+        frame_id: 
+      pose: 
+        position: 
+          x: 43.9628
+          y: 80.0246
+          z: 0
+        orientation: 
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    poses[5]: 
+        header: 
+        seq: 0
+        stamp: 0.000000000
+        frame_id: 
+      pose: 
+        position: 
+          x: 63.6667
+          y: 82.0831
+          z: 0
+        orientation: 
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    poses[6]: 
+        header: 
+        seq: 0
+        stamp: 0.000000000
+        frame_id: 
+      pose: 
+        position: 
+          x: 80.3932
+          y: 76.1811
+          z: 0
+        orientation: 
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+is_ip_defined: 0
+ip: 
+  x: 0
+  y: 0
+  z: 0
+is_heading_defined: 0
+heading: 0

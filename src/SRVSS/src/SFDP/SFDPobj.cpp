@@ -44,7 +44,7 @@ int SFDPobj::ParseMeFromXMLFile()
 	TiXmlDocument *XMLfile = new TiXmlDocument(my_SFDP_file_url);
 	if (!XMLfile->LoadFile())
 	{
-		std::cout << " failed to load file : " << my_SFDP_file_url << " it might not exist or be not valid XML " << std::endl;
+		std::cout << "\033[1;31m Failed to load file = " << my_SFDP_file_url << " it might not exist or be not valid XML \033[0m" << std::endl;
 		return 0;
 	}
 
@@ -59,7 +59,7 @@ int SFDPobj::ParseMeFromXMLFile()
 
 	if (XMLfile_Child == 0)
 	{
-		std::cout << " the file " << my_SFDP_file_url << " has no SFDP element " << std::endl;
+		std::cout << "\033[1;31m Failed to parse SFDP file = " << my_SFDP_file_url << " it has no SFDP element \033[0m" << std::endl;
 		return 0;
 	}
 
@@ -73,7 +73,7 @@ int SFDPobj::ParseMeFromXMLFile()
 				}
 			else
 				{
-				std::cout <<  " could not parse SDF file : " << my_SFDP_file_url  << " one or more of it's Scenario Feature Groups is not valid " << std::endl;
+				std::cout << "\033[1;31m Failed to parse SFDP file = " << my_SFDP_file_url  << " one or more of it's Scenario Feature Groups is not valid \033[0m" << std::endl;
 				return 0;
 				}
 		}
@@ -126,14 +126,14 @@ int SFDPobj::GenMySFVs(int samp_num)
 		boost::filesystem::remove_all(folder_url);
 		if(! boost::filesystem::create_directory(folder_url))
 			{
-			std::cout << "failed to create folder for sfv_" << sfv_index << std::endl;
+			std::cout << "\033[1;31m failed to create folder for sfv_" << sfv_index << "\033[0m"<< std::endl;
 			break;
 			}
 
 		sfvComp = genSFVComp();
 		if ( ! sfvComp )
 			{
-			std::cout << "failed to generate sfv_ " << sfv_index << std::endl;
+			std::cout << "\033[1;31m failed to generate sfv_ " << sfv_index << "\033[0m" <<std::endl;
 			break;
 			}
 
@@ -195,7 +195,7 @@ int SFDPobj::RunMySFVs()
 
 		if(! boost::filesystem::is_directory(folder_url))
 			{
-			std::cout << " failed to locate folder of sampl_" << std::to_string(sfv_index) << std::endl;
+			std::cout << "\033[1;31m failed to locate folder of sampl_" << std::to_string(sfv_index) << "\033[1;31m" << std::endl;
 			break;
 			}
 
@@ -236,7 +236,7 @@ int SFDPobj::PrintMyResultsToFile()
 {
 	if (! have_been_run)
 	{
-		std::cout << " can't print results file because the SFVs havn't been run yet " << std::endl;
+		std::cout << " \033[1;31m can't print results file because the SFVs havn't been run yet \033[0m" << std::endl;
 		return 0;
 	}
 
@@ -288,7 +288,7 @@ ScenarioFeature * SFDPobj::finedScenrioFeature(ScenarioFeatureGroupType GroupTip
 				}
 			}
 		}
-	std::cout << "could not find GroupTipe " << GroupTipe << " = " << GroupName << " with feature " << FeatureToSplit << std::endl;
+	std::cout << "\033[1;31m could not find GroupTipe " << GroupTipe << " = " << GroupName << " with feature " << FeatureToSplit << "\033[0m"<< std::endl;
 	return 0;
 }
 
@@ -311,8 +311,8 @@ int SFDPobj::SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,
 
 	if( ( boost::filesystem::create_directory(sub_sfdp_1_WS_url)) && ( boost::filesystem::create_directory(sub_sfdp_2_WS_url))  )
 		{
-		std::cout << "failed to create folder for sub_sfdp_1_WS_url and/or sub_sfdp_2_WS_url at : " << std::endl;
-		std::cout << sub_sfdp_1_WS_url << "\n" << sub_sfdp_2_WS_url << std::endl;
+		std::cout << "\033[1;31m vfailed to create folder for sub_sfdp_1_WS_url and/or sub_sfdp_2_WS_url at : " << std::endl;
+		std::cout << sub_sfdp_1_WS_url << "\n" << sub_sfdp_2_WS_url << "\033[0m"<< std::endl;
 		return 0;
 		}
 
@@ -329,7 +329,7 @@ int SFDPobj::SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,
 
 	if ( (! feature_sourse) ||  (! feature_1) ||  (! feature_2) )
 		{
-			std::cout << "could not split because feature to split wasn't found" << std::endl;
+			std::cout << "\033[1;31m  could not split because feature to split wasn't found \033[0m" << std::endl;
 			return 0;
 		}
 
@@ -381,7 +381,7 @@ int SFDPobj::ExploreMe()
 
 	if (! GenMySFVs(5) )
 	{
-		std::cout << "the generation of SFVs have failed " << std::endl;
+		std::cout << "\033[1;31m the generation of SFVs have failed \033[0m" << std::endl;
 		return 0;
 	}
 

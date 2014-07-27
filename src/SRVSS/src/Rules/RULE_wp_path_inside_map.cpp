@@ -53,7 +53,7 @@ bool Rule_wp_path_inside_map::isRuleValid(SFVComponent *sfvComp)
 
 		//load terrain
 		std::string terrain_name=ResourceHandler::getInstance(sfvComp->m_resource_file_path).getTerrainById(terrain->getTerrainId());
-		std::string teraine_file_url = ResourceHandler::getInstance(sfvComp->m_resource_file_path).getModelsPath();
+		std::string teraine_file_url = ResourceHandler::getInstance(sfvComp->m_resource_file_path).getWorldModelsFolderURL();
 		TerrainAnalyzer* terrainA=new TerrainAnalyzer();
 		terrainA->loadFile(teraine_file_url+"/"+terrain_name);
 

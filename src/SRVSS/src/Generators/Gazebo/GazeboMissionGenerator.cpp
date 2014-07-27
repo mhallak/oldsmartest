@@ -58,7 +58,7 @@ void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string 
 {
 
 	std::string terrain = ResourceHandler::getInstance(resources_file_path).getTerrainById(sfvcomp->getTerrains()->at(0)->getTerrainId());
-	std::string path = ResourceHandler::getInstance(resources_file_path).getModelsPath();
+	std::string path = ResourceHandler::getInstance(resources_file_path).getWorldModelsFolderURL();
 
 	m_terrainAnalyzer->loadFile(path+"/"+terrain);
 
@@ -102,7 +102,7 @@ void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string 
 void GazeboMissionGenerator::generateMission_ROBIL2(SFVComponent * sfvComp,std::string fileName, std::string resources_file_path)
 {
 	std::string path_to_terrain_file_name = ResourceHandler::getInstance(resources_file_path).getTerrainById(sfvComp->getTerrains()->at(0)->getTerrainId());
-	std::string path_to_terrain_folder = ResourceHandler::getInstance(resources_file_path).getModelsPath();
+	std::string path_to_terrain_folder = ResourceHandler::getInstance(resources_file_path).getWorldModelsFolderURL();
 	m_terrainAnalyzer->loadFile(path_to_terrain_folder+"/"+path_to_terrain_file_name);
 
 	nav_msgs::Path wp_path;
@@ -157,10 +157,10 @@ void GazeboMissionGenerator::generate(SFVComponent * sfvComp , std::string scena
 {
 	std::string temp = scenario_folder_url+"/scenarioMission";
 
-	std::cout << " Producing " << temp << ".txt" << std::endl;
+	std::cout << "\033[1;36m Producing " << temp << ".txt \033[1;36m" << std::endl;
 	generateMission(sfvComp, temp ,resource_file_url);
 
-	std::cout << " Producing " << temp << ".bag" << std::endl;
+	std::cout << "\033[1;36m Producing " << temp << ".bag \033[1;36m" << std::endl;
 	generateMission_ROBIL2(sfvComp, temp ,resource_file_url);
 }
 

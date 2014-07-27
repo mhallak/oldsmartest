@@ -4,13 +4,14 @@
 	<arg name="scen" default="scenarios/scenario_1"/> 
 
 	<arg name="scenarios_folder_url" value="$(find SRVSS)/$(arg scen)"/>
+	<arg name="world_models_folder_url" value="$(find SRVSS)/world_components_models"/>
 	<arg name="world_name" value="$(arg scenarios_folder_url)/scenarioEnv.world"/>
 	<arg name="pause" value="-u"/>
 	<arg name="record" value="-r"/>
 	<arg name="record_file_path" value="-O $(arg scenarios_folder_url)/scen_rec.bag"/>
 
 <!-- setting gazebo path for scenario platform and sensors models -->
-	<env name="GAZEBO_MODEL_PATH" value="$(arg scenarios_folder_url)/scenarioSystemModels"/>
+	<env name="GAZEBO_MODEL_PATH" value="$(arg world_models_folder_url):$(arg scenarios_folder_url)/scenarioSystemModels"/>
 
 
 <!-- synchronizing ros to gazebo -->

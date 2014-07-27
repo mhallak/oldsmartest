@@ -95,18 +95,17 @@ void ScenarioFeature::set_distributionType(ScenarioFeatureDistributionType type)
 
 int ScenarioFeature::parseScenarioFeatureFromXML(TiXmlNode* xmlFeature)
 {
-	if (! (xmlFeature->ValueStr().compare("scenario_feature")==0))
+	std::string FeatureType = xmlFeature->ToElement()->FirstAttribute()->ValueStr();
+
+	if ((xmlFeature->ValueStr().compare("scenario_feature")!=0) || (ScenarioFeatureType::get_by_name(FeatureType.c_str())==0))
 	{
-		std::cout <<  " could not parse " << xmlFeature->ValueStr() << " because it is not a Scenario Feature " << std::endl;
+		std::cout << "\033[1;31m could not parse scenario_feature = " << FeatureType.c_str() << " because it is not a a valid Scenario Feature \033[0m" << std::endl;
 		return 0;
 	}
 
-	std::string FeatureType = "";
 	std::string distribution = "";
 	std::string dist_param_1 = "";
 	std::string dist_param_2 = "";
-
-	FeatureType = xmlFeature->ToElement()->FirstAttribute()->ValueStr();
 
 	TiXmlNode* pChild;
 	for ( pChild = xmlFeature->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
@@ -122,9 +121,9 @@ int ScenarioFeature::parseScenarioFeatureFromXML(TiXmlNode* xmlFeature)
 		}
 	}
 
-	if ( (FeatureType=="" ) || (distribution=="") || (dist_param_1=="") || (dist_param_2=="") )
+	if ( (distribution=="") || (dist_param_1=="") || (dist_param_2=="") || (ScenarioFeatureDistributionType::get_by_name(distribution.c_str())==0) )
 	{
-		std::cout <<  " could not parse " << xmlFeature->ValueStr() << " = " << FeatureType << " its type, distribution, or distribution parameters are not valid " << std::endl;
+		std::cout << "\033[1;31m could not parse scenario_feature = " << FeatureType.c_str() << " its distribution, or distribution parameters are not valid " << std::endl;
 		return 0;
 	}
 

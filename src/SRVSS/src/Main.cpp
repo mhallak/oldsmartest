@@ -40,14 +40,14 @@ int main(int argc, char** argv)
 
 			if (! sfdp_root->ParseMeFromXMLFile())
 			{
-				std::cout << " failed parse SFDP from file " << std::endl;
+				std::cout << "\033[1;31m Failed parse SFDP from file \033[0m " << std::endl;
 				return 0;
 			}
 
 			SFVComponent *sfvComp = sfdp_root->genSFVComp();
 			if (! sfvComp )
 			{
-				std::cout << " rolling of SFV have failed " << std::endl;
+				std::cout << "\033[1;31m rolling of SFV have failed \033[0m" << std::endl;
 				return 0;
 			}
 			sfvComp->genFileFromSFV(sfv_file_destanation_path);
@@ -72,6 +72,7 @@ int main(int argc, char** argv)
 
 			return 0;
 		}
+
 
 	return 0;
 }

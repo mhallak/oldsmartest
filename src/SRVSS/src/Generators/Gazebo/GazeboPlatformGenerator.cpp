@@ -153,54 +153,36 @@ void GazeboPlatformGenerator::generatePlatform(SFVComponent * sfvcomp,std::strin
 }
 
 
-void CopyModelConfigAndMashes(std::string model_source_folder_url, std::string destenation_model_folder_url)
-{
-		std::string create_model_folder_command = "mkdir -p " + destenation_model_folder_url;
-		//std::cout << " create_model_folder_command = " << create_model_folder_command << std::endl;
-		system(create_model_folder_command.c_str());
-
-		std::string copy_meshes_folder_command = "cp -r " + model_source_folder_url + "/meshes " + destenation_model_folder_url;
-		//std::cout << " copy_meshes_folder_command = " << copy_meshes_folder_command << std::endl;
-		system(copy_meshes_folder_command.c_str());
-
-		std::string copy_config_file_command = "cp -r " + model_source_folder_url + "/model.config " + destenation_model_folder_url;
-		//std::cout << " copy_meshes_folder_command = " << copy_config_file_command << std::endl;
-		system(copy_config_file_command.c_str());
-}
-
 
 void GazeboPlatformGenerator::generate(SFVComponent * sfvComp, std::string scenario_folder_url, std::string resource_file_url)
 {
-
-	std::string nominal_models_folder_url = ResourceHandler::getInstance(resource_file_url).getSysModelsPath();
-	std::string nominal_platform_model_folder_url = nominal_models_folder_url + "/" +  ResourceHandler::getInstance(resource_file_url).getPlatformName() ;
-	std::string nominal_platform_model_url = nominal_platform_model_folder_url + "/model.sdf";
-
+	std::string nominal_models_folder_url = ResourceHandler::getInstance(resource_file_url).getRobotModelsFolderURL();
 	std::string scenario_models_folder_url = scenario_folder_url + "/scenarioSystemModels" ;
-	std::string scenario_platform_model_folder_url = scenario_models_folder_url + "/" + ResourceHandler::getInstance(resource_file_url).getPlatformName();
+
+	std::string nominal_sensor_model_folder_url;
+	std::string copy_sensor_folder_command;
+	for (std::string * sensor_it : *(ResourceHandler::getInstance(resource_file_url).getRobotSensorsNames()) )
+	{
+		nominal_sensor_model_folder_url = nominal_models_folder_url + "/" + *sensor_it;
+		copy_sensor_folder_command = "cp -r " + nominal_sensor_model_folder_url + " " + scenario_models_folder_url;
+		if ( system(copy_sensor_folder_command.c_str()) )
+		{ std::cout << "failed to : " << copy_sensor_folder_command << std::endl; }
+	}
+
+	std::string nominal_platform_model_folder_url = nominal_models_folder_url + "/" +  ResourceHandler::getInstance(resource_file_url).getRobotPlatformName() ;
+	std::string scenario_platform_model_folder_url = scenario_models_folder_url + "/" + ResourceHandler::getInstance(resource_file_url).getRobotPlatformName();
+
+	std::string copy_platform_folder_command = "cp -r " + nominal_platform_model_folder_url + " " + scenario_models_folder_url;
+	if ( system(copy_platform_folder_command.c_str()) )
+		{ std::cout << "failed to : " << copy_sensor_folder_command << std::endl; }
+
+	std::string nominal_platform_model_url = nominal_platform_model_folder_url + "/model.sdf";
 	std::string scenario_platform_model_url = scenario_platform_model_folder_url + "/model.sdf";
-
-	CopyModelConfigAndMashes(nominal_platform_model_folder_url, scenario_platform_model_folder_url);
-
-
-	std::string nominal_gpu_sick_model_folder_url = nominal_models_folder_url + "/" + "gpu_sick";
-	std::string copy_gpu_sick_folder_command = "cp -r " + nominal_gpu_sick_model_folder_url + " " + scenario_models_folder_url;
-	//std::cout << " copy_gpu_sick_folder_command = " << copy_gpu_sick_folder_command << std::endl;
-	system(copy_gpu_sick_folder_command.c_str());
-
-	std::string nominal_GPS_INS_model_folder_url = nominal_models_folder_url + "/" + "GPS_INS";
-	std::string copy_GPS_INS_folder_command = "cp -r " + nominal_GPS_INS_model_folder_url + " " + scenario_models_folder_url;
-	//std::cout << " copy_GPS_INS_folder_command = " << copy_GPS_INS_folder_command << std::endl;
-	system(copy_GPS_INS_folder_command.c_str());
-
 
 	generatePlatform(sfvComp, scenario_platform_model_url ,nominal_platform_model_url, scenario_models_folder_url);
 
 
-
-
-
-	std::cout << " Producing " << scenario_platform_model_url << std::endl;
+	std::cout << "\033[1;36m Producing " << scenario_platform_model_url << "\033[0m"<< std::endl;
 }
 
 

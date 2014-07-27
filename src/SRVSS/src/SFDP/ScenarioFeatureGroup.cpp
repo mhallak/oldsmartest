@@ -93,9 +93,9 @@ TiXmlElement *ScenarioFeatureGroup::toXMLElement()
 
 int ScenarioFeatureGroup::parseScenarioFeatureGroupFromXML(TiXmlNode* xmlFeatureGroup)
 {
-	if (! (xmlFeatureGroup->ValueStr().compare("scenario_feature_group")==0))
+	if ( xmlFeatureGroup->ValueStr().compare("scenario_feature_group")!=0)
 	{
-		std::cout <<  " could not parse " << xmlFeatureGroup->ValueStr() << " because it is not a Scenario Feature Group " << std::endl;
+		std::cout <<  "\033[1;31m could not parse " << xmlFeatureGroup->ValueStr().c_str() << " because it is not a Scenario Feature Group \033[0m" << std::endl;
 		return 0;
 	}
 
@@ -115,9 +115,9 @@ int ScenarioFeatureGroup::parseScenarioFeatureGroupFromXML(TiXmlNode* xmlFeature
 			}
 		}
 
-	if ( (GroupType=="" ) || (GroupName=="") )
+	if ( (GroupType=="" ) || (GroupName=="") ||  (ScenarioFeatureGroupType::get_by_name(GroupType.c_str())==0) )
 	{
-		std::cout <<  " could not parse " << xmlFeatureGroup->ValueStr() << " = " << GroupType << " its GroupType, or name are not valid " << std::endl;
+		std::cout <<  "\033[1;31m could not parse scenario_feature_group = " << GroupType.c_str() << " its type, or name are not valid \033[0m" << std::endl;
 		return 0;
 	}
 
@@ -128,7 +128,12 @@ int ScenarioFeatureGroup::parseScenarioFeatureGroupFromXML(TiXmlNode* xmlFeature
 	TiXmlNode* pChild;
 	for ( pChild = xmlFeatureGroup->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
 		{
-		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("scenario_feature")==0)
+		if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("scenario_feature")!=0)
+			{
+			std::cout <<  "\033[1;31m could not parse scenario_feature_group = " << GroupType.c_str() << "  one ore more of its chide features is not valid \033[0m" << std::endl;
+			return 0;
+			}
+		else
 			{
 			feature = new ScenarioFeature();
 			if (feature->parseScenarioFeatureFromXML(pChild))
@@ -137,7 +142,7 @@ int ScenarioFeatureGroup::parseScenarioFeatureGroupFromXML(TiXmlNode* xmlFeature
 				}
 			else
 				{
-				std::cout <<  " could not parse " << xmlFeatureGroup->ValueStr() << " = " << GroupType << " its one ore more of it's chide features is not valid " << std::endl;
+				std::cout <<  "\033[1;31m could not parse scenario_feature_group = " << GroupType.c_str() << "  one ore more of its chide features is not valid \033[0m" << std::endl;
 				return 0;
 				}
 			}
