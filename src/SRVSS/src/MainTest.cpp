@@ -15,6 +15,7 @@
 #include "TestSFV/SFV2.h"
 
 #include "TestSFV/SFV2mass_link.h"
+#include "TestSFV/SFV2objScattering.h"
 
 #define PATH std::string("")
 
@@ -54,12 +55,15 @@ int main(int argc, char** argv)
 			}
 
 
-			for (sfvSubGroup * subGroup_it : * sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::mass_link_i) )
+			for (sfvSubGroup * subGroup_it : * sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::objects) )
 			{
-			SFV2mass_link * MassLinkGroup = (SFV2mass_link *)subGroup_it;
-			std::cout << "  MassLinkGroup->get_Name() = " << MassLinkGroup->get_Name() << std::endl;
-			}
+			SFV2objScattering *Objs = (SFV2objScattering *)subGroup_it;
+			for (SFV2Object *obj : *Objs->get_Objects() )
+				{
+				std::cout << "  obj->get_ObjectType()->get_RolledValue() = " << obj->get_ObjectType()->get_RolledValue() << std::endl;
 
+				}
+			}
 
 			return 0;
 

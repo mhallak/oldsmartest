@@ -6,188 +6,188 @@
     <Generic type="objects" name="objects">
         <Object id="0" name="objects">
             <object_i_type>1</object_i_type>
-            <object_i_scaling_factor>2.69732</object_i_scaling_factor>
-            <object_i_location_on_the_X_axis>0.51124</object_i_location_on_the_X_axis>
-            <object_i_location_on_the_Y_axis>0.0711693</object_i_location_on_the_Y_axis>
-            <object_i_location_on_the_Z_axis>-0.0663298</object_i_location_on_the_Z_axis>
-            <object_i_location_Roll>-0.0478275</object_i_location_Roll>
-            <object_i_location_Pitch>-0.0154319</object_i_location_Pitch>
-            <object_i_location_Yaw>-0.0483325</object_i_location_Yaw>
+            <object_i_scaling_factor>4.51049</object_i_scaling_factor>
+            <object_i_location_on_the_X_axis>0.899262</object_i_location_on_the_X_axis>
+            <object_i_location_on_the_Y_axis>0.445785</object_i_location_on_the_Y_axis>
+            <object_i_location_on_the_Z_axis>-0.070279</object_i_location_on_the_Z_axis>
+            <object_i_location_Roll>-0.00633513</object_i_location_Roll>
+            <object_i_location_Pitch>-0.0586248</object_i_location_Pitch>
+            <object_i_location_Yaw>0.0848212</object_i_location_Yaw>
         </Object>
         <Object id="1" name="objects">
             <object_i_type>1</object_i_type>
-            <object_i_scaling_factor>1.63347</object_i_scaling_factor>
-            <object_i_location_on_the_X_axis>0.623261</object_i_location_on_the_X_axis>
-            <object_i_location_on_the_Y_axis>0.802171</object_i_location_on_the_Y_axis>
-            <object_i_location_on_the_Z_axis>-0.0772442</object_i_location_on_the_Z_axis>
-            <object_i_location_Roll>-0.0461073</object_i_location_Roll>
-            <object_i_location_Pitch>0.013872</object_i_location_Pitch>
-            <object_i_location_Yaw>0.039823</object_i_location_Yaw>
+            <object_i_scaling_factor>2.51941</object_i_scaling_factor>
+            <object_i_location_on_the_X_axis>0.30772</object_i_location_on_the_X_axis>
+            <object_i_location_on_the_Y_axis>0.731684</object_i_location_on_the_Y_axis>
+            <object_i_location_on_the_Z_axis>-0.0812691</object_i_location_on_the_Z_axis>
+            <object_i_location_Roll>-0.0596461</object_i_location_Roll>
+            <object_i_location_Pitch>-0.0740368</object_i_location_Pitch>
+            <object_i_location_Yaw>0.0393971</object_i_location_Yaw>
         </Object>
         <Object id="2" name="objects">
             <object_i_type>1</object_i_type>
-            <object_i_scaling_factor>4.33666</object_i_scaling_factor>
-            <object_i_location_on_the_X_axis>0.578258</object_i_location_on_the_X_axis>
-            <object_i_location_on_the_Y_axis>0.405967</object_i_location_on_the_Y_axis>
-            <object_i_location_on_the_Z_axis>-0.077125</object_i_location_on_the_Z_axis>
-            <object_i_location_Roll>-0.0621871</object_i_location_Roll>
-            <object_i_location_Pitch>-0.0685933</object_i_location_Pitch>
-            <object_i_location_Yaw>-0.0454196</object_i_location_Yaw>
+            <object_i_scaling_factor>4.76683</object_i_scaling_factor>
+            <object_i_location_on_the_X_axis>0.641028</object_i_location_on_the_X_axis>
+            <object_i_location_on_the_Y_axis>0.84698</object_i_location_on_the_Y_axis>
+            <object_i_location_on_the_Z_axis>-0.080384</object_i_location_on_the_Z_axis>
+            <object_i_location_Roll>-0.0514905</object_i_location_Roll>
+            <object_i_location_Pitch>-0.0293748</object_i_location_Pitch>
+            <object_i_location_Yaw>-0.00916988</object_i_location_Yaw>
         </Object>
         <Object id="3" name="objects">
             <object_i_type>1</object_i_type>
-            <object_i_scaling_factor>4.98649</object_i_scaling_factor>
-            <object_i_location_on_the_X_axis>0.829337</object_i_location_on_the_X_axis>
-            <object_i_location_on_the_Y_axis>0.606103</object_i_location_on_the_Y_axis>
-            <object_i_location_on_the_Z_axis>-0.0594485</object_i_location_on_the_Z_axis>
-            <object_i_location_Roll>-0.0788087</object_i_location_Roll>
-            <object_i_location_Pitch>0.00490961</object_i_location_Pitch>
-            <object_i_location_Yaw>0.0523359</object_i_location_Yaw>
+            <object_i_scaling_factor>4.34978</object_i_scaling_factor>
+            <object_i_location_on_the_X_axis>0.558906</object_i_location_on_the_X_axis>
+            <object_i_location_on_the_Y_axis>0.603694</object_i_location_on_the_Y_axis>
+            <object_i_location_on_the_Z_axis>-0.0714452</object_i_location_on_the_Z_axis>
+            <object_i_location_Roll>0.0544623</object_i_location_Roll>
+            <object_i_location_Pitch>-0.0161914</object_i_location_Pitch>
+            <object_i_location_Yaw>0.0959575</object_i_location_Yaw>
         </Object>
         <Object id="4" name="objects">
             <object_i_type>1</object_i_type>
-            <object_i_scaling_factor>3.97337</object_i_scaling_factor>
-            <object_i_location_on_the_X_axis>0.0518164</object_i_location_on_the_X_axis>
-            <object_i_location_on_the_Y_axis>0.0648916</object_i_location_on_the_Y_axis>
-            <object_i_location_on_the_Z_axis>-0.0726672</object_i_location_on_the_Z_axis>
-            <object_i_location_Roll>-0.0310312</object_i_location_Roll>
-            <object_i_location_Pitch>-0.0500511</object_i_location_Pitch>
-            <object_i_location_Yaw>-0.0537162</object_i_location_Yaw>
+            <object_i_scaling_factor>4.08898</object_i_scaling_factor>
+            <object_i_location_on_the_X_axis>0.29533</object_i_location_on_the_X_axis>
+            <object_i_location_on_the_Y_axis>0.596716</object_i_location_on_the_Y_axis>
+            <object_i_location_on_the_Z_axis>-0.056065</object_i_location_on_the_Z_axis>
+            <object_i_location_Roll>0.0312652</object_i_location_Roll>
+            <object_i_location_Pitch>-0.0479039</object_i_location_Pitch>
+            <object_i_location_Yaw>0.0611253</object_i_location_Yaw>
         </Object>
     </Generic>
     <Generic type="objects" name="objects2">
         <Object id="0" name="objects2">
             <object_i_type>3</object_i_type>
-            <object_i_scaling_factor>2.80041</object_i_scaling_factor>
-            <object_i_location_on_the_X_axis>0.905265</object_i_location_on_the_X_axis>
-            <object_i_location_on_the_Y_axis>0.922172</object_i_location_on_the_Y_axis>
-            <object_i_location_on_the_Z_axis>-0.0661029</object_i_location_on_the_Z_axis>
-            <object_i_location_Roll>0.0731744</object_i_location_Roll>
-            <object_i_location_Pitch>-0.0462212</object_i_location_Pitch>
-            <object_i_location_Yaw>0.0122477</object_i_location_Yaw>
+            <object_i_scaling_factor>1.73301</object_i_scaling_factor>
+            <object_i_location_on_the_X_axis>0.900195</object_i_location_on_the_X_axis>
+            <object_i_location_on_the_Y_axis>0.943169</object_i_location_on_the_Y_axis>
+            <object_i_location_on_the_Z_axis>-0.0559207</object_i_location_on_the_Z_axis>
+            <object_i_location_Roll>0.0653717</object_i_location_Roll>
+            <object_i_location_Pitch>0.00647624</object_i_location_Pitch>
+            <object_i_location_Yaw>-0.0244861</object_i_location_Yaw>
         </Object>
         <Object id="1" name="objects2">
             <object_i_type>3</object_i_type>
-            <object_i_scaling_factor>3.55182</object_i_scaling_factor>
-            <object_i_location_on_the_X_axis>0.909082</object_i_location_on_the_X_axis>
-            <object_i_location_on_the_Y_axis>0.912322</object_i_location_on_the_Y_axis>
-            <object_i_location_on_the_Z_axis>-0.0514083</object_i_location_on_the_Z_axis>
-            <object_i_location_Roll>-0.071635</object_i_location_Roll>
-            <object_i_location_Pitch>-0.0493614</object_i_location_Pitch>
-            <object_i_location_Yaw>0.0671252</object_i_location_Yaw>
+            <object_i_scaling_factor>1.88241</object_i_scaling_factor>
+            <object_i_location_on_the_X_axis>0.901557</object_i_location_on_the_X_axis>
+            <object_i_location_on_the_Y_axis>0.931781</object_i_location_on_the_Y_axis>
+            <object_i_location_on_the_Z_axis>-0.070306</object_i_location_on_the_Z_axis>
+            <object_i_location_Roll>-0.0212471</object_i_location_Roll>
+            <object_i_location_Pitch>0.0272031</object_i_location_Pitch>
+            <object_i_location_Yaw>0.0938561</object_i_location_Yaw>
         </Object>
         <Object id="2" name="objects2">
             <object_i_type>3</object_i_type>
-            <object_i_scaling_factor>4.45541</object_i_scaling_factor>
-            <object_i_location_on_the_X_axis>0.911187</object_i_location_on_the_X_axis>
-            <object_i_location_on_the_Y_axis>0.918156</object_i_location_on_the_Y_axis>
-            <object_i_location_on_the_Z_axis>-0.086984</object_i_location_on_the_Z_axis>
-            <object_i_location_Roll>0.024695</object_i_location_Roll>
-            <object_i_location_Pitch>0.0339158</object_i_location_Pitch>
-            <object_i_location_Yaw>0.0577915</object_i_location_Yaw>
+            <object_i_scaling_factor>1.82573</object_i_scaling_factor>
+            <object_i_location_on_the_X_axis>0.907682</object_i_location_on_the_X_axis>
+            <object_i_location_on_the_Y_axis>0.912174</object_i_location_on_the_Y_axis>
+            <object_i_location_on_the_Z_axis>-0.0870441</object_i_location_on_the_Z_axis>
+            <object_i_location_Roll>-0.0823066</object_i_location_Roll>
+            <object_i_location_Pitch>0.0751346</object_i_location_Pitch>
+            <object_i_location_Yaw>-0.0264257</object_i_location_Yaw>
         </Object>
         <Object id="3" name="objects2">
             <object_i_type>3</object_i_type>
-            <object_i_scaling_factor>4.42524</object_i_scaling_factor>
-            <object_i_location_on_the_X_axis>0.932866</object_i_location_on_the_X_axis>
-            <object_i_location_on_the_Y_axis>0.908077</object_i_location_on_the_Y_axis>
-            <object_i_location_on_the_Z_axis>-0.0517822</object_i_location_on_the_Z_axis>
-            <object_i_location_Roll>0.0592671</object_i_location_Roll>
-            <object_i_location_Pitch>0.0229785</object_i_location_Pitch>
-            <object_i_location_Yaw>-0.0188588</object_i_location_Yaw>
+            <object_i_scaling_factor>2.27307</object_i_scaling_factor>
+            <object_i_location_on_the_X_axis>0.937173</object_i_location_on_the_X_axis>
+            <object_i_location_on_the_Y_axis>0.908672</object_i_location_on_the_Y_axis>
+            <object_i_location_on_the_Z_axis>-0.0781791</object_i_location_on_the_Z_axis>
+            <object_i_location_Roll>-0.0048505</object_i_location_Roll>
+            <object_i_location_Pitch>-0.091419</object_i_location_Pitch>
+            <object_i_location_Yaw>0.0726931</object_i_location_Yaw>
         </Object>
         <Object id="4" name="objects2">
             <object_i_type>3</object_i_type>
-            <object_i_scaling_factor>4.13122</object_i_scaling_factor>
-            <object_i_location_on_the_X_axis>0.907576</object_i_location_on_the_X_axis>
-            <object_i_location_on_the_Y_axis>0.937583</object_i_location_on_the_Y_axis>
-            <object_i_location_on_the_Z_axis>-0.0720214</object_i_location_on_the_Z_axis>
-            <object_i_location_Roll>-0.0406672</object_i_location_Roll>
-            <object_i_location_Pitch>-0.097021</object_i_location_Pitch>
-            <object_i_location_Yaw>-0.0849597</object_i_location_Yaw>
+            <object_i_scaling_factor>2.5153</object_i_scaling_factor>
+            <object_i_location_on_the_X_axis>0.921366</object_i_location_on_the_X_axis>
+            <object_i_location_on_the_Y_axis>0.914014</object_i_location_on_the_Y_axis>
+            <object_i_location_on_the_Z_axis>-0.0953301</object_i_location_on_the_Z_axis>
+            <object_i_location_Roll>-0.0024276</object_i_location_Roll>
+            <object_i_location_Pitch>-0.0137947</object_i_location_Pitch>
+            <object_i_location_Yaw>0.0448792</object_i_location_Yaw>
         </Object>
     </Generic>
     <Generic type="obstacles_on_path" name="obstacles_on_path">
         <ObstacleOnPath id="0" name="obstacles_on_path">
             <obstacle_on_path_i_type>4</obstacle_on_path_i_type>
-            <obstacle_on_path_i_scaling_factor>1.9487</obstacle_on_path_i_scaling_factor>
-            <obstacle_on_path_i_location_along_the_path>0.239983</obstacle_on_path_i_location_along_the_path>
-            <obstacle_on_path_i_location_perpendicular_to_the_path>0.687232</obstacle_on_path_i_location_perpendicular_to_the_path>
-            <obstacle_on_path_i_location_on_the_Z_axis>-0.0610658</obstacle_on_path_i_location_on_the_Z_axis>
-            <obstacle_on_path_i_location_Roll>0.0942235</obstacle_on_path_i_location_Roll>
-            <obstacle_on_path_i_location_Pitch>0.0467867</obstacle_on_path_i_location_Pitch>
-            <obstacle_on_path_i_location_Yaw>-0.0523565</obstacle_on_path_i_location_Yaw>
+            <obstacle_on_path_i_scaling_factor>1.99249</obstacle_on_path_i_scaling_factor>
+            <obstacle_on_path_i_location_along_the_path>0.808937</obstacle_on_path_i_location_along_the_path>
+            <obstacle_on_path_i_location_perpendicular_to_the_path>0.0488048</obstacle_on_path_i_location_perpendicular_to_the_path>
+            <obstacle_on_path_i_location_on_the_Z_axis>-0.0764852</obstacle_on_path_i_location_on_the_Z_axis>
+            <obstacle_on_path_i_location_Roll>0.0303028</obstacle_on_path_i_location_Roll>
+            <obstacle_on_path_i_location_Pitch>-0.00803444</obstacle_on_path_i_location_Pitch>
+            <obstacle_on_path_i_location_Yaw>0.0222391</obstacle_on_path_i_location_Yaw>
         </ObstacleOnPath>
         <ObstacleOnPath id="1" name="obstacles_on_path">
             <obstacle_on_path_i_type>4</obstacle_on_path_i_type>
-            <obstacle_on_path_i_scaling_factor>2.39132</obstacle_on_path_i_scaling_factor>
-            <obstacle_on_path_i_location_along_the_path>0.757413</obstacle_on_path_i_location_along_the_path>
-            <obstacle_on_path_i_location_perpendicular_to_the_path>0.401413</obstacle_on_path_i_location_perpendicular_to_the_path>
-            <obstacle_on_path_i_location_on_the_Z_axis>-0.0944741</obstacle_on_path_i_location_on_the_Z_axis>
-            <obstacle_on_path_i_location_Roll>0.0284679</obstacle_on_path_i_location_Roll>
-            <obstacle_on_path_i_location_Pitch>0.0254884</obstacle_on_path_i_location_Pitch>
-            <obstacle_on_path_i_location_Yaw>0.0638252</obstacle_on_path_i_location_Yaw>
+            <obstacle_on_path_i_scaling_factor>2.22595</obstacle_on_path_i_scaling_factor>
+            <obstacle_on_path_i_location_along_the_path>0.454333</obstacle_on_path_i_location_along_the_path>
+            <obstacle_on_path_i_location_perpendicular_to_the_path>0.0439941</obstacle_on_path_i_location_perpendicular_to_the_path>
+            <obstacle_on_path_i_location_on_the_Z_axis>-0.0646658</obstacle_on_path_i_location_on_the_Z_axis>
+            <obstacle_on_path_i_location_Roll>0.069853</obstacle_on_path_i_location_Roll>
+            <obstacle_on_path_i_location_Pitch>-0.0113076</obstacle_on_path_i_location_Pitch>
+            <obstacle_on_path_i_location_Yaw>-0.0666366</obstacle_on_path_i_location_Yaw>
         </ObstacleOnPath>
         <ObstacleOnPath id="2" name="obstacles_on_path">
             <obstacle_on_path_i_type>4</obstacle_on_path_i_type>
-            <obstacle_on_path_i_scaling_factor>1.95575</obstacle_on_path_i_scaling_factor>
-            <obstacle_on_path_i_location_along_the_path>0.439312</obstacle_on_path_i_location_along_the_path>
-            <obstacle_on_path_i_location_perpendicular_to_the_path>-0.858777</obstacle_on_path_i_location_perpendicular_to_the_path>
-            <obstacle_on_path_i_location_on_the_Z_axis>-0.0916415</obstacle_on_path_i_location_on_the_Z_axis>
-            <obstacle_on_path_i_location_Roll>0.0397368</obstacle_on_path_i_location_Roll>
-            <obstacle_on_path_i_location_Pitch>-0.0552294</obstacle_on_path_i_location_Pitch>
-            <obstacle_on_path_i_location_Yaw>-0.033482</obstacle_on_path_i_location_Yaw>
+            <obstacle_on_path_i_scaling_factor>1.03774</obstacle_on_path_i_scaling_factor>
+            <obstacle_on_path_i_location_along_the_path>0.159025</obstacle_on_path_i_location_along_the_path>
+            <obstacle_on_path_i_location_perpendicular_to_the_path>-0.374701</obstacle_on_path_i_location_perpendicular_to_the_path>
+            <obstacle_on_path_i_location_on_the_Z_axis>-0.0640283</obstacle_on_path_i_location_on_the_Z_axis>
+            <obstacle_on_path_i_location_Roll>-0.0117769</obstacle_on_path_i_location_Roll>
+            <obstacle_on_path_i_location_Pitch>0.0271125</obstacle_on_path_i_location_Pitch>
+            <obstacle_on_path_i_location_Yaw>0.0234553</obstacle_on_path_i_location_Yaw>
         </ObstacleOnPath>
     </Generic>
     <Generic type="obstacles_on_path" name="obstacles_on_path2">
         <ObstacleOnPath id="0" name="obstacles_on_path2">
             <obstacle_on_path_i_type>2</obstacle_on_path_i_type>
-            <obstacle_on_path_i_scaling_factor>3.16838</obstacle_on_path_i_scaling_factor>
-            <obstacle_on_path_i_location_along_the_path>0.531375</obstacle_on_path_i_location_along_the_path>
-            <obstacle_on_path_i_location_perpendicular_to_the_path>0.391973</obstacle_on_path_i_location_perpendicular_to_the_path>
-            <obstacle_on_path_i_location_on_the_Z_axis>-0.0823054</obstacle_on_path_i_location_on_the_Z_axis>
-            <obstacle_on_path_i_location_Roll>-0.00139768</obstacle_on_path_i_location_Roll>
-            <obstacle_on_path_i_location_Pitch>0.0927412</obstacle_on_path_i_location_Pitch>
-            <obstacle_on_path_i_location_Yaw>0.0430337</obstacle_on_path_i_location_Yaw>
+            <obstacle_on_path_i_scaling_factor>2.82774</obstacle_on_path_i_scaling_factor>
+            <obstacle_on_path_i_location_along_the_path>0.546222</obstacle_on_path_i_location_along_the_path>
+            <obstacle_on_path_i_location_perpendicular_to_the_path>-0.547456</obstacle_on_path_i_location_perpendicular_to_the_path>
+            <obstacle_on_path_i_location_on_the_Z_axis>-0.0583862</obstacle_on_path_i_location_on_the_Z_axis>
+            <obstacle_on_path_i_location_Roll>-0.0456913</obstacle_on_path_i_location_Roll>
+            <obstacle_on_path_i_location_Pitch>0.0466099</obstacle_on_path_i_location_Pitch>
+            <obstacle_on_path_i_location_Yaw>0.0309114</obstacle_on_path_i_location_Yaw>
         </ObstacleOnPath>
         <ObstacleOnPath id="1" name="obstacles_on_path2">
             <obstacle_on_path_i_type>2</obstacle_on_path_i_type>
-            <obstacle_on_path_i_scaling_factor>3.68977</obstacle_on_path_i_scaling_factor>
-            <obstacle_on_path_i_location_along_the_path>0.546101</obstacle_on_path_i_location_along_the_path>
-            <obstacle_on_path_i_location_perpendicular_to_the_path>-0.596217</obstacle_on_path_i_location_perpendicular_to_the_path>
-            <obstacle_on_path_i_location_on_the_Z_axis>-0.0995984</obstacle_on_path_i_location_on_the_Z_axis>
-            <obstacle_on_path_i_location_Roll>-0.0692002</obstacle_on_path_i_location_Roll>
-            <obstacle_on_path_i_location_Pitch>-0.0827947</obstacle_on_path_i_location_Pitch>
-            <obstacle_on_path_i_location_Yaw>-0.056569</obstacle_on_path_i_location_Yaw>
+            <obstacle_on_path_i_scaling_factor>2.86754</obstacle_on_path_i_scaling_factor>
+            <obstacle_on_path_i_location_along_the_path>0.523931</obstacle_on_path_i_location_along_the_path>
+            <obstacle_on_path_i_location_perpendicular_to_the_path>0.695228</obstacle_on_path_i_location_perpendicular_to_the_path>
+            <obstacle_on_path_i_location_on_the_Z_axis>-0.0509302</obstacle_on_path_i_location_on_the_Z_axis>
+            <obstacle_on_path_i_location_Roll>-0.0264441</obstacle_on_path_i_location_Roll>
+            <obstacle_on_path_i_location_Pitch>0.0393124</obstacle_on_path_i_location_Pitch>
+            <obstacle_on_path_i_location_Yaw>0.0673157</obstacle_on_path_i_location_Yaw>
         </ObstacleOnPath>
         <ObstacleOnPath id="2" name="obstacles_on_path2">
             <obstacle_on_path_i_type>2</obstacle_on_path_i_type>
-            <obstacle_on_path_i_scaling_factor>4.60505</obstacle_on_path_i_scaling_factor>
-            <obstacle_on_path_i_location_along_the_path>0.53651</obstacle_on_path_i_location_along_the_path>
-            <obstacle_on_path_i_location_perpendicular_to_the_path>0.193833</obstacle_on_path_i_location_perpendicular_to_the_path>
-            <obstacle_on_path_i_location_on_the_Z_axis>-0.0788177</obstacle_on_path_i_location_on_the_Z_axis>
-            <obstacle_on_path_i_location_Roll>-0.0467851</obstacle_on_path_i_location_Roll>
-            <obstacle_on_path_i_location_Pitch>0.0143069</obstacle_on_path_i_location_Pitch>
-            <obstacle_on_path_i_location_Yaw>-0.0942478</obstacle_on_path_i_location_Yaw>
+            <obstacle_on_path_i_scaling_factor>3.93903</obstacle_on_path_i_scaling_factor>
+            <obstacle_on_path_i_location_along_the_path>0.510496</obstacle_on_path_i_location_along_the_path>
+            <obstacle_on_path_i_location_perpendicular_to_the_path>-0.100702</obstacle_on_path_i_location_perpendicular_to_the_path>
+            <obstacle_on_path_i_location_on_the_Z_axis>-0.0545535</obstacle_on_path_i_location_on_the_Z_axis>
+            <obstacle_on_path_i_location_Roll>-0.0844876</obstacle_on_path_i_location_Roll>
+            <obstacle_on_path_i_location_Pitch>-0.0984583</obstacle_on_path_i_location_Pitch>
+            <obstacle_on_path_i_location_Yaw>-0.0679829</obstacle_on_path_i_location_Yaw>
         </ObstacleOnPath>
     </Generic>
     <Generic type="lights" name="lights">
         <Light id="0" name="lights">
-            <light_source_i_type>3</light_source_i_type>
-            <light_source_i_location_on_the_X_axis>0.206504</light_source_i_location_on_the_X_axis>
-            <light_source_i_location_on_the_Y_axis>0.389041</light_source_i_location_on_the_Y_axis>
-            <light_source_i_location_on_the_Z_axis>3.09199</light_source_i_location_on_the_Z_axis>
-            <light_source_i_range>33.5849</light_source_i_range>
-            <light_source_i_direction_on_X_axis>-0.208562</light_source_i_direction_on_X_axis>
-            <light_source_i_direction_on_Y_axis>0.426415</light_source_i_direction_on_Y_axis>
-            <light_source_i_light_cone>83.4246</light_source_i_light_cone>
+            <light_source_i_type>1</light_source_i_type>
+            <light_source_i_location_on_the_X_axis>0.58308</light_source_i_location_on_the_X_axis>
+            <light_source_i_location_on_the_Y_axis>0.219471</light_source_i_location_on_the_Y_axis>
+            <light_source_i_location_on_the_Z_axis>3.1152</light_source_i_location_on_the_Z_axis>
+            <light_source_i_range>6.44207</light_source_i_range>
+            <light_source_i_direction_on_X_axis>0.29014</light_source_i_direction_on_X_axis>
+            <light_source_i_direction_on_Y_axis>-0.168753</light_source_i_direction_on_Y_axis>
+            <light_source_i_light_cone>44.0458</light_source_i_light_cone>
         </Light>
     </Generic>
     <MassLink id="0" name="body">
-        <mass_link_i_mass_deviation>1.00541</mass_link_i_mass_deviation>
-        <mass_link_i_inertia_deviation_Ixx_component>1.00696</mass_link_i_inertia_deviation_Ixx_component>
-        <mass_link_i_inertia_deviation_Iyy_component>0.969338</mass_link_i_inertia_deviation_Iyy_component>
-        <mass_link_i_inertia_deviation_Izz_component>1.03585</mass_link_i_inertia_deviation_Izz_component>
+        <mass_link_i_mass_deviation>1.02405</mass_link_i_mass_deviation>
+        <mass_link_i_inertia_deviation_Ixx_component>1.0427</mass_link_i_inertia_deviation_Ixx_component>
+        <mass_link_i_inertia_deviation_Iyy_component>0.965728</mass_link_i_inertia_deviation_Iyy_component>
+        <mass_link_i_inertia_deviation_Izz_component>1.00704</mass_link_i_inertia_deviation_Izz_component>
         <mass_link_i_location_deviation_X>0</mass_link_i_location_deviation_X>
         <mass_link_i_location_deviation_Y>0</mass_link_i_location_deviation_Y>
         <mass_link_i_location_deviation_Z>0</mass_link_i_location_deviation_Z>
@@ -196,73 +196,73 @@
         <mass_link_i_location_deviation_Yaw>0</mass_link_i_location_deviation_Yaw>
     </MassLink>
     <FrictionLink id="0" name="front_right_wheel">
-        <friction_link_friction_deviation>0.943987</friction_link_friction_deviation>
+        <friction_link_friction_deviation>1.09517</friction_link_friction_deviation>
     </FrictionLink>
     <FrictionLink id="0" name="front_left_wheel">
-        <friction_link_friction_deviation>0.939693</friction_link_friction_deviation>
+        <friction_link_friction_deviation>1.05652</friction_link_friction_deviation>
     </FrictionLink>
     <FrictionLink id="0" name="back_right_wheel">
-        <friction_link_friction_deviation>0.925005</friction_link_friction_deviation>
+        <friction_link_friction_deviation>0.972968</friction_link_friction_deviation>
     </FrictionLink>
     <FrictionLink id="0" name="back_left_wheel">
-        <friction_link_friction_deviation>0.93122</friction_link_friction_deviation>
+        <friction_link_friction_deviation>0.955831</friction_link_friction_deviation>
     </FrictionLink>
     <SensorLink id="0" name="gps_ins::link">
-        <sensor_link_i_location_deviation_X>-0.00586155</sensor_link_i_location_deviation_X>
-        <sensor_link_i_location_deviation_Y>0.0143472</sensor_link_i_location_deviation_Y>
-        <sensor_link_i_location_deviation_Z>0.0139274</sensor_link_i_location_deviation_Z>
-        <sensor_link_i_location_deviation_Roll>0.509502</sensor_link_i_location_deviation_Roll>
-        <sensor_link_i_location_deviation_Pitch>-0.00158582</sensor_link_i_location_deviation_Pitch>
-        <sensor_link_i_location_deviation_Yaw>0.0108398</sensor_link_i_location_deviation_Yaw>
+        <sensor_link_i_location_deviation_X>-0.00470784</sensor_link_i_location_deviation_X>
+        <sensor_link_i_location_deviation_Y>0.0125885</sensor_link_i_location_deviation_Y>
+        <sensor_link_i_location_deviation_Z>0.0073177</sensor_link_i_location_deviation_Z>
+        <sensor_link_i_location_deviation_Roll>0.403666</sensor_link_i_location_deviation_Roll>
+        <sensor_link_i_location_deviation_Pitch>0.00209162</sensor_link_i_location_deviation_Pitch>
+        <sensor_link_i_location_deviation_Yaw>0.00357981</sensor_link_i_location_deviation_Yaw>
     </SensorLink>
     <SensorLink id="0" name="front_sick::link">
-        <sensor_link_i_location_deviation_X>0.0146105</sensor_link_i_location_deviation_X>
-        <sensor_link_i_location_deviation_Y>0.000104256</sensor_link_i_location_deviation_Y>
-        <sensor_link_i_location_deviation_Z>0.00110263</sensor_link_i_location_deviation_Z>
-        <sensor_link_i_location_deviation_Roll>-0.0502744</sensor_link_i_location_deviation_Roll>
-        <sensor_link_i_location_deviation_Pitch>-0.00280335</sensor_link_i_location_deviation_Pitch>
-        <sensor_link_i_location_deviation_Yaw>-0.00921855</sensor_link_i_location_deviation_Yaw>
+        <sensor_link_i_location_deviation_X>-0.0033014</sensor_link_i_location_deviation_X>
+        <sensor_link_i_location_deviation_Y>-0.00320578</sensor_link_i_location_deviation_Y>
+        <sensor_link_i_location_deviation_Z>0.00413569</sensor_link_i_location_deviation_Z>
+        <sensor_link_i_location_deviation_Roll>-0.355038</sensor_link_i_location_deviation_Roll>
+        <sensor_link_i_location_deviation_Pitch>-0.00814475</sensor_link_i_location_deviation_Pitch>
+        <sensor_link_i_location_deviation_Yaw>0.00563792</sensor_link_i_location_deviation_Yaw>
     </SensorLink>
     <PlatformPose id="0" name="bobcat">
         <initial_platform_position_on_map_X_axis>0.1</initial_platform_position_on_map_X_axis>
         <initial_platform_position_on_map_Y_axis>0.1</initial_platform_position_on_map_Y_axis>
-        <initial_platform_azimut_on_map>1.02436</initial_platform_azimut_on_map>
+        <initial_platform_azimut_on_map>0.800452</initial_platform_azimut_on_map>
     </PlatformPose>
     <Generic type="waypoints" name="mission_waypoints">
         <Waypoint id="0" name="mission_waypoints">
-            <wp_i_relative_distance>15.0765</wp_i_relative_distance>
-            <wp_i_relative_angle>0.512247</wp_i_relative_angle>
-            <wp_i_velocity>6.68675</wp_i_velocity>
+            <wp_i_relative_distance>18.6266</wp_i_relative_distance>
+            <wp_i_relative_angle>-0.787489</wp_i_relative_angle>
+            <wp_i_velocity>5.325</wp_i_velocity>
         </Waypoint>
         <Waypoint id="1" name="mission_waypoints">
-            <wp_i_relative_distance>19.6432</wp_i_relative_distance>
-            <wp_i_relative_angle>-0.120306</wp_i_relative_angle>
-            <wp_i_velocity>3.37185</wp_i_velocity>
+            <wp_i_relative_distance>19.3058</wp_i_relative_distance>
+            <wp_i_relative_angle>0.557725</wp_i_relative_angle>
+            <wp_i_velocity>5.90567</wp_i_velocity>
         </Waypoint>
         <Waypoint id="2" name="mission_waypoints">
-            <wp_i_relative_distance>18.6031</wp_i_relative_distance>
-            <wp_i_relative_angle>-0.158877</wp_i_relative_angle>
-            <wp_i_velocity>6.48495</wp_i_velocity>
+            <wp_i_relative_distance>16.4576</wp_i_relative_distance>
+            <wp_i_relative_angle>-0.0712763</wp_i_relative_angle>
+            <wp_i_velocity>5.0839</wp_i_velocity>
         </Waypoint>
         <Waypoint id="3" name="mission_waypoints">
-            <wp_i_relative_distance>18.7615</wp_i_relative_distance>
-            <wp_i_relative_angle>0.604918</wp_i_relative_angle>
-            <wp_i_velocity>4.17288</wp_i_velocity>
+            <wp_i_relative_distance>15.6408</wp_i_relative_distance>
+            <wp_i_relative_angle>0.000163826</wp_i_relative_angle>
+            <wp_i_velocity>6.85749</wp_i_velocity>
         </Waypoint>
         <Waypoint id="4" name="mission_waypoints">
-            <wp_i_relative_distance>15.3533</wp_i_relative_distance>
-            <wp_i_relative_angle>-0.819957</wp_i_relative_angle>
-            <wp_i_velocity>6.20625</wp_i_velocity>
+            <wp_i_relative_distance>18.7163</wp_i_relative_distance>
+            <wp_i_relative_angle>1.11462</wp_i_relative_angle>
+            <wp_i_velocity>3.19087</wp_i_velocity>
         </Waypoint>
         <Waypoint id="5" name="mission_waypoints">
-            <wp_i_relative_distance>18.0138</wp_i_relative_distance>
-            <wp_i_relative_angle>-1.0697</wp_i_relative_angle>
-            <wp_i_velocity>5.5317</wp_i_velocity>
+            <wp_i_relative_distance>17.2103</wp_i_relative_distance>
+            <wp_i_relative_angle>0.0570015</wp_i_relative_angle>
+            <wp_i_velocity>4.85666</wp_i_velocity>
         </Waypoint>
         <Waypoint id="6" name="mission_waypoints">
-            <wp_i_relative_distance>17.0177</wp_i_relative_distance>
-            <wp_i_relative_angle>0.116961</wp_i_relative_angle>
-            <wp_i_velocity>5.33854</wp_i_velocity>
+            <wp_i_relative_distance>18.9528</wp_i_relative_distance>
+            <wp_i_relative_angle>-1.17861</wp_i_relative_angle>
+            <wp_i_velocity>5.38565</wp_i_velocity>
         </Waypoint>
     </Generic>
 </sfv>

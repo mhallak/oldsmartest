@@ -6,6 +6,14 @@
 #include "SFDP/SFDPobj.h"
 #include "Generators/Gazebo/GazeboScenarioGenerator.h"
 
+#include "Generators/Gazebo/GazeboScenarioGenerator.h"
+#include "Synchronizer/ScenarioCoordinatorPool.h"
+
+
+//for tests
+#include "SFV/SFVComponent.h"
+#include "SFV/SFVObject.h"
+//
 
 #define PATH std::string("")
 
@@ -57,6 +65,7 @@ int main(int argc, char** argv)
 
 	if(std::string(argv[1]).compare("-genSCEN")==0)
 		{
+
 			std::cout << " -genSCEN is runing !!! " << std::endl;
 
 			std::string sfv_file_path = PATH+argv[2];
@@ -70,6 +79,30 @@ int main(int argc, char** argv)
 			GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(sfvComp, scenarios_folder_path, resources_file_path);
 			ScenGen->GenerateScenario();
 
+
+			/*
+			ScenarioCoordinator* cord =ScenarioCoordinatorPool::Instance()->genCoordinator(8992,8993);
+			std::cout << " pool done!!! " << std::endl;
+
+			cord->startRosCore();
+			std::cout << " core done!!! " << std::endl;
+
+			cord->startGazeboServer();
+			std::cout << " server done!!! " << std::endl;
+
+			cord->launchGazeboClient();
+
+			for (SFVObjects* objs_it : *(sfvComp->getObjects()) )
+			{
+				for (SFVObject* sfvObj : *objs_it->m_objects)
+			     {
+			    	 std::cout << "obj->m_name = " << sfvObj->m_name << std::endl;
+				 cord->spawnGazeboModel<SFVObject>(sfvObj);
+			char c;
+			std::cin >>c;
+ 			     }
+			}
+*/
 			return 0;
 		}
 

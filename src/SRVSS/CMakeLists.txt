@@ -21,6 +21,7 @@ find_package(OpenCV REQUIRED)
                             
 find_package(Gazebo REQUIRED)
 
+FIND_PACKAGE(PythonLibs 2.7 REQUIRED)
 
 catkin_package(
     #LIBRARIES  
@@ -34,7 +35,7 @@ catkin_package(
 )
 
                                                                                                                                                  
-include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${TinyXML_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} /usr/include/sdformat-1.4)
+include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${TinyXML_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} /usr/include/sdformat-1.4 ${PYTHON_INCLUDE_DIR})
 
 
 
@@ -243,6 +244,28 @@ target_link_libraries(GazeboExecutor ${catkin_LIBRARIES}
 )
 
 
+############################
+#### ScenarioCoordinator ###
+############################
+add_library(ScenarioCoordinator src/Synchronizer/ScenarioCoordinator.cpp) 
+target_link_libraries(ScenarioCoordinator ${catkin_LIBRARIES} ${PYTHON_LIBRARY}
+)
+
+add_library(ScenarioCoordinatorPoolDestroyer STATIC src/Synchronizer/ScenarioCoordinatorPoolDestroyer.cpp)
+target_link_libraries(ScenarioCoordinatorPoolDestroyer ${catkin_LIBRARIES}
+ScenarioCoordinatorPool
+)
+
+
+add_library(ScenarioCoordinatorPool STATIC src/Synchronizer/ScenarioCoordinatorPool.cpp)
+target_link_libraries(ScenarioCoordinatorPool ${catkin_LIBRARIES}
+ScenarioCoordinator
+ScenarioCoordinatorPoolDestroyer
+)
+
+
+
+
 #############
 #### MAIN ###
 #############
@@ -253,6 +276,8 @@ SFDPobj
 SFDPParser
 SFDPobj
 GazeboScenarioGenerator
+ScenarioCoordinatorPool
+ScenarioCoordinator
 )
 
 
@@ -314,6 +339,15 @@ target_link_libraries(SFV2terraine ${catkin_LIBRARIES}
 )
 
 
+add_library(SFV2Object src/TestSFV/SFV2Object.cpp)
+target_link_libraries(SFV2terraine ${catkin_LIBRARIES}
+)
+
+add_library(SFV2objScattering src/TestSFV/SFV2objScattering.cpp)
+target_link_libraries(SFV2objScattering ${catkin_LIBRARIES}
+SFV2Object
+)
+
 
 add_library(SFV2 src/TestSFV/SFV2.cpp)
 target_link_libraries(SFV2 ${catkin_LIBRARIES}
@@ -321,6 +355,7 @@ SFDPobj
 SFV2path
 SFV2mass_link
 SFV2terraine
+SFV2objScattering
 )
 
 

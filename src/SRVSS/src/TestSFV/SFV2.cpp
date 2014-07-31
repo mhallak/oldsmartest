@@ -11,6 +11,8 @@
 #include "TestSFV/SFV2path.h"
 #include "TestSFV/SFV2mass_link.h"
 #include "TestSFV/SFV2terraine.h"
+#include "TestSFV/SFV2objScattering.h"
+
 #include "SFDP/ScenarioFeatureGroup.h"
 
 
@@ -33,8 +35,12 @@ SFV2::SFV2(SFDPobj * SFDP): sfvSubGroup(ScenarioFeatureGroupType::SFV)
 	 	 case(ScenarioFeatureGroupType::map) :
 			my_sfvSubGroups->push_back( new SFV2terraine(featureGroup_it->get_features() ) );
 	 		break;
+
+	 	 case(ScenarioFeatureGroupType::objects) :
+			my_sfvSubGroups->push_back( new SFV2objScattering(featureGroup_it->get_features() ) );
+	 	 	break;
 	 	 }
-	 }
+ 	 }
 
 	was_rolled_flag = false;
 }

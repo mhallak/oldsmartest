@@ -9,6 +9,8 @@
 #include "TestSFV/SFV2path.h"
 #include "TestSFV/SFVwp.h"
 #include "SFDP/ScenarioFeatureGroup.h"
+#include "SFDP/ScenarioFeature.h"
+
 
 SFV2path::SFV2path(std::vector<ScenarioFeature *> * ScenarioFeatures_vec): sfvSubGroup(ScenarioFeatureGroupType::Path)
 {
