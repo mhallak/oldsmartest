@@ -1,0 +1,139 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+    <world name="default">
+        <include>
+            <uri>model://sun</uri>
+        </include>
+        <scene>
+            <sky>
+                <time>10</time>
+                <clouds>
+                    <speed>5</speed>
+                    <direction>1.14</direction>
+                    <humidity>0.3</humidity>
+                </clouds>
+            </sky>
+        </scene>
+        <include>
+            <uri>model://srvss_terrain0</uri>
+        </include>
+        <include>
+            <uri>model://srvss_bobcat</uri>
+            <pose>10 10 0.508157 0 0 1.11354</pose>
+            <name>srvss_bobcat</name>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <pose>6.91158 39.1109 -0.0556881 -0.0884977 -0.0508522 0.0527581</pose>
+            <scale>1.49894 1.49894 1.49894</scale>
+            <name>object0</name>
+        </include>
+        <include>
+            <uri>model://barrel1</uri>
+            <pose>65.2396 74.8842 -0.0826943 0.0639154 0.0942332 -0.0142446</pose>
+            <scale>2.60802 2.60802 2.60802</scale>
+            <name>object1</name>
+        </include>
+        <include>
+            <uri>model://cube1</uri>
+            <pose>94.5429 93.984 -0.0915557 0.0124332 0.0812611 -0.0909498</pose>
+            <scale>1.89934 1.89934 1.89934</scale>
+            <name>object2</name>
+        </include>
+        <include>
+            <uri>model://rock1</uri>
+            <pose>94.4209 94.4288 -0.0580597 -0.073628 0.0657039 0.0643666</pose>
+            <scale>2.20469 2.20469 2.20469</scale>
+            <name>object3</name>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <pose>93.5926 92.3252 -0.0812316 0.0236975 0.0377035 0.0337995</pose>
+            <scale>3.13384 3.13384 3.13384</scale>
+            <name>object4</name>
+        </include>
+        <include>
+            <uri>model://rock1</uri>
+            <pose>93.4588 90.0875 -0.0664599 -0.0169537 -0.0982272 0.0645758</pose>
+            <scale>2.9445 2.9445 2.9445</scale>
+            <name>object5</name>
+        </include>
+        <include>
+            <uri>model://rock1</uri>
+            <pose>92.2599 90.9202 -0.0519706 0.0821247 -0.0927534 0.0963807</pose>
+            <scale>3.60204 3.60204 3.60204</scale>
+            <name>object6</name>
+        </include>
+        <include>
+            <uri>model://cube1</uri>
+            <pose>39.5648 52.6709 -0.0549289 0.00520756 -0.0591161 0.09038</pose>
+            <scale>3.35504 3.35504 3.35504</scale>
+            <name>obstacle_on_path0</name>
+        </include>
+        <include>
+            <uri>model://cube1</uri>
+            <pose>13.37 15.2318 -0.0551563 0.0963774 -0.0801632 -0.0928384</pose>
+            <scale>4.63075 4.63075 4.63075</scale>
+            <name>obstacle_on_path1</name>
+        </include>
+        <include>
+            <uri>model://cube1</uri>
+            <pose>24.3989 31.6727 -0.0862725 -0.0963868 -0.0278096 0.0924435</pose>
+            <scale>1.19993 1.19993 1.19993</scale>
+            <name>obstacle_on_path2</name>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <pose>45.3262 58.652 -0.0640904 0.0992022 0.0594057 -0.00446864</pose>
+            <scale>4.02178 4.02178 4.02178</scale>
+            <name>obstacle_on_path3</name>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <pose>45.2064 59.2925 -0.0476774 0.0995167 0.0527231 0.0938222</pose>
+            <scale>1.95574 1.95574 1.95574</scale>
+            <name>obstacle_on_path4</name>
+        </include>
+        <include>
+            <uri>model://tree1</uri>
+            <pose>44.0878 58.248 -0.0504751 0.0863636 0.0900473 0.087031</pose>
+            <scale>1.65092 1.65092 1.65092</scale>
+            <name>obstacle_on_path5</name>
+        </include>
+        <include>
+            <uri>model://wp_mark</uri>
+            <pose>18.975 22.5404 3.0069 0 0 0</pose>
+            <name>wp_mark0</name>
+        </include>
+        <include>
+            <uri>model://wp_mark</uri>
+            <pose>29.8414 37.5536 3.00251 0 0 0</pose>
+            <name>wp_mark1</name>
+        </include>
+        <include>
+            <uri>model://wp_mark</uri>
+            <pose>37.6992 50.7964 3.00518 0 0 0</pose>
+            <name>wp_mark2</name>
+        </include>
+        <include>
+            <uri>model://wp_mark</uri>
+            <pose>50.4388 63.6087 3.00737 0 0 0</pose>
+            <name>wp_mark3</name>
+        </include>
+        <include>
+            <uri>model://wp_mark</uri>
+            <pose>63.2952 76.5099 3.00475 0 0 0</pose>
+            <name>wp_mark4</name>
+        </include>
+        <include>
+            <uri>model://wp_mark</uri>
+            <pose>74.9768 87.1525 3.0058 0 0 0</pose>
+            <name>wp_mark5</name>
+        </include>
+        <include>
+            <uri>model://wp_mark</uri>
+            <pose>91.2402 88.8609 3.00549 0 0 0</pose>
+            <name>wp_mark6</name>
+        </include>
+    </world>
+</sdf>
