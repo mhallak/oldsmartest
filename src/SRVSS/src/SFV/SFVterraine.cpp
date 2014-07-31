@@ -1,5 +1,5 @@
 /*
- * SFV2terraine.cpp
+ * SFVterraine.cpp
  *
  *  Created on: Jul 31, 2014
  *      Author: userws3
@@ -8,11 +8,11 @@
 
 
 #include <iostream>
-#include "TestSFV/SFV2terraine.h"
+#include "SFV/SFVterraine.h"
 #include "SFDP/ScenarioFeatureGroup.h"
 #include "SFDP/ScenarioFeatureType.h"
 
-SFV2terraine::SFV2terraine(std::vector<ScenarioFeature *> * ScenarioFeatures_vec): sfvSubGroup(ScenarioFeatureGroupType::map)
+SFVterraine::SFVterraine(std::vector<ScenarioFeature *> * ScenarioFeatures_vec): sfvSubGroup(ScenarioFeatureGroupType::map)
 {
 
 	topographic_map_index = 0;
@@ -36,17 +36,17 @@ SFV2terraine::SFV2terraine(std::vector<ScenarioFeature *> * ScenarioFeatures_vec
 }
 
 
-SFV2terraine::SFV2terraine(SFV2terraine * template_SFV2terraine): sfvSubGroup(ScenarioFeatureGroupType::map)
+SFVterraine::SFVterraine(SFVterraine * template_SFVterraine): sfvSubGroup(ScenarioFeatureGroupType::map)
 {
 
-	topographic_map_index = new ScenarioFeature(template_SFV2terraine->get_TopographicMapIndex());
+	topographic_map_index = new ScenarioFeature(template_SFVterraine->get_TopographicMapIndex());
 
 	was_rolled_flag = false;
 }
 
 
 
-void SFV2terraine::roll()
+void SFVterraine::roll()
 {
 	if (was_rolled_flag)
 	{
@@ -60,7 +60,7 @@ void SFV2terraine::roll()
 	}
 }
 
-SFV2terraine::~SFV2terraine()
+SFVterraine::~SFVterraine()
 {
 
 }

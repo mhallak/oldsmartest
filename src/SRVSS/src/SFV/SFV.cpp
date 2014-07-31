@@ -1,22 +1,26 @@
 /*
- * SFV2.cpp
+ * SFV.cpp
  *
  *  Created on: Jul 30, 2014
  *      Author: userws3
  */
 
-#include "TestSFV/SFV2.h"
-#include "SFDP/SFDPobj.h"
-#include "TestSFV/sfvSubGroup.h"
-#include "TestSFV/SFV2path.h"
-#include "TestSFV/SFV2mass_link.h"
-#include "TestSFV/SFV2terraine.h"
-#include "TestSFV/SFV2objScattering.h"
+#include "SFV/SFV.h"
+//#include "SFDP/SFDPobj.h"
+#include "SFV/sfvSubGroup.h"
+#include "SFV/SFVpath.h"
+#include "SFV/SFVmass_link.h"
+#include "SFV/SFVterraine.h"
+#include "SFV/SFVobjScattering.h"
 
 #include "SFDP/ScenarioFeatureGroup.h"
 
 
-SFV2::SFV2(SFDPobj * SFDP): sfvSubGroup(ScenarioFeatureGroupType::SFV)
+SFV::SFV() : sfvSubGroup(ScenarioFeatureGroupType::SFV)
+{}
+
+/*
+SFV::SFV(SFDPobj * SFDP): sfvSubGroup(ScenarioFeatureGroupType::SFV)
 {
 	my_sfvSubGroups = new std::vector<sfvSubGroup *>;
 
@@ -25,28 +29,28 @@ SFV2::SFV2(SFDPobj * SFDP): sfvSubGroup(ScenarioFeatureGroupType::SFV)
 	 switch (featureGroup_it->get_featureGroupType().value())
 	 	 {
 	 	 case(ScenarioFeatureGroupType::waypoints) :
-			my_sfvSubGroups->push_back( new SFV2path(featureGroup_it->get_features()) );
+			my_sfvSubGroups->push_back( new SFVpath(featureGroup_it->get_features()) );
 	 		break;
 
 	 	 case(ScenarioFeatureGroupType::mass_link_i) :
-			my_sfvSubGroups->push_back( new SFV2mass_link(featureGroup_it->get_name(),featureGroup_it->get_features() ) );
+			my_sfvSubGroups->push_back( new SFVmass_link(featureGroup_it->get_name(),featureGroup_it->get_features() ) );
 	 		break;
 
 	 	 case(ScenarioFeatureGroupType::map) :
-			my_sfvSubGroups->push_back( new SFV2terraine(featureGroup_it->get_features() ) );
+			my_sfvSubGroups->push_back( new SFVterraine(featureGroup_it->get_features() ) );
 	 		break;
 
 	 	 case(ScenarioFeatureGroupType::objects) :
-			my_sfvSubGroups->push_back( new SFV2objScattering(featureGroup_it->get_features() ) );
+			my_sfvSubGroups->push_back( new SFVobjScattering(featureGroup_it->get_features() ) );
 	 	 	break;
 	 	 }
  	 }
 
 	was_rolled_flag = false;
 }
+*/
 
-
-std::vector<sfvSubGroup *> * SFV2::get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType GroupType)
+std::vector<sfvSubGroup *> * SFV::get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType GroupType)
 {
 	std::vector<sfvSubGroup *> * Vec = new std::vector<sfvSubGroup *>;
 
@@ -62,7 +66,7 @@ std::vector<sfvSubGroup *> * SFV2::get_SubGroupsBayFeatureGroupType(ScenarioFeat
 
 
 
-void SFV2::roll()
+void SFV::roll()
 {
 	if (was_rolled_flag)
 	{
@@ -81,7 +85,7 @@ void SFV2::roll()
 
 
 
-SFV2::~SFV2()
+SFV::~SFV()
 {
 
 }

@@ -1,34 +1,34 @@
 /*
- * SFV2.h
+ * SFV.h
  *
  *  Created on: Jul 30, 2014
  *      Author: userws3
  */
 
-#ifndef SFV2_H_
-#define SFV2_H_
+#ifndef SFV_H_
+#define SFV_H_
 
 #include <iostream>
 #include <vector>
 
-#include "SFDP/SFDPobj.h"
+//#include "SFDP/SFDPobj.h"
 #include "SFDP/ScenarioFeatureGroupType.h"
-#include "TestSFV/sfvSubGroup.h"
+#include "SFV/sfvSubGroup.h"
 
 
-class SFV2 : public sfvSubGroup {
+class SFV : public sfvSubGroup {
 	private :
 		std::vector<sfvSubGroup *> * my_sfvSubGroups;
 
 		bool was_rolled_flag;
 
 	public:
-		SFV2(SFDPobj * SFDP);
-
+//		SFV(SFDPobj * SFDP);
+		SFV();
 		void roll();
 
 
-		~SFV2();
+		~SFV();
 
 
 		inline std::vector<sfvSubGroup *> * get_sfvSubGroups()
@@ -48,4 +48,4 @@ class SFV2 : public sfvSubGroup {
 
 
 
-#endif /* SFV2_H_ */
+#endif /* SFV_H_ */

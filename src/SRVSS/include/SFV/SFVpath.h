@@ -5,15 +5,15 @@
  *      Author: userws3
  */
 
-#ifndef SFV2PATH_H_
-#define SFV2PATH_H_
+#ifndef SFVPATH_H_
+#define SFVPATH_H_
 
 #include <vector>
 
 #include "SFDP/ScenarioFeature.h"
-#include "TestSFV/SFVwp.h"
+#include "SFV/SFVwp.h"
 
-class SFV2path : public sfvSubGroup  {
+class SFVpath : public sfvSubGroup  {
 private :
 	ScenarioFeature * my_number_of_wp;
 	SFVwp * my_wp_template;
@@ -22,13 +22,13 @@ private :
 	bool was_rolled_flag;
 
 public :
-	SFV2path(std::vector<ScenarioFeature *> * ScenarioFeatures_vec);
-	SFV2path(SFV2path * template_SFVpath);
+	SFVpath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec);
+	SFVpath(SFVpath * template_SFVpath);
 
 	void roll();
 
 
-	~SFV2path();
+	~SFVpath();
 
 
 	inline ScenarioFeature * get_NumberOfWPs()
@@ -48,4 +48,4 @@ public :
 
 
 
-#endif /* SFV2PATH_H_ */
+#endif /* SFVPATH_H_ */

@@ -1,21 +1,21 @@
 /*
- * SFV2mass_link.h
+ * SFVmass_link.h
  *
  *  Created on: Jul 30, 2014
  *      Author: userws3
  */
 
-#ifndef SFV2MASS_LINK_H_
-#define SFV2MASS_LINK_H_
+#ifndef SFVMASS_LINK_H_
+#define SFVMASS_LINK_H_
 
 #include <iostream>
 #include <string>
 
-#include "TestSFV/sfvSubGroup.h"
+#include "SFV/sfvSubGroup.h"
 #include "SFDP/ScenarioFeature.h"
 
 
-class SFV2mass_link : public sfvSubGroup {
+class SFVmass_link : public sfvSubGroup {
 private :
 
 	std::string my_MassLinkName;
@@ -34,12 +34,12 @@ private :
 	bool was_rolled_flag;
 
 public :
-	SFV2mass_link(std::string MassLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec);
-	SFV2mass_link(SFV2mass_link * template_SFV2mass_link);
+	SFVmass_link(std::string MassLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec);
+	SFVmass_link(SFVmass_link * template_SFVmass_link);
 
 	void roll();
 
-	~SFV2mass_link();
+	~SFVmass_link();
 
 	inline std::string get_Name()
 		{ return(my_MassLinkName); }
@@ -84,4 +84,4 @@ public :
 
 
 
-#endif /* SFV2MASS_LINK_H_ */
+#endif /* SFVMASS_LINK_H_ */

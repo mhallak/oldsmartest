@@ -6,7 +6,6 @@
  */
 
 #include "SFDP/SFDPobj.h"
-#include "SFDP/SFDPParser.h"
 #include "Generators/Gazebo/GazeboScenarioGenerator.h"
 #include "Executor/GazeboExecutor.h"
 

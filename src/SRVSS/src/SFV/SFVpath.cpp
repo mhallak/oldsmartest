@@ -6,13 +6,13 @@
  */
 
 #include <iostream>
-#include "TestSFV/SFV2path.h"
-#include "TestSFV/SFVwp.h"
+#include "SFV/SFVpath.h"
+#include "SFV/SFVwp.h"
 #include "SFDP/ScenarioFeatureGroup.h"
 #include "SFDP/ScenarioFeature.h"
 
 
-SFV2path::SFV2path(std::vector<ScenarioFeature *> * ScenarioFeatures_vec): sfvSubGroup(ScenarioFeatureGroupType::Path)
+SFVpath::SFVpath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec): sfvSubGroup(ScenarioFeatureGroupType::Path)
 {
 		my_number_of_wp = 0;
 		my_wp_template = 0;
@@ -38,7 +38,7 @@ SFV2path::SFV2path(std::vector<ScenarioFeature *> * ScenarioFeatures_vec): sfvSu
 			}
 }
 
-SFV2path::SFV2path(SFV2path * template_SFVpath): sfvSubGroup(ScenarioFeatureGroupType::Path)
+SFVpath::SFVpath(SFVpath * template_SFVpath): sfvSubGroup(ScenarioFeatureGroupType::Path)
 {
 	my_number_of_wp = new ScenarioFeature(template_SFVpath->get_NumberOfWPs());
 	my_wp_template = new SFVwp(template_SFVpath->get_WpTemplate());
@@ -52,7 +52,7 @@ SFV2path::SFV2path(SFV2path * template_SFVpath): sfvSubGroup(ScenarioFeatureGrou
 	was_rolled_flag = false;
 }
 
-void SFV2path::roll()
+void SFVpath::roll()
 {
 	if (was_rolled_flag)
 	{
@@ -72,7 +72,7 @@ void SFV2path::roll()
 	}
 }
 
-SFV2path::~SFV2path()
+SFVpath::~SFVpath()
 {
 
 }

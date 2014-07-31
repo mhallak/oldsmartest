@@ -16,7 +16,7 @@
 #include "SFDP/ScenarioFeatureType.h"
 #include "ScenarioFeatureDistributionType.h"
 
-#include "SFV/SFVComponent.h"
+//#include "SFV/SFVComponent.h"
 
 
 

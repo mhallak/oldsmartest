@@ -1,107 +1,115 @@
 /*
  * SFVObject.cpp
  *
- *  Created on: Feb 24, 2014
- *      Author: userws1
+ *  Created on: Jul 31, 2014
+ *      Author: userws3
  */
 
+
+
+#include <iostream>
+#include <vector>
 #include "SFV/SFVObject.h"
+#include "SFDP/ScenarioFeatureType.h"
+#include "SFDP/ScenarioFeature.h"
+#include "SFDP/ScenarioFeatureGroup.h"
 
-SFVObject::SFVObject(DPGroup* dpGroup): SFVBase(dpGroup)
+
+SFVObject::SFVObject(std::vector<ScenarioFeature *> * ScenarioFeatures_vec): sfvSubGroup(ScenarioFeatureGroupType::object)
 {
-	setStructure();
-	init(dpGroup);
+	my_object_type = 0;
+	my_scaling_factor = 0;
+	my_location_on_the_X_axis = 0;	my_location_on_the_Y_axis = 0;	my_location_on_the_Z_axis = 0;
+	my_location_Roll = 0;			my_location_Pitch = 0;			my_location_Yaw = 0;
+
+	for (ScenarioFeature * feature_it : * ScenarioFeatures_vec )
+	{
+	 switch (feature_it->get_featureType().value())
+	 	 {
+	 	 case(ScenarioFeatureType::object_i_type) :
+			my_object_type = new ScenarioFeature(feature_it);
+	 		break;
+	 	 case(ScenarioFeatureType::object_i_scaling_factor) :
+			my_scaling_factor = new ScenarioFeature(feature_it);
+	 	 	break;
+	 	 case(ScenarioFeatureType::object_i_location_on_the_X_axis) :
+			my_location_on_the_X_axis = new ScenarioFeature(feature_it);
+	 	 	break;
+	 	 case(ScenarioFeatureType::object_i_location_on_the_Y_axis) :
+			my_location_on_the_Y_axis = new ScenarioFeature(feature_it);
+	 	 	break;
+	 	 case(ScenarioFeatureType::object_i_location_on_the_Z_axis) :
+			my_location_on_the_Z_axis = new ScenarioFeature(feature_it);
+	 	 	break;
+	 	 case(ScenarioFeatureType::object_i_location_Roll) :
+			my_location_Roll = new ScenarioFeature(feature_it);
+	 	 	break;
+	 	 case(ScenarioFeatureType::object_i_location_Pitch) :
+			my_location_Pitch = new ScenarioFeature(feature_it);
+	 	 	break;
+	 	 case(ScenarioFeatureType::object_i_location_Yaw) :
+			my_location_Yaw = new ScenarioFeature(feature_it);
+	 	 	break;
+
+	 	 }
+	 }
+	was_rolled_flag = false;
+
+	if ( 	(my_object_type==0) || (my_scaling_factor==0) ||
+			(my_location_on_the_X_axis == 0) || (my_location_on_the_Y_axis == 0) || (my_location_on_the_Z_axis == 0) ||
+			(my_location_Roll == 0) || (my_location_Pitch == 0) || (my_location_Yaw == 0) )
+		{
+		std::cout << "\033[1;31m The Object was no fully defined \033[0m" << std::endl;
+		}
 }
 
-void SFVObject::setStructure()
+
+SFVObject::SFVObject(SFVObject * template_SFVObject):  sfvSubGroup(ScenarioFeatureGroupType::object)
 {
-	m_objectType="Object";
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_type,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_location_on_the_X_axis,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_location_on_the_Y_axis,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_location_on_the_Z_axis,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_location_Roll,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_location_Pitch,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_location_Yaw,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_scaling_factor,0));
+	my_object_type = new ScenarioFeature(template_SFVObject->get_ObjectType());
+	my_scaling_factor = new ScenarioFeature(template_SFVObject->get_ScalingFactor());
+
+	my_location_on_the_X_axis = new ScenarioFeature(template_SFVObject->get_LocationOnTheXaxis());
+	my_location_on_the_Y_axis = new ScenarioFeature(template_SFVObject->get_LocationOnTheYaxis());
+	my_location_on_the_Z_axis = new ScenarioFeature(template_SFVObject->get_LocationOnTheZaxis());
+
+	my_location_Roll = new ScenarioFeature(template_SFVObject->get_LocationRoll());
+	my_location_Pitch =  new ScenarioFeature(template_SFVObject->get_LocationPitch());
+	my_location_Yaw =  new ScenarioFeature(template_SFVObject->get_LocationYaw());
+
+	was_rolled_flag = false;
 }
 
 
-double SFVObject::getPitch() const {
-	return m_objects->at(ScenarioFeatureType::object_i_location_Pitch)->getResult();
+void SFVObject::roll()
+{
+	if (was_rolled_flag)
+	{
+		std::cout << "\033[1;31m I already was rolled (I am Object) \033[0m"<< std::endl;
+	}
+	else
+	{
+		my_object_type->roll();
+		my_scaling_factor->roll();
+
+		my_location_on_the_X_axis->roll();
+		my_location_on_the_Y_axis->roll();
+		my_location_on_the_Z_axis->roll();
+
+		my_location_Roll->roll();
+		my_location_Pitch->roll();
+		my_location_Yaw->roll();
+
+		was_rolled_flag = true;
+	}
+
 }
-
-void SFVObject::setPitch(double pitch) {
-	m_objects->at(ScenarioFeatureType::object_i_location_Pitch)->setResult(pitch);
-}
-
-double SFVObject::getRoll() const {
-	return m_objects->at(ScenarioFeatureType::object_i_location_Roll)->getResult();
-}
-
-void SFVObject::setRoll(double roll) {
-	m_objects->at(ScenarioFeatureType::object_i_location_Roll)->setResult(roll);
-}
-
-double SFVObject::getScale() const {
-	return m_objects->at(ScenarioFeatureType::object_i_scaling_factor)->getResult();
-}
-
-void SFVObject::setScale(double scale) {
-	m_objects->at(ScenarioFeatureType::object_i_scaling_factor)->setResult(scale);
-}
-
-int SFVObject::getType() const {
-	return m_objects->at(ScenarioFeatureType::object_i_type)->getResult();
-}
-
-void SFVObject::setType(int type) {
-	m_objects->at(ScenarioFeatureType::object_i_type)->setResult(type);
-}
-
-double SFVObject::getX() const {
-	return m_objects->at(ScenarioFeatureType::object_i_location_on_the_X_axis)->getResult();
-}
-
-void SFVObject::setX(double x) {
-	 m_objects->at(ScenarioFeatureType::object_i_location_on_the_X_axis)->setResult(x);
-}
-
-double SFVObject::getY() const {
-	return  m_objects->at(ScenarioFeatureType::object_i_location_on_the_Y_axis)->getResult();
-}
-
-void SFVObject::setY(double y) {
-	 m_objects->at(ScenarioFeatureType::object_i_location_on_the_Y_axis)->setResult(y);
-}
-
-double SFVObject::getYaw() const {
-	return  m_objects->at(ScenarioFeatureType::object_i_location_Yaw)->getResult();
-}
-
-void SFVObject::setYaw(double yaw) {
-	m_objects->at(ScenarioFeatureType::object_i_location_Yaw)->setResult(yaw);
-}
-
-double SFVObject::getZ() const {
-	return m_objects->at(ScenarioFeatureType::object_i_location_on_the_Z_axis)->getResult();
-}
-
-int SFVObject::getId() const {
-	return m_Id;
-}
-
-void SFVObject::setId(int id) {
-	m_Id = id;
-}
-
-void SFVObject::setZ(double z) {
-	m_objects->at(ScenarioFeatureType::object_i_location_on_the_Z_axis)->setResult(z);
-}
-
-
 
 SFVObject::~SFVObject()
 {
+
 }
+
+
+
 

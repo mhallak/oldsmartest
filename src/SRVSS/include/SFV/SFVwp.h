@@ -8,7 +8,7 @@
 #ifndef SFVWP_H_
 #define SFVWP_H_
 
-#include "TestSFV/sfvSubGroup.h"
+#include "SFV/sfvSubGroup.h"
 
 #include "SFDP/ScenarioFeature.h"
 

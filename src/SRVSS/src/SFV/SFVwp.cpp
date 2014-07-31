@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <vector>
-#include "TestSFV/SFVwp.h"
+#include "SFV/SFVwp.h"
 #include "SFDP/ScenarioFeatureType.h"
 #include "SFDP/ScenarioFeature.h"
 #include "SFDP/ScenarioFeatureGroup.h"

@@ -1,5 +1,5 @@
 /*
- * SFV2mass_link.cpp
+ * SFVmass_link.cpp
  *
  *  Created on: Jul 30, 2014
  *      Author: userws3
@@ -7,11 +7,11 @@
 
 
 #include <iostream>
-#include "TestSFV/SFV2mass_link.h"
+#include "SFV/SFVmass_link.h"
 #include "SFDP/ScenarioFeatureGroup.h"
 #include "SFDP/ScenarioFeatureType.h"
 
-SFV2mass_link::SFV2mass_link(std::string MassLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec): sfvSubGroup(ScenarioFeatureGroupType::mass_link_i)
+SFVmass_link::SFVmass_link(std::string MassLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec): sfvSubGroup(ScenarioFeatureGroupType::mass_link_i)
 {
 	my_MassLinkName = MassLinkName;
 
@@ -69,30 +69,30 @@ SFV2mass_link::SFV2mass_link(std::string MassLinkName ,std::vector<ScenarioFeatu
 }
 
 
-SFV2mass_link::SFV2mass_link(SFV2mass_link * template_SFV2mass_link): sfvSubGroup(ScenarioFeatureGroupType::Path)
+SFVmass_link::SFVmass_link(SFVmass_link * template_SFVmass_link): sfvSubGroup(ScenarioFeatureGroupType::Path)
 {
-	my_MassLinkName = template_SFV2mass_link->get_Name();
+	my_MassLinkName = template_SFVmass_link->get_Name();
 
-	mass_deviation = new ScenarioFeature(template_SFV2mass_link->get_MassDeviation());
+	mass_deviation = new ScenarioFeature(template_SFVmass_link->get_MassDeviation());
 
-	inertia_deviation_Ixx_component = new ScenarioFeature(template_SFV2mass_link->get_InertiaDeviationIxxComponent());
-	inertia_deviation_Iyy_component = new ScenarioFeature(template_SFV2mass_link->get_InertiaDeviationIyyComponent());
-	inertia_deviation_Izz_component = new ScenarioFeature(template_SFV2mass_link->get_InertiaDeviationIzzComponent());
+	inertia_deviation_Ixx_component = new ScenarioFeature(template_SFVmass_link->get_InertiaDeviationIxxComponent());
+	inertia_deviation_Iyy_component = new ScenarioFeature(template_SFVmass_link->get_InertiaDeviationIyyComponent());
+	inertia_deviation_Izz_component = new ScenarioFeature(template_SFVmass_link->get_InertiaDeviationIzzComponent());
 
-	location_deviation_X = new ScenarioFeature(template_SFV2mass_link->get_LocationDeviationX());
-	location_deviation_Y = new ScenarioFeature(template_SFV2mass_link->get_LocationDeviationY());
-	location_deviation_Z = new ScenarioFeature(template_SFV2mass_link->get_LocationDeviationZ());
+	location_deviation_X = new ScenarioFeature(template_SFVmass_link->get_LocationDeviationX());
+	location_deviation_Y = new ScenarioFeature(template_SFVmass_link->get_LocationDeviationY());
+	location_deviation_Z = new ScenarioFeature(template_SFVmass_link->get_LocationDeviationZ());
 
-	location_deviation_Roll = new ScenarioFeature(template_SFV2mass_link->get_LocationDeviationRoll());
-	location_deviation_Pitch = new ScenarioFeature(template_SFV2mass_link->get_LocationDeviationPitch());
-	location_deviation_Yaw = new ScenarioFeature(template_SFV2mass_link->get_LocationDeviationYaw());
+	location_deviation_Roll = new ScenarioFeature(template_SFVmass_link->get_LocationDeviationRoll());
+	location_deviation_Pitch = new ScenarioFeature(template_SFVmass_link->get_LocationDeviationPitch());
+	location_deviation_Yaw = new ScenarioFeature(template_SFVmass_link->get_LocationDeviationYaw());
 
 	was_rolled_flag = false;
 }
 
 
 
-void SFV2mass_link::roll()
+void SFVmass_link::roll()
 {
 	if (was_rolled_flag)
 	{
@@ -115,7 +115,7 @@ void SFV2mass_link::roll()
 	}
 }
 
-SFV2mass_link::~SFV2mass_link()
+SFVmass_link::~SFVmass_link()
 {
 
 }
