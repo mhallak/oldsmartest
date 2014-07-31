@@ -168,6 +168,7 @@ add_library(ScenarioFeatureGroup src/SFDP/ScenarioFeatureGroup.cpp)
 add_library(ScenarioFeature src/SFDP/ScenarioFeature.cpp)
 
 target_link_libraries(ScenarioFeature ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
+NumberSampler
 )
 
 
@@ -189,6 +190,7 @@ ScenarioFeatureGroup
 ScenarioFeature
 SFVComponent
 GazeboExecutor
+GazeboScenarioGenerator
 )
 
 
@@ -233,17 +235,6 @@ GazeboPlatformGenerator
 
 
 
-################
-# synchronizer #
-################
-add_library(Executor src/Executor.cpp)
-
-add_library(SRVSSSyncronizer src/SRVSSSyncronizer.cpp)
-target_link_libraries(GazeboPlatformGenerator ${catkin_LIBRARIES}
-ResourceHandler
-Executor
-)
-
 ############
 # Executor #
 ############
@@ -263,7 +254,6 @@ SFDPParser
 SFDPobj
 GazeboScenarioGenerator
 )
-
 
 
 ######################
@@ -295,4 +285,59 @@ add_executable(grader_node src/Grader/grader_node.cpp)
 target_link_libraries(grader_node
    ${catkin_LIBRARIES}
 )
+
+
+
+
+
+
+###############
+#### tests ####
+###############
+
+add_library(SFVwp src/TestSFV/SFVwp.cpp)
+target_link_libraries(SFVwp ${catkin_LIBRARIES}
+)
+
+add_library(SFV2path src/TestSFV/SFV2path.cpp)
+target_link_libraries(SFV2path ${catkin_LIBRARIES}
+SFVwp
+)
+
+
+add_library(SFV2mass_link src/TestSFV/SFV2mass_link.cpp)
+target_link_libraries(SFV2mass_link ${catkin_LIBRARIES}
+)
+
+add_library(SFV2terraine src/TestSFV/SFV2terraine.cpp)
+target_link_libraries(SFV2terraine ${catkin_LIBRARIES}
+)
+
+
+
+add_library(SFV2 src/TestSFV/SFV2.cpp)
+target_link_libraries(SFV2 ${catkin_LIBRARIES}
+SFDPobj
+SFV2path
+SFV2mass_link
+SFV2terraine
+)
+
+
+add_executable(MainTest src/MainTest.cpp)
+target_link_libraries(MainTest ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
+ScenarioFeatureGroup
+ScenarioFeature
+SFVComponent
+SFDPobj
+SFDPParser
+SFDPobj
+SFV2
+)
+
+
+
+
+
+
 

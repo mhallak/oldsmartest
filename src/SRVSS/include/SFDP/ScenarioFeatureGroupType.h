@@ -17,13 +17,17 @@ BOOST_ENUM(ScenarioFeatureGroupType,
 		(map)
 		(lights)
 		(objects)
+		(object)
 		(mass_link_i)
 		(friction_link_i)
 		(sensor_link_i)
 		(platform_pose)
-		(waypoints)
 		(obstacles_on_path)
-	)
+		(waypoints)
+		(Path)
+		(WayPoint)
+		(SFV)
+)
 
 
 

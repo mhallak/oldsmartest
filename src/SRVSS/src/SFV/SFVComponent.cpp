@@ -19,7 +19,9 @@
 
 
 SFVComponent::SFVComponent(std::string resource_file_path) {
+
 	m_DPObjectMap=new std::map<ScenarioFeatureGroupType,std::vector<DPGroup*>*>;
+
 	m_massLinks=new std::vector<SFVMassLink *>;
 	m_frictionLinks=new std::vector<SFVFrictionLink *>;
 	m_sensorLinks=new std::vector<SFVSensorLink *>;
@@ -29,12 +31,12 @@ SFVComponent::SFVComponent(std::string resource_file_path) {
 	m_terrains=new std::vector<SFVTerrain*>;
 	m_platformPoses=new std::vector<SFVPlatformPose*>;
 	m_paths=new std::vector<SFVPath*>;
+
 	m_rules=new std::vector<Rule*>;
 	m_rules->push_back(new Rule_wp_path_inside_map);
 	m_rules->push_back(new Rule_platform_init_pose_with_no_obj_colisions);
 
 	m_resource_file_path = resource_file_path;
-
 }
 
 template<class T>
@@ -100,6 +102,7 @@ bool SFVComponent::calc()
     return roll_success;
 }
 
+
 bool  SFVComponent::checkRules(){
 	bool ans=true;
 	std::cout << " !! checking rules : " << std::endl;
@@ -113,6 +116,9 @@ bool  SFVComponent::checkRules(){
 	}
 	return ans;
 }
+
+
+
 
 std::vector<SFVMassLink *>* SFVComponent::getMassLinks()
 {
@@ -162,6 +168,8 @@ void SFVComponent::addTerrain(SFVTerrain* terrain) {
 	m_terrains->push_back(terrain);
 }
 
+
+
 void SFVComponent::addDPObjects(ScenarioFeatureGroupType groupType,DPGroup* values)
 {
 	std::map<ScenarioFeatureGroupType,std::vector<DPGroup*>*> ::iterator it;
@@ -172,6 +180,9 @@ void SFVComponent::addDPObjects(ScenarioFeatureGroupType groupType,DPGroup* valu
 	}
 	((*m_DPObjectMap)[groupType])->push_back(values);
 }
+
+
+
 
 TiXmlElement *SFVComponent::toXMLElement()
 {
@@ -189,6 +200,9 @@ TiXmlElement *SFVComponent::toXMLElement()
 
 	return element;
 }
+
+
+
 void SFVComponent::fromXMLElement(TiXmlElement * node)
 {
 	TiXmlNode* pChild;

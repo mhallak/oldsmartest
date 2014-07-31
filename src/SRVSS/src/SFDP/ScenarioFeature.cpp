@@ -19,6 +19,8 @@ ScenarioFeature::ScenarioFeature(std::string featureType):
 	m_dist_param_1(0),
 	m_dist_param_2(0)
 {
+	was_rolled_flag=false;
+	rolled_value=0;
 }
 
 ScenarioFeature::ScenarioFeature():
@@ -27,6 +29,8 @@ ScenarioFeature::ScenarioFeature():
 	m_dist_param_1(0),
 	m_dist_param_2(0)
 {
+	was_rolled_flag=false;
+	rolled_value=0;
 }
 
 ScenarioFeature::ScenarioFeature(ScenarioFeature * source_ScenarioFeature)
@@ -35,10 +39,40 @@ ScenarioFeature::ScenarioFeature(ScenarioFeature * source_ScenarioFeature)
 	m_distType=source_ScenarioFeature->get_distType();
 	m_dist_param_1=source_ScenarioFeature->get_dist_param_1();
 	m_dist_param_2=source_ScenarioFeature->get_dist_param_2();
+
+	was_rolled_flag=false;
+	rolled_value=0;
 }
 
 
 
+void ScenarioFeature::roll()
+{
+	if(was_rolled_flag)
+	{
+		std::cout << "\033[1;31m I already was rolled (I am " <<  m_featureType << ")\033[0m"<< std::endl;
+	}
+	else
+	{
+		float result;
+		switch(m_distType.index())
+		{
+			case ScenarioFeatureDistributionType::uniform_discrete:
+				result= NumberSampler::getInstance().uniformDiscreteDistribution(m_dist_param_1,m_dist_param_2);
+				break;
+			case ScenarioFeatureDistributionType::uniform_continuous:
+				result=NumberSampler::getInstance().uniformContinuousDistribution(m_dist_param_1,m_dist_param_2);
+				break;
+			case ScenarioFeatureDistributionType::normal_continuous:
+				result=NumberSampler::getInstance().normalContinuousDistribution(m_dist_param_1,m_dist_param_2);
+				break;
+			case ScenarioFeatureDistributionType::unknown_distribution:
+				throw std::string("unknown_distribution cannot be rolled");
+		}
+		rolled_value = result;
+		was_rolled_flag=true;
+	}
+}
 
 
 

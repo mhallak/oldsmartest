@@ -4,14 +4,14 @@
       <pose>0 0 0 0 -0 0</pose>
       <inertial>
         <pose>-0.849719 0.000149152 0.585738 0 -0 0</pose>
-        <mass>5849.28</mass>
+        <mass>6033.61</mass>
         <inertia>
-          <ixx>1777.85</ixx>
+          <ixx>1879.66</ixx>
           <ixy>0.345421</ixy>
           <ixz>-2.61801</ixz>
-          <iyy>3460.7</iyy>
+          <iyy>3695.31</iyy>
           <iyz>-0.0538623</iyz>
-          <izz>3269.24</izz>
+          <izz>3232.4</izz>
         </inertia>
       </inertial>
       <collision name='body_collision'>
@@ -484,8 +484,8 @@
           </contact>
           <friction>
             <ode>
-              <mu>1.09479</mu>
-              <mu2>1.09479</mu2>
+              <mu>0.942674</mu>
+              <mu2>0.942674</mu2>
             </ode>
           </friction>
         </surface>
@@ -552,8 +552,8 @@
           </contact>
           <friction>
             <ode>
-              <mu>0.908872</mu>
-              <mu2>0.908872</mu2>
+              <mu>0.923532</mu>
+              <mu2>0.923532</mu2>
             </ode>
           </friction>
         </surface>
@@ -620,8 +620,8 @@
           </contact>
           <friction>
             <ode>
-              <mu>0.934039</mu>
-              <mu2>0.934039</mu2>
+              <mu>1.077</mu>
+              <mu2>1.077</mu2>
             </ode>
           </friction>
         </surface>
@@ -688,8 +688,8 @@
           </contact>
           <friction>
             <ode>
-              <mu>0.989488</mu>
-              <mu2>0.989488</mu2>
+              <mu>0.979436</mu>
+              <mu2>0.979436</mu2>
             </ode>
           </friction>
         </surface>
@@ -755,7 +755,7 @@
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
-      <pose>0.00279172 -0.0138446 0.514077 0.16657 -0.0117035 0.00269542</pose>
+      <pose>0.0104934 -0.00381815 0.483503 0.021823 -0.00253425 0.016595</pose>
     </link>
     <plugin name='GPS_INS' filename='libgps_ins.so'>
       <start_latitude>31.2622</start_latitude>
@@ -810,7 +810,7 @@
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
-      <pose>0.990874 -0.0149244 0.199898 -0.420283 0.0168079 -0.0051468</pose>
+      <pose>1.00514 0.0178386 0.189261 -0.466804 -0.00474954 -0.00468866</pose>
     </link>
     <joint name='front_sick_joint' type='revolute'>
       <child>front_sick::link</child>

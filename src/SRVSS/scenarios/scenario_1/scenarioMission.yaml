@@ -11,8 +11,8 @@ waypoints:
         frame_id: 
       pose: 
         position: 
-          x: 11.0713
-          y: 16.393
+          x: 14.5658
+          y: 12.6312
           z: 0
         orientation: 
           x: 0
@@ -26,8 +26,8 @@ waypoints:
         frame_id: 
       pose: 
         position: 
-          x: 19.9741
-          y: 33.1285
+          x: 26.5917
+          y: 27.2511
           z: 0
         orientation: 
           x: 0
@@ -41,8 +41,8 @@ waypoints:
         frame_id: 
       pose: 
         position: 
-          x: 27.9032
-          y: 49.1523
+          x: 35.4667
+          y: 39.8803
           z: 0
         orientation: 
           x: 0
@@ -56,8 +56,8 @@ waypoints:
         frame_id: 
       pose: 
         position: 
-          x: 32.9337
-          y: 68.109
+          x: 52.0308
+          y: 48.2297
           z: 0
         orientation: 
           x: 0
@@ -71,8 +71,8 @@ waypoints:
         frame_id: 
       pose: 
         position: 
-          x: 43.9628
-          y: 80.0246
+          x: 63.1948
+          y: 58.497
           z: 0
         orientation: 
           x: 0
@@ -86,8 +86,8 @@ waypoints:
         frame_id: 
       pose: 
         position: 
-          x: 63.6667
-          y: 82.0831
+          x: 72.3121
+          y: 72.6889
           z: 0
         orientation: 
           x: 0
@@ -101,8 +101,8 @@ waypoints:
         frame_id: 
       pose: 
         position: 
-          x: 80.3932
-          y: 76.1811
+          x: 84.2685
+          y: 84.0786
           z: 0
         orientation: 
           x: 0

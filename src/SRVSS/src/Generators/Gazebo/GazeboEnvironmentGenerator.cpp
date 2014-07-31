@@ -32,39 +32,45 @@ GazeboEnvironmentGenerator::~GazeboEnvironmentGenerator() {
 	// TODO Auto-generated destructor stub
 }
 
-void GazeboEnvironmentGenerator::spawnObject(SFVObject* sfvObj,TiXmlElement * element, std::string resources_file_path)
+void GazeboEnvironmentGenerator::spawnObjects(SFVComponent* sfvComp,TiXmlElement * element, std::string resources_file_path)
 {
-	TiXmlElement * include = new TiXmlElement( "include" );
-	element->LinkEndChild(include);
-	TiXmlElement * url = new TiXmlElement( "uri" );
-	TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance(resources_file_path).getObjectById(sfvObj->getType()));
-	url->LinkEndChild(url_text);
-	include->LinkEndChild(url);
-	TiXmlElement * pose = new TiXmlElement( "pose" );
-	std::stringstream ss;
-	float x,y,z;
-	m_terrainAnalyzer->getXYZCoord(sfvObj->getX(),sfvObj->getY(),x,y,z);
+	for (SFVObjects* objs_it : *(sfvComp->getObjects()) )
+	{
+		for (SFVObject* sfvObj : *objs_it->m_objects)
+		{
+			TiXmlElement * include = new TiXmlElement( "include" );
+			element->LinkEndChild(include);
+			TiXmlElement * url = new TiXmlElement( "uri" );
+			TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance(resources_file_path).getObjectById(sfvObj->getType()));
+			url->LinkEndChild(url_text);
+			include->LinkEndChild(url);
+			TiXmlElement * pose = new TiXmlElement( "pose" );
+			std::stringstream ss;
+			float x,y,z;
+			m_terrainAnalyzer->getXYZCoord(sfvObj->getX(),sfvObj->getY(),x,y,z);
 
-	ss<<x <<" " << y <<" "<< z+sfvObj->getZ() << " ";
-	ss<<sfvObj->getRoll() <<" " << sfvObj->getPitch() <<" "<< sfvObj->getYaw();
-	TiXmlText * pose_text = new TiXmlText(ss.str());
-	ss.str("");
-	pose->LinkEndChild(pose_text);
-	include->LinkEndChild(pose);
-	TiXmlElement * scale = new TiXmlElement( "scale" );
+			ss<<x <<" " << y <<" "<< z+sfvObj->getZ() << " ";
+			ss<<sfvObj->getRoll() <<" " << sfvObj->getPitch() <<" "<< sfvObj->getYaw();
+			TiXmlText * pose_text = new TiXmlText(ss.str());
+			ss.str("");
+			pose->LinkEndChild(pose_text);
+			include->LinkEndChild(pose);
+			TiXmlElement * scale = new TiXmlElement( "scale" );
 
-	ss<<sfvObj->getScale() <<" " << sfvObj->getScale() <<" "<< sfvObj->getScale();
-	TiXmlText * scale_text = new TiXmlText(ss.str());
-	ss.str("");
-	scale->LinkEndChild(scale_text);
-	include->LinkEndChild(scale);
-	TiXmlElement * name = new TiXmlElement( "name" );
-	include->LinkEndChild(name);
-	ss.str("");
-	ss<< "object";
-	ss<<m_objectCount;
-	name->LinkEndChild(new TiXmlText(ss.str()));
-	m_objectCount++;
+			ss<<sfvObj->getScale() <<" " << sfvObj->getScale() <<" "<< sfvObj->getScale();
+			TiXmlText * scale_text = new TiXmlText(ss.str());
+			ss.str("");
+			scale->LinkEndChild(scale_text);
+			include->LinkEndChild(scale);
+			TiXmlElement * name = new TiXmlElement( "name" );
+			include->LinkEndChild(name);
+			ss.str("");
+			ss<< "object";
+			ss<<m_objectCount;
+			name->LinkEndChild(new TiXmlText(ss.str()));
+			m_objectCount++;
+		}
+	}
 }
 
 void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFVComponent* sfvComp,TiXmlElement * element, std::string resources_file_path)
@@ -78,74 +84,76 @@ void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFVComponent* sfvComp,TiXml
     SFVPath* path=sfvComp->getPaths()->at(0);
 	double path_length = path->getPathLength();
 
-	SFVObstaclesOnPath *obsOnPath = sfvComp->getObstaclesOnPath()->at(0);
-	for (SFVObstacleOnPath *obs : *obsOnPath->m_objects)
+	for (SFVObstaclesOnPath *obsOnPath_it : *(sfvComp->getObstaclesOnPath()) )
 	{
-		TiXmlElement * include = new TiXmlElement( "include" );
-		element->LinkEndChild(include);
-		TiXmlElement * url = new TiXmlElement( "uri" );
+		for (SFVObstacleOnPath *obs : *obsOnPath_it->m_objects)
+		{
+			TiXmlElement * include = new TiXmlElement( "include" );
+			element->LinkEndChild(include);
+			TiXmlElement * url = new TiXmlElement( "uri" );
 
-		TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance(resources_file_path).getObjectById(obs->getType()));
-		url->LinkEndChild(url_text);
-		include->LinkEndChild(url);
-		TiXmlElement * pose = new TiXmlElement( "pose" );
-		std::stringstream ss;
+			TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance(resources_file_path).getObjectById(obs->getType()));
+			url->LinkEndChild(url_text);
+			include->LinkEndChild(url);
+			TiXmlElement * pose = new TiXmlElement( "pose" );
+			std::stringstream ss;
 
-		double alo = obs->getAlong();
-		double per = obs->getPerpendicular();
-		double alo_path_pos = alo * path_length;
-	    //std::cout <<  "alo = " << alo <<  "  per = " << per << std::endl;
-	    double alon_path_dis = 0, azi = plat_init_azi, dis = 0, x=plat_x, y=plat_y, next_x=plat_x, next_y=plat_y;
-	    for (SFVWaypoint *wp : *(path->m_objects) )
-	    {
-	    	azi = azi + wp->getRelativeAngle();
-	    	dis = wp->getWpIDistanceI();
-	    	next_x = x + dis*cos(azi);
-	    	next_y = y + dis*sin(azi);
+			double alo = obs->getAlong();
+			double per = obs->getPerpendicular();
+			double alo_path_pos = alo * path_length;
+			//std::cout <<  "alo = " << alo <<  "  per = " << per << std::endl;
+			double alon_path_dis = 0, azi = plat_init_azi, dis = 0, x=plat_x, y=plat_y, next_x=plat_x, next_y=plat_y;
+			for (SFVWaypoint *wp : *(path->m_objects) )
+			{
+				azi = azi + wp->getRelativeAngle();
+				dis = wp->getWpIDistanceI();
+				next_x = x + dis*cos(azi);
+				next_y = y + dis*sin(azi);
 
-	    	if ( (alon_path_dis + dis) < alo_path_pos  )
-	    	{
-	    		alon_path_dis = alon_path_dis + dis;
-	    		x = next_x;
-	    		y = next_y;
-	    	    //std::cout <<  "wp_x = " << x <<  "  wp_y = " << y << std::endl;
-	    	}
-	    	else
-	    	{
-	    		break;
-	    	}
-	    }
-	    double rem_alo = ((alo - alon_path_dis/path_length)*path_length)/dis;
-	    double obs_x = x + rem_alo * (next_x - x) - per*(next_y - y)/dis;
-	    double obs_y = y + rem_alo * (next_y - y) + per*(next_x - x)/dis;
-	   // std::cout <<  "obs_x = " << obs_x <<  "  obs_y = " << obs_y << std::endl;
+				if ( (alon_path_dis + dis) < alo_path_pos  )
+				{
+					alon_path_dis = alon_path_dis + dis;
+					x = next_x;
+					y = next_y;
+					//std::cout <<  "wp_x = " << x <<  "  wp_y = " << y << std::endl;
+				}
+				else
+				{
+				break;
+				}
+			}
+			double rem_alo = ((alo - alon_path_dis/path_length)*path_length)/dis;
+			double obs_x = x + rem_alo * (next_x - x) - per*(next_y - y)/dis;
+			double obs_y = y + rem_alo * (next_y - y) + per*(next_x - x)/dis;
+			// std::cout <<  "obs_x = " << obs_x <<  "  obs_y = " << obs_y << std::endl;
 
-	float obs_z;
-	m_terrainAnalyzer->getZCoord(obs_x,obs_y,obs_z);
+			float obs_z;
+			m_terrainAnalyzer->getZCoord(obs_x,obs_y,obs_z);
 
-	ss<<obs_x <<" " << obs_y <<" "<< obs_z+obs->getZ() << " ";
-    ss<<obs->getRoll() <<" " << obs->getPitch() <<" "<< obs->getYaw();
+			ss<<obs_x <<" " << obs_y <<" "<< obs_z+obs->getZ() << " ";
+			ss<<obs->getRoll() <<" " << obs->getPitch() <<" "<< obs->getYaw();
 
-    TiXmlText * pose_text = new TiXmlText(ss.str());
-	ss.str("");
-	pose->LinkEndChild(pose_text);
-	include->LinkEndChild(pose);
+			TiXmlText * pose_text = new TiXmlText(ss.str());
+			ss.str("");
+			pose->LinkEndChild(pose_text);
+			include->LinkEndChild(pose);
 
-	TiXmlElement * scale = new TiXmlElement( "scale" );
-	ss<<obs->getScale() <<" " << obs->getScale() <<" "<< obs->getScale();
-	TiXmlText * scale_text = new TiXmlText(ss.str());
-	ss.str("");
-	scale->LinkEndChild(scale_text);
-	include->LinkEndChild(scale);
+			TiXmlElement * scale = new TiXmlElement( "scale" );
+			ss<<obs->getScale() <<" " << obs->getScale() <<" "<< obs->getScale();
+			TiXmlText * scale_text = new TiXmlText(ss.str());
+			ss.str("");
+			scale->LinkEndChild(scale_text);
+			include->LinkEndChild(scale);
 
-	TiXmlElement * name = new TiXmlElement( "name" );
-	include->LinkEndChild(name);
-	ss.str("");
-	ss<< "obstacle_on_path";
-	ss<<m_ObstacleOnPathCounter;
+			TiXmlElement * name = new TiXmlElement( "name" );
+			include->LinkEndChild(name);
+			ss.str("");
+			ss<< "obstacle_on_path";
+			ss<<m_ObstacleOnPathCounter;
 
-	name->LinkEndChild(new TiXmlText(ss.str()));
-	m_ObstacleOnPathCounter++;
+			name->LinkEndChild(new TiXmlText(ss.str()));
+			m_ObstacleOnPathCounter++;
+		}
 	}
 }
 
@@ -296,18 +304,9 @@ void GazeboEnvironmentGenerator::genEnvFromSFV(SFVComponent* sfvComp,std::string
 
 
 	spawnTerrain( sfvComp->getTerrains()->at(0),world, resources_file_path);
-
 	spawnPlatformPose(sfvComp->m_platformPoses->at(0),world, resources_file_path);
 
-
-	for(auto objs : *sfvComp->getObjects())
-	{
-		for(auto obj : *objs->m_objects)
-		{
-			spawnObject(obj,world,resources_file_path);
-		}
-	}
-
+	spawnObjects(sfvComp, world,resources_file_path);
 	spawnObstacleOnPath(sfvComp, world, resources_file_path);
 
 	spawnPathWpMarks(sfvComp, world);

@@ -19,7 +19,7 @@ class GazeboEnvironmentGenerator : public GeneratorInterface {
 	int m_ObstacleOnPathCounter;
 	int m_WpMarkCounter;
 
-	void spawnObject(SFVObject* sfvObj,TiXmlElement * element, std::string resources_file_path);
+	void spawnObjects(SFVComponent* sfvComp, TiXmlElement * element, std::string resources_file_path);
 
 	void spawnObstacleOnPath(SFVComponent* sfvComp,TiXmlElement * element, std::string resources_file_path);
 
