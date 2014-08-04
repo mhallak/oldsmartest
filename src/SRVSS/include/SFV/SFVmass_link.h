@@ -13,6 +13,7 @@
 
 #include "SFV/sfvSubGroup.h"
 #include "SFDP/ScenarioFeature.h"
+#include "SFV/SFV.h"
 
 
 class SFVmass_link : public sfvSubGroup {
@@ -34,10 +35,11 @@ private :
 	bool was_rolled_flag;
 
 public :
-	SFVmass_link(std::string MassLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec);
+	SFVmass_link(std::string MassLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV);
 	SFVmass_link(SFVmass_link * template_SFVmass_link);
 
-	void roll();
+	bool roll();
+	TiXmlElement * ToXmlElement(int id);
 
 	~SFVmass_link();
 

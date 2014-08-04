@@ -200,3 +200,22 @@ TiXmlElement *ScenarioFeature::toXMLElement()
 	return(xml_feature);
 }
 
+TiXmlElement *ScenarioFeature::toSFV_XMLElement()
+{
+	if (! was_rolled_flag)
+	{
+		std::cout << "\033[1;31m can not make XML element for " << m_featureType.str() << " because it wasn't rolled yet \033[0m"<< std::endl;
+		return 0;
+	}
+	else
+	{
+		TiXmlElement * xml_feature= new TiXmlElement(m_featureType.str());
+		std::stringstream temp_ss;
+		temp_ss.str("");
+		temp_ss << rolled_value;
+		TiXmlText * xml_rolled_val= new TiXmlText( temp_ss.str() );
+		xml_feature->LinkEndChild(xml_rolled_val);
+		return(xml_feature);
+	}
+}
+

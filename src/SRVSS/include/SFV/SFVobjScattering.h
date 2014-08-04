@@ -13,6 +13,8 @@
 
 #include "SFDP/ScenarioFeature.h"
 #include "SFV/SFVObject.h"
+#include "SFV/SFV.h"
+
 
 class SFVobjScattering : public sfvSubGroup  {
 private :
@@ -23,11 +25,11 @@ private :
 	bool was_rolled_flag;
 
 public :
-	SFVobjScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec);
+	SFVobjScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVobjScattering(SFVobjScattering * template_SFVobjScattering);
 
-	void roll();
-
+	bool roll();
+	TiXmlElement * ToXmlElement(int id);
 
 	~SFVobjScattering();
 

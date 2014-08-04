@@ -49,25 +49,25 @@ add_library(NumberSampler src/utils/NumberSampler.cpp)
 ##############
 ## RESOURCE ##
 ##############
-#add_library(ResourceHandler src/Resource/ResourceHandler.cpp)
-#target_link_libraries(ResourceHandler ${catkin_LIBRARIES} ${TinyXML_LIBRARIES})
+add_library(ResourceHandler src/Resource/ResourceHandler.cpp)
+target_link_libraries(ResourceHandler ${catkin_LIBRARIES} ${TinyXML_LIBRARIES})
 
-#add_library(TerrainAnalyzer src/Generators/Gazebo/TerrainAnalyzer.cpp)
-#target_link_libraries(TerrainAnalyzer ${catkin_LIBRARIES} ${OpenCV_LIBS})
+add_library(TerrainAnalyzer src/Generators/Gazebo/TerrainAnalyzer.cpp)
+target_link_libraries(TerrainAnalyzer ${catkin_LIBRARIES} ${OpenCV_LIBS})
 
 
 #############
 #### RULES ##
 #############
-#add_library(RULE_wp_path_inside_map src/Rules/RULE_wp_path_inside_map.cpp)
-#target_link_libraries(RULE_wp_path_inside_map ${catkin_LIBRARIES}
-#TerrainAnalyzer ResourceHandler
-#)
+add_library(RULE_wp_path_inside_map src/Rules/RULE_wp_path_inside_map.cpp)
+target_link_libraries(RULE_wp_path_inside_map ${catkin_LIBRARIES}
+TerrainAnalyzer ResourceHandler
+)
 
-#add_library(RULE_platform_init_pose_with_no_obj_colisions src/Rules/RULE_platform_init_pose_with_no_obj_colisions.cpp)
-#target_link_libraries(RULE_platform_init_pose_with_no_obj_colisions ${catkin_LIBRARIES}
-#TerrainAnalyzer ResourceHandler
-#)
+add_library(RULE_platform_init_pose_with_no_obj_colisions src/Rules/RULE_platform_init_pose_with_no_obj_colisions.cpp)
+target_link_libraries(RULE_platform_init_pose_with_no_obj_colisions ${catkin_LIBRARIES}
+TerrainAnalyzer ResourceHandler
+)
 
 
 
@@ -88,14 +88,14 @@ ScenarioFeature
 )
 
 
-#add_library(SFDPobj src/SFDP/SFDPobj.cpp)
-#target_link_libraries(SFDPobj ${catkin_LIBRARIES} ${Boost_INCLUDE_DIR}
-#ScenarioFeatureGroup
-#ScenarioFeature
-#SFVComponent
+add_library(SFDPobj src/SFDP/SFDPobj.cpp)
+target_link_libraries(SFDPobj ${catkin_LIBRARIES} ${Boost_INCLUDE_DIR}
+ScenarioFeatureGroup
+ScenarioFeature
+SFV
 #GazeboExecutor
-#GazeboScenarioGenerator
-#)
+GazeboScenarioGenerator
+)
 
 
 #############
@@ -131,31 +131,38 @@ target_link_libraries(SFVobjScattering ${catkin_LIBRARIES}
 SFVObject
 )
 
+add_library(SFVplatformPose src/SFV/SFVplatformPose.cpp)
+target_link_libraries(SFVplatformPose ${catkin_LIBRARIES}
+)
+
 
 add_library(SFV src/SFV/SFV.cpp)
 target_link_libraries(SFV ${catkin_LIBRARIES}
-#SFDPobj
 SFVpath
 SFVmass_link
 SFVterraine
 SFVobjScattering
+SFVplatformPose
+RULE_platform_init_pose_with_no_obj_colisions
+RULE_wp_path_inside_map
 )
 
 ##############
 # GENERATORS #
 ##############
 
-#add_library(GazeboEnvironmentGenerator src/Generators/Gazebo/GazeboEnvironmentGenerator.cpp)
-#target_link_libraries(GazeboEnvironmentGenerator ${catkin_LIBRARIES}
-#ResourceHandler
-#TerrainAnalyzer
-#)
+add_library(GazeboEnvironmentGenerator src/Generators/Gazebo/GazeboEnvironmentGenerator.cpp)
+target_link_libraries(GazeboEnvironmentGenerator ${catkin_LIBRARIES}
+ResourceHandler
+TerrainAnalyzer
+)
 
-#add_library(GazeboMissionGenerator src/Generators/Gazebo/GazeboMissionGenerator.cpp)
-#target_link_libraries(GazeboMissionGenerator ${catkin_LIBRARIES}
-#ResourceHandler
-#TerrainAnalyzer
-#)
+add_library(GazeboMissionGenerator src/Generators/Gazebo/GazeboMissionGenerator.cpp)
+target_link_libraries(GazeboMissionGenerator ${catkin_LIBRARIES}
+SFV
+SFVpath
+SFVwp
+)
 
 #add_library(GazeboPlatformGenerator src/Generators/Gazebo/GazeboPlatformGenerator.cpp)
 #target_link_libraries(GazeboPlatformGenerator ${catkin_LIBRARIES}
@@ -164,12 +171,12 @@ SFVobjScattering
 #)
 
 
-#add_library(GazeboScenarioGenerator src/Generators/Gazebo/GazeboScenarioGenerator.cpp)
-#target_link_libraries(GazeboScenarioGenerator ${catkin_LIBRARIES}
-#GazeboEnvironmentGenerator
-#GazeboMissionGenerator
+add_library(GazeboScenarioGenerator src/Generators/Gazebo/GazeboScenarioGenerator.cpp)
+target_link_libraries(GazeboScenarioGenerator ${catkin_LIBRARIES}
+GazeboEnvironmentGenerator
+GazeboMissionGenerator
 #GazeboPlatformGenerator
-#)
+)
 
 
 
@@ -210,7 +217,7 @@ add_executable(MainTest src/MainTest.cpp)
 target_link_libraries(MainTest ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
 ScenarioFeatureGroup
 ScenarioFeature
-#SFDPobj
+SFDPobj
 SFV
 )
 

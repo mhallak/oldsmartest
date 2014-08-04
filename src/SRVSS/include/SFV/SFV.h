@@ -11,22 +11,35 @@
 #include <iostream>
 #include <vector>
 
-//#include "SFDP/SFDPobj.h"
+
 #include "SFDP/ScenarioFeatureGroupType.h"
 #include "SFV/sfvSubGroup.h"
 
+#include "SFDP/SFDPobj.h"
 
-class SFV : public sfvSubGroup {
+#include "Rules/Rule.h"
+
+
+class SFDPobj;
+class sfvSubGroup;
+
+class SFV {
 	private :
 		std::vector<sfvSubGroup *> * my_sfvSubGroups;
 
+		std::string my_resource_file_url;
+
+		SFDPobj * my_SFDP;
 		bool was_rolled_flag;
 
-	public:
-//		SFV(SFDPobj * SFDP);
-		SFV();
-		void roll();
+		std::vector<Rule *> * my_rules;
 
+	public:
+		SFV(SFDPobj * SFDP);
+		bool roll();
+		bool rules_check();
+
+		int printToXML(std::string sfv_file_url);
 
 		~SFV();
 
@@ -36,8 +49,15 @@ class SFV : public sfvSubGroup {
 				  else { std::cout << "\033[1;31m SFV SubGroups vector is empty \033[0m" << std::endl; return(0); } }
 
 
+		inline std::string get_ResourceFile()
+			{ return(my_resource_file_url); }
+
+		inline SFDPobj * get_SFDP()
+			{return(my_SFDP); }
+
 		std::vector<sfvSubGroup*> * get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType GroupType);
 
+		void PopulationOf_mysfvSubGroups();
 
 		inline bool get_WasRolledFlag()
 			{ return(was_rolled_flag); }

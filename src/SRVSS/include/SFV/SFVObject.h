@@ -11,6 +11,7 @@
 
 #include "SFV/sfvSubGroup.h"
 #include "SFDP/ScenarioFeature.h"
+#include "SFV/SFV.h"
 
 
 class SFVObject : public sfvSubGroup  {
@@ -27,10 +28,11 @@ private :
 	bool was_rolled_flag;
 
 public :
-	SFVObject(std::vector<ScenarioFeature *> * ScenarioFeatures_vec);
+	SFVObject(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVObject(SFVObject * template_SFVObject);
 
-	void roll();
+	bool roll();
+	TiXmlElement * ToXmlElement(int id);
 
 	~SFVObject();
 

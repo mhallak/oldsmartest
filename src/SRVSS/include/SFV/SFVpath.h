@@ -12,6 +12,8 @@
 
 #include "SFDP/ScenarioFeature.h"
 #include "SFV/SFVwp.h"
+#include "SFV/SFV.h"
+
 
 class SFVpath : public sfvSubGroup  {
 private :
@@ -22,11 +24,11 @@ private :
 	bool was_rolled_flag;
 
 public :
-	SFVpath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec);
+	SFVpath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVpath(SFVpath * template_SFVpath);
 
-	void roll();
-
+	bool roll();
+	TiXmlElement * ToXmlElement(int id);
 
 	~SFVpath();
 
@@ -35,8 +37,7 @@ public :
 		{ return(my_number_of_wp); }
 
 	inline std::vector<SFVwp *> * get_PathWPs()
-		{ if (! my_PathWPs->empty() ) { return my_PathWPs; }
-		  else { std::cout << "\033[1;31m Path WPs vector is empty \033[0m" << std::endl; return(0); } }
+		{ return(my_PathWPs); }
 
 	inline SFVwp * get_WpTemplate()
 		{ return(my_wp_template); }

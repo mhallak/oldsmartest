@@ -7,9 +7,14 @@
 
 
 #include "Rules/RULE_platform_init_pose_with_no_obj_colisions.h"
-#include "SFV/SFVComponent.h"
+#include "SFV/SFV.h"
 #include "Resource/ResourceHandler.h"
 #include "Generators/Gazebo/TerrainAnalyzer.h"
+
+#include "SFV/SFVplatformPose.h"
+#include "SFV/SFVobjScattering.h"
+#include "SFV/SFVterraine.h"
+
 #include <math.h>
 
 #include <iostream>
@@ -24,50 +29,52 @@ Rule_platform_init_pose_with_no_obj_colisions::~Rule_platform_init_pose_with_no_
 }
 
 
-bool Rule_platform_init_pose_with_no_obj_colisions::isRuleValid(SFVComponent *sfvComp)
+bool Rule_platform_init_pose_with_no_obj_colisions::isRuleValid(SFV *sfv)
 {
 		std::cout << " !! checking Rule_platform_init_pose_with_no_obj_colisions  --- ";
 
-		std::vector<SFVPlatformPose*> *platformPoses_vec = sfvComp->getPlatformPoses();
-		SFVPlatformPose * platformPose = platformPoses_vec->at(0);
-		if (! platformPose->was_rolled)
+		SFVplatformPose *sfv_PlatPose = ((std::vector<SFVplatformPose*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::platform_pose))->at(0);
+
+		if (! sfv_PlatPose->get_WasRolledFlag())
 			{
 			std::cout << " platform initial position hasn't been rolled yet, so the rule have no meaning for now  - return true" << std::endl;
 			return true;
 			}
 
-		std::vector<SFVObjects*> * Objects_vec = sfvComp->getObjects();
-		SFVObjects * objects = Objects_vec->at(0);
-		if (! objects->was_rolled)
+
+		std::vector<SFVobjScattering*> *objects_scatterings_vec = (std::vector<SFVobjScattering*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::objects);
+		if (objects_scatterings_vec->empty())
 			{
 			std::cout << " no Object was rolled yet, so the rule has no meaning for now  - return true" << std::endl;
 			return true;
 			}
 
-		std::vector<SFVTerrain *> *terrain_vec = sfvComp->getTerrains();
-		SFVTerrain * terrain = terrain_vec->at(0);
-		if (! terrain->was_rolled)
+
+		SFVterraine *sfv_terrain = ((std::vector<SFVterraine*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::map))->at(0);
+		if (! sfv_terrain->get_WasRolledFlag())
 			{
 			std::cout << " terrain hasn't been rolled yet, so the rule can't be evaluated - return false" << std::endl;
 			return false; // terrain is needed for translation of percents to distance
 			}
 
 		//load terrain
-		std::string terrain_name=ResourceHandler::getInstance(sfvComp->m_resource_file_path).getTerrainById(terrain->getTerrainId());
-		std::string teraine_file_url = ResourceHandler::getInstance(sfvComp->m_resource_file_path).getWorldModelsFolderURL();
+		std::string terrain_name=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terrain->get_TopographicMapIndex()->get_RolledValue());
+		std::string teraine_file_url = ResourceHandler::getInstance(sfv->get_ResourceFile()).getWorldModelsFolderURL();
 		TerrainAnalyzer* terrainA=new TerrainAnalyzer();
 		terrainA->loadFile(teraine_file_url+"/"+terrain_name);
 
 		//get platform initial position
 		float plat_init_x , plat_init_y, plat_init_z;
-		terrainA->getXYZCoord(platformPose->getLocationX(),platformPose->getLocationY(),plat_init_x, plat_init_y ,plat_init_z);
+		terrainA->getXYZCoord(sfv_PlatPose->get_InitPlatformPoseX()->get_RolledValue(),sfv_PlatPose->get_InitPlatformPoseY()->get_RolledValue(),plat_init_x, plat_init_y ,plat_init_z);
 
-		for (SFVObject *obj : *(objects->m_objects) )
+		for (SFVobjScattering* obj_scat_it : * objects_scatterings_vec )
+		{
+			for (SFVObject *obj : *(obj_scat_it->get_Objects()))
 			{
 			// TODO platform and objects orientation shall be also taken to consideration
 
 				float obj_x, obj_y, obj_z;
-				terrainA->getXYZCoord(obj->getX(),obj->getY(),obj_x, obj_y ,obj_z);
+				terrainA->getXYZCoord(obj->get_LocationOnTheXaxis()->get_RolledValue(),obj->get_LocationOnTheYaxis()->get_RolledValue(),obj_x, obj_y ,obj_z);
 
 				float dx = plat_init_x - obj_x;
 				float dy = plat_init_y - obj_y;
@@ -80,6 +87,7 @@ bool Rule_platform_init_pose_with_no_obj_colisions::isRuleValid(SFVComponent *sf
 					return false; // obj is closer than 5m to the platform
 				}
 			}
+		}
 		std::cout << " all the obj are in distance of more than 5m from the bobcat - return true" << std::endl;
 		return true; // all the obj are in distance of more than 5m from the bobcat
 }

@@ -14,8 +14,7 @@
 #include "SFDP/ScenarioFeature.h"
 #include "SFDP/ScenarioFeatureGroup.h"
 
-
-SFVObject::SFVObject(std::vector<ScenarioFeature *> * ScenarioFeatures_vec): sfvSubGroup(ScenarioFeatureGroupType::object)
+SFVObject::SFVObject(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::object, parent_SFV)
 {
 	my_object_type = 0;
 	my_scaling_factor = 0;
@@ -64,7 +63,7 @@ SFVObject::SFVObject(std::vector<ScenarioFeature *> * ScenarioFeatures_vec): sfv
 }
 
 
-SFVObject::SFVObject(SFVObject * template_SFVObject):  sfvSubGroup(ScenarioFeatureGroupType::object)
+SFVObject::SFVObject(SFVObject * template_SFVObject):  sfvSubGroup(template_SFVObject->get_Type(), template_SFVObject->get_ParentSFV())
 {
 	my_object_type = new ScenarioFeature(template_SFVObject->get_ObjectType());
 	my_scaling_factor = new ScenarioFeature(template_SFVObject->get_ScalingFactor());
@@ -81,28 +80,77 @@ SFVObject::SFVObject(SFVObject * template_SFVObject):  sfvSubGroup(ScenarioFeatu
 }
 
 
-void SFVObject::roll()
+bool SFVObject::roll()
 {
 	if (was_rolled_flag)
 	{
 		std::cout << "\033[1;31m I already was rolled (I am Object) \033[0m"<< std::endl;
+		return(false);
 	}
 	else
 	{
-		my_object_type->roll();
-		my_scaling_factor->roll();
+		int roll_attemps_limit = 3;
+		int roll_attemp=1;
+		while (roll_attemp <= roll_attemps_limit)
+		{
+			my_object_type->roll();
+			my_scaling_factor->roll();
+			my_location_on_the_X_axis->roll();
+			my_location_on_the_Y_axis->roll();
+			my_location_on_the_Z_axis->roll();
+			my_location_Roll->roll();
+			my_location_Pitch->roll();
+			my_location_Yaw->roll();
 
-		my_location_on_the_X_axis->roll();
-		my_location_on_the_Y_axis->roll();
-		my_location_on_the_Z_axis->roll();
-
-		my_location_Roll->roll();
-		my_location_Pitch->roll();
-		my_location_Yaw->roll();
-
-		was_rolled_flag = true;
+		if (get_ParentSFV()->rules_check())
+			{
+			was_rolled_flag = true;
+			return(true);
+			std::cout << "\033[1;32m Succeed to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
+			}
+		else
+			{
+			my_object_type = new ScenarioFeature(this->get_ObjectType());
+			my_scaling_factor = new ScenarioFeature(this->get_ScalingFactor());
+			my_location_on_the_X_axis = new ScenarioFeature(this->get_LocationOnTheXaxis());
+			my_location_on_the_Y_axis = new ScenarioFeature(this->get_LocationOnTheYaxis());
+			my_location_on_the_Z_axis = new ScenarioFeature(this->get_LocationOnTheZaxis());
+			my_location_Roll = new ScenarioFeature(this->get_LocationRoll());
+			my_location_Pitch = new ScenarioFeature(this->get_LocationPitch());
+			my_location_Yaw = new ScenarioFeature(this->get_LocationYaw());
+			std::cout << "\033[1;35m fail to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
+			}
+		roll_attemp++;
+		}
+	return(false);
 	}
+}
 
+TiXmlElement * SFVObject::ToXmlElement(int id)
+{
+	if (! was_rolled_flag)
+	{
+		std::cout << "\033[1;31m can not make XML element for SFVObject because it wasn't rolled yet \033[0m"<< std::endl;
+		return(0);
+	}
+	else
+	{
+		TiXmlElement * xml_sub_group = new TiXmlElement(get_Type().str());
+		xml_sub_group->SetAttribute("ID",std::to_string(id));
+
+		xml_sub_group->LinkEndChild(my_object_type->toSFV_XMLElement());
+		xml_sub_group->LinkEndChild(my_scaling_factor->toSFV_XMLElement());
+
+		xml_sub_group->LinkEndChild(my_location_on_the_X_axis->toSFV_XMLElement());
+		xml_sub_group->LinkEndChild(my_location_on_the_Y_axis->toSFV_XMLElement());
+		xml_sub_group->LinkEndChild(my_location_on_the_Z_axis->toSFV_XMLElement());
+
+		xml_sub_group->LinkEndChild(my_location_Roll->toSFV_XMLElement());
+		xml_sub_group->LinkEndChild(my_location_Pitch->toSFV_XMLElement());
+		xml_sub_group->LinkEndChild(my_location_Yaw->toSFV_XMLElement());
+
+		return(xml_sub_group);
+	}
 }
 
 SFVObject::~SFVObject()

@@ -7,10 +7,14 @@
 
 
 #include "Rules/RULE_wp_path_inside_map.h"
+
 #include "Resource/ResourceHandler.h"
 #include "Generators/Gazebo/TerrainAnalyzer.h"
-#include "SFV/SFVComponent.h"
-#include "SFV/SFVTerrain.h"
+
+#include "SFV/SFVpath.h"
+#include "SFV/SFVplatformPose.h"
+#include "SFV/SFVterraine.h"
+
 
 Rule_wp_path_inside_map::Rule_wp_path_inside_map() {
 	// TODO Auto-generated constructor stub
@@ -21,30 +25,28 @@ Rule_wp_path_inside_map::~Rule_wp_path_inside_map() {
 }
 
 
-bool Rule_wp_path_inside_map::isRuleValid(SFVComponent *sfvComp)
+bool Rule_wp_path_inside_map::isRuleValid(SFV *sfv)
 {
 	std::cout << " !! checking Rule_wp_path_inside_map --- " ;
 
-	std::vector<SFVPath *> *path_vec = sfvComp->getPaths();
-	SFVPath * wp_path = path_vec->at(0);
-	if (! wp_path->was_rolled)
+
+	SFVpath *sfv_Path = ((std::vector<SFVpath*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::Path))->at(0);
+	if (sfv_Path->get_PathWPs()->empty())
 		{
 		std::cout << " path first wp hasn't been rolled yet, so the rule has no meaning for now - return true " << std::endl;
 		return true;
 		}
 	else
 		{
-			std::vector<SFVTerrain *> *terrain_vec = sfvComp->getTerrains();
-			SFVTerrain * terrain = terrain_vec->at(0);
-			if (! terrain->was_rolled)
+			SFVterraine *sfv_terraine = ((std::vector<SFVterraine*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::map))->at(0);
+			if (! sfv_terraine->get_WasRolledFlag())
 				{
 				std::cout << " terrain hasn't been rolled yet, so the rule can't be evaluated - return false" << std::endl;
 				return false;
 				}
 
-			std::vector<SFVPlatformPose*> *platformPoses_vec = sfvComp->getPlatformPoses();
-			SFVPlatformPose * platformPose = platformPoses_vec->at(0);
-			if (! platformPose->was_rolled)
+			SFVplatformPose *sfv_platPose = ((std::vector<SFVplatformPose*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::platform_pose))->at(0);
+			if (! sfv_platPose->get_WasRolledFlag())
 				{
 				std::cout << " platform initial position hasn't been rolled yet, so the rule can't be evaluated - return false" << std::endl;
 				return false;
@@ -52,15 +54,15 @@ bool Rule_wp_path_inside_map::isRuleValid(SFVComponent *sfvComp)
 
 
 		//load terrain
-		std::string terrain_name=ResourceHandler::getInstance(sfvComp->m_resource_file_path).getTerrainById(terrain->getTerrainId());
-		std::string teraine_file_url = ResourceHandler::getInstance(sfvComp->m_resource_file_path).getWorldModelsFolderURL();
+		std::string terrain_name=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terraine->get_TopographicMapIndex()->get_WasRolledFlag());
+		std::string teraine_file_url = ResourceHandler::getInstance(sfv->get_ResourceFile()).getWorldModelsFolderURL();
 		TerrainAnalyzer* terrainA=new TerrainAnalyzer();
 		terrainA->loadFile(teraine_file_url+"/"+terrain_name);
 
 		//get platform initial position
 		float plat_init_x , plat_init_y, plat_init_z , plat_init_azi;
-		terrainA->getXYZCoord(platformPose->getLocationX(),platformPose->getLocationY(),plat_init_x, plat_init_y ,plat_init_z);
-		plat_init_azi = platformPose->getLocationAzimut();
+		terrainA->getXYZCoord(sfv_platPose->get_InitPlatformPoseX()->get_RolledValue(),sfv_platPose->get_InitPlatformPoseY()->get_RolledValue(),plat_init_x, plat_init_y ,plat_init_z);
+		plat_init_azi = sfv_platPose->get_InitPlatformPoseAzimut()->get_RolledValue();
 
 
 		//set terrain bounds
@@ -70,11 +72,11 @@ bool Rule_wp_path_inside_map::isRuleValid(SFVComponent *sfvComp)
 
 		float wp_x=plat_init_x, wp_y=plat_init_y,  wp_azi = plat_init_azi;
 
-		for (SFVWaypoint *wp : *(wp_path->m_objects) )
+		for (SFVwp *wp_it : *(sfv_Path->get_PathWPs()) )
 			{
-				wp_azi = wp_azi + wp->getRelativeAngle();
-				wp_x = wp_x + wp->getWpIDistanceI()*cos(wp_azi);
-				wp_y = wp_y + wp->getWpIDistanceI()*sin(wp_azi);
+				wp_azi = wp_azi + wp_it->get_RalativeAngel()->get_RolledValue();
+				wp_x = wp_x + wp_it->get_RalativeDistance()->get_RolledValue()*cos(wp_azi);
+				wp_y = wp_y + wp_it->get_RalativeDistance()->get_RolledValue()*sin(wp_azi);
 
 				if(wp_x<xMin || wp_y<yMin || wp_x>xMax || wp_y>yMax)
 				{

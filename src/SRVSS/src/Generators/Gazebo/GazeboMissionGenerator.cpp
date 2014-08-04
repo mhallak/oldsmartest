@@ -27,9 +27,11 @@
 
 #include "robil_msgs/Path.h"
 
+#include "SFV/SFV.h"
+#include "SFV/SFVpath.h"
+#include "SFV/SFVplatformPose.h"
 
 GazeboMissionGenerator::GazeboMissionGenerator() {
-	m_terrainAnalyzer=new TerrainAnalyzer;
 
 }
 
@@ -37,93 +39,44 @@ GazeboMissionGenerator::~GazeboMissionGenerator() {
 	// TODO Auto-generated destructor stub
 }
 
-float GazeboMissionGenerator::getLastYawPose() const {
-	return m_last_yaw_pose;
-}
 
-void GazeboMissionGenerator::setLastYawPose(float lastYawPose) {
-	m_last_yaw_pose = lastYawPose;
-}
-
-const std::string& GazeboMissionGenerator::getLastPlatformName() const {
-	return m_last_platform_name;
-}
-
-void GazeboMissionGenerator::setLastPlatformName(
-		const std::string& lastPlatformName) {
-	m_last_platform_name = lastPlatformName;
-}
-
-void GazeboMissionGenerator::generateMission(SFVComponent * sfvcomp,std::string fileName, std::string resources_file_path)
+void GazeboMissionGenerator::generateMission(SFV *sfv, std::string fileName)
 {
-
-	std::string terrain = ResourceHandler::getInstance(resources_file_path).getTerrainById(sfvcomp->getTerrains()->at(0)->getTerrainId());
-	std::string path = ResourceHandler::getInstance(resources_file_path).getWorldModelsFolderURL();
-
-	m_terrainAnalyzer->loadFile(path+"/"+terrain);
-
-
-	SFVPlatformPose* platformPose=sfvcomp->getPlatformPoses()->at(0);
-	m_last_platform_name=platformPose->getPlatformName();
-
+	SFVplatformPose *sfv_PlatPose = ((std::vector<SFVplatformPose*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::platform_pose))->at(0);
+	SFVpath *sfv_Path = ((std::vector<SFVpath*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::Path))->at(0);
 
 	std::ofstream file;
 	file.open (fileName + ".txt");
 	file<< "PLATFORM" <<std::endl;
-	file<< platformPose->getPlatformName() <<std::endl;
+	file<< "koko" <<std::endl;
 	file<< "START"<<std::endl;
 
-	float x,y,z;
-	m_terrainAnalyzer->getXYZCoord(platformPose->getLocationX(),platformPose->getLocationY(),x,y,z);
-	file<< x <<" "<< y <<" "<< z<< " " <<platformPose->getLocationAzimut() << std::endl;
-	float azimut = platformPose->getLocationAzimut();
+	float plat_x = sfv_PlatPose->get_PlatInit_xy(sfv)->at('x');
+	float plat_y = sfv_PlatPose->get_PlatInit_xy(sfv)->at('y');
+	file<< plat_x <<" " <<plat_y << " " << std::endl;
 
-	m_last_x_pose=x;
-	m_last_y_pose=y;
-	m_last_z_pose=z;
-	m_last_yaw_pose=azimut;
-
-	double plat_init_azi = platformPose->getLocationAzimut();
-
-	BOOST_FOREACH(SFVPath* waypoints,*(sfvcomp->getPaths()))
+	file<< "WAYPOINTS"<<std::endl;
+	float x, y;
+	for(SFVwp* wp_it : *(sfv_Path->get_PathWPs()))
 	{
-		file<< "WAYPOINTS"<<std::endl;
-		BOOST_FOREACH(SFVWaypoint* waypoint,*(waypoints->m_objects))
-		{
-			azimut= azimut + waypoint->getRelativeAngle();
-			x+=waypoint->getWpIDistanceI()*cos(azimut);
-			y+=waypoint->getWpIDistanceI()*sin(azimut);
-			file<< x <<" " <<y << " " << waypoint->getWpVelocity() << std::endl;
-		}
+
+		x=wp_it->get_WPxy(sfv)->at('x');
+		y=wp_it->get_WPxy(sfv)->at('y');
+		file<< x <<" " <<y << " " << 3 << std::endl;
 	}
 	file.close();
 }
 
-void GazeboMissionGenerator::generateMission_ROBIL2(SFVComponent * sfvComp,std::string fileName, std::string resources_file_path)
+void GazeboMissionGenerator::generateMission_ROBIL2(SFV * sfv,std::string fileName)
 {
-	std::string path_to_terrain_file_name = ResourceHandler::getInstance(resources_file_path).getTerrainById(sfvComp->getTerrains()->at(0)->getTerrainId());
-	std::string path_to_terrain_folder = ResourceHandler::getInstance(resources_file_path).getWorldModelsFolderURL();
-	m_terrainAnalyzer->loadFile(path_to_terrain_folder+"/"+path_to_terrain_file_name);
+	SFVpath *sfv_Path = ((std::vector<SFVpath*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::Path))->at(0);
 
 	nav_msgs::Path wp_path;
 	geometry_msgs::PoseStamped pose;
-
-	SFVPlatformPose* platformPose=sfvComp->getPlatformPoses()->at(0);
-	double plat_init_azi = platformPose->getLocationAzimut();
-	float wp_x=0, wp_y=0, wp_z=0;
-	//m_terrainAnalyzer->getXYZCoord(platformPose->getLocationX(),platformPose->getLocationY(), wp_x, wp_y, wp_z);
-
-	double azi = plat_init_azi, dis = 0;
-	SFVPath* path=sfvComp->getPaths()->at(0);
-	for (SFVWaypoint *wp : *(path->m_objects) )
+	for(SFVwp* wp_it : *(sfv_Path->get_PathWPs()))
 	{
-    	azi = azi + wp->getRelativeAngle();
-		dis = wp->getWpIDistanceI();
-    	wp_x = wp_x + dis*cos(azi);
-    	wp_y = wp_y + dis*sin(azi);
-
-		pose.pose.position.x = wp_x;
-		pose.pose.position.y = wp_y;
+		pose.pose.position.x = wp_it->get_WPxy(sfv)->at('x');
+		pose.pose.position.y = wp_it->get_WPxy(sfv)->at('y');
 
 		wp_path.poses.push_back(pose);
 	}
@@ -153,37 +106,14 @@ void GazeboMissionGenerator::generateMission_ROBIL2(SFVComponent * sfvComp,std::
 
 
 
-void GazeboMissionGenerator::generate(SFVComponent * sfvComp , std::string scenario_folder_url, std::string resource_file_url)
+void GazeboMissionGenerator::generate(SFV * sfv , std::string scenario_folder_url)
 {
 	std::string temp = scenario_folder_url+"/scenarioMission";
 
 	std::cout << "\033[1;36m Producing " << temp << ".txt \033[1;36m" << std::endl;
-	generateMission(sfvComp, temp ,resource_file_url);
+	generateMission(sfv, temp);
 
 	std::cout << "\033[1;36m Producing " << temp << ".bag \033[1;36m" << std::endl;
-	generateMission_ROBIL2(sfvComp, temp ,resource_file_url);
+	generateMission_ROBIL2(sfv, temp);
 }
 
-float GazeboMissionGenerator::getLastXPose() const {
-	return m_last_x_pose;
-}
-
-void GazeboMissionGenerator::setLastXPose(float lastXPose) {
-	m_last_x_pose = lastXPose;
-}
-
-float GazeboMissionGenerator::getLastYPose() const {
-	return m_last_y_pose;
-}
-
-void GazeboMissionGenerator::setLastYPose(float lastYPose) {
-	m_last_y_pose = lastYPose;
-}
-
-float GazeboMissionGenerator::getLastZPose() const {
-	return m_last_z_pose;
-}
-
-void GazeboMissionGenerator::setLastZPose(float lastZPose) {
-	m_last_z_pose = lastZPose;
-}

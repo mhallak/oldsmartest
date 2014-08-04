@@ -14,6 +14,7 @@
 
 #include "SFV/sfvSubGroup.h"
 #include "SFDP/ScenarioFeature.h"
+#include "SFV/SFV.h"
 
 
 class SFVterraine : public sfvSubGroup {
@@ -24,10 +25,12 @@ private :
 	bool was_rolled_flag;
 
 public :
-	SFVterraine(std::vector<ScenarioFeature *> * ScenarioFeatures_vec);
+	SFVterraine(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVterraine(SFVterraine * template_SFVterraine);
 
-	void roll();
+	bool roll();
+
+	TiXmlElement * ToXmlElement(int id);
 
 	~SFVterraine();
 

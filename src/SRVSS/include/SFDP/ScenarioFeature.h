@@ -56,6 +56,7 @@ public:
 
 	int parseScenarioFeatureFromXML(TiXmlNode* xmlFeature);
 	TiXmlElement *toXMLElement();
+	TiXmlElement *toSFV_XMLElement();
 };
 
 #endif /* SCENARIOFEATURE_H_ */

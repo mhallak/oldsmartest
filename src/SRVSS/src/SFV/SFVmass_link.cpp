@@ -11,7 +11,9 @@
 #include "SFDP/ScenarioFeatureGroup.h"
 #include "SFDP/ScenarioFeatureType.h"
 
-SFVmass_link::SFVmass_link(std::string MassLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec): sfvSubGroup(ScenarioFeatureGroupType::mass_link_i)
+#include "SFV/SFV.h"
+
+SFVmass_link::SFVmass_link(std::string MassLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::mass_link_i, parent_SFV)
 {
 	my_MassLinkName = MassLinkName;
 
@@ -69,7 +71,7 @@ SFVmass_link::SFVmass_link(std::string MassLinkName ,std::vector<ScenarioFeature
 }
 
 
-SFVmass_link::SFVmass_link(SFVmass_link * template_SFVmass_link): sfvSubGroup(ScenarioFeatureGroupType::Path)
+SFVmass_link::SFVmass_link(SFVmass_link * template_SFVmass_link): sfvSubGroup(template_SFVmass_link->get_Type() ,template_SFVmass_link->get_ParentSFV())
 {
 	my_MassLinkName = template_SFVmass_link->get_Name();
 
@@ -91,15 +93,20 @@ SFVmass_link::SFVmass_link(SFVmass_link * template_SFVmass_link): sfvSubGroup(Sc
 }
 
 
-
-void SFVmass_link::roll()
+bool SFVmass_link::roll()
 {
+	int roll_attemps_limit = 3;
+
 	if (was_rolled_flag)
 	{
 		std::cout << "\033[1;31m I already was rolled (I am Mass Link) \033[0m"<< std::endl;
+		return(false);
 	}
 	else
 	{
+		int roll_attemp=1;
+		while (roll_attemp <= roll_attemps_limit)
+		{
 		mass_deviation->roll();
 		inertia_deviation_Ixx_component->roll();
 		inertia_deviation_Iyy_component->roll();
@@ -111,9 +118,64 @@ void SFVmass_link::roll()
 		location_deviation_Pitch->roll();
 		location_deviation_Yaw->roll();
 
-		was_rolled_flag = true;
+		if (get_ParentSFV()->rules_check())
+			{
+			was_rolled_flag = true;
+			std::cout << "\033[1;32m Succeed to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
+			return(true);
+			}
+		else
+			{
+			mass_deviation = new ScenarioFeature(this->get_MassDeviation());
+			inertia_deviation_Ixx_component = new ScenarioFeature(this->get_InertiaDeviationIxxComponent());
+			inertia_deviation_Iyy_component = new ScenarioFeature(this->get_InertiaDeviationIyyComponent());
+			inertia_deviation_Izz_component = new ScenarioFeature(this->get_InertiaDeviationIzzComponent());
+			location_deviation_X = new ScenarioFeature(this->get_LocationDeviationX());
+			location_deviation_Y = new ScenarioFeature(this->get_LocationDeviationY());
+			location_deviation_Z = new ScenarioFeature(this->get_LocationDeviationZ());
+			location_deviation_Roll = new ScenarioFeature(this->get_LocationDeviationRoll());
+			location_deviation_Pitch = new ScenarioFeature(this->get_LocationDeviationPitch());
+			location_deviation_Yaw = new ScenarioFeature(this->get_LocationDeviationYaw());
+			std::cout << "\033[1;35m fail to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
+			}
+		roll_attemp++;
+		}
+	return(false);
 	}
 }
+
+TiXmlElement * SFVmass_link::ToXmlElement(int id)
+{
+	if (! was_rolled_flag)
+	{
+		std::cout << "\033[1;31m can not make XML element for SFVmass_link because it wasn't rolled yet \033[0m"<< std::endl;
+		return(0);
+	}
+	else
+	{
+		TiXmlElement * xml_sub_group = new TiXmlElement(get_Type().str());
+		xml_sub_group->SetAttribute("ID",std::to_string(id));
+		xml_sub_group->SetAttribute("link_name",my_MassLinkName);
+
+		xml_sub_group->LinkEndChild(mass_deviation->toSFV_XMLElement());
+
+		xml_sub_group->LinkEndChild(inertia_deviation_Ixx_component->toSFV_XMLElement());
+		xml_sub_group->LinkEndChild(inertia_deviation_Iyy_component->toSFV_XMLElement());
+		xml_sub_group->LinkEndChild(inertia_deviation_Izz_component->toSFV_XMLElement());
+
+		xml_sub_group->LinkEndChild(location_deviation_X->toSFV_XMLElement());
+		xml_sub_group->LinkEndChild(location_deviation_Y->toSFV_XMLElement());
+		xml_sub_group->LinkEndChild(location_deviation_Z->toSFV_XMLElement());
+
+		xml_sub_group->LinkEndChild(location_deviation_Roll->toSFV_XMLElement());
+		xml_sub_group->LinkEndChild(location_deviation_Pitch->toSFV_XMLElement());
+		xml_sub_group->LinkEndChild(location_deviation_Yaw->toSFV_XMLElement());
+
+		return(xml_sub_group);
+	}
+}
+
+
 
 SFVmass_link::~SFVmass_link()
 {
