@@ -25,15 +25,13 @@ private :
 	ScenarioFeature * my_location_Pitch;
 	ScenarioFeature * my_location_Yaw;
 
-	bool was_rolled_flag;
 
 public :
 	SFVObject(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVObject(SFVObject * template_SFVObject);
-
+	void initFeaturesMap();
 
 	bool roll();
-
 	TiXmlElement * ToXmlElement(int id);
 
 	~SFVObject();
@@ -62,15 +60,6 @@ public :
 
 	inline ScenarioFeature * get_LocationYaw()
 		{ return(my_location_Yaw); }
-
-
-	inline bool get_WasRolledFlag()
-		{ return(was_rolled_flag); }
-
-	// in development
-	void initFeaturesMap();
 };
-
-
 
 #endif /* SFVOBJECT_H_ */

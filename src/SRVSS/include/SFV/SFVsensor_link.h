@@ -19,8 +19,6 @@
 class SFVsensor_link : public sfvSubGroup {
 private :
 
-	std::string my_SensorLinkName;
-
 	ScenarioFeature * location_deviationX;
 	ScenarioFeature * location_deviationY;
 	ScenarioFeature * location_deviationZ;
@@ -28,19 +26,16 @@ private :
 	ScenarioFeature * location_deviationPitch;
 	ScenarioFeature * location_deviationYaw;
 
-	bool was_rolled_flag;
 
 public :
 	SFVsensor_link(std::string FrictionLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV);
 	SFVsensor_link(SFVsensor_link * template_SFVsensor_link);
+	void initFeaturesMap();
 
 	bool roll();
 	TiXmlElement * ToXmlElement(int id);
 
 	~SFVsensor_link();
-
-	inline std::string get_Name()
-		{ return(my_SensorLinkName); }
 
 	inline ScenarioFeature * get_LocationDeviationX()
 		{ return(location_deviationX); }
@@ -59,9 +54,6 @@ public :
 
 	inline ScenarioFeature * get_LocationDeviationYaw()
 		{ return(location_deviationYaw); }
-
-	inline bool get_WasRolledFlag()
-		{ return(was_rolled_flag); }
 
 };
 

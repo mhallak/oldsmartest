@@ -15,47 +15,41 @@
 #include "SFDP/ScenarioFeature.h"
 
 
-SFVpath::SFVpath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::Path, parent_SFV)
+void SFVpath::initFeaturesMap()
 {
-		my_number_of_wp = 0;
-		my_wp_template = 0;
+	std::map<ScenarioFeatureType ,ScenarioFeature** > * my_features_map = get_FeaturesMap();
 
-		for (ScenarioFeature * feature_it : * ScenarioFeatures_vec )
-		{
-		 switch (feature_it->get_featureType().value())
-		 	 {
-		 	 case(ScenarioFeatureType::number_of_way_points) :
-		 		my_number_of_wp = new ScenarioFeature(feature_it);
-		 		break;
-		 	 }
-		}
-
-		my_wp_template = new SFVwp(ScenarioFeatures_vec, parent_SFV);
-		my_PathWPs = new std::vector<SFVwp *>;
-
-		was_rolled_flag = false;
-
-		if ( (my_number_of_wp==0) || (my_wp_template==0) )
-			{
-			std::cout << "\033[1;31m The Path was no fully defined \033[0m" << std::endl;
-			}
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::number_of_way_points, & my_number_of_wp ) );
 }
 
-SFVpath::SFVpath(SFVpath * template_SFVpath): sfvSubGroup(template_SFVpath->get_Type(),template_SFVpath->get_ParentSFV())
-{
-	my_number_of_wp = new ScenarioFeature(template_SFVpath->get_NumberOfWPs());
-	my_wp_template = new SFVwp(template_SFVpath->get_WpTemplate());
 
+SFVpath::SFVpath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::Path, parent_SFV)
+{
+	initFeaturesMap();
+	initSubGroupFeatures(ScenarioFeatures_vec);
+
+	my_wp_template = new SFVwp(ScenarioFeatures_vec, parent_SFV);
 	my_PathWPs = new std::vector<SFVwp *>;
 
-	was_rolled_flag = false;
+	set_WasRolledFlag(false);
+}
+
+SFVpath::SFVpath(SFVpath * template_subGroup): sfvSubGroup(template_subGroup->get_Type(),template_subGroup->get_ParentSFV())
+{
+	initFeaturesMap();
+	cloneSubGroupFeatures(template_subGroup);
+
+	my_wp_template = new SFVwp(template_subGroup->get_WpTemplate());
+	my_PathWPs = new std::vector<SFVwp *>;
+
+	set_WasRolledFlag(false);
 }
 
 
 
 bool SFVpath::roll()
 {
-	if (was_rolled_flag)
+	if (get_WasRolledFlag())
 	{
 		std::cout << "\033[1;31m I already was rolled (I am Path) \033[0m"<< std::endl;
 		return(false);
@@ -93,7 +87,7 @@ bool SFVpath::roll()
 			}
 		else
 			{
-			was_rolled_flag = true;
+			set_WasRolledFlag(true);
 			std::cout << "\033[1;32m Succeed to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
 			return(true);
 			}
@@ -103,6 +97,29 @@ bool SFVpath::roll()
 	}
 }
 
+
+TiXmlElement * SFVpath::ToXmlElement(int id)
+{
+	if (! get_WasRolledFlag())
+	{
+		std::cout << "\033[1;31m can not make XML element for SFVpath because it wasn't rolled yet \033[0m"<< std::endl;
+		return(0);
+	}
+	else
+	{
+		TiXmlElement * xml_sub_group = new TiXmlElement(get_Type().str());
+		xml_sub_group->SetAttribute("ID",std::to_string(id));
+
+		int id=1;
+		for (SFVwp * wp_it : * get_PathWPs())
+		{
+			xml_sub_group->LinkEndChild(wp_it->ToXmlElement(id));
+			id++;
+		}
+
+		return(xml_sub_group);
+	}
+}
 
 
 float SFVpath::get_PathLength()
@@ -124,32 +141,6 @@ float SFVpath::get_PathLength()
 		}
 
 	return(path_length);
-}
-
-
-
-
-TiXmlElement * SFVpath::ToXmlElement(int id)
-{
-	if (! was_rolled_flag)
-	{
-		std::cout << "\033[1;31m can not make XML element for SFVpath because it wasn't rolled yet \033[0m"<< std::endl;
-		return(0);
-	}
-	else
-	{
-		TiXmlElement * xml_sub_group = new TiXmlElement(get_Type().str());
-		xml_sub_group->SetAttribute("ID",std::to_string(id));
-
-		int id=1;
-		for (SFVwp * wp_it : * get_PathWPs())
-		{
-			xml_sub_group->LinkEndChild(wp_it->ToXmlElement(id));
-			id++;
-		}
-
-		return(xml_sub_group);
-	}
 }
 
 SFVpath::~SFVpath()

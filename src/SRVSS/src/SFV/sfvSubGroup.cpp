@@ -12,10 +12,8 @@
 #include "SFDP/ScenarioFeatureType.h"
 
 
-void sfvSubGroup::initSubGroup(ScenarioFeatureGroupType group_type ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV)
+void sfvSubGroup::initSubGroupFeatures(std::vector<ScenarioFeature *> * ScenarioFeatures_vec)
 {
-	my_type = group_type;
-	my_parent_SFV = parent_SFV;
 
 	for (auto& feature : *my_features_map)
 		{
@@ -43,7 +41,7 @@ void sfvSubGroup::initSubGroup(ScenarioFeatureGroupType group_type ,std::vector<
 }
 
 
-void sfvSubGroup::cloneSubGroup(sfvSubGroup * template_group)
+void sfvSubGroup::cloneSubGroupFeatures(sfvSubGroup * template_group)
 {
 	for (auto& feature : *(template_group->get_FeaturesMap()) )
 		{
@@ -83,6 +81,7 @@ TiXmlElement * sfvSubGroup::SubGroupfeaturesToXmlElement(int id)
 {
 	TiXmlElement * xml_sub_group = new TiXmlElement(get_Type().str());
 	xml_sub_group->SetAttribute("ID",std::to_string(id));
+	xml_sub_group->SetAttribute("name", my_name);
 
 	for (auto& feature : *my_features_map)
 		{

@@ -23,11 +23,10 @@ private :
 	ScenarioFeature * initial_platform_position_on_map_Y_axis;
 	ScenarioFeature * initial_platform_azimut;
 
-	bool was_rolled_flag;
-
 public :
 	SFVplatformPose(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVplatformPose(SFVplatformPose * template_SFVplatformPose);
+	void initFeaturesMap();
 
 	bool roll();
 	std::map<char,float> * get_PlatInit_xy();
@@ -45,13 +44,7 @@ public :
 	inline ScenarioFeature * get_InitPlatformPoseAzimut()
 			{ return(initial_platform_azimut); }
 
-	inline bool get_WasRolledFlag()
-		{ return(was_rolled_flag); }
-
 };
-
-
-
 
 
 #endif /* SFVPLATFORMPOSE_H_ */

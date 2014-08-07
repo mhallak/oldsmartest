@@ -21,16 +21,14 @@ private :
 	SFVwp * my_wp_template;
 	std::vector <SFVwp *> * my_PathWPs;
 
-	bool was_rolled_flag;
-
 public :
 	SFVpath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVpath(SFVpath * template_SFVpath);
+	void initFeaturesMap();
 
 	bool roll();
 
 	float get_PathLength();
-
 	TiXmlElement * ToXmlElement(int id);
 
 	~SFVpath();
@@ -45,11 +43,8 @@ public :
 	inline SFVwp * get_WpTemplate()
 		{ return(my_wp_template); }
 
-	inline bool get_WasRolledFlag()
-		{ return(was_rolled_flag); }
 
 };
-
 
 
 #endif /* SFVPATH_H_ */

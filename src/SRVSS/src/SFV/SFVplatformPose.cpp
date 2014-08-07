@@ -16,52 +16,36 @@
 #include "Resource/ResourceHandler.h"
 #include "Generators/Gazebo/TerrainAnalyzer.h"
 
+
+void SFVplatformPose::initFeaturesMap()
+{
+	std::map<ScenarioFeatureType ,ScenarioFeature** > * my_features_map = get_FeaturesMap();
+
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::initial_platform_position_on_map_X_axis, & initial_platform_position_on_map_X_axis ) );
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::initial_platform_position_on_map_Y_axis, & initial_platform_position_on_map_Y_axis ) );
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::initial_platform_azimut_on_map , & initial_platform_azimut ) );
+
+}
+
 SFVplatformPose::SFVplatformPose(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::platform_pose, parent_SFV)
 {
-
-	initial_platform_position_on_map_X_axis = 0;
-	initial_platform_position_on_map_Y_axis = 0;
-	initial_platform_azimut = 0;
-
-	for (ScenarioFeature * feature_it : * ScenarioFeatures_vec )
-	{
-	 switch (feature_it->get_featureType().value())
-	 	 {
-	 	 case(ScenarioFeatureType::initial_platform_position_on_map_X_axis) :
-		initial_platform_position_on_map_X_axis = new ScenarioFeature(feature_it);
-	 		break;
-	 	 case(ScenarioFeatureType::initial_platform_position_on_map_Y_axis) :
-		initial_platform_position_on_map_Y_axis = new ScenarioFeature(feature_it);
-	 		break;
-	 	 case(ScenarioFeatureType::initial_platform_azimut_on_map) :
-		initial_platform_azimut = new ScenarioFeature(feature_it);
-	 		break;
-	 	 }
-	 }
-
-	was_rolled_flag = false;
-
-	if ( (initial_platform_position_on_map_X_axis==0) || (initial_platform_position_on_map_Y_axis==0) || (initial_platform_azimut==0) )
-		{
-		std::cout << "\033[1;31m The Initial Platform Pose was no fully defined \033[0m" << std::endl;
-		}
+	initFeaturesMap();
+	initSubGroupFeatures(ScenarioFeatures_vec);
+	set_WasRolledFlag(false);
 }
 
 
-SFVplatformPose::SFVplatformPose(SFVplatformPose * template_SFVplatformPose): sfvSubGroup(template_SFVplatformPose->get_Type(),template_SFVplatformPose->get_ParentSFV())
+SFVplatformPose::SFVplatformPose(SFVplatformPose * template_subGroup): sfvSubGroup(template_subGroup->get_Type(),template_subGroup->get_ParentSFV())
 {
-
-	initial_platform_position_on_map_X_axis = new ScenarioFeature(template_SFVplatformPose->get_InitPlatformPoseX());
-	initial_platform_position_on_map_Y_axis = new ScenarioFeature(template_SFVplatformPose->get_InitPlatformPoseY());
-	initial_platform_azimut = new ScenarioFeature(template_SFVplatformPose->get_InitPlatformPoseAzimut());
-
-	was_rolled_flag = false;
+	initFeaturesMap();
+	cloneSubGroupFeatures(template_subGroup);
+	set_WasRolledFlag(false);
 }
 
 
 bool SFVplatformPose::roll()
 {
-	if (was_rolled_flag)
+	if (get_WasRolledFlag())
 	{
 		std::cout << "\033[1;31m I already was rolled (I am Initial Platform Pose) \033[0m"<< std::endl;
 		return(false);
@@ -72,26 +56,36 @@ bool SFVplatformPose::roll()
 		int roll_attemp=1;
 		while (roll_attemp <= roll_attemps_limit)
 		{
-			initial_platform_position_on_map_X_axis->roll();
-			initial_platform_position_on_map_Y_axis->roll();
-			initial_platform_azimut->roll();
+			rollSubGroupfeatures();
 
 		if (get_ParentSFV()->rules_check())
 			{
-			was_rolled_flag = true;
+			set_WasRolledFlag(true);
 			std::cout << "\033[1;32m Succeed to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
 			return(true);
 			}
 		else
 			{
-			initial_platform_position_on_map_X_axis = new ScenarioFeature(this->get_InitPlatformPoseX());
-			initial_platform_position_on_map_Y_axis = new ScenarioFeature(this->get_InitPlatformPoseY());
-			initial_platform_azimut = new ScenarioFeature(this->get_InitPlatformPoseAzimut());
+			resetSubGroupfeatures();
 			std::cout << "\033[1;35m fail to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
 			}
 		roll_attemp++;
 		}
 	return(false);
+	}
+}
+
+
+TiXmlElement * SFVplatformPose::ToXmlElement(int id)
+{
+	if (! get_WasRolledFlag())
+	{
+		std::cout << "\033[1;31m can not make XML element for SFVplatformPose because it wasn't rolled yet \033[0m"<< std::endl;
+		return(0);
+	}
+	else
+	{
+		return(SubGroupfeaturesToXmlElement(id));
 	}
 }
 
@@ -123,27 +117,6 @@ std::map<char,float> * SFVplatformPose::get_PlatInit_xy()
 	Palt_xy->insert(std::pair<char,float>('x',plat_init_x) );
 	Palt_xy->insert(std::pair<char,float>('y',plat_init_y) );
 	return(Palt_xy);
-}
-
-
-TiXmlElement * SFVplatformPose::ToXmlElement(int id)
-{
-	if (! was_rolled_flag)
-	{
-		std::cout << "\033[1;31m can not make XML element for SFVplatformPose because it wasn't rolled yet \033[0m"<< std::endl;
-		return(0);
-	}
-	else
-	{
-		TiXmlElement * xml_sub_group = new TiXmlElement(get_Type().str());
-		xml_sub_group->SetAttribute("ID",std::to_string(id));
-
-		xml_sub_group->LinkEndChild(initial_platform_position_on_map_X_axis->toSFV_XMLElement());
-		xml_sub_group->LinkEndChild(initial_platform_position_on_map_Y_axis->toSFV_XMLElement());
-		xml_sub_group->LinkEndChild(initial_platform_azimut->toSFV_XMLElement());
-
-		return(xml_sub_group);
-	}
 }
 
 SFVplatformPose::~SFVplatformPose()

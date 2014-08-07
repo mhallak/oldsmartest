@@ -19,8 +19,6 @@
 class SFVmass_link : public sfvSubGroup {
 private :
 
-	std::string my_MassLinkName;
-
 	ScenarioFeature * mass_deviation;
 	ScenarioFeature * inertia_deviation_Ixx_component;
 	ScenarioFeature * inertia_deviation_Iyy_component;
@@ -32,20 +30,15 @@ private :
 	ScenarioFeature * location_deviation_Pitch;
 	ScenarioFeature * location_deviation_Yaw;
 
-	bool was_rolled_flag;
-
 public :
 	SFVmass_link(std::string MassLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV);
 	SFVmass_link(SFVmass_link * template_SFVmass_link);
+	void initFeaturesMap();
 
 	bool roll();
 	TiXmlElement * ToXmlElement(int id);
 
 	~SFVmass_link();
-
-	inline std::string get_Name()
-		{ return(my_MassLinkName); }
-
 
 	inline ScenarioFeature * get_MassDeviation()
 		{ return(mass_deviation); }
@@ -76,11 +69,6 @@ public :
 
 	inline ScenarioFeature * get_LocationDeviationYaw()
 		{ return(location_deviation_Yaw); }
-
-
-	inline bool get_WasRolledFlag()
-		{ return(was_rolled_flag); }
-
 
 };
 

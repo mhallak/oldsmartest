@@ -14,48 +14,40 @@
 #include "SFDP/ScenarioFeature.h"
 
 
-SFVobsOnPathScattering::SFVobsOnPathScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::obstacles_on_path, parent_SFV)
+void SFVobsOnPathScattering::initFeaturesMap()
 {
-		my_num_of_obsOnpath = 0;
-		my_obsOnPath_template = 0;
+	std::map<ScenarioFeatureType ,ScenarioFeature** > * my_features_map = get_FeaturesMap();
 
-		for (ScenarioFeature * feature_it : * ScenarioFeatures_vec )
-		{
-		 switch (feature_it->get_featureType().value())
-		 	 {
-		 	 case(ScenarioFeatureType::number_of_obstacles_on_path) :
-				my_num_of_obsOnpath = new ScenarioFeature(feature_it);
-		 		break;
-		 	 }
-		}
-
-		my_obsOnPath_template = new SFVObstacleOnPath(ScenarioFeatures_vec, parent_SFV);
-		my_ObstaclesOnpath = new std::vector<SFVObstacleOnPath *>;
-
-		was_rolled_flag = false;
-
-		if ( (my_num_of_obsOnpath==0) || (my_obsOnPath_template==0) )
-			{
-			std::cout << "\033[1;31m The Obstacles on Path Scattering was no fully defined \033[0m" << std::endl;
-			}
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::number_of_obstacles_on_path, & my_num_of_obsOnpath ) );
 }
 
-SFVobsOnPathScattering::SFVobsOnPathScattering(SFVobsOnPathScattering * template_SFVobsOnPathScattering): sfvSubGroup(template_SFVobsOnPathScattering->get_Type(),template_SFVobsOnPathScattering->get_ParentSFV())
+SFVobsOnPathScattering::SFVobsOnPathScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::obstacles_on_path, parent_SFV)
 {
-	my_num_of_obsOnpath = new ScenarioFeature(template_SFVobsOnPathScattering->get_NumberOfObstaclesOnPath());
-	my_obsOnPath_template = new SFVObstacleOnPath(template_SFVobsOnPathScattering->get_ObstaceOnPathTemplate());
+	initFeaturesMap();
+	initSubGroupFeatures(ScenarioFeatures_vec);
 
+	my_obsOnPath_template = new SFVObstacleOnPath(ScenarioFeatures_vec, parent_SFV);
 	my_ObstaclesOnpath = new std::vector<SFVObstacleOnPath *>;
 
+	set_WasRolledFlag(false);
+}
 
-	was_rolled_flag = false;
+SFVobsOnPathScattering::SFVobsOnPathScattering(SFVobsOnPathScattering * template_subGroup): sfvSubGroup(template_subGroup->get_Type(),template_subGroup->get_ParentSFV())
+{
+	initFeaturesMap();
+	cloneSubGroupFeatures(template_subGroup);
+
+	my_obsOnPath_template = new SFVObstacleOnPath(template_subGroup->get_ObstaceOnPathTemplate());
+	my_ObstaclesOnpath = new std::vector<SFVObstacleOnPath *>;
+
+	set_WasRolledFlag(false);
 }
 
 
 
 bool SFVobsOnPathScattering::roll()
 {
-	if (was_rolled_flag)
+	if (get_WasRolledFlag())
 	{
 		std::cout << "\033[1;31m I already was rolled (I am Obstacles On Path Scattering) \033[0m"<< std::endl;
 		return(false);
@@ -93,7 +85,7 @@ bool SFVobsOnPathScattering::roll()
 			}
 		else
 			{
-			was_rolled_flag = true;
+			set_WasRolledFlag(true);
 			std::cout << "\033[1;32m Succeed to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
 			return(true);
 			}
@@ -106,7 +98,7 @@ bool SFVobsOnPathScattering::roll()
 
 TiXmlElement * SFVobsOnPathScattering::ToXmlElement(int id)
 {
-	if (! was_rolled_flag)
+	if (! get_WasRolledFlag())
 	{
 		std::cout << "\033[1;31m can not make XML element for SFVobsOnPathScattering because it wasn't rolled yet \033[0m"<< std::endl;
 		return(0);

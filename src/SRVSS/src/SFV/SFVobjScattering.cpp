@@ -13,49 +13,41 @@
 #include "SFDP/ScenarioFeature.h"
 
 
-SFVobjScattering::SFVobjScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::objects, parent_SFV)
+void SFVobjScattering::initFeaturesMap()
 {
-		my_num_of_objects = 0;
-		my_object_template = 0;
+	std::map<ScenarioFeatureType ,ScenarioFeature** > * my_features_map = get_FeaturesMap();
 
-		for (ScenarioFeature * feature_it : * ScenarioFeatures_vec )
-		{
-		 switch (feature_it->get_featureType().value())
-		 	 {
-		 	 case(ScenarioFeatureType::number_of_objects) :
-				my_num_of_objects = new ScenarioFeature(feature_it);
-		 		break;
-		 	 }
-		}
-
-
-		my_object_template = new SFVObject(ScenarioFeatures_vec, parent_SFV);
-
-		my_Objects = new std::vector<SFVObject *>;
-
-		was_rolled_flag = false;
-
-		if ( (my_num_of_objects==0) || (my_object_template==0) )
-			{
-			std::cout << "\033[1;31m The Objects Scattering was no fully defined \033[0m" << std::endl;
-			}
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::number_of_objects, & my_num_of_objects ) );
 }
 
-SFVobjScattering::SFVobjScattering(SFVobjScattering * template_SFVobjScattering): sfvSubGroup(template_SFVobjScattering->get_Type(),template_SFVobjScattering->get_ParentSFV())
-{
-	my_num_of_objects = new ScenarioFeature(template_SFVobjScattering->get_NumberOfObjects());
-	my_object_template = new SFVObject(template_SFVobjScattering->get_ObjectTemplate());
 
+SFVobjScattering::SFVobjScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::objects, parent_SFV)
+{
+	initFeaturesMap();
+	initSubGroupFeatures(ScenarioFeatures_vec);
+
+	my_object_template = new SFVObject(ScenarioFeatures_vec, parent_SFV);
 	my_Objects = new std::vector<SFVObject *>;
 
-	was_rolled_flag = false;
+	set_WasRolledFlag(false);
+}
+
+SFVobjScattering::SFVobjScattering(SFVobjScattering * template_subGroup): sfvSubGroup(template_subGroup->get_Type(),template_subGroup->get_ParentSFV())
+{
+	initFeaturesMap();
+	cloneSubGroupFeatures(template_subGroup);
+
+	my_object_template = new SFVObject(template_subGroup->get_ObjectTemplate());
+	my_Objects = new std::vector<SFVObject *>;
+
+	set_WasRolledFlag(false);
 }
 
 
 
 bool SFVobjScattering::roll()
 {
-	if (was_rolled_flag)
+	if (get_WasRolledFlag())
 	{
 		std::cout << "\033[1;31m I already was rolled (I am Objects Scattering) \033[0m"<< std::endl;
 		return(false);
@@ -93,7 +85,7 @@ bool SFVobjScattering::roll()
 			}
 		else
 			{
-			was_rolled_flag = true;
+			set_WasRolledFlag(true);
 			std::cout << "\033[1;32m Succeed to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
 			return(true);
 			}
@@ -106,7 +98,7 @@ bool SFVobjScattering::roll()
 
 TiXmlElement * SFVobjScattering::ToXmlElement(int id)
 {
-	if (! was_rolled_flag)
+	if (! get_WasRolledFlag())
 	{
 		std::cout << "\033[1;31m can not make XML element for SFVobjScattering because it wasn't rolled yet \033[0m"<< std::endl;
 		return(0);

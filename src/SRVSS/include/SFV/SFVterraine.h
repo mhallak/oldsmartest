@@ -22,11 +22,10 @@ private :
 
 	ScenarioFeature * topographic_map_index;
 
-	bool was_rolled_flag;
-
 public :
 	SFVterraine(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVterraine(SFVterraine * template_SFVterraine);
+	void initFeaturesMap();
 
 	bool roll();
 
@@ -36,9 +35,6 @@ public :
 
 	inline ScenarioFeature * get_TopographicMapIndex()
 		{ return(topographic_map_index); }
-
-	inline bool get_WasRolledFlag()
-		{ return(was_rolled_flag); }
 
 };
 

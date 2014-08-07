@@ -19,14 +19,14 @@
 class SFVobsOnPathScattering : public sfvSubGroup  {
 private :
 	ScenarioFeature * my_num_of_obsOnpath;
+
 	SFVObstacleOnPath * my_obsOnPath_template;
 	std::vector <SFVObstacleOnPath *> * my_ObstaclesOnpath;
-
-	bool was_rolled_flag;
 
 public :
 	SFVobsOnPathScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVobsOnPathScattering(SFVobsOnPathScattering * template_SFVobsOnPathScattering);
+	void initFeaturesMap();
 
 	bool roll();
 	TiXmlElement * ToXmlElement(int id);
@@ -43,9 +43,6 @@ public :
 
 	inline SFVObstacleOnPath * get_ObstaceOnPathTemplate()
 		{ return(my_obsOnPath_template); }
-
-	inline bool get_WasRolledFlag()
-		{ return(was_rolled_flag); }
 
 };
 

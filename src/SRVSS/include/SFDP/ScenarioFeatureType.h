@@ -15,6 +15,7 @@ BOOST_ENUM(ScenarioFeatureType,
 		(unknown_feature)
 		(topographic_map)
 		(number_of_objects)
+
 		(object_i_type)
 		(object_i_scaling_factor)
 		(object_i_location_on_the_X_axis)
@@ -23,6 +24,7 @@ BOOST_ENUM(ScenarioFeatureType,
 		(object_i_location_Roll)
 		(object_i_location_Pitch)
 		(object_i_location_Yaw)
+
 		(number_of_light_sources)
 		(light_source_i_type)
 		(light_source_i_location_on_the_X_axis)
@@ -52,9 +54,11 @@ BOOST_ENUM(ScenarioFeatureType,
 		(sensor_link_i_location_deviation_Roll)
 		(sensor_link_i_location_deviation_Pitch)
 		(sensor_link_i_location_deviation_Yaw)
+
 		(initial_platform_position_on_map_X_axis)
 		(initial_platform_position_on_map_Y_axis)
 		(initial_platform_azimut_on_map)
+
 		(number_of_way_points)
 		(wp_i_relative_distance)
 		(wp_i_relative_angle)

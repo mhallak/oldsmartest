@@ -14,37 +14,28 @@
 
 #include "SFV/SFV.h"
 
+void SFVfriction_link::initFeaturesMap()
+{
+	std::map<ScenarioFeatureType ,ScenarioFeature** > * my_features_map = get_FeaturesMap();
+
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::friction_link_friction_deviation, & friction_deviation ) );
+}
+
 SFVfriction_link::SFVfriction_link(std::string FrictionLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::friction_link_i, parent_SFV)
 {
-	my_FrictionLinkName = FrictionLinkName;
-	friction_deviation = 0;
-
-	for (ScenarioFeature * feature_it : * ScenarioFeatures_vec )
-	{
-	 switch (feature_it->get_featureType().value())
-	 	 {
-	 	 case(ScenarioFeatureType::friction_link_friction_deviation) :
-			friction_deviation = new ScenarioFeature(feature_it);
-	 		break;
-	 	 }
-	 }
-
-	was_rolled_flag = false;
-
-	if ( (my_FrictionLinkName=="") || (friction_deviation==0) )
-		{
-		std::cout << "\033[1;31m The Friction Link was no fully defined \033[0m" << std::endl;
-		}
+	set_Name(FrictionLinkName);
+	initFeaturesMap();
+	initSubGroupFeatures(ScenarioFeatures_vec);
+	set_WasRolledFlag(false);
 }
 
 
-SFVfriction_link::SFVfriction_link(SFVfriction_link * template_SFVfriction_link): sfvSubGroup(template_SFVfriction_link->get_Type() ,template_SFVfriction_link->get_ParentSFV())
+SFVfriction_link::SFVfriction_link(SFVfriction_link * template_subGroup): sfvSubGroup(template_subGroup->get_Type() ,template_subGroup->get_ParentSFV())
 {
-	my_FrictionLinkName = template_SFVfriction_link->get_Name();
-
-	friction_deviation = new ScenarioFeature(template_SFVfriction_link->get_FrictionDeviation());
-
-	was_rolled_flag = false;
+	set_Name(template_subGroup->get_Name());
+	initFeaturesMap();
+	cloneSubGroupFeatures(template_subGroup);
+	set_WasRolledFlag(false);
 }
 
 
@@ -52,7 +43,7 @@ bool SFVfriction_link::roll()
 {
 	int roll_attemps_limit = 3;
 
-	if (was_rolled_flag)
+	if (get_WasRolledFlag())
 	{
 		std::cout << "\033[1;31m I already was rolled (I am Friction Link) \033[0m"<< std::endl;
 		return(false);
@@ -62,17 +53,17 @@ bool SFVfriction_link::roll()
 		int roll_attemp=1;
 		while (roll_attemp <= roll_attemps_limit)
 		{
-		friction_deviation->roll();
+		rollSubGroupfeatures();
 
 		if (get_ParentSFV()->rules_check())
 			{
-			was_rolled_flag = true;
+			set_WasRolledFlag(true);
 			std::cout << "\033[1;32m Succeed to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
 			return(true);
 			}
 		else
 			{
-			friction_deviation = new ScenarioFeature(this->get_FrictionDeviation());
+			resetSubGroupfeatures();
 			std::cout << "\033[1;35m fail to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
 			}
 		roll_attemp++;
@@ -83,20 +74,14 @@ bool SFVfriction_link::roll()
 
 TiXmlElement * SFVfriction_link::ToXmlElement(int id)
 {
-	if (! was_rolled_flag)
+	if (! get_WasRolledFlag())
 	{
 		std::cout << "\033[1;31m can not make XML element for SFVfriction_link because it wasn't rolled yet \033[0m"<< std::endl;
 		return(0);
 	}
 	else
 	{
-		TiXmlElement * xml_sub_group = new TiXmlElement(get_Type().str());
-		xml_sub_group->SetAttribute("ID",std::to_string(id));
-		xml_sub_group->SetAttribute("link_name",my_FrictionLinkName);
-
-		xml_sub_group->LinkEndChild(friction_deviation->toSFV_XMLElement());
-
-		return(xml_sub_group);
+		return(SubGroupfeaturesToXmlElement(id));
 	}
 }
 

@@ -22,43 +22,37 @@
 #include "Resource/ResourceHandler.h"
 #include "Generators/Gazebo/TerrainAnalyzer.h"
 
-SFVwp::SFVwp(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::WayPoint, parent_SFV)
+
+
+void SFVwp::initFeaturesMap()
 {
-	my_relative_angle = 0;
-	my_relative_distance = 0;
+	std::map<ScenarioFeatureType ,ScenarioFeature** > * my_features_map = get_FeaturesMap();
 
-	for (ScenarioFeature * feature_it : * ScenarioFeatures_vec )
-	{
-	 switch (feature_it->get_featureType().value())
-	 	 {
-	 	 case(ScenarioFeatureType::wp_i_relative_angle) :
-	 		my_relative_angle = new ScenarioFeature(feature_it);
-	 		break;
-	 	 case(ScenarioFeatureType::wp_i_relative_distance) :
-	 		my_relative_distance = new ScenarioFeature(feature_it);
-	 	 	break;
-	 	 }
-	 }
-	was_rolled_flag = false;
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::wp_i_relative_angle, & my_relative_angle ) );
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::wp_i_relative_distance, & my_relative_distance));
 
-	if ( (my_relative_angle==0) || (my_relative_distance==0) )
-		{
-		std::cout << "\033[1;31m The WP was no fully defined \033[0m" << std::endl;
-		}
 }
 
 
-SFVwp::SFVwp(SFVwp * template_SFVwp): sfvSubGroup(template_SFVwp->get_Type(),template_SFVwp->get_ParentSFV())
+SFVwp::SFVwp(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::WayPoint, parent_SFV)
 {
-	my_relative_angle = new ScenarioFeature(template_SFVwp->get_RalativeAngel());
-	my_relative_distance = new ScenarioFeature(template_SFVwp->get_RalativeDistance());
-	was_rolled_flag = false;
+	initFeaturesMap();
+	initSubGroupFeatures(ScenarioFeatures_vec);
+	set_WasRolledFlag(false);
+}
+
+
+SFVwp::SFVwp(SFVwp * template_subGroup): sfvSubGroup(template_subGroup->get_Type(),template_subGroup->get_ParentSFV())
+{
+	initFeaturesMap();
+	cloneSubGroupFeatures(template_subGroup);
+	set_WasRolledFlag(false);
 }
 
 
 bool SFVwp::roll()
 {
-	if (was_rolled_flag)
+	if ( get_WasRolledFlag())
 	{
 		std::cout << "\033[1;31m I already was rolled (I am SFVwp) \033[0m"<< std::endl;
 		return(false);
@@ -69,24 +63,37 @@ bool SFVwp::roll()
 		int roll_attemp=1;
 		while (roll_attemp <= roll_attemps_limit)
 		{
-			my_relative_angle->roll();
-			my_relative_distance->roll();
+			rollSubGroupfeatures();
 
 		if (get_ParentSFV()->rules_check())
 			{
-			was_rolled_flag = true;
+			set_WasRolledFlag(true);
 			std::cout << "\033[1;32m Succeed to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
 			return(true);
 			}
 		else
 			{
-			my_relative_angle = new ScenarioFeature(this->get_RalativeAngel());
-			my_relative_distance = new ScenarioFeature(this->get_RalativeDistance());
+			resetSubGroupfeatures();
 			std::cout << "\033[1;35m fail to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
 			}
 		roll_attemp++;
 		}
 	return(false);
+	}
+}
+
+
+
+TiXmlElement * SFVwp::ToXmlElement(int id)
+{
+	if (!  get_WasRolledFlag())
+	{
+		std::cout << "\033[1;31m can not make XML element for SFVwp because it wasn't rolled yet \033[0m"<< std::endl;
+		return(0);
+	}
+	else
+	{
+		return(SubGroupfeaturesToXmlElement(id));
 	}
 }
 
@@ -138,29 +145,6 @@ std::map<char,float> * SFVwp::get_WPxy()
 	std::cout << " the WP is not on Path " << std::endl;
 	return(0);
 }
-
-
-
-TiXmlElement * SFVwp::ToXmlElement(int id)
-{
-	if (! was_rolled_flag)
-	{
-		std::cout << "\033[1;31m can not make XML element for SFVwp because it wasn't rolled yet \033[0m"<< std::endl;
-		return(0);
-	}
-	else
-	{
-		TiXmlElement * xml_sub_group = new TiXmlElement(get_Type().str());
-		xml_sub_group->SetAttribute("ID",std::to_string(id));
-
-		xml_sub_group->LinkEndChild(my_relative_angle->toSFV_XMLElement());
-		xml_sub_group->LinkEndChild(my_relative_distance->toSFV_XMLElement());
-
-		return(xml_sub_group);
-	}
-}
-
-
 
 
 SFVwp::~SFVwp()

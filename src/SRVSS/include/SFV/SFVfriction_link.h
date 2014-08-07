@@ -23,25 +23,18 @@ private :
 
 	ScenarioFeature * friction_deviation;
 
-	bool was_rolled_flag;
-
 public :
 	SFVfriction_link(std::string FrictionLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV);
 	SFVfriction_link(SFVfriction_link * template_SFVfriction_link);
+	void initFeaturesMap();
 
 	bool roll();
 	TiXmlElement * ToXmlElement(int id);
 
 	~SFVfriction_link();
 
-	inline std::string get_Name()
-		{ return(my_FrictionLinkName); }
-
 	inline ScenarioFeature * get_FrictionDeviation()
 		{ return(friction_deviation); }
-
-	inline bool get_WasRolledFlag()
-		{ return(was_rolled_flag); }
 
 };
 

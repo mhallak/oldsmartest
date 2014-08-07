@@ -19,20 +19,19 @@
 class SFVobjScattering : public sfvSubGroup  {
 private :
 	ScenarioFeature * my_num_of_objects;
+
 	SFVObject * my_object_template;
 	std::vector <SFVObject *> * my_Objects;
-
-	bool was_rolled_flag;
 
 public :
 	SFVobjScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVobjScattering(SFVobjScattering * template_SFVobjScattering);
+	void initFeaturesMap();
 
 	bool roll();
 	TiXmlElement * ToXmlElement(int id);
 
 	~SFVobjScattering();
-
 
 	inline ScenarioFeature * get_NumberOfObjects()
 		{ return(my_num_of_objects); }
@@ -43,9 +42,6 @@ public :
 
 	inline SFVObject * get_ObjectTemplate()
 		{ return(my_object_template); }
-
-	inline bool get_WasRolledFlag()
-		{ return(was_rolled_flag); }
 
 };
 

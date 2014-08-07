@@ -14,80 +14,48 @@
 #include "SFV/SFVplatformPose.h"
 #include "SFV/SFVpath.h"
 
-
 #include "SFDP/ScenarioFeatureType.h"
 #include "SFDP/ScenarioFeature.h"
 #include "SFDP/ScenarioFeatureGroup.h"
 
-SFVObstacleOnPath::SFVObstacleOnPath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::obstacle_on_path, parent_SFV)
+
+void SFVObstacleOnPath::initFeaturesMap()
 {
-	my_obstacle_type = 0;
-	my_scaling_factor = 0;
-	my_location_along_the_path = 0;	my_location_perpendicular_to_the_path = 0;	my_location_on_the_Z_axis = 0;
-	my_location_Roll = 0;			my_location_Pitch = 0;			my_location_Yaw = 0;
+	std::map<ScenarioFeatureType ,ScenarioFeature** > * my_features_map = get_FeaturesMap();
 
-	for (ScenarioFeature * feature_it : * ScenarioFeatures_vec )
-	{
-	 switch (feature_it->get_featureType().value())
-	 	 {
-	 	 case(ScenarioFeatureType::obstacle_on_path_i_type) :
-			my_obstacle_type = new ScenarioFeature(feature_it);
-	 		break;
-	 	 case(ScenarioFeatureType::obstacle_on_path_i_scaling_factor) :
-			my_scaling_factor = new ScenarioFeature(feature_it);
-	 	 	break;
-	 	 case(ScenarioFeatureType::obstacle_on_path_i_location_along_the_path) :
-			my_location_along_the_path = new ScenarioFeature(feature_it);
-	 	 	break;
-	 	 case(ScenarioFeatureType::obstacle_on_path_i_location_perpendicular_to_the_path) :
-			my_location_perpendicular_to_the_path = new ScenarioFeature(feature_it);
-	 	 	break;
-	 	 case(ScenarioFeatureType::obstacle_on_path_i_location_on_the_Z_axis) :
-			my_location_on_the_Z_axis = new ScenarioFeature(feature_it);
-	 	 	break;
-	 	 case(ScenarioFeatureType::obstacle_on_path_i_location_Roll) :
-			my_location_Roll = new ScenarioFeature(feature_it);
-	 	 	break;
-	 	 case(ScenarioFeatureType::obstacle_on_path_i_location_Pitch) :
-			my_location_Pitch = new ScenarioFeature(feature_it);
-	 	 	break;
-	 	 case(ScenarioFeatureType::obstacle_on_path_i_location_Yaw) :
-			my_location_Yaw = new ScenarioFeature(feature_it);
-	 	 	break;
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::obstacle_on_path_i_type, & my_obstacle_type ) );
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::obstacle_on_path_i_scaling_factor, & my_scaling_factor));
 
-	 	 }
-	 }
-	was_rolled_flag = false;
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::obstacle_on_path_i_location_along_the_path, & my_location_along_the_path));
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::obstacle_on_path_i_location_perpendicular_to_the_path, & my_location_perpendicular_to_the_path));
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::obstacle_on_path_i_location_on_the_Z_axis, & my_location_on_the_Z_axis));
 
-	if ( 	(my_obstacle_type==0) || (my_scaling_factor==0) ||
-			(my_location_along_the_path == 0) || (my_location_perpendicular_to_the_path == 0) || (my_location_on_the_Z_axis == 0) ||
-			(my_location_Roll == 0) || (my_location_Pitch == 0) || (my_location_Yaw == 0) )
-		{
-		std::cout << "\033[1;31m The Obstacle was no fully defined \033[0m" << std::endl;
-		}
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::obstacle_on_path_i_location_Roll,  & my_location_Roll));
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::obstacle_on_path_i_location_Pitch, & my_location_Pitch));
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::obstacle_on_path_i_location_Yaw, & my_location_Yaw));
 }
 
 
-SFVObstacleOnPath::SFVObstacleOnPath(SFVObstacleOnPath * template_SFVObstacleOnPath):  sfvSubGroup(template_SFVObstacleOnPath->get_Type(), template_SFVObstacleOnPath->get_ParentSFV())
+
+SFVObstacleOnPath::SFVObstacleOnPath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::obstacle_on_path, parent_SFV)
 {
-	my_obstacle_type = new ScenarioFeature(template_SFVObstacleOnPath->get_ObstacleType());
-	my_scaling_factor = new ScenarioFeature(template_SFVObstacleOnPath->get_ScalingFactor());
+	initFeaturesMap();
+	initSubGroupFeatures(ScenarioFeatures_vec);
+	set_WasRolledFlag(false);
+}
 
-	my_location_along_the_path = new ScenarioFeature(template_SFVObstacleOnPath->get_LocationAlongThePath());
-	my_location_perpendicular_to_the_path = new ScenarioFeature(template_SFVObstacleOnPath->get_LocationmyPerpendicularToPath());
-	my_location_on_the_Z_axis = new ScenarioFeature(template_SFVObstacleOnPath->get_LocationOnTheZaxis());
 
-	my_location_Roll = new ScenarioFeature(template_SFVObstacleOnPath->get_LocationRoll());
-	my_location_Pitch =  new ScenarioFeature(template_SFVObstacleOnPath->get_LocationPitch());
-	my_location_Yaw =  new ScenarioFeature(template_SFVObstacleOnPath->get_LocationYaw());
-
-	was_rolled_flag = false;
+SFVObstacleOnPath::SFVObstacleOnPath(SFVObstacleOnPath * template_subGroup):  sfvSubGroup(template_subGroup->get_Type(), template_subGroup->get_ParentSFV())
+{
+	initFeaturesMap();
+	cloneSubGroupFeatures(template_subGroup);
+	set_WasRolledFlag(false);
 }
 
 
 bool SFVObstacleOnPath::roll()
 {
-	if (was_rolled_flag)
+	if (get_WasRolledFlag())
 	{
 		std::cout << "\033[1;31m I already was rolled (I am Object) \033[0m"<< std::endl;
 		return(false);
@@ -98,31 +66,17 @@ bool SFVObstacleOnPath::roll()
 		int roll_attemp=1;
 		while (roll_attemp <= roll_attemps_limit)
 		{
-			my_obstacle_type->roll();
-			my_scaling_factor->roll();
-			my_location_along_the_path->roll();
-			my_location_perpendicular_to_the_path->roll();
-			my_location_on_the_Z_axis->roll();
-			my_location_Roll->roll();
-			my_location_Pitch->roll();
-			my_location_Yaw->roll();
+			rollSubGroupfeatures();
 
 		if (get_ParentSFV()->rules_check())
 			{
-			was_rolled_flag = true;
+			set_WasRolledFlag(true);
 			return(true);
 			std::cout << "\033[1;32m Succeed to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
 			}
 		else
 			{
-			my_obstacle_type = new ScenarioFeature(this->get_ObstacleType());
-			my_scaling_factor = new ScenarioFeature(this->get_ScalingFactor());
-			my_location_along_the_path = new ScenarioFeature(this->get_LocationAlongThePath());
-			my_location_perpendicular_to_the_path = new ScenarioFeature(this->get_LocationmyPerpendicularToPath());
-			my_location_on_the_Z_axis = new ScenarioFeature(this->get_LocationOnTheZaxis());
-			my_location_Roll = new ScenarioFeature(this->get_LocationRoll());
-			my_location_Pitch = new ScenarioFeature(this->get_LocationPitch());
-			my_location_Yaw = new ScenarioFeature(this->get_LocationYaw());
+			resetSubGroupfeatures();
 			std::cout << "\033[1;35m fail to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
 			}
 		roll_attemp++;
@@ -130,6 +84,23 @@ bool SFVObstacleOnPath::roll()
 	return(false);
 	}
 }
+
+
+
+
+TiXmlElement * SFVObstacleOnPath::ToXmlElement(int id)
+{
+	if (! get_WasRolledFlag())
+	{
+		std::cout << "\033[1;31m can not make XML element for SFVObject because it wasn't rolled yet \033[0m"<< std::endl;
+		return(0);
+	}
+	else
+	{
+		return(SubGroupfeaturesToXmlElement(id));
+	}
+}
+
 
 
 std::map<char,float> * SFVObstacleOnPath::get_Obstacle_xy()
@@ -189,34 +160,6 @@ std::map<char,float> * SFVObstacleOnPath::get_Obstacle_xy()
 		return(Obstacle_xy);
 }
 
-
-
-TiXmlElement * SFVObstacleOnPath::ToXmlElement(int id)
-{
-	if (! was_rolled_flag)
-	{
-		std::cout << "\033[1;31m can not make XML element for SFVObject because it wasn't rolled yet \033[0m"<< std::endl;
-		return(0);
-	}
-	else
-	{
-		TiXmlElement * xml_sub_group = new TiXmlElement(get_Type().str());
-		xml_sub_group->SetAttribute("ID",std::to_string(id));
-
-		xml_sub_group->LinkEndChild(my_obstacle_type->toSFV_XMLElement());
-		xml_sub_group->LinkEndChild(my_scaling_factor->toSFV_XMLElement());
-
-		xml_sub_group->LinkEndChild(my_location_along_the_path->toSFV_XMLElement());
-		xml_sub_group->LinkEndChild(my_location_perpendicular_to_the_path->toSFV_XMLElement());
-		xml_sub_group->LinkEndChild(my_location_on_the_Z_axis->toSFV_XMLElement());
-
-		xml_sub_group->LinkEndChild(my_location_Roll->toSFV_XMLElement());
-		xml_sub_group->LinkEndChild(my_location_Pitch->toSFV_XMLElement());
-		xml_sub_group->LinkEndChild(my_location_Yaw->toSFV_XMLElement());
-
-		return(xml_sub_group);
-	}
-}
 
 SFVObstacleOnPath::~SFVObstacleOnPath()
 {
