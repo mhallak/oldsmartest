@@ -28,7 +28,9 @@ SFVobjScattering::SFVobjScattering(std::vector<ScenarioFeature *> * ScenarioFeat
 		 	 }
 		}
 
+
 		my_object_template = new SFVObject(ScenarioFeatures_vec, parent_SFV);
+
 		my_Objects = new std::vector<SFVObject *>;
 
 		was_rolled_flag = false;
@@ -45,10 +47,6 @@ SFVobjScattering::SFVobjScattering(SFVobjScattering * template_SFVobjScattering)
 	my_object_template = new SFVObject(template_SFVobjScattering->get_ObjectTemplate());
 
 	my_Objects = new std::vector<SFVObject *>;
-	for (SFVObject * obj_it : * template_SFVobjScattering->get_Objects())
-	 	 {
-		my_Objects->push_back(new SFVObject(obj_it));
-	 	 }
 
 	was_rolled_flag = false;
 }
@@ -67,6 +65,7 @@ bool SFVobjScattering::roll()
 		int roll_attemps_limit = 3;
 		int roll_attemp=1;
 		bool roll_fail_flag=false;
+		my_Objects = new std::vector<SFVObject *>;
 
 		while (roll_attemp <= roll_attemps_limit)
 		{

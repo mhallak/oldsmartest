@@ -27,7 +27,7 @@ public :
 	SFVwp(SFVwp * template_SFVwp);
 
 	bool roll();
-	std::map<char,float> * get_WPxy(SFV *sfv);
+	std::map<char,float> * get_WPxy();
 
 	TiXmlElement * ToXmlElement(int id);
 

@@ -72,7 +72,7 @@ int main(int argc, char** argv)
 			std::string scenarios_folder_path = PATH + argv[3];
 			std::string resources_file_path = PATH + argv[4];
 
-			SFVComponent *sfvComp=new SFVComponent(resources_file_path);
+			SFV *sfv = new SFVComponent(resources_file_path);
 			sfvComp->genSFVFromFile(sfv_file_path);
 			sfvComp->genFileFromSFV("testRun.sfv");
 

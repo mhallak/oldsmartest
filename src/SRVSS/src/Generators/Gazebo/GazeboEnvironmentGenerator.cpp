@@ -13,7 +13,7 @@
 #include "SFV/SFVterraine.h"
 #include "SFV/SFVplatformPose.h"
 #include "SFV/SFVpath.h"
-
+#include "SFV/SFVobsOnPathScattering.h"
 
 #include "utils/TinyXmlDef.h"
 #include "Resource/ResourceHandler.h"
@@ -36,6 +36,7 @@ GazeboEnvironmentGenerator::~GazeboEnvironmentGenerator() {
 
 void GazeboEnvironmentGenerator::spawnObjects(SFV* sfv,TiXmlElement * element)
 {
+
 	for (SFVobjScattering* objScattering_it : * (std::vector<SFVobjScattering*> *)(sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::objects)))
 	{
 		for (SFVObject* obj : *objScattering_it->get_Objects())
@@ -75,74 +76,41 @@ void GazeboEnvironmentGenerator::spawnObjects(SFV* sfv,TiXmlElement * element)
 	}
 }
 
-/*
-void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFVComponent* sfvComp,TiXmlElement * element, std::string resources_file_path)
+
+void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFV* sfv,TiXmlElement * element)
 {
-	SFVPlatformPose* platformPose=sfvComp->getPlatformPoses()->at(0);
-	float plat_x,plat_y,plat_z;
-	m_terrainAnalyzer->getXYZCoord(platformPose->getLocationX(),platformPose->getLocationY(),plat_x,plat_y,plat_z);
-    //std::cout <<  "plat_x = " << plat_x <<  "plat_y = " << plat_y << std::endl;
-	double plat_init_azi = platformPose->getLocationAzimut();
-
-    SFVPath* path=sfvComp->getPaths()->at(0);
-	double path_length = path->getPathLength();
-
-	for (SFVObstaclesOnPath *obsOnPath_it : *(sfvComp->getObstaclesOnPath()) )
+	for (SFVobsOnPathScattering *obsScattering_it : *((std::vector<SFVobsOnPathScattering*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::obstacles_on_path)) )
 	{
-		for (SFVObstacleOnPath *obs : *obsOnPath_it->m_objects)
+		for (SFVObstacleOnPath *obs : *(obsScattering_it->get_ObstaclesOnPath()))
 		{
-			TiXmlElement * include = new TiXmlElement( "include" );
-			element->LinkEndChild(include);
-			TiXmlElement * url = new TiXmlElement( "uri" );
-
-			TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance(resources_file_path).getObjectById(obs->getType()));
-			url->LinkEndChild(url_text);
-			include->LinkEndChild(url);
-			TiXmlElement * pose = new TiXmlElement( "pose" );
-			std::stringstream ss;
-
-			double alo = obs->getAlong();
-			double per = obs->getPerpendicular();
-			double alo_path_pos = alo * path_length;
-			//std::cout <<  "alo = " << alo <<  "  per = " << per << std::endl;
-			double alon_path_dis = 0, azi = plat_init_azi, dis = 0, x=plat_x, y=plat_y, next_x=plat_x, next_y=plat_y;
-			for (SFVWaypoint *wp : *(path->m_objects) )
-			{
-				azi = azi + wp->getRelativeAngle();
-				dis = wp->getWpIDistanceI();
-				next_x = x + dis*cos(azi);
-				next_y = y + dis*sin(azi);
-
-				if ( (alon_path_dis + dis) < alo_path_pos  )
-				{
-					alon_path_dis = alon_path_dis + dis;
-					x = next_x;
-					y = next_y;
-					//std::cout <<  "wp_x = " << x <<  "  wp_y = " << y << std::endl;
-				}
-				else
-				{
-				break;
-				}
-			}
-			double rem_alo = ((alo - alon_path_dis/path_length)*path_length)/dis;
-			double obs_x = x + rem_alo * (next_x - x) - per*(next_y - y)/dis;
-			double obs_y = y + rem_alo * (next_y - y) + per*(next_x - x)/dis;
-			// std::cout <<  "obs_x = " << obs_x <<  "  obs_y = " << obs_y << std::endl;
-
+			double obs_x = obs->get_Obstacle_xy()->at('x');
+			double obs_y = obs->get_Obstacle_xy()->at('y');
 			float obs_z;
 			m_terrainAnalyzer->getZCoord(obs_x,obs_y,obs_z);
 
-			ss<<obs_x <<" " << obs_y <<" "<< obs_z+obs->getZ() << " ";
-			ss<<obs->getRoll() <<" " << obs->getPitch() <<" "<< obs->getYaw();
+			std::stringstream ss;
+			ss<<obs_x <<" " << obs_y <<" "<< obs_z+obs->get_LocationOnTheZaxis()->get_RolledValue() << " ";
+			ss<<obs->get_LocationRoll()->get_RolledValue() <<" " << obs->get_LocationPitch()->get_RolledValue() <<" "<< obs->get_LocationYaw()->get_RolledValue();
+
+
+		    TiXmlElement * include = new TiXmlElement( "include" );
+			element->LinkEndChild(include);
+			TiXmlElement * url = new TiXmlElement( "uri" );
+			TiXmlText * url_text = new TiXmlText(std::string("model://")+ResourceHandler::getInstance(sfv->get_ResourceFile()).getObjectById(obs->get_ObstacleType()->get_RolledValue()));
+			url->LinkEndChild(url_text);
+			include->LinkEndChild(url);
+
+
 
 			TiXmlText * pose_text = new TiXmlText(ss.str());
 			ss.str("");
+			TiXmlElement * pose = new TiXmlElement( "pose" );
 			pose->LinkEndChild(pose_text);
 			include->LinkEndChild(pose);
 
+
 			TiXmlElement * scale = new TiXmlElement( "scale" );
-			ss<<obs->getScale() <<" " << obs->getScale() <<" "<< obs->getScale();
+			ss<<obs->get_ScalingFactor()->get_RolledValue() <<" " << obs->get_ScalingFactor()->get_RolledValue() <<" "<< obs->get_ScalingFactor()->get_RolledValue();
 			TiXmlText * scale_text = new TiXmlText(ss.str());
 			ss.str("");
 			scale->LinkEndChild(scale_text);
@@ -159,7 +127,7 @@ void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFVComponent* sfvComp,TiXml
 		}
 	}
 }
-*/
+
 
 
 
@@ -171,8 +139,8 @@ void GazeboEnvironmentGenerator::spawnPathWpMarks(SFV* sfv,TiXmlElement * elemen
 	for(SFVwp* wp_it : *(sfv_Path->get_PathWPs()))
 	     {
 
-	    wp_x = wp_it->get_WPxy(sfv)->at('x');
-	    wp_y = wp_it->get_WPxy(sfv)->at('y');
+	    wp_x = wp_it->get_WPxy()->at('x');
+	    wp_y = wp_it->get_WPxy()->at('y');
 
 
 	    TiXmlElement * include = new TiXmlElement( "include" );
@@ -316,7 +284,7 @@ void GazeboEnvironmentGenerator::genEnvFromSFV(SFV* sfv,std::string filename)
 	spawnPlatformPose(sfv, world);
 
 	spawnObjects(sfv, world);
-//	spawnObstacleOnPath(sfv, world);
+	spawnObstacleOnPath(sfv, world);
 
 	spawnPathWpMarks(sfv, world);
 

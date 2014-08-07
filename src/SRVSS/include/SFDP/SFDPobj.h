@@ -16,7 +16,6 @@
 #include "SFDP/ScenarioFeatureType.h"
 #include "ScenarioFeatureDistributionType.h"
 
-//#include "SFV/SFVComponent.h"
 #include "SFV/SFV.h"
 
 class SFV;
@@ -46,15 +45,15 @@ class SFDPobj {
 		SFDPobj(std::string SFDP_file_url, std::string Resources_file_url, std::string WS_url, int division_level);
 		~SFDPobj();
 
-//		int ExploreMe();
+		int ExploreMe();
 
 		int ParseMeFromXMLFile();
 		int PrintMeToFile();
 
-//		int PrintMyResultsToFile();
+		int PrintMyResultsToFile();
 
 //		SFDPobj * ShrinkMe(ScenarioFeatureType * FeatureToShrink, float new_upper_bound_percents, float new_lower_bound_percents);
-//		int SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,ScenarioFeatureType FeatureToSplit, float split_percents);
+		int SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,ScenarioFeatureType FeatureToSplit, float split_percents);
 
 
 //		SFV* genSFVComp();
@@ -83,7 +82,7 @@ class SFDPobj {
 			{if (! my_featureGroups->empty() ) return my_featureGroups; else return 0; }
 
 
-//		ScenarioFeature * finedScenrioFeature(ScenarioFeatureGroupType GroupTipe, std::string GroupName, ScenarioFeatureType FeatureToSplit);
+		ScenarioFeature * finedScenrioFeature(ScenarioFeatureGroupType GroupType, std::string GroupName, ScenarioFeatureType FeatureToLocate);
 
 
 		inline int set_FeatureGroups(std::vector<ScenarioFeatureGroup*> * source_featureGroups)

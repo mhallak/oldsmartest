@@ -51,8 +51,8 @@ void GazeboMissionGenerator::generateMission(SFV *sfv, std::string fileName)
 	file<< "koko" <<std::endl;
 	file<< "START"<<std::endl;
 
-	float plat_x = sfv_PlatPose->get_PlatInit_xy(sfv)->at('x');
-	float plat_y = sfv_PlatPose->get_PlatInit_xy(sfv)->at('y');
+	float plat_x = sfv_PlatPose->get_PlatInit_xy()->at('x');
+	float plat_y = sfv_PlatPose->get_PlatInit_xy()->at('y');
 	file<< plat_x <<" " <<plat_y << " " << std::endl;
 
 	file<< "WAYPOINTS"<<std::endl;
@@ -60,8 +60,8 @@ void GazeboMissionGenerator::generateMission(SFV *sfv, std::string fileName)
 	for(SFVwp* wp_it : *(sfv_Path->get_PathWPs()))
 	{
 
-		x=wp_it->get_WPxy(sfv)->at('x');
-		y=wp_it->get_WPxy(sfv)->at('y');
+		x=wp_it->get_WPxy()->at('x');
+		y=wp_it->get_WPxy()->at('y');
 		file<< x <<" " <<y << " " << 3 << std::endl;
 	}
 	file.close();
@@ -75,8 +75,8 @@ void GazeboMissionGenerator::generateMission_ROBIL2(SFV * sfv,std::string fileNa
 	geometry_msgs::PoseStamped pose;
 	for(SFVwp* wp_it : *(sfv_Path->get_PathWPs()))
 	{
-		pose.pose.position.x = wp_it->get_WPxy(sfv)->at('x');
-		pose.pose.position.y = wp_it->get_WPxy(sfv)->at('y');
+		pose.pose.position.x = wp_it->get_WPxy()->at('x');
+		pose.pose.position.y = wp_it->get_WPxy()->at('y');
 
 		wp_path.poses.push_back(pose);
 	}

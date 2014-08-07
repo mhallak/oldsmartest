@@ -96,8 +96,9 @@ bool SFVplatformPose::roll()
 }
 
 
-std::map<char,float> * SFVplatformPose::get_PlatInit_xy(SFV *sfv)
+std::map<char,float> * SFVplatformPose::get_PlatInit_xy()
 {
+	SFV * sfv = get_ParentSFV();
 	if(! sfv->get_WasRolledFlag())
 	{
 		std::cout << " can't calculate Platform Initial (x,y) as the SFV wasn't fully rolled " << std::endl;

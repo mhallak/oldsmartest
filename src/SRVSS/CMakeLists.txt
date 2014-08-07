@@ -93,7 +93,7 @@ target_link_libraries(SFDPobj ${catkin_LIBRARIES} ${Boost_INCLUDE_DIR}
 ScenarioFeatureGroup
 ScenarioFeature
 SFV
-#GazeboExecutor
+GazeboExecutor
 GazeboScenarioGenerator
 )
 
@@ -102,6 +102,9 @@ GazeboScenarioGenerator
 #### SFV ####
 #############
 
+add_library(sfvSubGroup src/SFV/sfvSubGroup.cpp)
+target_link_libraries(sfvSubGroup ${catkin_LIBRARIES}
+)
 
 add_library(SFVwp src/SFV/SFVwp.cpp)
 target_link_libraries(SFVwp ${catkin_LIBRARIES}
@@ -112,10 +115,18 @@ target_link_libraries(SFVpath ${catkin_LIBRARIES}
 SFVwp
 )
 
-
 add_library(SFVmass_link src/SFV/SFVmass_link.cpp)
 target_link_libraries(SFVmass_link ${catkin_LIBRARIES}
 )
+
+add_library(SFVfriction_link src/SFV/SFVfriction_link.cpp)
+target_link_libraries(SFVfriction_link ${catkin_LIBRARIES}
+)
+
+add_library(SFVsensor_link src/SFV/SFVsensor_link.cpp)
+target_link_libraries(SFVsensor_link ${catkin_LIBRARIES}
+)
+
 
 add_library(SFVterraine src/SFV/SFVterraine.cpp)
 target_link_libraries(SFVterraine ${catkin_LIBRARIES}
@@ -123,13 +134,24 @@ target_link_libraries(SFVterraine ${catkin_LIBRARIES}
 
 
 add_library(SFVObject src/SFV/SFVObject.cpp)
-target_link_libraries(SFVterraine ${catkin_LIBRARIES}
+target_link_libraries(SFVObject ${catkin_LIBRARIES}
+sfvSubGroup
 )
 
 add_library(SFVobjScattering src/SFV/SFVobjScattering.cpp)
 target_link_libraries(SFVobjScattering ${catkin_LIBRARIES}
 SFVObject
 )
+
+add_library(SFVobstacaleOnPath src/SFV/SFVobstacaleOnPath.cpp)
+target_link_libraries(SFVobstacaleOnPath ${catkin_LIBRARIES}
+)
+
+add_library(SFVobsOnPathScattering src/SFV/SFVobsOnPathScattering.cpp)
+target_link_libraries(SFVobsOnPathScattering ${catkin_LIBRARIES}
+SFVobstacaleOnPath
+)
+
 
 add_library(SFVplatformPose src/SFV/SFVplatformPose.cpp)
 target_link_libraries(SFVplatformPose ${catkin_LIBRARIES}
@@ -139,10 +161,13 @@ target_link_libraries(SFVplatformPose ${catkin_LIBRARIES}
 add_library(SFV src/SFV/SFV.cpp)
 target_link_libraries(SFV ${catkin_LIBRARIES}
 SFVpath
-SFVmass_link
 SFVterraine
 SFVobjScattering
 SFVplatformPose
+SFVmass_link
+SFVfriction_link
+SFVsensor_link
+SFVobsOnPathScattering
 RULE_platform_init_pose_with_no_obj_colisions
 RULE_wp_path_inside_map
 )
@@ -164,18 +189,20 @@ SFVpath
 SFVwp
 )
 
-#add_library(GazeboPlatformGenerator src/Generators/Gazebo/GazeboPlatformGenerator.cpp)
-#target_link_libraries(GazeboPlatformGenerator ${catkin_LIBRARIES}
-#ResourceHandler
-#/usr/lib/libsdformat.so
-#)
+add_library(GazeboPlatformGenerator src/Generators/Gazebo/GazeboPlatformGenerator.cpp)
+target_link_libraries(GazeboPlatformGenerator ${catkin_LIBRARIES}
+ResourceHandler
+/usr/lib/libsdformat.so
+SFV
+SFVmass_link
+)
 
 
 add_library(GazeboScenarioGenerator src/Generators/Gazebo/GazeboScenarioGenerator.cpp)
 target_link_libraries(GazeboScenarioGenerator ${catkin_LIBRARIES}
 GazeboEnvironmentGenerator
 GazeboMissionGenerator
-#GazeboPlatformGenerator
+GazeboPlatformGenerator
 )
 
 
@@ -225,13 +252,12 @@ SFV
 ######################
 #### Sampling Algo ###
 ######################
-#add_executable(SamplingAlgo src/SamplingAlgo.cpp)
-#target_link_libraries(SamplingAlgo ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
-#SFVComponent
-#SFDPobj
-#SFDPParser
-#GazeboScenarioGenerator
-#)
+add_executable(SamplingAlgo src/SamplingAlgo.cpp)
+target_link_libraries(SamplingAlgo ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
+SFV
+SFDPobj
+GazeboScenarioGenerator
+)
 
 
 

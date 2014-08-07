@@ -10,14 +10,21 @@
 #include "SFV/sfvSubGroup.h"
 #include "SFV/SFVpath.h"
 #include "SFV/SFVmass_link.h"
+#include "SFV/SFVsensor_link.h"
+#include "SFV/SFVfriction_link.h"
 #include "SFV/SFVterraine.h"
 #include "SFV/SFVobjScattering.h"
 #include "SFV/SFVplatformPose.h"
+#include "SFV/SFVobsOnPathScattering.h"
 
 #include "SFDP/ScenarioFeatureGroup.h"
+#include "SFDP/ScenarioFeatureGroupType.h"
 
 #include "Rules/RULE_platform_init_pose_with_no_obj_colisions.h"
 #include "Rules/RULE_wp_path_inside_map.h"
+
+#include <tinyxml.h>
+#include "utils/TinyXmlDef.h"
 
 class sfvSubGroup;
 SFV::SFV(SFDPobj * SFDP)
@@ -34,6 +41,75 @@ SFV::SFV(SFDPobj * SFDP)
 	my_rules->push_back(new Rule_wp_path_inside_map);
 
 }
+
+
+SFV::SFV(std::string SFV_file_name)
+{
+	my_SFDP = 0;
+	was_rolled_flag=true;
+
+
+	my_rules = new std::vector<Rule *>;
+	my_rules->push_back(new Rule_platform_init_pose_with_no_obj_colisions());
+	my_rules->push_back(new Rule_wp_path_inside_map);
+
+
+	TiXmlDocument *SFVfile = new TiXmlDocument(SFV_file_name);
+	if (!SFVfile->LoadFile())
+	{
+		std::cout << "\033[1;31m Failed to load file : " << SFV_file_name << " it might not exist or be not valid XML \033[0m" << std::endl;
+	}
+
+
+	//search for an sfv element to parse
+	TiXmlNode* sfv_xml = 0 ;
+	for ( sfv_xml = SFVfile->FirstChild(); sfv_xml != 0; sfv_xml = sfv_xml->NextSibling())
+		{
+		if(sfv_xml->Type()==XML_ELEMENT && sfv_xml->ValueStr().compare("SFV")==0)
+			{ break; }
+		}
+	if (sfv_xml == 0)
+	{
+		std::cout << "\033[1;31m There is no SFV xml element in file : " << SFV_file_name << "\033[0m" << std::endl;
+	}
+
+	//search for an ResourceFileURL attribute to parse
+	TiXmlAttribute* sfv_xml_att;
+	for ( sfv_xml_att = sfv_xml->ToElement()->FirstAttribute(); sfv_xml_att != 0; sfv_xml_att = sfv_xml_att->Next())
+		{
+		if(sfv_xml_att->NameTStr().compare("ResourceFileURL")==0)
+			{
+			my_resource_file_url = sfv_xml_att->ValueStr();
+			break;
+			}
+		}
+	if (sfv_xml_att == 0)
+	{
+		std::cout << "\033[1;31m There is no ResourceFileURL attribute in file : " << SFV_file_name << "\033[0m" << std::endl;
+	}
+
+
+	TiXmlNode* featureGroup_xml = 0 ;
+	for ( featureGroup_xml = sfv_xml->FirstChild(); featureGroup_xml != 0; featureGroup_xml = featureGroup_xml->NextSibling())
+		{
+		if (featureGroup_xml->Type()==XML_ELEMENT)
+			{
+			switch (ScenarioFeatureGroupType::get_by_name(featureGroup_xml->ValueStr().c_str())->value())
+				{
+				case(ScenarioFeatureGroupType::map) :
+				//	my_sfvSubGroups->push_back( new SFVterraine(featureGroup_it->get_features(), this) );
+					std::cout << " map " <<std::endl;
+		 			break;
+				case(ScenarioFeatureGroupType::objects) :
+				//	my_sfvSubGroups->push_back( new SFVterraine(featureGroup_it->get_features(), this) );
+					std::cout << " objects " <<std::endl;
+		 			break;
+				}
+			}
+		}
+	std::cout << "my_resource_file_url = " << my_resource_file_url <<std::endl;
+}
+
 
 void SFV::PopulationOf_mysfvSubGroups()
 {
@@ -57,8 +133,20 @@ void SFV::PopulationOf_mysfvSubGroups()
 			my_sfvSubGroups->push_back( new SFVpath(featureGroup_it->get_features(), this) );
 	 		break;
 
+	 	 case(ScenarioFeatureGroupType::obstacles_on_path) :
+			my_sfvSubGroups->push_back( new SFVobsOnPathScattering(featureGroup_it->get_features(), this) );
+	 		break;
+
 	 	 case(ScenarioFeatureGroupType::mass_link_i) :
 			my_sfvSubGroups->push_back( new SFVmass_link(featureGroup_it->get_name(),featureGroup_it->get_features(), this) );
+	 		break;
+
+	 	 case(ScenarioFeatureGroupType::friction_link_i) :
+			my_sfvSubGroups->push_back( new SFVfriction_link(featureGroup_it->get_name(),featureGroup_it->get_features(), this) );
+	 		break;
+
+	 	 case(ScenarioFeatureGroupType::sensor_link_i) :
+			my_sfvSubGroups->push_back( new SFVsensor_link(featureGroup_it->get_name(),featureGroup_it->get_features(), this) );
 	 		break;
 
 	 	 }
@@ -100,6 +188,7 @@ bool SFV::roll()
 			{
 			for (sfvSubGroup * subGroup_it : * my_sfvSubGroups)
 				{
+				std::cout << "Roll of " << subGroup_it->get_Type().str() <<std::endl;
 				if (! subGroup_it->roll())
 					{
 					roll_fail_flag=true;
@@ -150,6 +239,7 @@ int SFV::printToXML(std::string sfv_file_url)
 	{
 		TiXmlElement * xml_SFV = new TiXmlElement("SFV");
 		xml_SFV->SetAttribute("ID",std::to_string(1));
+		xml_SFV->SetAttribute("ResourceFileURL" , my_resource_file_url);
 
 		TiXmlElement * xml_subGroup;
 		int id=1;
@@ -175,6 +265,7 @@ int SFV::printToXML(std::string sfv_file_url)
 		return(1);
 	}
 }
+
 
 
 SFV::~SFV()

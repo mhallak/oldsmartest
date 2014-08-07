@@ -31,7 +31,9 @@ public :
 	SFVObject(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVObject(SFVObject * template_SFVObject);
 
+
 	bool roll();
+
 	TiXmlElement * ToXmlElement(int id);
 
 	~SFVObject();
@@ -65,6 +67,8 @@ public :
 	inline bool get_WasRolledFlag()
 		{ return(was_rolled_flag); }
 
+	// in development
+	void initFeaturesMap();
 };
 
 

@@ -30,7 +30,7 @@ public :
 	SFVplatformPose(SFVplatformPose * template_SFVplatformPose);
 
 	bool roll();
-	std::map<char,float> * get_PlatInit_xy(SFV *sfv);
+	std::map<char,float> * get_PlatInit_xy();
 
 	TiXmlElement * ToXmlElement(int id);
 
@@ -40,10 +40,10 @@ public :
 		{ return(initial_platform_position_on_map_X_axis); }
 
 	inline ScenarioFeature * get_InitPlatformPoseY()
-		{ return(initial_platform_position_on_map_X_axis); }
+		{ return(initial_platform_position_on_map_Y_axis); }
 
 	inline ScenarioFeature * get_InitPlatformPoseAzimut()
-			{ return(initial_platform_position_on_map_X_axis); }
+			{ return(initial_platform_azimut); }
 
 	inline bool get_WasRolledFlag()
 		{ return(was_rolled_flag); }

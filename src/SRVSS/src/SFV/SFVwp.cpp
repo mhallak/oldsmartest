@@ -91,8 +91,9 @@ bool SFVwp::roll()
 }
 
 
-std::map<char,float> * SFVwp::get_WPxy(SFV *sfv)
+std::map<char,float> * SFVwp::get_WPxy()
 {
+	SFV *sfv = get_ParentSFV();
 	if(! sfv->get_WasRolledFlag())
 	{
 		std::cout << " can't calculate WP_xy as the SFV wasn't fully rolled " << std::endl;

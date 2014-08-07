@@ -10,7 +10,7 @@
 
 #include <iostream>
 #include <vector>
-
+#include <string>
 
 #include "SFDP/ScenarioFeatureGroupType.h"
 #include "SFV/sfvSubGroup.h"
@@ -36,6 +36,8 @@ class SFV {
 
 	public:
 		SFV(SFDPobj * SFDP);
+		SFV(std::string SFV_file_name);
+
 		bool roll();
 		bool rules_check();
 
@@ -53,7 +55,10 @@ class SFV {
 			{ return(my_resource_file_url); }
 
 		inline SFDPobj * get_SFDP()
-			{return(my_SFDP); }
+			{
+			if (my_SFDP == 0) { std::cout << " the is no SFDP perent defined for this SFV, it probably was created from file " << std::endl; return(0); }
+			else { return(my_SFDP); }
+			}
 
 		std::vector<sfvSubGroup*> * get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType GroupType);
 

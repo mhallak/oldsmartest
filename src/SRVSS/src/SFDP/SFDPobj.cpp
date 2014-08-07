@@ -8,7 +8,7 @@
 #include "SFDP/SFDPobj.h"
 #include "SFV/SFV.h"
 #include "Generators/Gazebo/GazeboScenarioGenerator.h"
-//#include "Executor/GazeboExecutor.h"
+#include "Executor/GazeboExecutor.h"
 
 #include <string>
 #include <vector>
@@ -135,15 +135,19 @@ int SFDPobj::GenMySFVs(int samp_num)
 		sfv_temp = new SFV(this);
 		if ( ! sfv_temp )
 			{
-			std::cout << "\033[1;31m failed to generate sfv_ " << sfv_index << "\033[0m" <<std::endl;
+			std::cout << "\033[1;31m failed to Generate sfv_ " << sfv_index << "\033[0m" <<std::endl;
 			break;
 			}
 
-			sfv_temp->roll();
+		if (! sfv_temp->roll() )
+			{
+			std::cout << "\033[1;31m failed to Roll sfv_ " << sfv_index << "\033[0m" <<std::endl;
+			break;
+			}
+
 			my_sampled_SFVs->push_back(sfv_temp);
 			success_num++;
 			sfv_temp->printToXML(file_url);
-			//	sfv_temp->genFileFromSFV(file_url);
 			sfv_index++;
 	}
 
@@ -161,7 +165,7 @@ int SFDPobj::GenMySFVs(int samp_num)
 int SFDPobj::RunMySFVs()
 {
 	GazeboScenarioGenerator * ScenGen;
-//	GazeboExecutor * ScenExe;
+	GazeboExecutor * ScenExe;
 
 	std::string folder_url;
 	int sfv_index=1;
@@ -182,17 +186,17 @@ int SFDPobj::RunMySFVs()
 		ScenGen = new GazeboScenarioGenerator(sfv_it, folder_url);
 		ScenGen->GenerateScenario();
 
-/*		ScenExe = new GazeboExecutor("AUT_url","Grader_url",my_WS_url);
+		ScenExe = new GazeboExecutor("AUT_url","Grader_url",my_WS_url);
 		ScenExe->RunScenario();
 
 		grad = ScenExe->get_scenario_grade();
 		grades.push_back(grad);
 		std::cout << " grade of scenario " << sfv_index << " = " << grad << std::endl;
-*/
+
      	sfv_index++;
 	}
 
-/*
+
 	float sum = 0;
 	float sum_of_squers = 0;
 	for (float scen_grad : grades)
@@ -203,17 +207,17 @@ int SFDPobj::RunMySFVs()
 
 	my_Grade_mean = sum/sfv_index;												  // E(x) = sum(x)/n
 	my_Grade_std = sqrt(sum_of_squers/sfv_index - my_Grade_mean*my_Grade_mean);   // Var(x) = E(x^2) - [E(x)]^2
-*/
+
 
 	have_been_run = true;
 
-//    PrintMyResultsToFile();
+    PrintMyResultsToFile();
 
 	return 1;
 
 }
 
-/*
+
 
 int SFDPobj::PrintMyResultsToFile()
 {
@@ -255,22 +259,22 @@ int SFDPobj::PrintMyResultsToFile()
 
 
 
-ScenarioFeature * SFDPobj::finedScenrioFeature(ScenarioFeatureGroupType GroupTipe, std::string GroupName, ScenarioFeatureType FeatureToSplit)
+ScenarioFeature * SFDPobj::finedScenrioFeature(ScenarioFeatureGroupType GroupType, std::string GroupName, ScenarioFeatureType FeatureToLocate)
 {
 	for ( ScenarioFeatureGroup * group_it : * my_featureGroups )
 		{
-			if ( (group_it->get_featureGroupType() == GroupTipe) && (group_it->get_name() == GroupName) )
+			if ( (group_it->get_featureGroupType() == GroupType) && (group_it->get_name() == GroupName) )
 			{
 				for (ScenarioFeature * feature_it : *(group_it->get_features()) )
 				{
-					if (feature_it->get_featureType() == FeatureToSplit)
+					if (feature_it->get_featureType() == FeatureToLocate)
 					{
 						return feature_it;
 					}
 				}
 			}
 		}
-	std::cout << "\033[1;31m could not find GroupTipe " << GroupTipe << " = " << GroupName << " with feature " << FeatureToSplit << "\033[0m"<< std::endl;
+	std::cout << "\033[1;31m could not find GroupTipe " << GroupType << " = " << GroupName << " with feature " << FeatureToLocate << "\033[0m"<< std::endl;
 	return 0;
 }
 
@@ -384,4 +388,4 @@ int SFDPobj::ExploreMe()
 	return 1;
 }
 
-*/
+

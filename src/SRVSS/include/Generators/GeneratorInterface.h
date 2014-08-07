@@ -7,7 +7,7 @@
 
 #ifndef GENERATORINTERFACE_H_
 #define GENERATORINTERFACE_H_
-//#include <SFV/SFVComponent.h>
+
 #include "SFV/SFV.h"
 
 class GeneratorInterface{

@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <tinyxml.h>
+#include <math.h>
 
 #include "SFV/SFVpath.h"
 #include "SFV/SFVwp.h"
@@ -46,10 +47,6 @@ SFVpath::SFVpath(SFVpath * template_SFVpath): sfvSubGroup(template_SFVpath->get_
 	my_wp_template = new SFVwp(template_SFVpath->get_WpTemplate());
 
 	my_PathWPs = new std::vector<SFVwp *>;
-	for (SFVwp * wp_it : * template_SFVpath->get_PathWPs())
-	 	 {
-		my_PathWPs->push_back(new SFVwp(wp_it));
-	 	 }
 
 	was_rolled_flag = false;
 }
@@ -68,6 +65,7 @@ bool SFVpath::roll()
 		int roll_attemps_limit = 3;
 		int roll_attemp=1;
 		bool roll_fail_flag=false;
+		my_PathWPs = new std::vector<SFVwp *>;
 
 		while (roll_attemp <= roll_attemps_limit)
 		{
@@ -107,8 +105,26 @@ bool SFVpath::roll()
 
 
 
+float SFVpath::get_PathLength()
+{
+	SFV* sfv = get_ParentSFV();
+	if(! sfv->get_WasRolledFlag())
+	{
+		std::cout << " can't calculate PathLength as the SFV wasn't fully rolled " << std::endl;
+		return 0;
+	}
 
+	SFVpath *sfv_path = ((std::vector<SFVpath*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::Path))->at(0);
 
+	float path_length = 0;
+
+	for(SFVwp *wp_it : *(sfv_path->get_PathWPs()))
+		{
+		path_length = path_length + wp_it->get_RalativeDistance()->get_RolledValue();
+		}
+
+	return(path_length);
+}
 
 
 

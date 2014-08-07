@@ -3,7 +3,7 @@
 
 //#include "Generators/Gazebo/GazeboDisruptionGenerator.h"
 #include "Generators/Gazebo/GazeboEnvironmentGenerator.h"
-//#include "Generators/Gazebo/GazeboPlatformGenerator.h"
+#include "Generators/Gazebo/GazeboPlatformGenerator.h"
 #include "Generators/Gazebo/GazeboMissionGenerator.h"
 
 #include "Generators/GeneratorInterface.h"
@@ -19,7 +19,7 @@ GazeboScenarioGenerator::GazeboScenarioGenerator(SFV* sfv, std::string scenario_
 	generators_vec = new std::vector<GeneratorInterface *>;
 
 	generators_vec->push_back(new GazeboMissionGenerator);
-	//generators_vec->push_back(new GazeboPlatformGenerator);
+	generators_vec->push_back(new GazeboPlatformGenerator);
 	generators_vec->push_back(new GazeboEnvironmentGenerator);
 }
 

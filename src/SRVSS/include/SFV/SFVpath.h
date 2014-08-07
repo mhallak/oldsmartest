@@ -28,6 +28,9 @@ public :
 	SFVpath(SFVpath * template_SFVpath);
 
 	bool roll();
+
+	float get_PathLength();
+
 	TiXmlElement * ToXmlElement(int id);
 
 	~SFVpath();

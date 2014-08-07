@@ -1,0 +1,53 @@
+/*
+ * SFVobsOnPathScattering.h
+ *
+ *  Created on: Aug 5, 2014
+ *      Author: userws3
+ */
+
+#ifndef SFVOBSONPATHSCATTERING_H_
+#define SFVOBSONPATHSCATTERING_H_
+
+
+#include <vector>
+
+#include "SFDP/ScenarioFeature.h"
+#include "SFV/SFVobstacleOnPath.h"
+#include "SFV/SFV.h"
+
+
+class SFVobsOnPathScattering : public sfvSubGroup  {
+private :
+	ScenarioFeature * my_num_of_obsOnpath;
+	SFVObstacleOnPath * my_obsOnPath_template;
+	std::vector <SFVObstacleOnPath *> * my_ObstaclesOnpath;
+
+	bool was_rolled_flag;
+
+public :
+	SFVobsOnPathScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
+	SFVobsOnPathScattering(SFVobsOnPathScattering * template_SFVobsOnPathScattering);
+
+	bool roll();
+	TiXmlElement * ToXmlElement(int id);
+
+	~SFVobsOnPathScattering();
+
+
+	inline ScenarioFeature * get_NumberOfObstaclesOnPath()
+		{ return(my_num_of_obsOnpath); }
+
+	inline std::vector<SFVObstacleOnPath *> * get_ObstaclesOnPath()
+		{ if (! my_ObstaclesOnpath->empty() ) { return my_ObstaclesOnpath; }
+		  else { std::cout << "\033[1;31m Obstacles On Path vector is empty \033[0m" << std::endl; return(0); } }
+
+	inline SFVObstacleOnPath * get_ObstaceOnPathTemplate()
+		{ return(my_obsOnPath_template); }
+
+	inline bool get_WasRolledFlag()
+		{ return(was_rolled_flag); }
+
+};
+
+
+#endif /* SFVOBSONPATHSCATTERING_H_ */

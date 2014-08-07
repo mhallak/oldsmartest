@@ -6,12 +6,16 @@
  */
 
 #include <Generators/Gazebo/GazeboPlatformGenerator.h>
-#include <SFV/SFVMassLink.h>
 #include <sdf/SDFImpl.hh>
 #include <sdf/parser.hh>
 #include <Resource/ResourceHandler.h>
 #include <sdf/sdf.hh>
 #include <boost/tokenizer.hpp>
+
+#include "SFV/SFV.h"
+#include "SFV/SFVmass_link.h"
+#include "SFV/SFVfriction_link.h"
+#include "SFV/SFVsensor_link.h"
 
 #include <stdlib.h>
 
@@ -43,7 +47,7 @@ int findElementWithAttribute(sdf::ElementPtr *link, sdf::ElementPtr modelPtr,std
 
 
 
-void GazeboPlatformGenerator::generatePlatform(SFVComponent * sfvcomp,std::string filename, std::string nominal_platform_model_url, std::string scenario_models_folder_url)
+void GazeboPlatformGenerator::generatePlatform(SFV * sfv ,std::string filename, std::string nominal_platform_model_url, std::string scenario_models_folder_url)
 {
 	sdf::SDFPtr sdfptr(new sdf::SDF());
 	init(sdfptr);
@@ -55,9 +59,9 @@ void GazeboPlatformGenerator::generatePlatform(SFVComponent * sfvcomp,std::strin
 
 
 	// set mass links
-	for(SFVMassLink * mass_link_it : *(sfvcomp->getMassLinks()) )
+	for(SFVmass_link * mass_link_it : * ((std::vector<SFVmass_link*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::mass_link_i)))
 	{
-	if(findElementWithAttribute( &link, modelPtr,"link","name",mass_link_it->getLinkName()))
+	if(findElementWithAttribute( &link, modelPtr,"link","name",mass_link_it->get_Name()))
 		{
 
 			sdf::ElementPtr inertial=link->GetElement("inertial");
@@ -70,39 +74,39 @@ void GazeboPlatformGenerator::generatePlatform(SFVComponent * sfvcomp,std::strin
 
 			sdf::Pose new_pose;
 			pose->GetValue()->Get(new_pose);
-			new_pose.pos.x += mass_link_it->getLocationXDeviation();
-			new_pose.pos.y += mass_link_it->getLocationYDeviation();
-			new_pose.pos.z += mass_link_it->getLocationZDeviation();
+			new_pose.pos.x += mass_link_it->get_LocationDeviationX()->get_RolledValue();
+			new_pose.pos.y += mass_link_it->get_LocationDeviationY()->get_RolledValue();
+			new_pose.pos.z += mass_link_it->get_LocationDeviationZ()->get_RolledValue();
 			sdf::Vector3 quad=new_pose.rot.GetAsEuler();
-			quad.x += mass_link_it->getLocationRollDeviation();
-			quad.y += mass_link_it->getLocationPitchDeviation();
-			quad.z += mass_link_it->getLocationYawDeviation();
+			quad.x += mass_link_it->get_LocationDeviationRoll()->get_RolledValue();
+			quad.y += mass_link_it->get_LocationDeviationPitch()->get_RolledValue();
+			quad.z += mass_link_it->get_LocationDeviationYaw()->get_RolledValue();
 			new_pose.rot.SetFromEuler(quad);
 			pose->Set(new_pose);
 
 
-			double new_mass = mass->Get<double>() * mass_link_it->getMassDeviation();
+			double new_mass = mass->Get<double>() * mass_link_it->get_MassDeviation()->get_RolledValue();
 			mass->Set(new_mass);
 
-			double new_Ixx = inertiaxx->Get<double>() * mass_link_it->getInertiaDeviationIxxComponent();
+			double new_Ixx = inertiaxx->Get<double>() * mass_link_it->get_InertiaDeviationIxxComponent()->get_RolledValue();
 			inertiaxx->Set(new_Ixx);
 
-			double new_Iyy = inertiayy->Get<double>() * mass_link_it->getInertiaDeviationIyyComponent();
+			double new_Iyy = inertiayy->Get<double>() * mass_link_it->get_InertiaDeviationIyyComponent()->get_RolledValue();
 			inertiayy->Set(new_Iyy);
 
-			double new_Izz = inertiazz->Get<double>() * mass_link_it->getInertiaDeviationIzzComponent();
+			double new_Izz = inertiazz->Get<double>() * mass_link_it->get_InertiaDeviationIzzComponent()->get_RolledValue();
 			inertiazz->Set(new_Izz);
 		}
 		else
 		{
-			std::cout << mass_link_it->getLinkName() << " mass link not found in sdf" << std::endl;
+			std::cout << mass_link_it->get_Name() << " mass link not found in sdf" << std::endl;
 		}
 	}
 
-	// set mass friction links
-	for(SFVFrictionLink * friction_link_it : *(sfvcomp->getFrictionLinks()) )
+	// set friction links
+	for(SFVfriction_link * friction_link_it : * ((std::vector<SFVfriction_link*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::friction_link_i)))
 	{
-		if(findElementWithAttribute( &link, modelPtr,"link","name",friction_link_it->getLinkName()))
+		if(findElementWithAttribute( &link, modelPtr,"link","name",friction_link_it->get_Name()))
 		{
 			sdf::ElementPtr collision=link->GetElement("collision");
 			sdf::ElementPtr surface=collision->GetElement("surface");
@@ -111,57 +115,63 @@ void GazeboPlatformGenerator::generatePlatform(SFVComponent * sfvcomp,std::strin
 			sdf::ElementPtr mu=ode->GetElement("mu");
 			sdf::ElementPtr mu2=ode->GetElement("mu2");
 
-			double new_mu = mu->Get<double>() * friction_link_it->getFrictionDeviation();
+			double new_mu = mu->Get<double>() * friction_link_it->get_FrictionDeviation()->get_RolledValue();
 			mu->Set<double>(new_mu);
 
-			double new_mu2 = mu2->Get<double>() * friction_link_it->getFrictionDeviation();
+			double new_mu2 = mu2->Get<double>() * friction_link_it->get_FrictionDeviation()->get_RolledValue();
 			mu2->Set<double>(new_mu2);
 		}
 		else
 		{
-			std::cout << friction_link_it->getLinkName() << " friction link not found in sdf" << std::endl;
+			std::cout << friction_link_it->get_Name() << " friction link not found in sdf" << std::endl;
 		}
 	}
 
-	// set mass sensors links
-  	for(SFVSensorLink * sensor_link_it : *(sfvcomp->getSensorLinks()) )
+
+	// set sensors links
+	for(SFVsensor_link * sensor_link_it : * ((std::vector<SFVsensor_link*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::sensor_link_i)))
 	{
-  		if(findElementWithAttribute( &link, modelPtr,"link","name",sensor_link_it->getLinkName()))
+  		if(findElementWithAttribute( &link, modelPtr,"link","name",sensor_link_it->get_Name()))
 		{
 			sdf::ElementPtr pose=link->GetElement("pose");
 
 			sdf::Pose new_pose;
 			pose->GetValue()->Get(new_pose);
-			new_pose.pos.x += sensor_link_it->getLocationXDeviation();
-			new_pose.pos.y += sensor_link_it->getLocationYDeviation();
-			new_pose.pos.z += sensor_link_it->getLocationZDeviation();
+			new_pose.pos.x += sensor_link_it->get_LocationDeviationX()->get_RolledValue();
+			new_pose.pos.y += sensor_link_it->get_LocationDeviationY()->get_RolledValue();
+			new_pose.pos.z += sensor_link_it->get_LocationDeviationZ()->get_RolledValue();
 
 			sdf::Vector3 quad=new_pose.rot.GetAsEuler();
-			quad.x += sensor_link_it->getLocationRollDeviation();
-			quad.y += sensor_link_it->getLocationPitchDeviation();
-			quad.z += sensor_link_it->getLocationYawDeviation();
+			quad.x += sensor_link_it->get_LocationDeviationRoll()->get_RolledValue();
+			quad.y += sensor_link_it->get_LocationDeviationPitch()->get_RolledValue();
+			quad.z += sensor_link_it->get_LocationDeviationYaw()->get_RolledValue();
 			new_pose.rot.SetFromEuler(quad);
 
 			pose->GetValue()->Set(new_pose);
 		}
 		else
 		{
-			std::cout << sensor_link_it->getLinkName() << " sensor link not found in sdf" << std::endl;
+			std::cout << sensor_link_it->get_Name() << " sensor link not found in sdf" << std::endl;
 		}
 	}
+
 	sdfptr->Write(filename);
 }
 
 
 
-void GazeboPlatformGenerator::generate(SFVComponent * sfvComp, std::string scenario_folder_url, std::string resource_file_url)
+void GazeboPlatformGenerator::generate(SFV *sfv, std::string scenario_folder_url)
 {
-	std::string nominal_models_folder_url = ResourceHandler::getInstance(resource_file_url).getRobotModelsFolderURL();
+	std::string nominal_models_folder_url = ResourceHandler::getInstance(sfv->get_ResourceFile()).getRobotModelsFolderURL();
 	std::string scenario_models_folder_url = scenario_folder_url + "/scenarioSystemModels" ;
+
+	std::string create_scenario_models_folder_command = "mkdir -p " + scenario_models_folder_url;
+	if ( system(create_scenario_models_folder_command.c_str()) )
+	{ std::cout << "failed to : " << create_scenario_models_folder_command << std::endl; }
 
 	std::string nominal_sensor_model_folder_url;
 	std::string copy_sensor_folder_command;
-	for (std::string * sensor_it : *(ResourceHandler::getInstance(resource_file_url).getRobotSensorsNames()) )
+	for (std::string * sensor_it : *(ResourceHandler::getInstance(sfv->get_ResourceFile()).getRobotSensorsNames()) )
 	{
 		nominal_sensor_model_folder_url = nominal_models_folder_url + "/" + *sensor_it;
 		copy_sensor_folder_command = "cp -r " + nominal_sensor_model_folder_url + " " + scenario_models_folder_url;
@@ -169,8 +179,8 @@ void GazeboPlatformGenerator::generate(SFVComponent * sfvComp, std::string scena
 		{ std::cout << "failed to : " << copy_sensor_folder_command << std::endl; }
 	}
 
-	std::string nominal_platform_model_folder_url = nominal_models_folder_url + "/" +  ResourceHandler::getInstance(resource_file_url).getRobotPlatformName() ;
-	std::string scenario_platform_model_folder_url = scenario_models_folder_url + "/" + ResourceHandler::getInstance(resource_file_url).getRobotPlatformName();
+	std::string nominal_platform_model_folder_url = nominal_models_folder_url + "/" +  ResourceHandler::getInstance(sfv->get_ResourceFile()).getRobotPlatformName() ;
+	std::string scenario_platform_model_folder_url = scenario_models_folder_url + "/" + ResourceHandler::getInstance(sfv->get_ResourceFile()).getRobotPlatformName();
 
 	std::string copy_platform_folder_command = "cp -r " + nominal_platform_model_folder_url + " " + scenario_models_folder_url;
 	if ( system(copy_platform_folder_command.c_str()) )
@@ -179,7 +189,7 @@ void GazeboPlatformGenerator::generate(SFVComponent * sfvComp, std::string scena
 	std::string nominal_platform_model_url = nominal_platform_model_folder_url + "/model.sdf";
 	std::string scenario_platform_model_url = scenario_platform_model_folder_url + "/model.sdf";
 
-	generatePlatform(sfvComp, scenario_platform_model_url ,nominal_platform_model_url, scenario_models_folder_url);
+	generatePlatform(sfv, scenario_platform_model_url ,nominal_platform_model_url, scenario_models_folder_url);
 
 
 	std::cout << "\033[1;36m Producing " << scenario_platform_model_url << "\033[0m"<< std::endl;

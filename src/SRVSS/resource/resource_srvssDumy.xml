@@ -3,8 +3,8 @@
 <robot_components_models name="srvss_bobcat" dirPath="/home/userws3/dany_ws/src/Simulation/srvss_bobcat/sdf_models">
 
 	<platform name="srvss_bobcat"/>
-	<sensor name="gpu_sick"/>
 	<sensor name="GPS_INS"/>
+	<sensor name="gpu_sick"/>
 
 </robot_components_models>
 

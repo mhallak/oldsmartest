@@ -42,8 +42,6 @@ int main(int argc, char** argv)
 				return 0;
 			}
 
-//			sfdp_root->GenMySFVs(1);
-//			sfdp_root->RunMySFVs();
 
 
 			SFV * sfv = new SFV(sfdp_root);
@@ -56,6 +54,8 @@ int main(int argc, char** argv)
 				}
 
 
+
+			SFV * sfv2 = new SFV(scenario_folder_path+"/test.SFV");
 
 			//SFVpath * testPath = (SFVpath *)(sfv->get_sfvSubGroups()->at(0));
 
