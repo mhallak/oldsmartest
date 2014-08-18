@@ -22,6 +22,8 @@ private :
 public :
 	SFVwp(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVwp(SFVwp * template_SFVwp);
+	SFVwp(TiXmlNode * xml_subGroup, SFV * parent_SFV);
+
 	void initFeaturesMap();
 
 	bool roll();

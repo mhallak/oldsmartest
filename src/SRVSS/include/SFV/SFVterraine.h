@@ -25,6 +25,8 @@ private :
 public :
 	SFVterraine(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVterraine(SFVterraine * template_SFVterraine);
+	SFVterraine(TiXmlNode * xml_subGroup, SFV * parent_SFV);
+
 	void initFeaturesMap();
 
 	bool roll();

@@ -70,6 +70,8 @@ class sfvSubGroup
 
 		void initSubGroupFeatures(std::vector<ScenarioFeature *> * ScenarioFeatures_vec);
 		void cloneSubGroupFeatures(sfvSubGroup * template_group);
+		void setSubGroupFeaturesFromXmlElement(TiXmlNode * xml_subGroup);
+
 		void rollSubGroupfeatures();
 		void resetSubGroupfeatures();
 		TiXmlElement * SubGroupfeaturesToXmlElement(int id);

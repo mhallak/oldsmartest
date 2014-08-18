@@ -6,6 +6,8 @@
  */
 
 #include <iostream>
+#include <utils/TinyXmlDef.h>
+
 
 #include "SFV/SFVobsOnPathScattering.h"
 #include "SFV/SFVobstacleOnPath.h"
@@ -43,7 +45,21 @@ SFVobsOnPathScattering::SFVobsOnPathScattering(SFVobsOnPathScattering * template
 	set_WasRolledFlag(false);
 }
 
+SFVobsOnPathScattering::SFVobsOnPathScattering(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::obstacles_on_path , parent_SFV)
+{
+	initFeaturesMap();
+	my_ObstaclesOnpath = new std::vector<SFVObstacleOnPath *>;
 
+	TiXmlNode* XmlSubGroup_it = 0 ;
+	for ( XmlSubGroup_it = xml_subGroup->FirstChild(); XmlSubGroup_it != 0; XmlSubGroup_it = XmlSubGroup_it->NextSibling())
+		{
+		if (XmlSubGroup_it->Type()==XML_ELEMENT)
+			{
+			my_ObstaclesOnpath->push_back( new SFVObstacleOnPath(XmlSubGroup_it,parent_SFV));
+			}
+		}
+	set_WasRolledFlag(true);
+}
 
 bool SFVobsOnPathScattering::roll()
 {

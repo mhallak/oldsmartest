@@ -44,6 +44,13 @@ SFVsensor_link::SFVsensor_link(SFVsensor_link * template_subGroup): sfvSubGroup(
 	set_WasRolledFlag(false);
 }
 
+SFVsensor_link::SFVsensor_link(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::sensor_link_i , parent_SFV)
+{
+	initFeaturesMap();
+	setSubGroupFeaturesFromXmlElement(xml_subGroup);
+	set_WasRolledFlag(true);
+}
+
 
 bool SFVsensor_link::roll()
 {

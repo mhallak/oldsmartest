@@ -28,6 +28,8 @@ private :
 public :
 	SFVObstacleOnPath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVObstacleOnPath(SFVObstacleOnPath * template_SFVObstacleOnPath);
+	SFVObstacleOnPath(TiXmlNode * xml_subGroup, SFV * parent_SFV);
+
 	void initFeaturesMap();
 
 	bool roll();

@@ -52,6 +52,13 @@ SFVObstacleOnPath::SFVObstacleOnPath(SFVObstacleOnPath * template_subGroup):  sf
 	set_WasRolledFlag(false);
 }
 
+SFVObstacleOnPath::SFVObstacleOnPath(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::obstacle_on_path , parent_SFV)
+{
+	initFeaturesMap();
+	setSubGroupFeaturesFromXmlElement(xml_subGroup);
+	set_WasRolledFlag(true);
+}
+
 
 bool SFVObstacleOnPath::roll()
 {

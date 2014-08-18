@@ -51,6 +51,13 @@ SFVObject::SFVObject(SFVObject * template_subGroup):  sfvSubGroup(template_subGr
 	set_WasRolledFlag(false);
 }
 
+SFVObject::SFVObject(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::object , parent_SFV)
+{
+	initFeaturesMap();
+	setSubGroupFeaturesFromXmlElement(xml_subGroup);
+	set_WasRolledFlag(true);
+}
+
 
 bool SFVObject::roll()
 {

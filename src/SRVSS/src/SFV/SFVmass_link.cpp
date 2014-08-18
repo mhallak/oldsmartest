@@ -51,6 +51,12 @@ SFVmass_link::SFVmass_link(SFVmass_link * template_subGroup): sfvSubGroup(templa
 	set_WasRolledFlag(false);
 }
 
+SFVmass_link::SFVmass_link(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::mass_link_i , parent_SFV)
+{
+	initFeaturesMap();
+	setSubGroupFeaturesFromXmlElement(xml_subGroup);
+	set_WasRolledFlag(true);
+}
 
 bool SFVmass_link::roll()
 {

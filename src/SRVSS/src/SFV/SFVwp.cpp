@@ -49,6 +49,13 @@ SFVwp::SFVwp(SFVwp * template_subGroup): sfvSubGroup(template_subGroup->get_Type
 	set_WasRolledFlag(false);
 }
 
+SFVwp::SFVwp(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::WayPoint , parent_SFV)
+{
+	initFeaturesMap();
+	setSubGroupFeaturesFromXmlElement(xml_subGroup);
+	set_WasRolledFlag(true);
+}
+
 
 bool SFVwp::roll()
 {

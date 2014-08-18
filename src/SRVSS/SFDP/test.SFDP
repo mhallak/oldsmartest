@@ -408,7 +408,7 @@
 
 
 
-	 <scenario_feature_group type="waypoints" name="mission_waypoints">
+	 <scenario_feature_group type="Path" name="mission_waypoints">
 		<scenario_feature type="number_of_way_points">
 			<distribution>uniform_discrete</distribution>
 			<dist_param_1>4</dist_param_1>

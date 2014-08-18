@@ -11,6 +11,8 @@
 #include "SFV/SFVObject.h"
 #include "SFDP/ScenarioFeatureGroup.h"
 #include "SFDP/ScenarioFeature.h"
+#include "utils/TinyXmlDef.h"
+
 
 
 void SFVobjScattering::initFeaturesMap()
@@ -43,7 +45,21 @@ SFVobjScattering::SFVobjScattering(SFVobjScattering * template_subGroup): sfvSub
 	set_WasRolledFlag(false);
 }
 
+SFVobjScattering::SFVobjScattering(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::objects , parent_SFV)
+{
+	initFeaturesMap();
+	my_Objects = new std::vector<SFVObject *>;
 
+	TiXmlNode* XmlSubGroup_it = 0 ;
+	for ( XmlSubGroup_it = xml_subGroup->FirstChild(); XmlSubGroup_it != 0; XmlSubGroup_it = XmlSubGroup_it->NextSibling())
+		{
+		if (XmlSubGroup_it->Type()==XML_ELEMENT)
+			{
+			my_Objects->push_back( new SFVObject(XmlSubGroup_it,parent_SFV));
+			}
+		}
+	set_WasRolledFlag(true);
+}
 
 bool SFVobjScattering::roll()
 {

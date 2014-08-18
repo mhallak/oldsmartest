@@ -24,7 +24,6 @@ BOOST_ENUM(ScenarioFeatureGroupType,
 		(platform_pose)
 		(obstacle_on_path)
 		(obstacles_on_path)
-		(waypoints)
 		(Path)
 		(WayPoint)
 		(SFV)

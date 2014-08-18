@@ -26,6 +26,8 @@ private :
 public :
 	SFVobsOnPathScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVobsOnPathScattering(SFVobsOnPathScattering * template_SFVobsOnPathScattering);
+	SFVobsOnPathScattering(TiXmlNode * xml_subGroup, SFV * parent_SFV);
+
 	void initFeaturesMap();
 
 	bool roll();

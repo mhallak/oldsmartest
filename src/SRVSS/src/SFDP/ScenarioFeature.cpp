@@ -46,6 +46,18 @@ ScenarioFeature::ScenarioFeature(ScenarioFeature * source_ScenarioFeature)
 }
 
 
+ScenarioFeature::ScenarioFeature(TiXmlNode* xml_ScenarioFeature):
+	m_distType(ScenarioFeatureDistributionType::unknown_distribution),
+	m_dist_param_1(0),
+	m_dist_param_2(0)
+{
+	if (xml_ScenarioFeature->Type()==XML_ELEMENT)
+		{
+		m_featureType = ScenarioFeatureType::get_by_name(xml_ScenarioFeature->ValueStr().c_str()).get();
+		rolled_value = std::stof(xml_ScenarioFeature->FirstChild()->ToText()->ValueStr());
+		was_rolled_flag=true;
+		}
+}
 
 void ScenarioFeature::roll()
 {

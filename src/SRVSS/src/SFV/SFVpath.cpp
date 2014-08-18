@@ -45,7 +45,21 @@ SFVpath::SFVpath(SFVpath * template_subGroup): sfvSubGroup(template_subGroup->ge
 	set_WasRolledFlag(false);
 }
 
+SFVpath::SFVpath(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::Path , parent_SFV)
+{
+	initFeaturesMap();
+	my_PathWPs = new std::vector<SFVwp *>;
 
+	TiXmlNode* XmlSubGroup_it = 0 ;
+	for ( XmlSubGroup_it = xml_subGroup->FirstChild(); XmlSubGroup_it != 0; XmlSubGroup_it = XmlSubGroup_it->NextSibling())
+		{
+		if (XmlSubGroup_it->Type()==XML_ELEMENT)
+			{
+			my_PathWPs->push_back( new SFVwp(XmlSubGroup_it,parent_SFV));
+			}
+		}
+	set_WasRolledFlag(true);
+}
 
 bool SFVpath::roll()
 {

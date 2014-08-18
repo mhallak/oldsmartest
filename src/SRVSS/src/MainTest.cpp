@@ -49,13 +49,20 @@ int main(int argc, char** argv)
 				{
 				sfv->printToXML(scenario_folder_path+"/test.SFV");
 
-				GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(sfv, scenario_folder_path);
-				ScenGen->GenerateScenario();
-				}
+
 
 
 
 			SFV * sfv2 = new SFV(scenario_folder_path+"/test.SFV");
+
+			sfv2->printToXML(scenario_folder_path+"/test2.SFV");
+
+
+				GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(sfv2, scenario_folder_path);
+				ScenGen->GenerateScenario();
+
+			}
+
 
 			//SFVpath * testPath = (SFVpath *)(sfv->get_sfvSubGroups()->at(0));
 

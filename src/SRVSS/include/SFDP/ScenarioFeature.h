@@ -31,6 +31,7 @@ public:
 	ScenarioFeature(std::string featureType);
 	ScenarioFeature();
 	ScenarioFeature(ScenarioFeature * source_ScenarioFeature);
+	ScenarioFeature(TiXmlNode* xml_ScenarioFeature);
 	virtual ~ScenarioFeature();
 
 	void roll();

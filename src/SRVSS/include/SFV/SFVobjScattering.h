@@ -26,6 +26,8 @@ private :
 public :
 	SFVobjScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVobjScattering(SFVobjScattering * template_SFVobjScattering);
+	SFVobjScattering(TiXmlNode * xml_subGroup, SFV * parent_SFV);
+
 	void initFeaturesMap();
 
 	bool roll();

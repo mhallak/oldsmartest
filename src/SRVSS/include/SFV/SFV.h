@@ -64,6 +64,9 @@ class SFV {
 
 		void PopulationOf_mysfvSubGroups();
 
+		template <class T>
+		void PopulationOf_mysfvSubGroups1(ScenarioFeatureGroupType::optional scenarioFeatureType , T fatures_data);
+
 		inline bool get_WasRolledFlag()
 			{ return(was_rolled_flag); }
 

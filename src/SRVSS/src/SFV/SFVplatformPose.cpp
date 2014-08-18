@@ -42,6 +42,12 @@ SFVplatformPose::SFVplatformPose(SFVplatformPose * template_subGroup): sfvSubGro
 	set_WasRolledFlag(false);
 }
 
+SFVplatformPose::SFVplatformPose(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::platform_pose , parent_SFV)
+{
+	initFeaturesMap();
+	setSubGroupFeaturesFromXmlElement(xml_subGroup);
+	set_WasRolledFlag(true);
+}
 
 bool SFVplatformPose::roll()
 {

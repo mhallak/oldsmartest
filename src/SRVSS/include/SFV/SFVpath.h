@@ -13,6 +13,8 @@
 #include "SFDP/ScenarioFeature.h"
 #include "SFV/SFVwp.h"
 #include "SFV/SFV.h"
+#include "utils/TinyXmlDef.h"
+
 
 
 class SFVpath : public sfvSubGroup  {
@@ -24,6 +26,8 @@ private :
 public :
 	SFVpath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVpath(SFVpath * template_SFVpath);
+	SFVpath(TiXmlNode * xml_subGroup, SFV * parent_SFV);
+
 	void initFeaturesMap();
 
 	bool roll();

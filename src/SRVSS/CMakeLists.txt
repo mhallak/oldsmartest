@@ -108,28 +108,34 @@ target_link_libraries(sfvSubGroup ${catkin_LIBRARIES}
 
 add_library(SFVwp src/SFV/SFVwp.cpp)
 target_link_libraries(SFVwp ${catkin_LIBRARIES}
+sfvSubGroup
 )
 
 add_library(SFVpath src/SFV/SFVpath.cpp)
 target_link_libraries(SFVpath ${catkin_LIBRARIES}
+sfvSubGroup
 SFVwp
 )
 
 add_library(SFVmass_link src/SFV/SFVmass_link.cpp)
 target_link_libraries(SFVmass_link ${catkin_LIBRARIES}
+sfvSubGroup
 )
 
 add_library(SFVfriction_link src/SFV/SFVfriction_link.cpp)
 target_link_libraries(SFVfriction_link ${catkin_LIBRARIES}
+sfvSubGroup
 )
 
 add_library(SFVsensor_link src/SFV/SFVsensor_link.cpp)
 target_link_libraries(SFVsensor_link ${catkin_LIBRARIES}
+sfvSubGroup
 )
 
 
 add_library(SFVterraine src/SFV/SFVterraine.cpp)
 target_link_libraries(SFVterraine ${catkin_LIBRARIES}
+sfvSubGroup
 )
 
 
@@ -140,26 +146,32 @@ sfvSubGroup
 
 add_library(SFVobjScattering src/SFV/SFVobjScattering.cpp)
 target_link_libraries(SFVobjScattering ${catkin_LIBRARIES}
+sfvSubGroup
 SFVObject
 )
 
 add_library(SFVobstacaleOnPath src/SFV/SFVobstacaleOnPath.cpp)
 target_link_libraries(SFVobstacaleOnPath ${catkin_LIBRARIES}
+sfvSubGroup
+SFVpath
 )
 
 add_library(SFVobsOnPathScattering src/SFV/SFVobsOnPathScattering.cpp)
 target_link_libraries(SFVobsOnPathScattering ${catkin_LIBRARIES}
+sfvSubGroup
 SFVobstacaleOnPath
 )
 
 
 add_library(SFVplatformPose src/SFV/SFVplatformPose.cpp)
 target_link_libraries(SFVplatformPose ${catkin_LIBRARIES}
+sfvSubGroup
 )
 
 
 add_library(SFV src/SFV/SFV.cpp)
 target_link_libraries(SFV ${catkin_LIBRARIES}
+sfvSubGroup
 SFVpath
 SFVterraine
 SFVobjScattering
@@ -180,6 +192,9 @@ add_library(GazeboEnvironmentGenerator src/Generators/Gazebo/GazeboEnvironmentGe
 target_link_libraries(GazeboEnvironmentGenerator ${catkin_LIBRARIES}
 ResourceHandler
 TerrainAnalyzer
+SFVobstacaleOnPath
+SFVwp
+SFVobsOnPathScattering
 )
 
 add_library(GazeboMissionGenerator src/Generators/Gazebo/GazeboMissionGenerator.cpp)
@@ -254,8 +269,8 @@ SFV
 ######################
 add_executable(SamplingAlgo src/SamplingAlgo.cpp)
 target_link_libraries(SamplingAlgo ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
-SFV
 SFDPobj
+SFV
 GazeboScenarioGenerator
 )
 

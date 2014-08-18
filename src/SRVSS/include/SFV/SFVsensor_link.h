@@ -30,6 +30,8 @@ private :
 public :
 	SFVsensor_link(std::string FrictionLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV);
 	SFVsensor_link(SFVsensor_link * template_SFVsensor_link);
+	SFVsensor_link(TiXmlNode * xml_subGroup, SFV * parent_SFV);
+
 	void initFeaturesMap();
 
 	bool roll();

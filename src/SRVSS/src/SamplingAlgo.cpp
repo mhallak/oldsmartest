@@ -29,19 +29,5 @@ int main(int argc, char** argv)
 	sfdp_root->ExploreMe();
 
 
-	/*
-	SFVComponent *sfvComp = sfdp_root->genSFVComp();
-	if (! sfvComp )
-		{
-			std::cout << " rolling of SFV have failed " << std::endl;
-			return 0;
-		}
-
-	sfvComp->genFileFromSFV(SFVs_destination_folder_path+"sfv1.SFV");
-
-	GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(sfvComp, scenarios_destination_folder_url, resource_file_url);
-	ScenGen->GenerateScenario();
-	*/
-
 	return 1;
 }

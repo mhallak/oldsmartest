@@ -38,6 +38,12 @@ SFVfriction_link::SFVfriction_link(SFVfriction_link * template_subGroup): sfvSub
 	set_WasRolledFlag(false);
 }
 
+SFVfriction_link::SFVfriction_link(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::friction_link_i , parent_SFV)
+{
+	initFeaturesMap();
+	setSubGroupFeaturesFromXmlElement(xml_subGroup);
+	set_WasRolledFlag(true);
+}
 
 bool SFVfriction_link::roll()
 {

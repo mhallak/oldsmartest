@@ -26,6 +26,8 @@ private :
 public :
 	SFVplatformPose(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
 	SFVplatformPose(SFVplatformPose * template_SFVplatformPose);
+	SFVplatformPose(TiXmlNode * xml_subGroup, SFV * parent_SFV);
+
 	void initFeaturesMap();
 
 	bool roll();

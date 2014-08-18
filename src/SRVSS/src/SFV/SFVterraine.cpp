@@ -9,8 +9,10 @@
 
 #include <iostream>
 #include "SFV/SFVterraine.h"
+
 #include "SFDP/ScenarioFeatureGroup.h"
 #include "SFDP/ScenarioFeatureType.h"
+
 
 void SFVterraine::initFeaturesMap()
 {
@@ -32,6 +34,14 @@ SFVterraine::SFVterraine(SFVterraine * template_subGroup): sfvSubGroup(template_
 	initFeaturesMap();
 	cloneSubGroupFeatures(template_subGroup);
 	set_WasRolledFlag(false);
+}
+
+
+SFVterraine::SFVterraine(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::map , parent_SFV)
+{
+	initFeaturesMap();
+	setSubGroupFeaturesFromXmlElement(xml_subGroup);
+	set_WasRolledFlag(true);
 }
 
 
