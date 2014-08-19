@@ -23,7 +23,8 @@ private :
 	ScenarioFeature * topographic_map_index;
 
 public :
-	SFVterraine(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
+//	SFVterraine(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
+	SFVterraine(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV);
 	SFVterraine(SFVterraine * template_SFVterraine);
 	SFVterraine(TiXmlNode * xml_subGroup, SFV * parent_SFV);
 

@@ -32,11 +32,11 @@
 	<node pkg="srvss_wp_driver" type="srvss_wp_driver_node" name="srvss_wp_driver_node" args="-file $(arg scenarios_folder_url)/scenarioMission.txt" output="screen" />
 
 
-<!-- start RosBag recording 
+<!-- start RosBag recording -->
 	<node name="rosbag_recorder" pkg="rosbag" type="record" args="-a $(arg record_file_path)" />
--->
 
-<!-- grader
+
+<!-- grader -->
 	<node pkg="SRVSS" type="grader_node" name="grader_node" output="screen"/>
--->
+
 </launch>

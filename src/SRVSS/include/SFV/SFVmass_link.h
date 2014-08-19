@@ -31,7 +31,7 @@ private :
 	ScenarioFeature * location_deviation_Yaw;
 
 public :
-	SFVmass_link(std::string MassLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV);
+	SFVmass_link(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV);
 	SFVmass_link(SFVmass_link * template_SFVmass_link);
 	SFVmass_link(TiXmlNode * xml_subGroup, SFV * parent_SFV);
 

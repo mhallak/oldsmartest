@@ -24,7 +24,7 @@ private :
 	ScenarioFeature * friction_deviation;
 
 public :
-	SFVfriction_link(std::string FrictionLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV);
+	SFVfriction_link(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV);
 	SFVfriction_link(SFVfriction_link * template_SFVfriction_link);
 	SFVfriction_link(TiXmlNode * xml_subGroup, SFV * parent_SFV);
 

@@ -79,8 +79,6 @@ void sfvSubGroup::setSubGroupFeaturesFromXmlElement(TiXmlNode * xml_subGroup)
 			{
 			if ( my_features_map->find(ScenarioFeatureType::get_by_name(feature_xml->ValueStr().c_str()).get()) != my_features_map->end() )
 				{
-				std::cout << "feature_xml->ValueStr().c_str()).get() = " << feature_xml->ValueStr().c_str() << std::endl;
-
 				*(my_features_map->at( ScenarioFeatureType::get_by_name(feature_xml->ValueStr().c_str()).get()))  = new ScenarioFeature(feature_xml);
 				}
 			}

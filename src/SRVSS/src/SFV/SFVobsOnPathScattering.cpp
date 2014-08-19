@@ -23,12 +23,13 @@ void SFVobsOnPathScattering::initFeaturesMap()
     my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::number_of_obstacles_on_path, & my_num_of_obsOnpath ) );
 }
 
-SFVobsOnPathScattering::SFVobsOnPathScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::obstacles_on_path, parent_SFV)
+SFVobsOnPathScattering::SFVobsOnPathScattering(ScenarioFeatureGroup * scenfeaturesGroup,  SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::obstacles_on_path, parent_SFV)
 {
 	initFeaturesMap();
-	initSubGroupFeatures(ScenarioFeatures_vec);
+	initSubGroupFeatures(scenfeaturesGroup->get_features());
 
-	my_obsOnPath_template = new SFVObstacleOnPath(ScenarioFeatures_vec, parent_SFV);
+	set_Name(scenfeaturesGroup->get_name());
+	my_obsOnPath_template = new SFVObstacleOnPath(scenfeaturesGroup, parent_SFV);
 	my_ObstaclesOnpath = new std::vector<SFVObstacleOnPath *>;
 
 	set_WasRolledFlag(false);

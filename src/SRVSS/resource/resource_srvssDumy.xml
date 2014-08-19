@@ -17,8 +17,8 @@
 	<terrain id="3">shetah_nisuy</terrain>
 
 	<object id="1">barrel1</object>
-	<object id="2">tree1</object>
-	<object id="3">rock1</object>
+	<object id="2">rock1</object>
+	<object id="3">tree1</object>
 	<object id="4">cube1</object>
 
 </world_components_models>

@@ -24,7 +24,7 @@ private :
 	std::vector <SFVwp *> * my_PathWPs;
 
 public :
-	SFVpath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
+	SFVpath(ScenarioFeatureGroup * scenfeaturesGroup,  SFV * parent_SFV);
 	SFVpath(SFVpath * template_SFVpath);
 	SFVpath(TiXmlNode * xml_subGroup, SFV * parent_SFV);
 

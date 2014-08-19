@@ -24,7 +24,7 @@ private :
 	std::vector <SFVObject *> * my_Objects;
 
 public :
-	SFVobjScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
+	SFVobjScattering(ScenarioFeatureGroup * scenfeaturesGroup,  SFV * parent_SFV);
 	SFVobjScattering(SFVobjScattering * template_SFVobjScattering);
 	SFVobjScattering(TiXmlNode * xml_subGroup, SFV * parent_SFV);
 

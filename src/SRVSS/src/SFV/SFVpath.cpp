@@ -23,12 +23,13 @@ void SFVpath::initFeaturesMap()
 }
 
 
-SFVpath::SFVpath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::Path, parent_SFV)
+SFVpath::SFVpath(ScenarioFeatureGroup * scenfeaturesGroup,  SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::Path, parent_SFV)
 {
 	initFeaturesMap();
-	initSubGroupFeatures(ScenarioFeatures_vec);
+	initSubGroupFeatures(scenfeaturesGroup->get_features());
 
-	my_wp_template = new SFVwp(ScenarioFeatures_vec, parent_SFV);
+	set_Name(scenfeaturesGroup->get_name());
+	my_wp_template = new SFVwp(scenfeaturesGroup, parent_SFV);
 	my_PathWPs = new std::vector<SFVwp *>;
 
 	set_WasRolledFlag(false);

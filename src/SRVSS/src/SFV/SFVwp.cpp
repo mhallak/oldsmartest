@@ -34,10 +34,11 @@ void SFVwp::initFeaturesMap()
 }
 
 
-SFVwp::SFVwp(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::WayPoint, parent_SFV)
+SFVwp::SFVwp(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::WayPoint, parent_SFV)
 {
+	set_Name(scenfeaturesGroup->get_name());
 	initFeaturesMap();
-	initSubGroupFeatures(ScenarioFeatures_vec);
+	initSubGroupFeatures(scenfeaturesGroup->get_features());
 	set_WasRolledFlag(false);
 }
 

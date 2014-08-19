@@ -24,7 +24,7 @@ private :
 	ScenarioFeature * initial_platform_azimut;
 
 public :
-	SFVplatformPose(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
+	SFVplatformPose(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV);
 	SFVplatformPose(SFVplatformPose * template_SFVplatformPose);
 	SFVplatformPose(TiXmlNode * xml_subGroup, SFV * parent_SFV);
 

@@ -21,11 +21,11 @@ void SFVfriction_link::initFeaturesMap()
     my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::friction_link_friction_deviation, & friction_deviation ) );
 }
 
-SFVfriction_link::SFVfriction_link(std::string FrictionLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::friction_link_i, parent_SFV)
+SFVfriction_link::SFVfriction_link(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::friction_link_i, parent_SFV)
 {
-	set_Name(FrictionLinkName);
+	set_Name(scenfeaturesGroup->get_name());
 	initFeaturesMap();
-	initSubGroupFeatures(ScenarioFeatures_vec);
+	initSubGroupFeatures(scenfeaturesGroup->get_features());
 	set_WasRolledFlag(false);
 }
 

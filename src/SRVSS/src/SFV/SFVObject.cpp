@@ -36,10 +36,11 @@ void SFVObject::initFeaturesMap()
 }
 
 
-SFVObject::SFVObject(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::object, parent_SFV)
+SFVObject::SFVObject(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::object, parent_SFV)
 {
+	set_Name(scenfeaturesGroup->get_name());
 	initFeaturesMap();
-	initSubGroupFeatures(ScenarioFeatures_vec);
+	initSubGroupFeatures(scenfeaturesGroup->get_features());
 	set_WasRolledFlag(false);
 }
 

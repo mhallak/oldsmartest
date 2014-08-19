@@ -21,10 +21,11 @@ void SFVterraine::initFeaturesMap()
     my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::topographic_map, & topographic_map_index ) );
 }
 
-SFVterraine::SFVterraine(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::map , parent_SFV)
+SFVterraine::SFVterraine(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::map , parent_SFV)
 {
+	set_Name(scenfeaturesGroup->get_name());
 	initFeaturesMap();
-	initSubGroupFeatures(ScenarioFeatures_vec);
+	initSubGroupFeatures(scenfeaturesGroup->get_features());
 	set_WasRolledFlag(false);
 }
 

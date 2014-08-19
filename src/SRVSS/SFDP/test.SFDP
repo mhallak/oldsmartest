@@ -13,8 +13,8 @@
 	<scenario_feature_group type="objects" name="objects">
 		<scenario_feature type="number_of_objects">
 			<distribution>uniform_discrete</distribution>
-			<dist_param_1>2</dist_param_1>
-			<dist_param_2>2</dist_param_2>
+			<dist_param_1>3</dist_param_1>
+			<dist_param_2>3</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="object_i_type">
 			<distribution>uniform_discrete</distribution>
@@ -28,13 +28,13 @@
 		</scenario_feature>
 		<scenario_feature type="object_i_location_on_the_X_axis">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0.05</dist_param_1>
-			<dist_param_2>0.95</dist_param_2>
+			<dist_param_1>0.20</dist_param_1>
+			<dist_param_2>0.80</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="object_i_location_on_the_Y_axis">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0.05</dist_param_1>
-			<dist_param_2>0.95</dist_param_2>
+			<dist_param_1>0.20</dist_param_1>
+			<dist_param_2>0.80</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="object_i_location_on_the_Z_axis">
 			<distribution>uniform_continuous</distribution>
@@ -60,8 +60,6 @@
 
 
 
-
-
 	<scenario_feature_group type="obstacles_on_path" name="obstacles_on_path">
 		<scenario_feature type="number_of_obstacles_on_path">
 			<distribution>uniform_discrete</distribution>
@@ -70,7 +68,7 @@
 		</scenario_feature>
 		<scenario_feature type="obstacle_on_path_i_type">
 			<distribution>uniform_discrete</distribution>
-			<dist_param_1>4</dist_param_1>
+			<dist_param_1>3</dist_param_1>
 			<dist_param_2>4</dist_param_2>
 			<feature_dependency type="roll_number">number_of_objects</feature_dependency>
 		</scenario_feature>
@@ -118,121 +116,6 @@
 		</scenario_feature>
 	</scenario_feature_group>
 
-
-
-
-<scenario_feature_group type="obstacles_on_path" name="obstacles_on_path2">
-		<scenario_feature type="number_of_obstacles_on_path">
-			<distribution>uniform_discrete</distribution>
-			<dist_param_1>3</dist_param_1>
-			<dist_param_2>3</dist_param_2>
-		</scenario_feature>
-		<scenario_feature type="obstacle_on_path_i_type">
-			<distribution>uniform_discrete</distribution>
-			<dist_param_1>2</dist_param_1>
-			<dist_param_2>2</dist_param_2>
-			<feature_dependency type="roll_number">number_of_objects</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="obstacle_on_path_i_scaling_factor">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>1</dist_param_1>
-			<dist_param_2>5</dist_param_2>
-			<feature_dependency type="roll_number">number_of_objects</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="obstacle_on_path_i_location_along_the_path">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0.50</dist_param_1>
-			<dist_param_2>0.55</dist_param_2>
-			<feature_dependency type="roll_number">number_of_objects</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="obstacle_on_path_i_location_perpendicular_to_the_path">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-1</dist_param_1>
-			<dist_param_2>1</dist_param_2>
-			<feature_dependency type="roll_number">number_of_objects</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="obstacle_on_path_i_location_on_the_Z_axis">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-0.1</dist_param_1>
-			<dist_param_2>-0.05</dist_param_2>
-			<feature_dependency type="roll_number">number_of_objects</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="obstacle_on_path_i_location_Roll">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-0.1</dist_param_1>
-			<dist_param_2>0.1</dist_param_2>
-			<feature_dependency type="roll_number">number_of_objects</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="obstacle_on_path_i_location_Pitch">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-0.1</dist_param_1>
-			<dist_param_2>0.1</dist_param_2>
-			<feature_dependency type="roll_number">number_of_objects</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="obstacle_on_path_i_location_Yaw">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-0.1</dist_param_1>
-			<dist_param_2>0.1</dist_param_2>
-			<feature_dependency type="roll_number">number_of_objects</feature_dependency>
-		</scenario_feature>
-	</scenario_feature_group>
-
-
-	<scenario_feature_group type="lights" name="lights">
-		<scenario_feature type="number_of_light_sources">
-			<distribution>uniform_discrete</distribution>
-			<dist_param_1>1</dist_param_1>
-			<dist_param_2>5</dist_param_2>
-		</scenario_feature>
-		<scenario_feature type="light_source_i_type">
-			<distribution>uniform_discrete</distribution>
-			<dist_param_1>1</dist_param_1>
-			<dist_param_2>3</dist_param_2>
-			<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="light_source_i_location_on_the_X_axis">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0.05</dist_param_1>
-			<dist_param_2>0.95</dist_param_2>
-			<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="light_source_i_location_on_the_Y_axis">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0.05</dist_param_1>
-			<dist_param_2>0.95</dist_param_2>
-			<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="light_source_i_location_on_the_Z_axis">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>5</dist_param_1>
-			<dist_param_2>2</dist_param_2>
-			<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="light_source_i_range">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>40</dist_param_1>
-			<dist_param_2>5</dist_param_2>
-			<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="light_source_i_direction_on_X_axis">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-0.5</dist_param_1>
-			<dist_param_2>0.5</dist_param_2>
-			<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="light_source_i_direction_on_Y_axis">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>-0.5</dist_param_1>
-			<dist_param_2>0.5</dist_param_2>
-			<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
-		</scenario_feature>
-		<scenario_feature type="light_source_i_light_cone">
-			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0</dist_param_1>
-			<dist_param_2>90</dist_param_2>
-			<feature_dependency type="roll_number">number_of_light_sources</feature_dependency>
-		</scenario_feature>
-	</scenario_feature_group>
 
 	<scenario_feature_group type="mass_link_i" name="body">
 		<scenario_feature type="mass_link_i_mass_deviation">
@@ -391,8 +274,8 @@
 	 <scenario_feature_group type="platform_pose" name="bobcat">
 		<scenario_feature type="initial_platform_position_on_map_X_axis">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>0.10</dist_param_1>
-			<dist_param_2>0.10</dist_param_2>
+			<dist_param_1>0.20</dist_param_1>
+			<dist_param_2>0.20</dist_param_2>
 		</scenario_feature> 
 		<scenario_feature type="initial_platform_position_on_map_Y_axis">
 			<distribution>uniform_continuous</distribution>

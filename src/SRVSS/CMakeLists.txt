@@ -153,7 +153,7 @@ SFVObject
 add_library(SFVobstacaleOnPath src/SFV/SFVobstacaleOnPath.cpp)
 target_link_libraries(SFVobstacaleOnPath ${catkin_LIBRARIES}
 sfvSubGroup
-SFVpath
+
 )
 
 add_library(SFVobsOnPathScattering src/SFV/SFVobsOnPathScattering.cpp)
@@ -261,6 +261,16 @@ ScenarioFeatureGroup
 ScenarioFeature
 SFDPobj
 SFV
+GazeboScenarioGenerator
+)
+
+add_executable(mainGen src/Main.cpp)
+target_link_libraries(mainGen ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
+ScenarioFeatureGroup
+ScenarioFeature
+SFDPobj
+SFV
+GazeboScenarioGenerator
 )
 
 
@@ -279,19 +289,19 @@ GazeboScenarioGenerator
 ######################
 #### Replay Player ###
 ######################
-#add_executable(ReplayPlayer src/ReplayPlayer/ReplayPlayer.cpp)
-#target_link_libraries(ReplayPlayer ${catkin_LIBRARIES}
-#)
+add_executable(ReplayPlayer src/ReplayPlayer/ReplayPlayer.cpp)
+target_link_libraries(ReplayPlayer ${catkin_LIBRARIES}
+)
 
 
 
 ###############
 #### grader ###
 ###############
-#add_executable(grader_node src/Grader/grader_node.cpp)
-#target_link_libraries(grader_node
-#   ${catkin_LIBRARIES}
-#)
+add_executable(grader_node src/Grader/grader_node.cpp)
+target_link_libraries(grader_node
+   ${catkin_LIBRARIES}
+)
 
 
 

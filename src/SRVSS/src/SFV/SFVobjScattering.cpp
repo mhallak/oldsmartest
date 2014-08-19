@@ -23,12 +23,13 @@ void SFVobjScattering::initFeaturesMap()
 }
 
 
-SFVobjScattering::SFVobjScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec,  SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::objects, parent_SFV)
+SFVobjScattering::SFVobjScattering(ScenarioFeatureGroup * scenfeaturesGroup,  SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::objects, parent_SFV)
 {
 	initFeaturesMap();
-	initSubGroupFeatures(ScenarioFeatures_vec);
+	initSubGroupFeatures(scenfeaturesGroup->get_features());
 
-	my_object_template = new SFVObject(ScenarioFeatures_vec, parent_SFV);
+	set_Name(scenfeaturesGroup->get_name());
+	my_object_template = new SFVObject(scenfeaturesGroup, parent_SFV);
 	my_Objects = new std::vector<SFVObject *>;
 
 	set_WasRolledFlag(false);

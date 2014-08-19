@@ -37,10 +37,11 @@ void SFVObstacleOnPath::initFeaturesMap()
 
 
 
-SFVObstacleOnPath::SFVObstacleOnPath(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::obstacle_on_path, parent_SFV)
+SFVObstacleOnPath::SFVObstacleOnPath(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::obstacle_on_path, parent_SFV)
 {
+	set_Name(scenfeaturesGroup->get_name());
 	initFeaturesMap();
-	initSubGroupFeatures(ScenarioFeatures_vec);
+	initSubGroupFeatures(scenfeaturesGroup->get_features());
 	set_WasRolledFlag(false);
 }
 

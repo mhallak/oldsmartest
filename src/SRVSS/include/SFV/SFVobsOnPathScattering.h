@@ -24,7 +24,7 @@ private :
 	std::vector <SFVObstacleOnPath *> * my_ObstaclesOnpath;
 
 public :
-	SFVobsOnPathScattering(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
+	SFVobsOnPathScattering(ScenarioFeatureGroup * scenfeaturesGroup,  SFV * parent_SFV);
 	SFVobsOnPathScattering(SFVobsOnPathScattering * template_SFVobsOnPathScattering);
 	SFVobsOnPathScattering(TiXmlNode * xml_subGroup, SFV * parent_SFV);
 

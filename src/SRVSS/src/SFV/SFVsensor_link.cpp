@@ -27,11 +27,11 @@ void SFVsensor_link::initFeaturesMap()
     my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::sensor_link_i_location_deviation_Yaw, & location_deviationYaw ) );
 }
 
-SFVsensor_link::SFVsensor_link(std::string SensorLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::sensor_link_i, parent_SFV)
+SFVsensor_link::SFVsensor_link(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::sensor_link_i, parent_SFV)
 {
-	set_Name(SensorLinkName);
+	set_Name(scenfeaturesGroup->get_name());
 	initFeaturesMap();
-	initSubGroupFeatures(ScenarioFeatures_vec);
+	initSubGroupFeatures(scenfeaturesGroup->get_features());
 	set_WasRolledFlag(false);
 }
 

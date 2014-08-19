@@ -27,7 +27,7 @@ private :
 
 
 public :
-	SFVObject(std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV);
+	SFVObject(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV);
 	SFVObject(SFVObject * template_SFVObject);
 	SFVObject(TiXmlNode * xml_subGroup, SFV * parent_SFV);
 

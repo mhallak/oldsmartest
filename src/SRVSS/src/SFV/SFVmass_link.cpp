@@ -34,11 +34,11 @@ void SFVmass_link::initFeaturesMap()
 }
 
 
-SFVmass_link::SFVmass_link(std::string MassLinkName ,std::vector<ScenarioFeature *> * ScenarioFeatures_vec, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::mass_link_i, parent_SFV)
+SFVmass_link::SFVmass_link(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::mass_link_i, parent_SFV)
 {
-	set_Name(MassLinkName);
+	set_Name(scenfeaturesGroup->get_name());
 	initFeaturesMap();
-	initSubGroupFeatures(ScenarioFeatures_vec);
+	initSubGroupFeatures(scenfeaturesGroup->get_features());
 	set_WasRolledFlag(false);
 }
 

@@ -10,11 +10,6 @@
 #include "Synchronizer/ScenarioCoordinatorPool.h"
 
 
-//for tests
-#include "SFV/SFVComponent.h"
-#include "SFV/SFVObject.h"
-//
-
 #define PATH std::string("")
 
 void printUsage()
@@ -40,11 +35,12 @@ int main(int argc, char** argv)
 			std::cout << " -genSFV is runing !!! " << std::endl;
 
 			std::string SFDP_file_path = PATH+argv[2];
-			std::string sfv_file_destanation_path = PATH + argv[3];
+			std::string scenario_folder_path = PATH + argv[3];
 			std::string resources_file_path = PATH + argv[4];
 
 			SFDPobj * sfdp_root;
-			sfdp_root = new SFDPobj(SFDP_file_path,resources_file_path,sfv_file_destanation_path,0);
+			sfdp_root = new SFDPobj(SFDP_file_path,resources_file_path,scenario_folder_path,0);
+
 
 			if (! sfdp_root->ParseMeFromXMLFile())
 			{
@@ -52,13 +48,14 @@ int main(int argc, char** argv)
 				return 0;
 			}
 
-			SFVComponent *sfvComp = sfdp_root->genSFVComp();
-			if (! sfvComp )
+			SFV * sfv = new SFV(sfdp_root);
+			if (! sfv->roll() )
 			{
 				std::cout << "\033[1;31m rolling of SFV have failed \033[0m" << std::endl;
 				return 0;
 			}
-			sfvComp->genFileFromSFV(sfv_file_destanation_path);
+
+			sfv->printToXML(scenario_folder_path+"/test.SFV");
 
 			return 0;
 		}
@@ -70,14 +67,13 @@ int main(int argc, char** argv)
 
 			std::string sfv_file_path = PATH+argv[2];
 			std::string scenarios_folder_path = PATH + argv[3];
-			std::string resources_file_path = PATH + argv[4];
 
-			SFV *sfv = new SFVComponent(resources_file_path);
-			sfvComp->genSFVFromFile(sfv_file_path);
-			sfvComp->genFileFromSFV("testRun.sfv");
+			SFV *sfv = new SFV(sfv_file_path);
 
-			GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(sfvComp, scenarios_folder_path, resources_file_path);
+			GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(sfv, scenarios_folder_path);
 			ScenGen->GenerateScenario();
+
+
 
 
 			/*
