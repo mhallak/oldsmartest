@@ -74,8 +74,6 @@ int main(int argc, char** argv)
 			ScenGen->GenerateScenario();
 
 
-
-
 			/*
 			ScenarioCoordinator* cord =ScenarioCoordinatorPool::Instance()->genCoordinator(8992,8993);
 			std::cout << " pool done!!! " << std::endl;
@@ -101,7 +99,6 @@ int main(int argc, char** argv)
 */
 			return 0;
 		}
-
 
 	return 0;
 }
