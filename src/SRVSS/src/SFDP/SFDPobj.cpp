@@ -6,7 +6,7 @@
  */
 
 #include "SFDP/SFDPobj.h"
-#include "SFDP/SFDPParser.h"
+#include "SFV/SFV.h"
 #include "Generators/Gazebo/GazeboScenarioGenerator.h"
 #include "Executor/GazeboExecutor.h"
 
@@ -34,7 +34,7 @@ SFDPobj::SFDPobj(std::string SFDP_file_url, std::string Resources_file_url, std:
 	have_been_run = false;
 
 	my_featureGroups = new std::vector<ScenarioFeatureGroup*>;
-	my_sampled_SFVs = new std::vector<SFVComponent *>;
+	my_sampled_SFVs = new std::vector<SFV *>;
 	my_sub_SFDPs = new std::vector<SFDPobj *>;
 }
 
@@ -44,7 +44,7 @@ int SFDPobj::ParseMeFromXMLFile()
 	TiXmlDocument *XMLfile = new TiXmlDocument(my_SFDP_file_url);
 	if (!XMLfile->LoadFile())
 	{
-		std::cout << " failed to load file : " << my_SFDP_file_url << " it might not exist or be not valid XML " << std::endl;
+		std::cout << "\033[1;31m Failed to load file = " << my_SFDP_file_url << " it might not exist or be not valid XML \033[0m" << std::endl;
 		return 0;
 	}
 
@@ -59,7 +59,7 @@ int SFDPobj::ParseMeFromXMLFile()
 
 	if (XMLfile_Child == 0)
 	{
-		std::cout << " the file " << my_SFDP_file_url << " has no SFDP element " << std::endl;
+		std::cout << "\033[1;31m Failed to parse SFDP file = " << my_SFDP_file_url << " it has no SFDP element \033[0m" << std::endl;
 		return 0;
 	}
 
@@ -73,12 +73,13 @@ int SFDPobj::ParseMeFromXMLFile()
 				}
 			else
 				{
-				std::cout <<  " could not parse SDF file : " << my_SFDP_file_url  << " one or more of it's Scenario Feature Groups is not valid " << std::endl;
+				std::cout << "\033[1;31m Failed to parse SFDP file = " << my_SFDP_file_url  << " one or more of it's Scenario Feature Groups is not valid \033[0m" << std::endl;
 				return 0;
 				}
 		}
 	return 1;
 }
+
 
 
 int SFDPobj::PrintMeToFile()
@@ -105,11 +106,12 @@ int SFDPobj::PrintMeToFile()
 }
 
 
+
 int SFDPobj::GenMySFVs(int samp_num)
 {
-	my_sampled_SFVs = new std::vector<SFVComponent *>;
+	my_sampled_SFVs = new std::vector<SFV *>;
 
-	SFVComponent * sfvComp;
+	SFV * sfv_temp;
 	std::string file_url;
 
 	int success;
@@ -119,29 +121,34 @@ int SFDPobj::GenMySFVs(int samp_num)
 	for (int i=1 ; i<=samp_num ; i++ )
 	{
 
-		std::string folder_url = my_WS_url + "sampl_" + std::to_string(sfv_index);
+		std::string folder_url = my_WS_url + "/sampl_" + std::to_string(sfv_index);
 		file_url = folder_url + "/scen.SFV";
 
 
 		boost::filesystem::remove_all(folder_url);
 		if(! boost::filesystem::create_directory(folder_url))
 			{
-			std::cout << "failed to create folder for sfv_" << sfv_index << std::endl;
+			std::cout << "\033[1;31m failed to create folder for sfv_" << sfv_index << "\033[0m"<< std::endl;
 			break;
 			}
 
-		sfvComp = genSFVComp();
-		if ( ! sfvComp )
+		sfv_temp = new SFV(this);
+		if ( ! sfv_temp )
 			{
-			std::cout << "failed to generate sfv_ " << sfv_index << std::endl;
+			std::cout << "\033[1;31m failed to Generate sfv_ " << sfv_index << "\033[0m" <<std::endl;
 			break;
 			}
 
-			my_sampled_SFVs->push_back(sfvComp);
-			success_num++;
-			sfvComp->genFileFromSFV(file_url);
-			sfv_index++;
+		if (! sfv_temp->roll() )
+			{
+			std::cout << "\033[1;31m failed to Roll sfv_ " << sfv_index << "\033[0m" <<std::endl;
+			break;
+			}
 
+			my_sampled_SFVs->push_back(sfv_temp);
+			success_num++;
+			sfv_temp->printToXML(file_url);
+			sfv_index++;
 	}
 
 	std::cout << "success in rolling " << success_num << "/" << samp_num << " SFVs " << std::endl;
@@ -150,32 +157,9 @@ int SFDPobj::GenMySFVs(int samp_num)
 		return 1;
 	else
 		return 0;
-
 }
 
 
-SFVComponent* SFDPobj::genSFVComp()
-{
-	SFVComponent * sfvComp = new SFVComponent(my_Resources_file_url);
-
-	for (ScenarioFeatureGroup * group_it : * my_featureGroups )
-	{
-		std::map<ScenarioFeatureType,DPObject*> *dpMap=new std::map<ScenarioFeatureType,DPObject*>;
-
-		for(ScenarioFeature* feat_it : *(group_it->get_features()) )
-		{
-			(*dpMap)[feat_it->get_featureType()]=(new DPObject(feat_it));
-		}
-
-		sfvComp->addDPObjects( group_it->get_featureGroupType()  ,  new DPGroup(group_it->get_name(),  group_it->get_featureGroupType(),dpMap));
-	}
-
-	sfvComp->init();
-	if (sfvComp->calc())
-		return sfvComp;
-	else
-		return 0;
-}
 
 
 int SFDPobj::RunMySFVs()
@@ -189,17 +173,17 @@ int SFDPobj::RunMySFVs()
 	std::vector <float> grades;
 	float grad;
 
-	for (SFVComponent * sfvComp_it : * my_sampled_SFVs )
+	for (SFV * sfv_it : * my_sampled_SFVs )
 	{
-		folder_url = my_WS_url + "sampl_" + std::to_string(sfv_index);
+		folder_url = my_WS_url + "/sampl_" + std::to_string(sfv_index);
 
 		if(! boost::filesystem::is_directory(folder_url))
 			{
-			std::cout << " failed to locate folder of sampl_" << std::to_string(sfv_index) << std::endl;
+			std::cout << "\033[1;31m failed to locate folder of sampl_" << std::to_string(sfv_index) << "\033[1;31m" << std::endl;
 			break;
 			}
 
-		ScenGen = new GazeboScenarioGenerator(sfvComp_it, folder_url, my_Resources_file_url);
+		ScenGen = new GazeboScenarioGenerator(sfv_it, folder_url);
 		ScenGen->GenerateScenario();
 
 		ScenExe = new GazeboExecutor("AUT_url","Grader_url",my_WS_url);
@@ -224,6 +208,7 @@ int SFDPobj::RunMySFVs()
 	my_Grade_mean = sum/sfv_index;												  // E(x) = sum(x)/n
 	my_Grade_std = sqrt(sum_of_squers/sfv_index - my_Grade_mean*my_Grade_mean);   // Var(x) = E(x^2) - [E(x)]^2
 
+
 	have_been_run = true;
 
     PrintMyResultsToFile();
@@ -232,11 +217,13 @@ int SFDPobj::RunMySFVs()
 
 }
 
+
+
 int SFDPobj::PrintMyResultsToFile()
 {
 	if (! have_been_run)
 	{
-		std::cout << " can't print results file because the SFVs havn't been run yet " << std::endl;
+		std::cout << " \033[1;31m can't print results file because the SFVs havn't been run yet \033[0m" << std::endl;
 		return 0;
 	}
 
@@ -272,23 +259,22 @@ int SFDPobj::PrintMyResultsToFile()
 
 
 
-
-ScenarioFeature * SFDPobj::finedScenrioFeature(ScenarioFeatureGroupType GroupTipe, std::string GroupName, ScenarioFeatureType FeatureToSplit)
+ScenarioFeature * SFDPobj::finedScenrioFeature(ScenarioFeatureGroupType GroupType, std::string GroupName, ScenarioFeatureType FeatureToLocate)
 {
 	for ( ScenarioFeatureGroup * group_it : * my_featureGroups )
 		{
-			if ( (group_it->get_featureGroupType() == GroupTipe) && (group_it->get_name() == GroupName) )
+			if ( (group_it->get_featureGroupType() == GroupType) && (group_it->get_name() == GroupName) )
 			{
 				for (ScenarioFeature * feature_it : *(group_it->get_features()) )
 				{
-					if (feature_it->get_featureType() == FeatureToSplit)
+					if (feature_it->get_featureType() == FeatureToLocate)
 					{
 						return feature_it;
 					}
 				}
 			}
 		}
-	std::cout << "could not find GroupTipe " << GroupTipe << " = " << GroupName << " with feature " << FeatureToSplit << std::endl;
+	std::cout << "\033[1;31m could not find GroupTipe " << GroupType << " = " << GroupName << " with feature " << FeatureToLocate << "\033[0m"<< std::endl;
 	return 0;
 }
 
@@ -311,8 +297,8 @@ int SFDPobj::SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,
 
 	if( ( boost::filesystem::create_directory(sub_sfdp_1_WS_url)) && ( boost::filesystem::create_directory(sub_sfdp_2_WS_url))  )
 		{
-		std::cout << "failed to create folder for sub_sfdp_1_WS_url and/or sub_sfdp_2_WS_url at : " << std::endl;
-		std::cout << sub_sfdp_1_WS_url << "\n" << sub_sfdp_2_WS_url << std::endl;
+		std::cout << "\033[1;31m vfailed to create folder for sub_sfdp_1_WS_url and/or sub_sfdp_2_WS_url at : " << std::endl;
+		std::cout << sub_sfdp_1_WS_url << "\n" << sub_sfdp_2_WS_url << "\033[0m"<< std::endl;
 		return 0;
 		}
 
@@ -329,7 +315,7 @@ int SFDPobj::SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,
 
 	if ( (! feature_sourse) ||  (! feature_1) ||  (! feature_2) )
 		{
-			std::cout << "could not split because feature to split wasn't found" << std::endl;
+			std::cout << "\033[1;31m  could not split because feature to split wasn't found \033[0m" << std::endl;
 			return 0;
 		}
 
@@ -381,7 +367,7 @@ int SFDPobj::ExploreMe()
 
 	if (! GenMySFVs(5) )
 	{
-		std::cout << "the generation of SFVs have failed " << std::endl;
+		std::cout << "\033[1;31m the generation of SFVs have failed \033[0m" << std::endl;
 		return 0;
 	}
 

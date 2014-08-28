@@ -7,12 +7,13 @@
 
 #ifndef GENERATORINTERFACE_H_
 #define GENERATORINTERFACE_H_
-#include <SFV/SFVComponent.h>
+
+#include "SFV/SFV.h"
 
 class GeneratorInterface{
 public:
 	inline virtual ~GeneratorInterface(){}
-	virtual void generate(SFVComponent* sfvComp, std::string scenario_folder_url, std::string resource_file_url)=0;
+	virtual void generate(SFV* sfv, std::string scenario_folder_url)=0;
 };
 
 #endif /* GENERATORINTERFACE_H_ */

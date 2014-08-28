@@ -14,7 +14,7 @@ class Rule_wp_path_inside_map : public Rule
 public:
 	Rule_wp_path_inside_map();
 	virtual ~Rule_wp_path_inside_map();
-	bool isRuleValid(SFVComponent *sfvComp);
+	bool isRuleValid(SFV *sfv);
 };
 
 

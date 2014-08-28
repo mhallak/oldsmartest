@@ -9,20 +9,20 @@
 #define GAZEBOSCENARIOGENERATOR_H_
 
 #include <Generators/GeneratorInterface.h>
+#include "SFV/SFV.h"
+
 
 class GazeboScenarioGenerator
 {
-
 	private :
-		SFVComponent* my_sfvComp;
+		SFV* my_sfv;
 		std::string my_scenario_folder_url;
-		std::string my_resource_file_url;
 
 		std::vector<GeneratorInterface *> * generators_vec;
 
 	public:
 
-		GazeboScenarioGenerator(SFVComponent* sfvComp, std::string scenario_folder_url, std::string resource_file_url);
+		GazeboScenarioGenerator(SFV* sfv, std::string scenario_folder_url);
 		inline virtual ~GazeboScenarioGenerator() {};
 
 		int GenerateScenario();

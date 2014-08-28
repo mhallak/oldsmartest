@@ -14,7 +14,7 @@ class Rule_platform_init_pose_with_no_obj_colisions : public Rule
 public:
 	Rule_platform_init_pose_with_no_obj_colisions();
 	virtual ~Rule_platform_init_pose_with_no_obj_colisions();
-	bool isRuleValid(SFVComponent *sfvComp);
+	bool isRuleValid(SFV *sfv);
 };
 
 #endif /* RULE_PLATFORM_INIT_POSE_WITH_NO_OBJ_COLISIONS_H_ */

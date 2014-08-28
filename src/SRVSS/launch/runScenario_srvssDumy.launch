@@ -4,13 +4,14 @@
 	<arg name="scen" default="scenarios/scenario_1"/> 
 
 	<arg name="scenarios_folder_url" value="$(find SRVSS)/$(arg scen)"/>
+	<arg name="world_models_folder_url" value="$(find SRVSS)/world_components_models"/>
 	<arg name="world_name" value="$(arg scenarios_folder_url)/scenarioEnv.world"/>
 	<arg name="pause" value="-u"/>
 	<arg name="record" value="-r"/>
 	<arg name="record_file_path" value="-O $(arg scenarios_folder_url)/scen_rec.bag"/>
 
 <!-- setting gazebo path for scenario platform and sensors models -->
-	<env name="GAZEBO_MODEL_PATH" value="$(arg scenarios_folder_url)/scenarioSystemModels"/>
+	<env name="GAZEBO_MODEL_PATH" value="$(arg world_models_folder_url):$(arg scenarios_folder_url)/scenarioSystemModels"/>
 
 
 <!-- synchronizing ros to gazebo -->
@@ -29,7 +30,6 @@
 	<include file="$(find srvss_bobcat)/launch/srvss_bobcat.launch"/>
 	<node pkg="tf" type="static_transform_publisher" name="sick_link_broadcaster" args="1 0 0.2 0 0 0 body front_sick 100" />
 	<node pkg="srvss_wp_driver" type="srvss_wp_driver_node" name="srvss_wp_driver_node" args="-file $(arg scenarios_folder_url)/scenarioMission.txt" output="screen" />
-
 
 
 <!-- start RosBag recording -->

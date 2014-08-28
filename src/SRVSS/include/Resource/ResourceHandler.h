@@ -9,26 +9,25 @@
 #define RESOURCEHANDLER_H_
 #include <string>
 #include <map>
+#include <vector>
+#include <iostream>
 
 class ResourceHandler {
 
 private:
-
-	std::map <std::string, std::map<int,std::string>*>* m_resourceMap;
-	std::string m_modelsPath;
-	std::string m_platformPath;
-	std::string m_platformModel;
-	std::string m_platformName;
-
-	std::string m_SysModelsPath;
-
-	std::string getResource(std::string name,int id);
     // Private Constructor
 	ResourceHandler(std::string resources_file_path);
 	virtual ~ResourceHandler();
-    // Stop the compiler generating methods of copy the object
-	ResourceHandler(ResourceHandler const& copy);            // Not Implemented
-	ResourceHandler& operator=(ResourceHandler const& copy);  // Not Implemented
+
+	std::string my_RobotModelsFolderURL;
+	std::string my_RobotName;
+	std::string my_RobotPlatformName;
+	std::vector<std::string *> * my_RobotSensorsNames;
+
+	std::string my_WorldModelsFolderURL;
+	std::map <std::string, std::map<int,std::string>*>* m_resourceMap;
+
+	std::string getResource(std::string name,int id);
 
 public:
     static ResourceHandler& getInstance(std::string resources_file_path)
@@ -40,12 +39,32 @@ public:
     std::string getTerrainById(int id);
     std::string getObjectById(int id);
     std::string getLightById(int id);
-	const std::string& getModelsPath() const;
-	const std::string& getPlatformPath() const;
-	const std::string& getPlatformModel() const;
-	const std::string& getPlatformName() const;
 
-	const std::string& getSysModelsPath() const;
+
+	inline std::string getWorldModelsFolderURL()
+				{	if ( my_WorldModelsFolderURL != "")  { return my_WorldModelsFolderURL; }
+				else  { std::cout << "\033[1;31m No WorldModelsFolderURL was set \033[1;31m"<< std::endl; 	return 0;   } }
+
+
+	inline std::string getRobotModelsFolderURL()
+				{	if ( my_RobotModelsFolderURL != "")  { return my_RobotModelsFolderURL; }
+					else  { std::cout << "\033[1;31m No RobotModelsFolderURL was set \033[1;31m"<< std::endl; 	return 0;   } }
+
+
+	inline std::string getRobotName()
+				{	if ( my_RobotName != "")  { return my_RobotName; }
+					else  { std::cout << "\033[1;31m No RobotName was set \033[1;31m"<< std::endl; 	return 0;   } }
+
+
+	inline std::string getRobotPlatformName()
+				{	if ( my_RobotPlatformName != "")  { return my_RobotPlatformName; }
+					else  { std::cout << "\033[1;31m No RobotPlatformName was set \033[1;31m"<< std::endl; 	return 0;   } }
+
+
+	inline std::vector <std::string *> * getRobotSensorsNames()
+				{	if ( ! my_RobotSensorsNames->empty() )  { return my_RobotSensorsNames; }
+					else  { std::cout << "\033[1;31m No RobotSensorsNames where set \033[1;31m"<< std::endl; 	return 0;   } }
+
 };
 
 #endif /* RESOURCEHANDLER_H_ */

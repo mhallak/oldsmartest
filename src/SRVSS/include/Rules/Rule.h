@@ -8,10 +8,10 @@
 #ifndef RULE_H_
 #define RULE_H_
 
-class SFVComponent;
+class SFV;
 class Rule {
 public:
-	virtual bool isRuleValid(SFVComponent* sfv)=0;
+	virtual bool isRuleValid(SFV* sfv)=0;
 	inline virtual ~Rule(){};
 };
 

@@ -27,6 +27,8 @@ ResourceHandler::ResourceHandler(std::string resources_file_path) {
 	m_resourceMap->insert(std::pair<std::string,std::map<int,std::string> *>(std::string("object"),new std::map<int,std::string>));
 	m_resourceMap->insert(std::pair<std::string,std::map<int,std::string> *>(std::string("light"),new std::map<int,std::string>));
 
+	my_RobotSensorsNames = new std::vector<std::string *>;
+
 	TiXmlDocument doc(resources_file_path);
 
 		if (!doc.LoadFile())
@@ -37,51 +39,50 @@ ResourceHandler::ResourceHandler(std::string resources_file_path) {
 			throw error;
 		}
 		TiXmlNode* pChild;
-		TiXmlAttribute* pAttrib;;
 		//search for an sdfp element to parse
 		for ( pChild = doc.FirstChild(); pChild != 0; pChild = pChild->NextSibling())
 		{
-			if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("resource")==0)
+			if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("world_components_models")==0)
 			{
-				for ( pAttrib = pChild->ToElement()->FirstAttribute(); pAttrib != 0; pAttrib = pAttrib->Next())
+				for ( TiXmlAttribute * world_components_xmlAttribute = pChild->ToElement()->FirstAttribute(); world_components_xmlAttribute != 0; world_components_xmlAttribute = world_components_xmlAttribute->Next())
 				{
-					if(pAttrib->NameTStr().compare("dirPath")==0)
+					if(world_components_xmlAttribute->NameTStr().compare("dirPath")==0)
 					{
-						m_modelsPath=pAttrib->ValueStr();
-					}
-					else if(pAttrib->NameTStr().compare("platform")==0)
-					{
-						m_platformModel=pAttrib->ValueStr();
-						m_platformPath=m_modelsPath+"/"+pAttrib->ValueStr()+"/model.sdf";
-					}
-					else if(pAttrib->NameTStr().compare("name")==0)
-					{
-						m_platformName =pAttrib->ValueStr();
+						my_WorldModelsFolderURL=world_components_xmlAttribute->ValueStr();
 					}
 				}
 				parseResource(pChild,m_resourceMap);
-				//break;
 			}
 
-			if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("system_components")==0)
+			if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("robot_components_models")==0)
 			{
-				for ( pAttrib = pChild->ToElement()->FirstAttribute(); pAttrib != 0; pAttrib = pAttrib->Next())
+				for ( TiXmlAttribute * robot_components_xmlAtribute = pChild->ToElement()->FirstAttribute(); robot_components_xmlAtribute != 0; robot_components_xmlAtribute = robot_components_xmlAtribute->Next())
 				{
-					if(pAttrib->NameTStr().compare("dirPath")==0)
+					if(robot_components_xmlAtribute->NameTStr().compare("name")==0)
 					{
-						m_SysModelsPath=pAttrib->ValueStr();
-						std::cout << " system_components dirPath = " << m_SysModelsPath << std::endl;
+						my_RobotName = robot_components_xmlAtribute->ValueStr();
 					}
-					else if(pAttrib->NameTStr().compare("platform")==0)
+					if(robot_components_xmlAtribute->NameTStr().compare("dirPath")==0)
 					{
-						m_platformModel=pAttrib->ValueStr();
+						my_RobotModelsFolderURL=robot_components_xmlAtribute->ValueStr();
 					}
-					else if(pAttrib->NameTStr().compare("name")==0)
+				}
+
+				for ( TiXmlNode * robot_component_xmlNode = pChild->FirstChild(); robot_component_xmlNode != 0; robot_component_xmlNode=robot_component_xmlNode->NextSibling())
+				{
+					if( robot_component_xmlNode->Type()==XML_ELEMENT && robot_component_xmlNode->ValueStr().compare("platform")==0)
 					{
-						m_platformName =pAttrib->ValueStr();
+						my_RobotPlatformName = robot_component_xmlNode->ToElement()->FirstAttribute()->Value();
+					}
+					if( robot_component_xmlNode->Type()==XML_ELEMENT && robot_component_xmlNode->ValueStr().compare("sensor")==0)
+					{
+						std::string * sensor_name = new std::string(robot_component_xmlNode->ToElement()->FirstAttribute()->Value());
+						my_RobotSensorsNames->push_back(sensor_name);
 					}
 				}
 			}
+
+
 		}
 }
 
@@ -113,26 +114,5 @@ std::string ResourceHandler::getObjectById(int id) {
 std::string ResourceHandler::getLightById(int id) {
 	return getResource(std::string("light"),id);
 }
-
-const std::string& ResourceHandler::getModelsPath() const {
-	return m_modelsPath;
-}
-
-const std::string& ResourceHandler::getPlatformPath() const {
-	return m_platformPath;
-}
-
-const std::string& ResourceHandler::getPlatformModel() const {
-	return m_platformModel;
-}
-
-const std::string& ResourceHandler::getPlatformName() const {
-	return m_platformName;
-}
-
-const std::string& ResourceHandler::getSysModelsPath() const {
-	return m_SysModelsPath;
-}
-
 
 

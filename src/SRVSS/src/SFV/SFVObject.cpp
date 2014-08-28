@@ -1,107 +1,115 @@
 /*
  * SFVObject.cpp
  *
- *  Created on: Feb 24, 2014
- *      Author: userws1
+ *  Created on: Jul 31, 2014
+ *      Author: userws3
  */
 
+
+
+#include <iostream>
+#include <vector>
+#include <map>
+
 #include "SFV/SFVObject.h"
+#include "SFDP/ScenarioFeatureType.h"
+#include "SFDP/ScenarioFeature.h"
+#include "SFDP/ScenarioFeatureGroup.h"
 
-SFVObject::SFVObject(DPGroup* dpGroup): SFVBase(dpGroup)
+#include "SFV/sfvSubGroup.h"
+
+
+void SFVObject::initFeaturesMap()
 {
-	setStructure();
-	init(dpGroup);
+	std::map<ScenarioFeatureType ,ScenarioFeature** > * my_features_map = get_FeaturesMap();
+
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::object_i_type, & my_object_type ) );
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::object_i_scaling_factor, & my_scaling_factor));
+
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::object_i_location_on_the_X_axis, & my_location_on_the_X_axis));
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::object_i_location_on_the_Y_axis, & my_location_on_the_Y_axis));
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::object_i_location_on_the_Z_axis, & my_location_on_the_Z_axis));
+
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::object_i_location_Roll,  & my_location_Roll));
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::object_i_location_Pitch, & my_location_Pitch));
+    my_features_map->insert(std::pair<ScenarioFeatureType,ScenarioFeature**>(ScenarioFeatureType::object_i_location_Yaw, & my_location_Yaw));
 }
 
-void SFVObject::setStructure()
+
+SFVObject::SFVObject(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::object, parent_SFV)
 {
-	m_objectType="Object";
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_type,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_location_on_the_X_axis,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_location_on_the_Y_axis,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_location_on_the_Z_axis,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_location_Roll,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_location_Pitch,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_location_Yaw,0));
-	m_objects->insert(std::pair<ScenarioFeatureType,DPObject*>(ScenarioFeatureType::object_i_scaling_factor,0));
+	set_Name(scenfeaturesGroup->get_name());
+	initFeaturesMap();
+	initSubGroupFeatures(scenfeaturesGroup->get_features());
+	set_WasRolledFlag(false);
 }
 
 
-double SFVObject::getPitch() const {
-	return m_objects->at(ScenarioFeatureType::object_i_location_Pitch)->getResult();
+SFVObject::SFVObject(SFVObject * template_subGroup):  sfvSubGroup(template_subGroup->get_Type(), template_subGroup->get_ParentSFV())
+{
+	initFeaturesMap();
+	cloneSubGroupFeatures(template_subGroup);
+	set_WasRolledFlag(false);
 }
 
-void SFVObject::setPitch(double pitch) {
-	m_objects->at(ScenarioFeatureType::object_i_location_Pitch)->setResult(pitch);
-}
-
-double SFVObject::getRoll() const {
-	return m_objects->at(ScenarioFeatureType::object_i_location_Roll)->getResult();
-}
-
-void SFVObject::setRoll(double roll) {
-	m_objects->at(ScenarioFeatureType::object_i_location_Roll)->setResult(roll);
-}
-
-double SFVObject::getScale() const {
-	return m_objects->at(ScenarioFeatureType::object_i_scaling_factor)->getResult();
-}
-
-void SFVObject::setScale(double scale) {
-	m_objects->at(ScenarioFeatureType::object_i_scaling_factor)->setResult(scale);
-}
-
-int SFVObject::getType() const {
-	return m_objects->at(ScenarioFeatureType::object_i_type)->getResult();
-}
-
-void SFVObject::setType(int type) {
-	m_objects->at(ScenarioFeatureType::object_i_type)->setResult(type);
-}
-
-double SFVObject::getX() const {
-	return m_objects->at(ScenarioFeatureType::object_i_location_on_the_X_axis)->getResult();
-}
-
-void SFVObject::setX(double x) {
-	 m_objects->at(ScenarioFeatureType::object_i_location_on_the_X_axis)->setResult(x);
-}
-
-double SFVObject::getY() const {
-	return  m_objects->at(ScenarioFeatureType::object_i_location_on_the_Y_axis)->getResult();
-}
-
-void SFVObject::setY(double y) {
-	 m_objects->at(ScenarioFeatureType::object_i_location_on_the_Y_axis)->setResult(y);
-}
-
-double SFVObject::getYaw() const {
-	return  m_objects->at(ScenarioFeatureType::object_i_location_Yaw)->getResult();
-}
-
-void SFVObject::setYaw(double yaw) {
-	m_objects->at(ScenarioFeatureType::object_i_location_Yaw)->setResult(yaw);
-}
-
-double SFVObject::getZ() const {
-	return m_objects->at(ScenarioFeatureType::object_i_location_on_the_Z_axis)->getResult();
-}
-
-int SFVObject::getId() const {
-	return m_Id;
-}
-
-void SFVObject::setId(int id) {
-	m_Id = id;
-}
-
-void SFVObject::setZ(double z) {
-	m_objects->at(ScenarioFeatureType::object_i_location_on_the_Z_axis)->setResult(z);
+SFVObject::SFVObject(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::object , parent_SFV)
+{
+	initFeaturesMap();
+	setSubGroupFeaturesFromXmlElement(xml_subGroup);
+	set_WasRolledFlag(true);
 }
 
 
+bool SFVObject::roll()
+{
+	if (get_WasRolledFlag())
+	{
+		std::cout << "\033[1;31m I already was rolled (I am Object) \033[0m"<< std::endl;
+		return(false);
+	}
+	else
+	{
+		int roll_attemps_limit = 3;
+		int roll_attemp=1;
+		while (roll_attemp <= roll_attemps_limit)
+		{
+			rollSubGroupfeatures();
+
+		if (get_ParentSFV()->rules_check())
+			{
+			set_WasRolledFlag(true);
+			return(true);
+			std::cout << "\033[1;32m Succeed to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
+			}
+		else
+			{
+			resetSubGroupfeatures();
+			std::cout << "\033[1;35m fail to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
+			}
+		roll_attemp++;
+		}
+	return(false);
+	}
+}
+
+TiXmlElement * SFVObject::ToXmlElement(int id)
+{
+	if (! get_WasRolledFlag())
+	{
+		std::cout << "\033[1;31m can not make XML element for SFVObject because it wasn't rolled yet \033[0m"<< std::endl;
+		return(0);
+	}
+	else
+	{
+		return(SubGroupfeaturesToXmlElement(id));
+	}
+}
 
 SFVObject::~SFVObject()
 {
+
 }
+
+
+
 

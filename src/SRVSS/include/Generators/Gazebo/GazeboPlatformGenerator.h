@@ -14,8 +14,8 @@ class GazeboPlatformGenerator : public GeneratorInterface{
 public:
 	GazeboPlatformGenerator();
 	virtual ~GazeboPlatformGenerator();
-	void generatePlatform(SFVComponent * sfvcomp,std::string filename, std::string resources_file_path,  std::string scenario_platform_model_folder_url);
-	void generate(SFVComponent * sfvcomp, std::string scenario_folder_url, std::string resource_file_url);
+	void generatePlatform(SFV * sfv,std::string filename, std::string resources_file_path,  std::string scenario_platform_model_folder_url);
+	void generate(SFV * sfv, std::string scenario_folder_url);
 };
 
 #endif /* GAZEBOPLATFORMGENERATOR_H_ */

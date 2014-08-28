@@ -16,9 +16,9 @@
 #include "SFDP/ScenarioFeatureType.h"
 #include "ScenarioFeatureDistributionType.h"
 
-#include "SFV/SFVComponent.h"
+#include "SFV/SFV.h"
 
-
+class SFV;
 
 class SFDPobj {
 	private :
@@ -32,7 +32,7 @@ class SFDPobj {
 		int my_division_level;
 		static const int division_limit = 5;
 
-		std::vector<SFVComponent *> * my_sampled_SFVs;   // vector of sampled SFVs
+		std::vector<SFV *> * my_sampled_SFVs;   // vector of sampled SFVs
 
 		bool have_been_run;								// Flag to show that the Grades have been calculated
 		float my_Grade_mean;    		 				// Grade refers to the my_sampled_SFVs
@@ -52,11 +52,11 @@ class SFDPobj {
 
 		int PrintMyResultsToFile();
 
-		SFDPobj * ShrinkMe(ScenarioFeatureType * FeatureToShrink, float new_upper_bound_percents, float new_lower_bound_percents);
+//		SFDPobj * ShrinkMe(ScenarioFeatureType * FeatureToShrink, float new_upper_bound_percents, float new_lower_bound_percents);
 		int SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,ScenarioFeatureType FeatureToSplit, float split_percents);
 
 
-		SFVComponent* genSFVComp();
+//		SFV* genSFVComp();
 		int GenMySFVs(int samp_num);
 		int RunMySFVs();
 
@@ -82,7 +82,7 @@ class SFDPobj {
 			{if (! my_featureGroups->empty() ) return my_featureGroups; else return 0; }
 
 
-		ScenarioFeature * finedScenrioFeature(ScenarioFeatureGroupType GroupTipe, std::string GroupName, ScenarioFeatureType FeatureToSplit);
+		ScenarioFeature * finedScenrioFeature(ScenarioFeatureGroupType GroupType, std::string GroupName, ScenarioFeatureType FeatureToLocate);
 
 
 		inline int set_FeatureGroups(std::vector<ScenarioFeatureGroup*> * source_featureGroups)
@@ -97,7 +97,7 @@ class SFDPobj {
 			}
 
 
-		inline std::vector<SFVComponent *> * get_Sampled_SFVs()
+		inline std::vector<SFV *> * get_Sampled_SFVs()
 			{if (! my_sampled_SFVs->empty() ) return my_sampled_SFVs; else return 0; }
 
 		inline std::vector<SFDPobj *> * get_Sub_SFDPs()

@@ -14,6 +14,9 @@
 #include <vector>
 #include <tinyxml.h>
 
+#include "utils/NumberSampler.h"
+
+
 class ScenarioFeature {
 
 	ScenarioFeatureType m_featureType;
@@ -21,12 +24,17 @@ class ScenarioFeature {
 	float m_dist_param_1;
 	float m_dist_param_2;
 
+	bool was_rolled_flag;
+	float rolled_value;
+
 public:
 	ScenarioFeature(std::string featureType);
 	ScenarioFeature();
 	ScenarioFeature(ScenarioFeature * source_ScenarioFeature);
+	ScenarioFeature(TiXmlNode* xml_ScenarioFeature);
 	virtual ~ScenarioFeature();
 
+	void roll();
 
 	ScenarioFeatureType get_featureType();
 	void set_featureType(ScenarioFeatureType type);
@@ -40,8 +48,16 @@ public:
 	float get_dist_param_2();
 	void set_dist_param_2(float val);
 
+	inline bool get_WasRolledFlag()
+		{ return(rolled_value); }
+
+	inline float get_RolledValue()
+		{ if (was_rolled_flag) return(rolled_value); else return(0); }
+
+
 	int parseScenarioFeatureFromXML(TiXmlNode* xmlFeature);
 	TiXmlElement *toXMLElement();
+	TiXmlElement *toSFV_XMLElement();
 };
 
 #endif /* SCENARIOFEATURE_H_ */

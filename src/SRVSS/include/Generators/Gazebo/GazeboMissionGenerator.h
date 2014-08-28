@@ -8,30 +8,18 @@
 #ifndef GAZEBOMISSIONGENERATOR_H_
 #define GAZEBOMISSIONGENERATOR_H_
 #include <Generators/GeneratorInterface.h>
-#include <Generators/Gazebo/TerrainAnalyzer.h>
+
 class GazeboMissionGenerator : public GeneratorInterface{
-	TerrainAnalyzer * m_terrainAnalyzer;
-	float m_last_x_pose;
-	float m_last_y_pose;
-	float m_last_z_pose;
-	float m_last_yaw_pose;
-	std::string m_last_platform_name;
+
 public:
 	GazeboMissionGenerator();
 	virtual ~GazeboMissionGenerator();
-	void generateMission(SFVComponent * sfvcomp,std::string filename, std::string resources_file_path);
-	void generateMission_ROBIL2(SFVComponent * sfvcomp,std::string filename, std::string resources_file_path);
-	void generate(SFVComponent * sfvcomp, std::string scenario_folder_url, std::string resource_file_url);
-	float getLastXPose() const;
-	void setLastXPose(float lastXPose);
-	float getLastYPose() const;
-	void setLastYPose(float lastYPose);
-	float getLastZPose() const;
-	void setLastZPose(float lastZPose);
-	float getLastYawPose() const;
-	void setLastYawPose(float lastYawPose);
-	const std::string& getLastPlatformName() const;
-	void setLastPlatformName(const std::string& lastPlatformName);
+
+	void generateMission(SFV *sfv, std::string fileName);
+	void generateMission_ROBIL2(SFV *sfv, std::string fileName);
+
+	void generate(SFV * sfv, std::string scenario_folder_url);
+
 };
 
 #endif /* GAZEBOMISSIONGENERATOR_H_ */
