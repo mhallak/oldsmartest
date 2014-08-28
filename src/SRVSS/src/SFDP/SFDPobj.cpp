@@ -162,7 +162,7 @@ int SFDPobj::GenMySFVs(int samp_num)
 
 
 
-int SFDPobj::RunMySFVs()
+int SFDPobj::RunMySFVs(int argc, char** argv)
 {
 	GazeboScenarioGenerator * ScenGen;
 	GazeboExecutor * ScenExe;
@@ -186,8 +186,9 @@ int SFDPobj::RunMySFVs()
 		ScenGen = new GazeboScenarioGenerator(sfv_it, folder_url);
 		ScenGen->GenerateScenario();
 
-		ScenExe = new GazeboExecutor("AUT_url","Grader_url",my_WS_url);
-		ScenExe->RunScenario();
+		ScenExe = new GazeboExecutor(folder_url);
+		ScenExe->RunScenario(argc,argv);
+		ScenExe->PrintResultsToFile();
 
 		grad = ScenExe->get_scenario_grade();
 		grades.push_back(grad);
@@ -231,7 +232,7 @@ int SFDPobj::PrintMyResultsToFile()
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
 	doc.LinkEndChild(decl);
 
-	TiXmlElement * xml_results = new TiXmlElement( "Scenario_results" );
+	TiXmlElement * xml_results = new TiXmlElement( "Scenarios_results" );
 	xml_results->SetAttribute("version","1.0");
 	doc.LinkEndChild(xml_results);
 
@@ -356,7 +357,7 @@ int SFDPobj::SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,
 	return 1;
 }
 
-
+/*
 int SFDPobj::ExploreMe()
 {
 	if ( my_division_level > division_limit )
@@ -387,5 +388,5 @@ int SFDPobj::ExploreMe()
 
 	return 1;
 }
-
+*/
 

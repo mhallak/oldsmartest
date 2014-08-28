@@ -23,7 +23,7 @@
 	<node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
 
 <!-- play RosBag recording -->
-	<node name="ros_scen_replay" pkg="rosbag" type="play"  output="screen" args="--pause --loop --clock -r 0.4 $(arg ros_record_path)"/>
+	<node name="ros_scen_replay" pkg="rosbag" type="play"  output="screen" args="--pause --loop --clock -r 1 $(arg ros_record_path)"/>
 
 <!-- run translater for gazebo LinkStates -->
 	<node name="rosbag_to_gazebo_translater" pkg="SRVSS" type="ReplayPlayer" />	

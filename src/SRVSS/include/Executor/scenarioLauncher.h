@@ -32,7 +32,10 @@ class ScenarioLauncher
 		void launchWPdriver(std::string Scenarin_folder);
 		void launchTFbroadcaster();
 		void launchRecorder(std::string Scenarin_folder);
+		void launchGrader();
 
+		void GazeboPause();
+		void GazeboUnPause();
 };
 
 #endif /* SCENARIOLAUNCHER_H_ */

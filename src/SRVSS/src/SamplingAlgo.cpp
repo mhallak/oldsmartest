@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 			return 0;
 		}
 
-	sfdp_root->ExploreMe();
+	//sfdp_root->ExploreMe();
 
 
 	return 1;

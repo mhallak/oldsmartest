@@ -58,7 +58,7 @@ class SFDPobj {
 
 //		SFV* genSFVComp();
 		int GenMySFVs(int samp_num);
-		int RunMySFVs();
+		int RunMySFVs(int argc, char** argv);
 
 		inline std::string get_SFDP_file_url()
 			{ return my_SFDP_file_url; }

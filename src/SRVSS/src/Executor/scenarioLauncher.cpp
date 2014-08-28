@@ -6,7 +6,7 @@
  */
 
 
-#include "scenarioLauncher.h"
+#include "Executor/scenarioLauncher.h"
 #include <iostream>
 #include <Python.h>
 #include <string>
@@ -96,6 +96,22 @@ void ScenarioLauncher::launchRecorder(std::string Scenarin_folder)
 {
 	PyObject_CallMethod(pInstance, "launch_recorder", "(s)", Scenarin_folder.c_str() , NULL);
 }
+
+void ScenarioLauncher::launchGrader()
+{
+	PyObject_CallMethod(pInstance, "launch_grader", NULL);
+}
+
+void ScenarioLauncher::GazeboPause()
+{
+	PyObject_CallMethod(pInstance, "Gazebo_Pause", NULL);
+}
+
+void ScenarioLauncher::GazeboUnPause()
+{
+	PyObject_CallMethod(pInstance, "Gazebo_UnPause", NULL);
+}
+
 
 ScenarioLauncher::~ScenarioLauncher()
 {

@@ -225,8 +225,13 @@ GazeboPlatformGenerator
 ############
 # Executor #
 ############
+add_library(scenarioLauncher src/Executor/scenarioLauncher.cpp) 
+target_link_libraries(scenarioLauncher ${catkin_LIBRARIES} ${PYTHON_LIBRARY}
+)
+
 add_library(GazeboExecutor src/Executor/GazeboExecutor.cpp)
 target_link_libraries(GazeboExecutor ${catkin_LIBRARIES}
+scenarioLauncher
 )
 
 
@@ -249,9 +254,7 @@ target_link_libraries(GazeboExecutor ${catkin_LIBRARIES}
 #ScenarioCoordinatorPoolDestroyer
 #)
 
-add_library(scenarioLauncher src/Synchronizer/scenarioLauncher.cpp) 
-target_link_libraries(scenarioLauncher ${catkin_LIBRARIES} ${PYTHON_LIBRARY}
-)
+
 
 
 #############
@@ -265,7 +268,8 @@ SFDPobj
 SFV
 GazeboScenarioGenerator
 #ScenarioCoordinatorPool
-scenarioLauncher
+GazeboExecutor
+#scenarioLauncher
 )
 
 add_executable(mainGen src/Main.cpp)
