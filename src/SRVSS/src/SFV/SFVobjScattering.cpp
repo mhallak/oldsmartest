@@ -83,12 +83,10 @@ bool SFVobjScattering::roll()
 			for (int i=1 ; i<=my_num_of_objects->get_RolledValue(); i++)
 				{
 				obj_i = new SFVObject(my_object_template);
-				if (obj_i->roll())
+				my_Objects->push_back(obj_i);
+				if (! obj_i->roll())
 					{
-					my_Objects->push_back(obj_i);
-					}
-				else
-					{
+					my_Objects->pop_back();
 					roll_fail_flag=true;
 					break;
 					}

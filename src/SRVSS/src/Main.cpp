@@ -6,7 +6,6 @@
 #include "SFDP/SFDPobj.h"
 #include "Generators/Gazebo/GazeboScenarioGenerator.h"
 
-#include "Generators/Gazebo/GazeboScenarioGenerator.h"
 #include "Synchronizer/ScenarioCoordinatorPool.h"
 
 
@@ -74,9 +73,13 @@ int main(int argc, char** argv)
 			ScenGen->GenerateScenario();
 
 
-			/*
+
+
+/*
 			ScenarioCoordinator* cord =ScenarioCoordinatorPool::Instance()->genCoordinator(8992,8993);
 			std::cout << " pool done!!! " << std::endl;
+
+
 
 			cord->startRosCore();
 			std::cout << " core done!!! " << std::endl;

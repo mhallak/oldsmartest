@@ -15,6 +15,8 @@
 	<terrain id="1">srvss_terrain1</terrain>
 	<terrain id="2">srvss_terrain2</terrain>
 	<terrain id="3">shetah_nisuy</terrain>
+	<terrain id="4">terrainWithRoad</terrain>
+
 
 	<object id="1">barrel1</object>
 	<object id="2">rock1</object>

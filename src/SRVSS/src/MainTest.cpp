@@ -18,12 +18,15 @@
 
 #include "Generators/Gazebo/GazeboScenarioGenerator.h"
 
+#include "Synchronizer/ScenarioCoordinatorPool.h"
+
+#include "Synchronizer/scenarioLauncher.h"
+
 #define PATH std::string("")
 
 int main(int argc, char** argv)
 {
 	std::cout << " Test Main is runing !!! " << std::endl;
-
 
 	if(std::string(argv[1]).compare("-genSCEN")==0)
 		{
@@ -43,54 +46,57 @@ int main(int argc, char** argv)
 			}
 
 
-
+char c;
+ScenarioLauncher *launcher = new ScenarioLauncher();
+for (int i=1 ; i<=3 ; i++)
+	{
 			SFV * sfv = new SFV(sfdp_root);
-			if (sfv->roll() )
+			if (! sfv->roll() )
 				{
-				sfv->printToXML(scenario_folder_path+"/test.SFV");
-
-
-
-
-
-			SFV * sfv2 = new SFV(scenario_folder_path+"/test.SFV");
-
-			sfv2->printToXML(scenario_folder_path+"/test2.SFV");
-
-
-				GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(sfv2, scenario_folder_path);
-				ScenGen->GenerateScenario();
-
-			}
-
-
-			//SFVpath * testPath = (SFVpath *)(sfv->get_sfvSubGroups()->at(0));
-
-/*
-			for (SFV * sfv_it : * sfdp_root->get_Sampled_SFVs())
-			{
-
-				for (sfvSubGroup * subGroup_it : * sfv_it->get_sfvSubGroups())
-					{
-					std::cout << " subGroup_it->get_Type().str() = " << subGroup_it->get_Type().str() << std::endl;
-					}
-
-
-
-
-				for (sfvSubGroup * subGroup_it : * sfv_it->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::objects) )
-				{
-					SFVobjScattering *Objs = (SFVobjScattering *)subGroup_it;
-					for (SFVObject *obj : *Objs->get_Objects() )
-					{
-						std::cout << "  obj->get_ObjectType()->get_RolledValue() = " << obj->get_ObjectType()->get_RolledValue() << std::endl;
-
-					}
+				std::cout << "\033[1;31m Fail to roll SFV !!! \033[0m" << std::endl;
+ 				return (0);
 				}
-			}
-*/
-			return 0;
+
+			sfv->printToXML(scenario_folder_path+"/test.SFV");
+
+			GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(sfv, scenario_folder_path);
+			ScenGen->GenerateScenario();
+
+			std::cout << " I am here !!! " << std::endl;
+
+
+			launcher->start_launcher();
+
+			launcher->setScenarioEnv(scenario_folder_path);
+			std::cout << "\033[1;31m Scenario Env_Variables are loaded !!! \033[0m" << std::endl;
+
+			launcher->startGazeboServer(scenario_folder_path);
+			std::cout << "\033[1;31m GazeboServer is loaded !!! \033[0m" << std::endl;
+
+			launcher->launchGazeboClient();
+			std::cout << "\033[1;31m GazeboClient is loaded !!! \033[0m" << std::endl;
+
+			launcher->launchPlatformControls();
+			std::cout << "\033[1;31m Platform is loaded !!! \033[0m" << std::endl;
+
+			launcher->launchWPdriver(scenario_folder_path);
+			std::cout << "\033[1;31m WP driver is loaded !!! \03re3[0m" << std::endl;
+
+			launcher->launchTFbroadcaster();
+			std::cout << "\033[1;31m TF publishing is loaded !!! \033[0m" << std::endl;
+
+			launcher->launchRecorder(scenario_folder_path);
+			std::cout << "\033[1;31m Recorder is loaded !!! \033[0m" << std::endl;
+
+
+			std::cin >>c;
+
+			launcher->stop_launcher();
+	}
+
+launcher->~ScenarioLauncher();
 
 		}
 
+	return 0;
 }

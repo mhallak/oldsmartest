@@ -83,12 +83,10 @@ bool SFVobsOnPathScattering::roll()
 			for (int i=1 ; i<=my_num_of_obsOnpath->get_RolledValue(); i++)
 				{
 				obs_i = new SFVObstacleOnPath(my_obsOnPath_template);
-				if (obs_i->roll())
+				my_ObstaclesOnpath->push_back(obs_i);
+				if (! obs_i->roll())
 					{
-					my_ObstaclesOnpath->push_back(obs_i);
-					}
-				else
-					{
+					my_ObstaclesOnpath->pop_back();
 					roll_fail_flag=true;
 					break;
 					}

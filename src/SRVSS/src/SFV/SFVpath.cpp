@@ -83,12 +83,10 @@ bool SFVpath::roll()
 			for (int i=1 ; i<=my_number_of_wp->get_RolledValue(); i++)
 				{
 				wp_i = new SFVwp(my_wp_template);
-				if (wp_i->roll())
+				my_PathWPs->push_back(wp_i);
+				if (! wp_i->roll())
 					{
-					my_PathWPs->push_back(wp_i);
-					}
-				else
-					{
+					my_PathWPs->pop_back();
 					roll_fail_flag=true;
 					break;
 					}
