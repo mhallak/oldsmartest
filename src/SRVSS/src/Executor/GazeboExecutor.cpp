@@ -22,6 +22,15 @@ GazeboExecutor::GazeboExecutor(std::string Scenario_folder_url)
 	my_Scenario_folder_url = Scenario_folder_url;
 	my_Grades_file_url = Scenario_folder_url + "/SFV_execution_grades.xml";
 	was_executed_flag = false;
+
+	my_launcher = new ScenarioLauncher();
+	my_launcher->start_launcher();
+}
+
+GazeboExecutor::~GazeboExecutor()
+{
+	my_launcher->stop_launcher();
+	my_launcher->~ScenarioLauncher();
 }
 
 double temp_grade;
@@ -39,41 +48,39 @@ int GazeboExecutor::RunScenario(int argc, char** argv)
 
 	bool end_scen_flag = false;
 
-	ScenarioLauncher *launcher = new ScenarioLauncher();
-	launcher->start_launcher();
 
-	launcher->setScenarioEnv(my_Scenario_folder_url);
+	my_launcher->setScenarioEnv(my_Scenario_folder_url);
 	std::cout << "\033[1;31m Scenario Env_Variables are loaded !!! \033[0m" << std::endl;
 
-	launcher->startGazeboServer(my_Scenario_folder_url);
+	my_launcher->startGazeboServer(my_Scenario_folder_url);
 	std::cout << "\033[1;31m GazeboServer is loaded !!! \033[0m" << std::endl;
 
-	launcher->launchGazeboClient();
+	my_launcher->launchGazeboClient();
 	std::cout << "\033[1;31m GazeboClient is loaded !!! \033[0m" << std::endl;
 
-	launcher->launchPlatformControls();
+	my_launcher->launchPlatformControlsSpawner();
 	std::cout << "\033[1;31m Platform is loaded !!! \033[0m" << std::endl;
 
-	launcher->launchWPdriver(my_Scenario_folder_url);
+	my_launcher->launchWPdriver(my_Scenario_folder_url);
 	std::cout << "\033[1;31m WP driver is loaded !!! \033[0m" << std::endl;
 
-	launcher->launchTFbroadcaster();
+	my_launcher->launchTFbroadcaster();
 	std::cout << "\033[1;31m TF publishing is loaded !!! \033[0m" << std::endl;
 
-	launcher->launchRecorder(my_Scenario_folder_url);
+	my_launcher->launchRecorder(my_Scenario_folder_url);
 	std::cout << "\033[1;31m Recorder is loaded !!! \033[0m" << std::endl;
 
-	launcher->launchGrader();
+	my_launcher->launchGrader();
 	std::cout << "\033[1;31m Grader is loaded !!! \033[0m" << std::endl;
 
-	launcher->GazeboUnPause();
+	my_launcher->GazeboUnPause();
 	std::cout << "\033[1;31m Gazebo is Playin !!! \033[0m" << std::endl;
 
 	model_states_sub = n.subscribe("/srvss/greade", 100, scen_grade_Callback);
-	ros::Duration scen_max_duration(1*60, 0);
+	ros::Duration scen_max_duration(30, 0);
 	ros::Time begin_time = ros::Time::now();
 	ros::Time now_time = ros::Time::now();
-	while ( (! end_scen_flag) && ros::ok() && (now_time - begin_time < scen_max_duration))
+	while ( (! end_scen_flag) && ros::ok() && (now_time - begin_time < scen_max_duration) )
 		 {
 		now_time = ros::Time::now();
 		ros::spinOnce();
@@ -84,10 +91,15 @@ int GazeboExecutor::RunScenario(int argc, char** argv)
 
 	my_scenario_graede = temp_grade;
 	was_executed_flag = true;
-	ros::requestShutdown();
-	launcher->stop_launcher();
-	launcher->~ScenarioLauncher();
 
+
+	my_launcher->GazeboPause();
+	std::cout << "\033[1;31m Gazebo is Paused !!! \033[0m" << std::endl;
+
+	my_launcher->launchPlatformControlsUnspawner();
+	std::cout << "\033[1;31m Platform controls are unspawnnd !!! \033[0m" << std::endl;
+
+	my_launcher->stop_launcher();
 
 	return 1;
 }

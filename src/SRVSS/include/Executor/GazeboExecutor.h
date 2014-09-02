@@ -9,6 +9,7 @@
 #define GAZEBOEXECUTOR_H_
 
 #include <string>
+#include "Executor/scenarioLauncher.h"
 
 class GazeboExecutor {
 	private :
@@ -17,6 +18,8 @@ class GazeboExecutor {
 		std::string my_Grades_file_url;
 		double my_scenario_graede;
 		bool was_executed_flag;
+
+		ScenarioLauncher *my_launcher;
 
 	public :
 		GazeboExecutor(std::string Scenario_folder_url);

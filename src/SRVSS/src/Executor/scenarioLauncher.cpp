@@ -77,9 +77,14 @@ void ScenarioLauncher::stop_launcher()
 	PyObject_CallMethod(pInstance, "stop_launcher", NULL);
 }
 
-void ScenarioLauncher::launchPlatformControls()
+void ScenarioLauncher::launchPlatformControlsSpawner()
 {
-	PyObject_CallMethod(pInstance, "launch_platform_controls", NULL);
+	PyObject_CallMethod(pInstance, "launch_platform_controls_spawner", NULL);
+}
+
+void ScenarioLauncher::launchPlatformControlsUnspawner()
+{
+	PyObject_CallMethod(pInstance, "launch_platform_controls_unspawner", NULL);
 }
 
 void ScenarioLauncher::launchWPdriver(std::string Scenarin_folder)
@@ -119,5 +124,6 @@ ScenarioLauncher::~ScenarioLauncher()
 	Py_DECREF(pDict);
 	Py_DECREF(pModule);
 	Py_DECREF(pName);
+	Py_DECREF(pInstance);
 	Py_Finalize();
 }

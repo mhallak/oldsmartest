@@ -19,7 +19,7 @@ class ScenarioCoordinator
 		virtual ~ScenarioCoordinator();
 
 	    void startRosCore();
-	    void startGazeboServer();
+	    void startGazeboServer(std::string arguments);
 	    void launchGazeboClient();
 	    void stopRosCore();
 	    void stopGazeboServer();
@@ -29,14 +29,29 @@ class ScenarioCoordinator
 	    void pauseSimulation();
 	    void unpauseSimulation();
 	    void resetSimulation();
+
+//	    void spawnGazeboEnv(std::string Env_fileName);
+	    void setScenarioEnv(std::string Scenarin_folder);
+	    void launch_platform_controls(std::string platform_pkg_name , std::string platform_launch_file);
+
+
+
 	    template<typename T>
 	    void spawnGazeboModel(T *model)
 	    {
 	    	std::stringstream ss;
 	    	ss << model->toXMLElement();
-	    	PyObject_CallMethod(m_pyInstance, "spawnGazeboObject","(ss)",model->m_name.c_str()," <include><uri>model://barrel1</uri><pose>55.8906 60.3694 -0.0652491 0.0544623 -0.0161914 0.0959575</pose><scale>4.34978 4.34978 4.34978</scale><name>object3</name></include>",NULL);
+	    	PyObject_CallMethod(m_pyInstance, "spawnGazeboObject","(ss)",model->m_name.c_str(),"<include><uri>model://barrel1</uri><pose>0 0 0 0 0 0</pose><name>object3</name></include>",NULL);
 	    }
 
+	    /*
+	    void test()
+	    {
+	    	PyObject_CallMethod(m_pyInstance, "spawnGazeboObject","(ss)","koko"
+	    			,"<sdf version='1.4'><model name='cube1'><static>true</static><link name='link'><pose>0 0 0.5 0 0 0</pose><collision name='collision'><geometry><box><size>1 1 1</size></box></geometry></collision><visual name='visual'><geometry><box><size>1 1 1</size></box></geometry><material><script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/Grey</name></script></material></visual></link></model></sdf>"
+	    			,NULL);
+	    }
+	     */
 };
 
 #endif /* SCHENARIOCOORDINATOR_H_ */

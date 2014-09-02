@@ -7,8 +7,8 @@
 
 #include "SFDP/SFDPobj.h"
 #include "SFV/SFV.h"
-#include "Generators/Gazebo/GazeboScenarioGenerator.h"
-#include "Executor/GazeboExecutor.h"
+//#include "Generators/Gazebo/GazeboScenarioGenerator.h"
+//#include "Executor/GazeboExecutor.h"
 
 #include <string>
 #include <vector>
@@ -29,7 +29,7 @@ SFDPobj::SFDPobj(std::string SFDP_file_url, std::string Resources_file_url, std:
 	my_SFDP_file_url = SFDP_file_url;
 	my_Resources_file_url = Resources_file_url;
 	my_WS_url = WS_url;
-	my_Grades_file_url = WS_url + "Grades.xml";
+	my_Grades_file_url = WS_url + "/Grades.xml";
 	my_division_level = division_level;
 	have_been_run = false;
 
@@ -118,7 +118,7 @@ int SFDPobj::GenMySFVs(int samp_num)
 	int success_num=0;
 	int sfv_index=1;
 
-	for (int i=1 ; i<=samp_num ; i++ )
+	for (int sfv_index=1 ; sfv_index<=samp_num ; sfv_index++ )
 	{
 
 		std::string folder_url = my_WS_url + "/sampl_" + std::to_string(sfv_index);
@@ -132,7 +132,7 @@ int SFDPobj::GenMySFVs(int samp_num)
 			break;
 			}
 
-		sfv_temp = new SFV(this);
+		sfv_temp = new SFV(this,folder_url);
 		if ( ! sfv_temp )
 			{
 			std::cout << "\033[1;31m failed to Generate sfv_ " << sfv_index << "\033[0m" <<std::endl;
@@ -148,7 +148,6 @@ int SFDPobj::GenMySFVs(int samp_num)
 			my_sampled_SFVs->push_back(sfv_temp);
 			success_num++;
 			sfv_temp->printToXML(file_url);
-			sfv_index++;
 	}
 
 	std::cout << "success in rolling " << success_num << "/" << samp_num << " SFVs " << std::endl;
@@ -164,58 +163,34 @@ int SFDPobj::GenMySFVs(int samp_num)
 
 int SFDPobj::RunMySFVs(int argc, char** argv)
 {
-	GazeboScenarioGenerator * ScenGen;
-	GazeboExecutor * ScenExe;
-
-	std::string folder_url;
-	int sfv_index=1;
-
-	std::vector <float> grades;
-	float grad;
+	int sfv_index=0;
+	float sum = 0;
+	float sum_of_squers = 0;
 
 	for (SFV * sfv_it : * my_sampled_SFVs )
 	{
-		folder_url = my_WS_url + "/sampl_" + std::to_string(sfv_index);
-
-		if(! boost::filesystem::is_directory(folder_url))
+		sfv_it->execute(argc, argv);
+		if (sfv_it->get_WasExecutedFlag())
 			{
-			std::cout << "\033[1;31m failed to locate folder of sampl_" << std::to_string(sfv_index) << "\033[1;31m" << std::endl;
-			break;
+			sum = sum + sfv_it->get_Grade();
+			sum_of_squers = sum_of_squers + (sfv_it->get_Grade())*(sfv_it->get_Grade());
+			sfv_index++;
 			}
-
-		ScenGen = new GazeboScenarioGenerator(sfv_it, folder_url);
-		ScenGen->GenerateScenario();
-
-		ScenExe = new GazeboExecutor(folder_url);
-		ScenExe->RunScenario(argc,argv);
-		ScenExe->PrintResultsToFile();
-
-		grad = ScenExe->get_scenario_grade();
-		grades.push_back(grad);
-		std::cout << " grade of scenario " << sfv_index << " = " << grad << std::endl;
-
-     	sfv_index++;
 	}
 
 
-	float sum = 0;
-	float sum_of_squers = 0;
-	for (float scen_grad : grades)
+	if (sfv_index == 0)
 		{
-		sum = sum + scen_grad;
-		sum_of_squers = sum_of_squers + scen_grad*scen_grad;
+		std::cout << "\033[1;31m No SFV was successfully executed \033[1;31m" << std::endl;
+		return(0);
 		}
 
 	my_Grade_mean = sum/sfv_index;												  // E(x) = sum(x)/n
 	my_Grade_std = sqrt(sum_of_squers/sfv_index - my_Grade_mean*my_Grade_mean);   // Var(x) = E(x^2) - [E(x)]^2
-
-
 	have_been_run = true;
-
     PrintMyResultsToFile();
 
 	return 1;
-
 }
 
 
@@ -251,6 +226,20 @@ int SFDPobj::PrintMyResultsToFile()
 	TiXmlText * std_val= new TiXmlText( temp_ss.str() );
 	xml_std->LinkEndChild(std_val);
 	doc.LinkEndChild(xml_std);
+
+	int sfv_idex=0;
+	std::string sfv_name;
+	for (SFV * sfv_it : * my_sampled_SFVs )
+	{
+		sfv_idex = sfv_idex + 1;
+		sfv_name = "sfv_" + std::to_string(sfv_idex);
+		temp_ss.str("");
+		temp_ss << sfv_it->get_Grade();
+		TiXmlElement * xml_grade = new TiXmlElement( sfv_name );
+		TiXmlText * grade_val= new TiXmlText( temp_ss.str() );
+		xml_grade->LinkEndChild(grade_val);
+		doc.LinkEndChild(xml_grade);
+	}
 
 	doc.SaveFile(my_Grades_file_url.c_str());
 	std::cout << " printing Grades to file : " << my_Grades_file_url << std::endl;

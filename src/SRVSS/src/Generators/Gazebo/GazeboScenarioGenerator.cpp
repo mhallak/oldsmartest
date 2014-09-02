@@ -29,6 +29,7 @@ int GazeboScenarioGenerator::GenerateScenario()
       {
     	  	  gen_it->generate(my_sfv, my_scenario_folder_url);
       }
+      return(1);
 }
 
 

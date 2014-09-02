@@ -28,7 +28,9 @@ class ScenarioLauncher
 		void startGazeboServer(std::string Scenarin_folder);
 		void launchGazeboClient();
 		void setScenarioEnv(std::string Scenarin_folder);
-		void launchPlatformControls();
+		void launchPlatformControlsSpawner();
+		void launchPlatformControlsUnspawner();
+
 		void launchWPdriver(std::string Scenarin_folder);
 		void launchTFbroadcaster();
 		void launchRecorder(std::string Scenarin_folder);

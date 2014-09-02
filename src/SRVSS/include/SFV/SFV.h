@@ -28,20 +28,26 @@ class SFV {
 		std::vector<sfvSubGroup *> * my_sfvSubGroups;
 
 		std::string my_resource_file_url;
+		std::string my_ws_folder_url;
 
 		SFDPobj * my_SFDP;
 		bool was_rolled_flag;
 
 		std::vector<Rule *> * my_rules;
 
+		bool was_executed_flag;
+		float my_grade;
+
 	public:
-		SFV(SFDPobj * SFDP);
-		SFV(std::string SFV_file_name);
+		SFV(SFDPobj * SFDP, std::string ws_folder_url);
+		SFV(std::string SFV_file_name, std::string ws_folder_url);
 
 		bool roll();
 		bool rules_check();
 
 		int printToXML(std::string sfv_file_url);
+
+		int execute(int argc, char** argv);
 
 		~SFV();
 
@@ -67,6 +73,14 @@ class SFV {
 
 		inline bool get_WasRolledFlag()
 			{ return(was_rolled_flag); }
+
+
+		inline bool get_WasExecutedFlag()
+			{ return(was_executed_flag); }
+
+		inline float get_Grade()
+			{ if (was_executed_flag) { return my_grade; }
+				else { std::cout << "\033[1;31m SFV wasn't executed yet \033[0m" << std::endl; return(0); } }
 
 };
 

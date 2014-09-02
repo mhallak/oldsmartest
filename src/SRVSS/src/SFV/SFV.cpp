@@ -26,11 +26,15 @@
 #include <tinyxml.h>
 #include "utils/TinyXmlDef.h"
 
+#include "Generators/Gazebo/GazeboScenarioGenerator.h"
+#include "Executor/GazeboExecutor.h"
+
 class sfvSubGroup;
-SFV::SFV(SFDPobj * SFDP)
+SFV::SFV(SFDPobj * SFDP, std::string ws_folder_url)
 {
 	my_SFDP = SFDP;
 	my_resource_file_url = SFDP->get_Resources_file_url();
+	my_ws_folder_url = ws_folder_url;
 	was_rolled_flag = false;
 
 	my_sfvSubGroups = new std::vector<sfvSubGroup *>;
@@ -45,12 +49,14 @@ SFV::SFV(SFDPobj * SFDP)
 }
 
 
-SFV::SFV(std::string SFV_file_name)
+SFV::SFV(std::string SFV_file_name, std::string ws_folder_url)
 {
 	my_SFDP = 0;
+	my_ws_folder_url = ws_folder_url;
 	was_rolled_flag=true;
 	my_rules=0;
 	my_sfvSubGroups = new std::vector<sfvSubGroup *>;
+
 
 	//Loading file
 	TiXmlDocument *SFVfile = new TiXmlDocument(SFV_file_name);
@@ -255,6 +261,28 @@ int SFV::printToXML(std::string sfv_file_url)
 	}
 }
 
+int SFV::execute(int argc, char** argv)
+{
+	GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(this, my_ws_folder_url);
+	if (! ScenGen->GenerateScenario())
+	{
+		std::cout << "\033[1;31m Generation of SFVs scenario files have failed \033[0m"<< std::endl;
+		return(0);
+	}
+
+	GazeboExecutor * ScenExe = new GazeboExecutor(my_ws_folder_url);
+	if (! ScenExe->RunScenario(argc,argv))
+	{
+		std::cout << "\033[1;31m Execution of SFVs scenario have failed \033[0m"<< std::endl;
+		return(0);
+	}
+
+	ScenExe->PrintResultsToFile();
+	my_grade = ScenExe->get_scenario_grade();
+	was_executed_flag = true;
+
+	return 1;
+}
 
 
 SFV::~SFV()
