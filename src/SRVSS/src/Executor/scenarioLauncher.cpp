@@ -48,7 +48,6 @@ ScenarioLauncher::ScenarioLauncher()
 	{
 	  pInstance = PyObject_CallObject(pClass, NULL); // Create an instance of the class
 	}
-
 }
 
 void ScenarioLauncher::startGazeboServer(std::string Scenarin_folder)

@@ -22,7 +22,7 @@
 
 
 <!-- run translater for gazebo LinkStates -->
-	<node name="rosbag_to_gazebo_translater" pkg="SRVSS" type="ReplayPlayer" />	
+	<node name="rosbag_to_gazebo_translater" pkg="SRVSS" type="ReplayPlayer" />
 
 
 </launch>

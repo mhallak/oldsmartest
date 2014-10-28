@@ -47,6 +47,7 @@ class SFV {
 
 		int printToXML(std::string sfv_file_url);
 
+		int generate();
 		int execute(int argc, char** argv);
 
 		~SFV();

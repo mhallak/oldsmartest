@@ -29,13 +29,15 @@ SFDPobj::SFDPobj(std::string SFDP_file_url, std::string Resources_file_url, std:
 	my_SFDP_file_url = SFDP_file_url;
 	my_Resources_file_url = Resources_file_url;
 	my_WS_url = WS_url;
-	my_Grades_file_url = WS_url + "/Grades.xml";
+	my_Grades_file_url = WS_url + "Grades.xml";
 	my_division_level = division_level;
 	have_been_run = false;
 
 	my_featureGroups = new std::vector<ScenarioFeatureGroup*>;
 	my_sampled_SFVs = new std::vector<SFV *>;
 	my_sub_SFDPs = new std::vector<SFDPobj *>;
+
+	my_ExploretionFeature = new ScenarioFeature(); ;
 }
 
 
@@ -121,7 +123,7 @@ int SFDPobj::GenMySFVs(int samp_num)
 	for (int sfv_index=1 ; sfv_index<=samp_num ; sfv_index++ )
 	{
 
-		std::string folder_url = my_WS_url + "/sampl_" + std::to_string(sfv_index);
+		std::string folder_url = my_WS_url + "sampl_" + std::to_string(sfv_index);
 		file_url = folder_url + "/scen.SFV";
 
 
@@ -193,7 +195,52 @@ int SFDPobj::RunMySFVs(int argc, char** argv)
 	return 1;
 }
 
+TiXmlElement * SFDPobj::GetResultsInXML()
+{
+	if (! have_been_run)
+	{
+		std::cout << " \033[1;31m can't return results because the SFVs havn't been run yet \033[0m" << std::endl;
+		return 0;
+	}
 
+	TiXmlElement * resultsXML = new TiXmlElement("subSFDP_results");
+	resultsXML->SetAttribute("dist_param_1", std::to_string(my_ExploretionFeature->get_dist_param_1()));
+	resultsXML->SetAttribute("dist_param_2", std::to_string(my_ExploretionFeature->get_dist_param_2()));
+
+	TiXmlElement * sampsXML = new TiXmlElement("samples");
+	sampsXML->SetAttribute("mean", std::to_string(my_Grade_mean));
+	sampsXML->SetAttribute("std", std::to_string(my_Grade_std));
+	resultsXML->LinkEndChild(sampsXML);
+
+	std::stringstream temp_ss;
+	temp_ss.str("");
+
+	int sfv_idex=0;
+	std::string sfv_name;
+	for (SFV * sfv_it : * my_sampled_SFVs )
+		{
+			sfv_idex = sfv_idex + 1;
+			sfv_name = "sfv_" + std::to_string(sfv_idex);
+			temp_ss.str("");
+			temp_ss << sfv_it->get_Grade();
+			TiXmlElement * xml_grade = new TiXmlElement( sfv_name );
+			TiXmlText * grade_val= new TiXmlText( temp_ss.str() );
+			xml_grade->LinkEndChild(grade_val);
+			sampsXML->LinkEndChild(xml_grade);
+		}
+
+
+	TiXmlElement * subSFDPsXML = new TiXmlElement("subSFDPs");
+	resultsXML->LinkEndChild(subSFDPsXML);
+
+	for (SFDPobj * subSFDP_it : * my_sub_SFDPs )
+		{
+			TiXmlElement * subSFDPresultsXML = subSFDP_it->GetResultsInXML();
+			subSFDPsXML->LinkEndChild(subSFDPresultsXML);
+		}
+
+	return(resultsXML);
+}
 
 int SFDPobj::PrintMyResultsToFile()
 {
@@ -207,10 +254,11 @@ int SFDPobj::PrintMyResultsToFile()
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
 	doc.LinkEndChild(decl);
 
-	TiXmlElement * xml_results = new TiXmlElement( "Scenarios_results" );
-	xml_results->SetAttribute("version","1.0");
+	TiXmlElement * xml_results = GetResultsInXML();
 	doc.LinkEndChild(xml_results);
 
+
+/*
 	std::stringstream temp_ss;
 
 	temp_ss.str("");
@@ -240,6 +288,7 @@ int SFDPobj::PrintMyResultsToFile()
 		xml_grade->LinkEndChild(grade_val);
 		doc.LinkEndChild(xml_grade);
 	}
+*/
 
 	doc.SaveFile(my_Grades_file_url.c_str());
 	std::cout << " printing Grades to file : " << my_Grades_file_url << std::endl;
@@ -272,6 +321,12 @@ ScenarioFeature * SFDPobj::finedScenrioFeature(ScenarioFeatureGroupType GroupTyp
 
 int SFDPobj::SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,ScenarioFeatureType FeatureToSplit, float split_percents)
 {
+	if ( (! get_ExploretionFeature()))
+		{
+			std::cout << "\033[1;31m  could not split because feature to split wasn't found \033[0m" << std::endl;
+			return 0;
+		}
+
 	SFDPobj * sub_sfdp1;
 	SFDPobj * sub_sfdp2;
 
@@ -287,7 +342,7 @@ int SFDPobj::SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,
 
 	if( ( boost::filesystem::create_directory(sub_sfdp_1_WS_url)) && ( boost::filesystem::create_directory(sub_sfdp_2_WS_url))  )
 		{
-		std::cout << "\033[1;31m vfailed to create folder for sub_sfdp_1_WS_url and/or sub_sfdp_2_WS_url at : " << std::endl;
+		std::cout << "\033[1;31m failed to create folder for sub_sfdp_1_WS_url and/or sub_sfdp_2_WS_url at : " << std::endl;
 		std::cout << sub_sfdp_1_WS_url << "\n" << sub_sfdp_2_WS_url << "\033[0m"<< std::endl;
 		return 0;
 		}
@@ -295,26 +350,25 @@ int SFDPobj::SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,
 
 	sub_sfdp1 = new SFDPobj(sub_sfdp_1_WS_url+"sub_sfdp",my_Resources_file_url,sub_sfdp_1_WS_url,my_division_level+1);
 	sub_sfdp1->set_FeatureGroups(this->get_FeatureGroups());
+	sub_sfdp1->set_ExploretionFeature(sub_sfdp1->finedScenrioFeature(GroupTipe,GroupName,FeatureToSplit));
 
 	sub_sfdp2 = new SFDPobj(sub_sfdp_2_WS_url+"sub_sfdp",my_Resources_file_url,sub_sfdp_2_WS_url,my_division_level+1);
 	sub_sfdp2->set_FeatureGroups(this->get_FeatureGroups());
+	sub_sfdp2->set_ExploretionFeature(sub_sfdp2->finedScenrioFeature(GroupTipe,GroupName,FeatureToSplit));
 
-	ScenarioFeature * feature_sourse = this->finedScenrioFeature(GroupTipe,GroupName,FeatureToSplit);
-	ScenarioFeature * feature_1 = sub_sfdp1->finedScenrioFeature(GroupTipe,GroupName,FeatureToSplit);
-	ScenarioFeature * feature_2 = sub_sfdp2->finedScenrioFeature(GroupTipe,GroupName,FeatureToSplit);
 
-	if ( (! feature_sourse) ||  (! feature_1) ||  (! feature_2) )
-		{
-			std::cout << "\033[1;31m  could not split because feature to split wasn't found \033[0m" << std::endl;
-			return 0;
-		}
+	ScenarioFeature * feature_sourse = this->get_ExploretionFeature(); // this->finedScenrioFeature(GroupTipe,GroupName,FeatureToSplit);
+	ScenarioFeature * feature_1 = sub_sfdp1->get_ExploretionFeature(); // sub_sfdp1->finedScenrioFeature(GroupTipe,GroupName,FeatureToSplit);
+	ScenarioFeature * feature_2 = sub_sfdp2->get_ExploretionFeature(); // sub_sfdp2->finedScenrioFeature(GroupTipe,GroupName,FeatureToSplit);
+
 
 
 	if ( feature_sourse->get_distType() == ScenarioFeatureDistributionType::uniform_continuous )
 		{
 			float range = feature_sourse->get_dist_param_2() - feature_sourse->get_dist_param_1();
 			float new_bound = feature_sourse->get_dist_param_1() + split_percents * range;
-			feature_1->set_dist_param_2(new_bound);				feature_2->set_dist_param_1(new_bound);
+			feature_1->set_dist_param_2(new_bound);
+			feature_2->set_dist_param_1(new_bound);
 		}
 
 	if ( feature_sourse->get_distType() == ScenarioFeatureDistributionType::uniform_discrete )
@@ -346,36 +400,46 @@ int SFDPobj::SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,
 	return 1;
 }
 
-/*
-int SFDPobj::ExploreMe()
+
+int SFDPobj::ExploreMe(int argc, char** argv)
 {
+	this->set_ExploretionFeature(this->finedScenrioFeature(ScenarioFeatureGroupType::obstacles_on_path,"obstacles_on_path" ,ScenarioFeatureType::number_of_obstacles_on_path));
+	if ( (! get_ExploretionFeature()))
+		{
+			std::cout << "\033[1;31m  could not Explore because feature to explore wasn't found \033[0m" << std::endl;
+			return 0;
+		}
+
 	if ( my_division_level > division_limit )
 	{
 		std::cout << "the division level reached the Division Limit " << std::endl;
 		return 0;
 	}
 
-	if (! GenMySFVs(5) )
+	if (! GenMySFVs(2) )
 	{
 		std::cout << "\033[1;31m the generation of SFVs have failed \033[0m" << std::endl;
 		return 0;
 	}
 
-	RunMySFVs();
+	RunMySFVs(argc,argv);
+
 
 	if (my_division_level <= 2)
 	{
-		if (my_Grade_std > 0.25)
+		if (my_Grade_std > 0.10)
 			{
-				SplitMe(ScenarioFeatureGroupType::objects, "objects" ,ScenarioFeatureType::object_i_location_on_the_X_axis, 0.5);
+				SplitMe(ScenarioFeatureGroupType::obstacles_on_path, "obstacles_on_path" ,ScenarioFeatureType::number_of_obstacles_on_path, 0.5);
 				for (SFDPobj * sub_SFDP_it : * my_sub_SFDPs)
 					{
-						sub_SFDP_it->ExploreMe();
+						sub_SFDP_it->ExploreMe(argc,argv);
 					}
 			}
 	}
 
+	PrintMyResultsToFile();
+
 	return 1;
 }
-*/
+
 

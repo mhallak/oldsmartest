@@ -77,7 +77,7 @@ int GazeboExecutor::RunScenario(int argc, char** argv)
 	std::cout << "\033[1;31m Gazebo is Playin !!! \033[0m" << std::endl;
 
 	model_states_sub = n.subscribe("/srvss/greade", 100, scen_grade_Callback);
-	ros::Duration scen_max_duration(30, 0);
+	ros::Duration scen_max_duration(90, 0);
 	ros::Time begin_time = ros::Time::now();
 	ros::Time now_time = ros::Time::now();
 	while ( (! end_scen_flag) && ros::ok() && (now_time - begin_time < scen_max_duration) )

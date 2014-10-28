@@ -268,29 +268,29 @@ ScenarioFeatureGroup
 ScenarioFeature
 SFDPobj
 SFV
-GazeboScenarioGenerator
-GazeboExecutor
+#GazeboScenarioGenerator
+#GazeboExecutor
 )
 
-#add_executable(mainGen src/Main.cpp)
-#target_link_libraries(mainGen ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
-#ScenarioFeatureGroup
-#ScenarioFeature
-#SFDPobj
-#SFV
-#GazeboScenarioGenerator
-#)
+add_executable(mainGen src/Main.cpp)
+target_link_libraries(mainGen ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
+ScenarioFeatureGroup
+ScenarioFeature
+SFDPobj
+SFV
+GazeboScenarioGenerator
+)
 
 
 ######################
 #### Sampling Algo ###
 ######################
-#add_executable(SamplingAlgo src/SamplingAlgo.cpp)
-#target_link_libraries(SamplingAlgo ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
-#SFDPobj
-#SFV
-#GazeboScenarioGenerator
-#)
+add_executable(SamplingAlgo src/SamplingAlgo.cpp)
+target_link_libraries(SamplingAlgo ${catkin_LIBRARIES} ${TinyXML_LIBRARIES}
+SFDPobj
+SFV
+GazeboScenarioGenerator
+)
 
 
 

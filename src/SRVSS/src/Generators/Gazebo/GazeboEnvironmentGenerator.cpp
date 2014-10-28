@@ -278,6 +278,15 @@ void GazeboEnvironmentGenerator::genEnvFromSFV(SFV* sfv,std::string filename)
 	TiXmlText * humidity_value = new TiXmlText("0.3");
 	humidity->LinkEndChild(humidity_value);
 
+	TiXmlElement * gui = new TiXmlElement( "gui" );
+	world->LinkEndChild(gui);
+	TiXmlElement * camera = new TiXmlElement( "camera" );
+	camera->SetAttribute("name","camera_pose");
+	gui->LinkEndChild(camera);
+	TiXmlElement * camera_pose = new TiXmlElement( "pose" );
+	camera->LinkEndChild(camera_pose);
+	TiXmlText * camera_pose_value = new TiXmlText("80 -60 60 0 0.5 2");
+	camera_pose->LinkEndChild(camera_pose_value);
 
 	spawnTerrain(sfv, world);
 

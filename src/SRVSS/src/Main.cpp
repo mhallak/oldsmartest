@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 				return 0;
 			}
 
-			SFV * sfv = new SFV(sfdp_root);
+			SFV * sfv = new SFV(sfdp_root,scenario_folder_path);
 			if (! sfv->roll() )
 			{
 				std::cout << "\033[1;31m rolling of SFV have failed \033[0m" << std::endl;
@@ -67,10 +67,12 @@ int main(int argc, char** argv)
 			std::string sfv_file_path = PATH+argv[2];
 			std::string scenarios_folder_path = PATH + argv[3];
 
-			SFV *sfv = new SFV(sfv_file_path);
+			SFV *sfv = new SFV(sfv_file_path,scenarios_folder_path);
 
-			GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(sfv, scenarios_folder_path);
-			ScenGen->GenerateScenario();
+			sfv->generate();
+
+			//GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(sfv, scenarios_folder_path);
+			//ScenGen->GenerateScenario();
 
 
 

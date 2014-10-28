@@ -36,9 +36,9 @@ void scen_grade_Callback(const std_msgs::Float32MultiArray::ConstPtr &msg)
 int main(int argc, char** argv)
 {
 	std::cout << " Test Main is runing !!! " << std::endl;
-	std::string SFDP_file_path = PATH+argv[2];
-	std::string scenario_folder_path = PATH + argv[3];
-	std::string resources_file_path = PATH + argv[4];
+	std::string SFDP_file_path = PATH+argv[1];
+	std::string scenario_folder_path = PATH + argv[2];
+	std::string resources_file_path = PATH + argv[3];
 
 	SFDPobj * sfdp_root;
 	sfdp_root = new SFDPobj(SFDP_file_path,resources_file_path,scenario_folder_path,0);
@@ -48,7 +48,7 @@ int main(int argc, char** argv)
 		return 0;
 		}
 
-	if (sfdp_root->GenMySFVs(1) )
+	if (sfdp_root->GenMySFVs(3) )
 	{
 	sfdp_root->RunMySFVs(argc,argv);
 	}

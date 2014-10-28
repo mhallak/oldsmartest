@@ -261,7 +261,7 @@ int SFV::printToXML(std::string sfv_file_url)
 	}
 }
 
-int SFV::execute(int argc, char** argv)
+int SFV::generate()
 {
 	GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(this, my_ws_folder_url);
 	if (! ScenGen->GenerateScenario())
@@ -269,6 +269,13 @@ int SFV::execute(int argc, char** argv)
 		std::cout << "\033[1;31m Generation of SFVs scenario files have failed \033[0m"<< std::endl;
 		return(0);
 	}
+
+	return 1;
+}
+
+int SFV::execute(int argc, char** argv)
+{
+	generate();
 
 	GazeboExecutor * ScenExe = new GazeboExecutor(my_ws_folder_url);
 	if (! ScenExe->RunScenario(argc,argv))
