@@ -25,7 +25,11 @@
 #include <rosbag/bag.h>
 #include <rosbag/view.h>
 
-#include "robil_msgs/Path.h"
+//#include "robil_msgs/Path.h"
+#include "robil_msgs/AssignNavTask.h"
+#include "nav_msgs/Odometry.h"
+#include "robil_msgs/AssignMission.h"
+#include "robil_msgs/AssignMissionTask.h"
 
 #include "SFV/SFV.h"
 #include "SFV/SFVpath.h"
@@ -70,18 +74,55 @@ void GazeboMissionGenerator::generateMission(SFV *sfv, std::string fileName)
 void GazeboMissionGenerator::generateMission_ROBIL2(SFV * sfv,std::string fileName)
 {
 	SFVpath *sfv_Path = ((std::vector<SFVpath*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::Path))->at(0);
+	SFVplatformPose *sfv_PlatPose = ((std::vector<SFVplatformPose*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::platform_pose))->at(0);
 
-	nav_msgs::Path wp_path;
-	geometry_msgs::PoseStamped pose;
+//	nav_msgs::Path wp_path;
+//	geometry_msgs::PoseStamped pose;
+
+	robil_msgs::AssignNavTask robilNavTask;
+	nav_msgs::Odometry wp;
+
+	float plat_init_x = sfv_PlatPose->get_PlatInit_xy()->at('x');
+	float plat_init_y = sfv_PlatPose->get_PlatInit_xy()->at('y');
+
 	for(SFVwp* wp_it : *(sfv_Path->get_PathWPs()))
 	{
-		pose.pose.position.x = wp_it->get_WPxy()->at('x');
-		pose.pose.position.y = wp_it->get_WPxy()->at('y');
-
+/*		pose.pose.position.x = wp_it->get_WPxy()->at('x') - plat_init_x;
+		pose.pose.position.y = wp_it->get_WPxy()->at('y') - plat_init_y;
 		wp_path.poses.push_back(pose);
+	*/
+
+		//wp = new nav_msgs::Odometry();
+		wp.pose.pose.position.x = wp_it->get_WPxy()->at('x') - plat_init_x;
+		wp.pose.pose.position.y = wp_it->get_WPxy()->at('y') - plat_init_y;
+		robilNavTask.waypoints.push_back(wp);
 	}
+	robilNavTask.task_id= std::to_string(100);
 
 
+	rosbag::Bag bag;
+	bag.open(fileName + ".bag", rosbag::bagmode::Write);
+
+	ros::Time task_play_time(1,0);
+	bag.write("/OCU/SMME/NavigationTask",task_play_time,robilNavTask);
+
+	robil_msgs::AssignMission robilMission;
+	robilMission.mission_id = std::to_string(101);
+	robil_msgs::AssignMissionTask mission_task;
+	mission_task.task_id = "100";
+	robilMission.tasks.push_back(mission_task);
+
+	ros::Time mission_play_time(2,0);
+	bag.write("/OCU/SMME/MissionPlan",mission_play_time,robilMission);
+
+	std_msgs::String play;
+	play.data = "/mission/101/StartMission";
+	ros::Time play_time(7,0);
+	bag.write("/decision_making/events",play_time,play);
+
+
+	bag.close();
+/*
 	robil_msgs::Path Robil2_path;
 	Robil2_path.waypoints = wp_path;
 	Robil2_path.is_heading_defined = false;
@@ -102,6 +143,7 @@ void GazeboMissionGenerator::generateMission_ROBIL2(SFV * sfv,std::string fileNa
 	file.open(fileName + ".yaml");
 	file << ss.str();
 	file.close();
+	*/
 }
 
 

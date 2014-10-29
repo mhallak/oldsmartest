@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <tinyxml.h>
 
 #include "SFDP/ScenarioFeatureGroup.h"
 #include "SFDP/ScenarioFeatureType.h"
@@ -39,17 +40,19 @@ class SFDPobj {
 		float my_Grade_std;
 
 		std::vector<SFDPobj *> * my_sub_SFDPs;			// vector of sub SFDPs
+		ScenarioFeature * my_ExploretionFeature;		// the feature that is explored (the split performed on it)
 
 	public :
 
 		SFDPobj(std::string SFDP_file_url, std::string Resources_file_url, std::string WS_url, int division_level);
 		~SFDPobj();
 
-		int ExploreMe();
+		int ExploreMe(int argc, char** argv);
 
 		int ParseMeFromXMLFile();
 		int PrintMeToFile();
 
+		TiXmlElement * GetResultsInXML();
 		int PrintMyResultsToFile();
 
 //		SFDPobj * ShrinkMe(ScenarioFeatureType * FeatureToShrink, float new_upper_bound_percents, float new_lower_bound_percents);
@@ -58,7 +61,7 @@ class SFDPobj {
 
 //		SFV* genSFVComp();
 		int GenMySFVs(int samp_num);
-		int RunMySFVs();
+		int RunMySFVs(int argc, char** argv);
 
 		inline std::string get_SFDP_file_url()
 			{ return my_SFDP_file_url; }
@@ -68,6 +71,12 @@ class SFDPobj {
 
 		inline std::string get_WS_url()
 			{ return my_WS_url; }
+
+		inline int set_ExploretionFeature(ScenarioFeature * exploretion_feature)
+			{ my_ExploretionFeature = exploretion_feature; return 1;}
+
+		inline ScenarioFeature * get_ExploretionFeature()
+			{ return my_ExploretionFeature; }
 
 		inline int get_division_level()
 			{ return my_division_level; }
@@ -94,6 +103,7 @@ class SFDPobj {
 					temp_group = new ScenarioFeatureGroup(group_it);
 					my_featureGroups->push_back(temp_group);
 				}
+			return 1;
 			}
 
 

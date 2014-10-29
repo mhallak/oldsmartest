@@ -9,6 +9,8 @@
 #include <Python.h>
 #include "stdlib.h"
 #include <sstream>
+#include <iostream>
+
 ScenarioCoordinatorPool *ScenarioCoordinatorPool::_instance = 0;
 ScenarioCoordinatorPoolDestroyer ScenarioCoordinatorPool::_destroyer;
 ScenarioCoordinatorPool::ScenarioCoordinatorPool()
@@ -18,15 +20,33 @@ ScenarioCoordinatorPool::ScenarioCoordinatorPool()
 	Py_Initialize();
 	char *g="";
 	PySys_SetArgv(1, &g);
-	// Build the name object
-	pName = PyString_FromString("cordinator");
-	// Load the module object
-	pModule = PyImport_Import(pName);
-	// pDict is a borrowed reference
-	pDict = PyModule_GetDict(pModule);
 
-	// Build the name of a callable class
-	pClass = PyDict_GetItemString(pDict, "SimCordinator");
+
+	pName = PyString_FromString("cordinator");	// Build the name object
+
+
+	pModule = PyImport_Import(pName);             // Load the module object
+	if ( ! pModule)
+	{
+		PyErr_Print();
+		std::cout << "\033[1;31m Fail to load Python coordinator module \033[0m" << std::endl;
+	}
+
+	pDict = PyModule_GetDict(pModule);	// pDict is a borrowed reference
+	if ( ! pDict)
+	{
+		PyErr_Print();
+		std::cout << "\033[1;31m Fail to load Python coordinator module \033[0m" << std::endl;
+	}
+
+
+	pClass = PyDict_GetItemString(pDict, "SimCordinator");  // Build the name of a callable class
+	if ( ! pClass)
+	{
+		PyErr_Print();
+		std::cout << "\033[1;31m Fail to load Python SimCordinator class \033[0m" << std::endl;
+	}
+
 }
 
 ScenarioCoordinator * ScenarioCoordinatorPool::genCoordinator(int gazebo_port,int ros_port,std::string gazebo_host ,std::string ros_host)
@@ -56,6 +76,8 @@ ScenarioCoordinatorPool *ScenarioCoordinatorPool::Instance() {
 	if (!_instance) {
 		_instance = new ScenarioCoordinatorPool;
 		_destroyer.SetDoomed(_instance);
+
+
 	}
 	return _instance;
 }

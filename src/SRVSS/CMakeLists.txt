@@ -93,8 +93,8 @@ target_link_libraries(SFDPobj ${catkin_LIBRARIES} ${Boost_INCLUDE_DIR}
 ScenarioFeatureGroup
 ScenarioFeature
 SFV
-GazeboExecutor
-GazeboScenarioGenerator
+#GazeboExecutor
+#GazeboScenarioGenerator
 )
 
 
@@ -182,6 +182,8 @@ SFVsensor_link
 SFVobsOnPathScattering
 RULE_platform_init_pose_with_no_obj_colisions
 RULE_wp_path_inside_map
+GazeboExecutor
+GazeboScenarioGenerator
 )
 
 ##############
@@ -199,7 +201,7 @@ SFVobsOnPathScattering
 
 add_library(GazeboMissionGenerator src/Generators/Gazebo/GazeboMissionGenerator.cpp)
 target_link_libraries(GazeboMissionGenerator ${catkin_LIBRARIES}
-SFV
+#SFV
 SFVpath
 SFVwp
 )
@@ -208,7 +210,7 @@ add_library(GazeboPlatformGenerator src/Generators/Gazebo/GazeboPlatformGenerato
 target_link_libraries(GazeboPlatformGenerator ${catkin_LIBRARIES}
 ResourceHandler
 /usr/lib/libsdformat.so
-SFV
+#SFV
 SFVmass_link
 )
 
@@ -225,8 +227,13 @@ GazeboPlatformGenerator
 ############
 # Executor #
 ############
+add_library(scenarioLauncher src/Executor/scenarioLauncher.cpp) 
+target_link_libraries(scenarioLauncher ${catkin_LIBRARIES} ${PYTHON_LIBRARY}
+)
+
 add_library(GazeboExecutor src/Executor/GazeboExecutor.cpp)
 target_link_libraries(GazeboExecutor ${catkin_LIBRARIES}
+scenarioLauncher
 )
 
 
@@ -249,9 +256,7 @@ target_link_libraries(GazeboExecutor ${catkin_LIBRARIES}
 #ScenarioCoordinatorPoolDestroyer
 #)
 
-add_library(scenarioLauncher src/Synchronizer/scenarioLauncher.cpp) 
-target_link_libraries(scenarioLauncher ${catkin_LIBRARIES} ${PYTHON_LIBRARY}
-)
+
 
 
 #############
@@ -263,9 +268,8 @@ ScenarioFeatureGroup
 ScenarioFeature
 SFDPobj
 SFV
-GazeboScenarioGenerator
-#ScenarioCoordinatorPool
-scenarioLauncher
+#GazeboScenarioGenerator
+#GazeboExecutor
 )
 
 add_executable(mainGen src/Main.cpp)
@@ -275,7 +279,6 @@ ScenarioFeature
 SFDPobj
 SFV
 GazeboScenarioGenerator
-#ScenarioCoordinatorPool
 )
 
 
