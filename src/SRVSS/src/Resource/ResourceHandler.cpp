@@ -100,7 +100,14 @@ ResourceHandler::~ResourceHandler() {
 
 std::string ResourceHandler::getResource(std::string name,int id)
 {
-	return m_resourceMap->at(name)->at(id);
+	if (m_resourceMap->find(name) != m_resourceMap->end() )
+	{
+		if(m_resourceMap->at(name)->find(id) != (m_resourceMap->at(name))->end() )
+		{
+			return m_resourceMap->at(name)->at(id);
+		}
+	}
+	return("");
 }
 
 std::string ResourceHandler::getTerrainById(int id) {

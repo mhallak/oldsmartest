@@ -34,6 +34,7 @@ public :
 	void initFeaturesMap();
 
 	bool roll();
+	std::map<char,float> * get_Object_xyz();
 	TiXmlElement * ToXmlElement(int id);
 
 	~SFVObject();

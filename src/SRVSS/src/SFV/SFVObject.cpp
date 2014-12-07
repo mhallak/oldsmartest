@@ -17,6 +17,10 @@
 #include "SFDP/ScenarioFeatureGroup.h"
 
 #include "SFV/sfvSubGroup.h"
+#include "SFV/SFVterraine.h"
+
+#include "Generators/Gazebo/TerrainAnalyzer.h"
+#include "Resource/ResourceHandler.h"
 
 
 void SFVObject::initFeaturesMap()
@@ -104,6 +108,38 @@ TiXmlElement * SFVObject::ToXmlElement(int id)
 		return(SubGroupfeaturesToXmlElement(id));
 	}
 }
+
+
+
+std::map<char,float> * SFVObject::get_Object_xyz()
+{
+	SFV * sfv = get_ParentSFV();
+	if(! sfv)
+	{
+		std::cout << " can't calculate Object_xyz as the SFV wasn't fully rolled " << std::endl;
+		return 0;
+	}
+
+		SFVterraine *sfv_terraine = ((std::vector<SFVterraine*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::map))->at(0);
+		std::string terrain=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terraine->get_TopographicMapIndex()->get_RolledValue());
+		std::string path = ResourceHandler::getInstance(sfv->get_ResourceFile()).getWorldModelsFolderURL();
+		TerrainAnalyzer* m_terrainAnalyzer=new TerrainAnalyzer();
+		m_terrainAnalyzer->loadFile(path+"/"+terrain);
+
+		float obj_x, obj_y, map_z;
+		m_terrainAnalyzer->getXYZCoord(this->get_LocationOnTheXaxis()->get_RolledValue(),this->get_LocationOnTheYaxis()->get_RolledValue(), obj_x, obj_y, map_z);
+		float obj_z = map_z + this->get_LocationOnTheZaxis()->get_RolledValue();
+
+		std::map<char,float> * Obj_xyz = new std::map<char,float>;
+		Obj_xyz->insert(std::pair<char,float>('x',obj_x) );
+		Obj_xyz->insert(std::pair<char,float>('y',obj_y) );
+		Obj_xyz->insert(std::pair<char,float>('z',obj_z) );
+		return(Obj_xyz);
+}
+
+
+
+
 
 SFVObject::~SFVObject()
 {

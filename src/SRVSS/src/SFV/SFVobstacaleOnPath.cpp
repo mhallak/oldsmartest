@@ -13,6 +13,10 @@
 #include "SFV/SFVobstacleOnPath.h"
 #include "SFV/SFVplatformPose.h"
 #include "SFV/SFVpath.h"
+#include "SFV/SFVterraine.h"
+
+#include "Generators/Gazebo/TerrainAnalyzer.h"
+#include "Resource/ResourceHandler.h"
 
 #include "SFDP/ScenarioFeatureType.h"
 #include "SFDP/ScenarioFeature.h"
@@ -111,16 +115,16 @@ TiXmlElement * SFVObstacleOnPath::ToXmlElement(int id)
 
 
 
-std::map<char,float> * SFVObstacleOnPath::get_Obstacle_xy()
+std::map<char,float> * SFVObstacleOnPath::get_Obstacle_xyz()
 {
 	SFV * sfv = get_ParentSFV();
 	if(! sfv)
 	{
-		std::cout << " can't calculate WP_xy as the SFV wasn't fully rolled " << std::endl;
+		std::cout << " can't calculate WP_xyz as the SFV wasn't fully rolled " << std::endl;
 		return 0;
 	}
 
-	std::map<char,float> * Obs_xy = new std::map<char,float>;
+	//std::map<char,float> * Obs_xy = new std::map<char,float>;
 
 	SFVplatformPose *sfv_platPose = ((std::vector<SFVplatformPose*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::platform_pose))->at(0);
 	SFVpath *sfv_path = ((std::vector<SFVpath*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::Path))->at(0);
@@ -162,10 +166,23 @@ std::map<char,float> * SFVObstacleOnPath::get_Obstacle_xy()
 
 		// std::cout <<  "obs_x = " << obs_x <<  "  obs_y = " << obs_y << std::endl;
 
-		std::map<char,float> * Obstacle_xy = new std::map<char,float>;
-		Obstacle_xy->insert(std::pair<char,float>('x',obs_x) );
-		Obstacle_xy->insert(std::pair<char,float>('y',obs_y) );
-		return(Obstacle_xy);
+		SFVterraine *sfv_terraine = ((std::vector<SFVterraine*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::map))->at(0);
+		std::string terrain=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terraine->get_TopographicMapIndex()->get_RolledValue());
+		std::string path = ResourceHandler::getInstance(sfv->get_ResourceFile()).getWorldModelsFolderURL();
+		TerrainAnalyzer* m_terrainAnalyzer=new TerrainAnalyzer();
+		m_terrainAnalyzer->loadFile(path+"/"+terrain);
+
+		float terrain_z;
+		m_terrainAnalyzer->getZCoord(obs_x,obs_y,terrain_z);
+		double obs_z = terrain_z + this->get_LocationOnTheZaxis()->get_RolledValue();
+
+
+
+		std::map<char,float> * Obstacle_xyz = new std::map<char,float>;
+		Obstacle_xyz->insert(std::pair<char,float>('x',obs_x) );
+		Obstacle_xyz->insert(std::pair<char,float>('y',obs_y) );
+		Obstacle_xyz->insert(std::pair<char,float>('z',obs_z) );
+		return(Obstacle_xyz);
 }
 
 

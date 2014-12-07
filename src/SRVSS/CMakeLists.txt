@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   rosbag
   robil_msgs 
   gazebo_msgs
+  fcl 
 )
 
 find_package(Boost REQUIRED COMPONENTS system thread filesystem)
@@ -22,6 +23,8 @@ find_package(OpenCV REQUIRED)
 find_package(Gazebo REQUIRED)
 
 FIND_PACKAGE(PythonLibs 2.7 REQUIRED)
+
+
 
 catkin_package(
     #LIBRARIES  
@@ -35,7 +38,7 @@ catkin_package(
 )
 
                                                                                                                                                  
-include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${TinyXML_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} /usr/include/sdformat-1.4 ${PYTHON_INCLUDE_DIR})
+include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${TinyXML_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} /usr/include/sdformat-1.4 ${PYTHON_INCLUDE_DIR} )
 
 
 
@@ -89,7 +92,7 @@ ScenarioFeature
 
 
 add_library(SFDPobj src/SFDP/SFDPobj.cpp)
-target_link_libraries(SFDPobj ${catkin_LIBRARIES} ${Boost_INCLUDE_DIR}
+target_link_libraries(SFDPobj ${catkin_LIBRARIES} 
 ScenarioFeatureGroup
 ScenarioFeature
 SFV
@@ -113,6 +116,7 @@ sfvSubGroup
 
 add_library(SFVpath src/SFV/SFVpath.cpp)
 target_link_libraries(SFVpath ${catkin_LIBRARIES}
+ScenarioFeature
 sfvSubGroup
 SFVwp
 )
@@ -153,7 +157,7 @@ SFVObject
 add_library(SFVobstacaleOnPath src/SFV/SFVobstacaleOnPath.cpp)
 target_link_libraries(SFVobstacaleOnPath ${catkin_LIBRARIES}
 sfvSubGroup
-
+ScenarioFeatureGroup
 )
 
 add_library(SFVobsOnPathScattering src/SFV/SFVobsOnPathScattering.cpp)
@@ -171,6 +175,7 @@ sfvSubGroup
 
 add_library(SFV src/SFV/SFV.cpp)
 target_link_libraries(SFV ${catkin_LIBRARIES}
+ScenarioFeatureGroup
 sfvSubGroup
 SFVpath
 SFVterraine
@@ -307,8 +312,10 @@ target_link_libraries(ReplayPlayer ${catkin_LIBRARIES}
 #### grader ###
 ###############
 add_executable(grader_node src/Grader/grader_node.cpp)
-target_link_libraries(grader_node
-   ${catkin_LIBRARIES}
+target_link_libraries(grader_node ${catkin_LIBRARIES}
+SFV
+ResourceHandler
+/usr/lib/libsdformat.so
 )
 
 

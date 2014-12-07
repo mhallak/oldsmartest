@@ -24,7 +24,7 @@
 #include <iostream>
 
 GazeboEnvironmentGenerator::GazeboEnvironmentGenerator() {
-	m_terrainAnalyzer=new TerrainAnalyzer();
+	 m_terrainAnalyzer=new TerrainAnalyzer();
 	 m_objectCount=0;
 	 m_ObstacleOnPathCounter=0;
 	 m_WpMarkCounter=0;
@@ -49,10 +49,12 @@ void GazeboEnvironmentGenerator::spawnObjects(SFV* sfv,TiXmlElement * element)
 			include->LinkEndChild(url);
 			TiXmlElement * pose = new TiXmlElement( "pose" );
 			std::stringstream ss;
-			float x,y,z;
-			m_terrainAnalyzer->getXYZCoord(obj->get_LocationOnTheXaxis()->get_RolledValue(),obj->get_LocationOnTheYaxis()->get_RolledValue(),x,y,z);
 
-			ss<<x <<" " << y <<" "<< z+obj->get_LocationOnTheZaxis()->get_RolledValue() << " ";
+			float obj_x = obj->get_Object_xyz()->at('x');
+			float obj_y = obj->get_Object_xyz()->at('y');
+			float obj_z = obj->get_Object_xyz()->at('z');
+
+			ss<<obj_x <<" " << obj_y <<" "<< obj_z << " ";
 			ss<<obj->get_LocationRoll()->get_RolledValue()<<" " << obj->get_LocationPitch()->get_RolledValue()<<" "<< obj->get_LocationYaw()->get_RolledValue();
 			TiXmlText * pose_text = new TiXmlText(ss.str());
 			ss.str("");
@@ -83,13 +85,13 @@ void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFV* sfv,TiXmlElement * ele
 	{
 		for (SFVObstacleOnPath *obs : *(obsScattering_it->get_ObstaclesOnPath()))
 		{
-			double obs_x = obs->get_Obstacle_xy()->at('x');
-			double obs_y = obs->get_Obstacle_xy()->at('y');
-			float obs_z;
-			m_terrainAnalyzer->getZCoord(obs_x,obs_y,obs_z);
+			double obs_x = obs->get_Obstacle_xyz()->at('x');
+			double obs_y = obs->get_Obstacle_xyz()->at('y');
+			double obs_z = obs->get_Obstacle_xyz()->at('z');
+
 
 			std::stringstream ss;
-			ss<<obs_x <<" " << obs_y <<" "<< obs_z+obs->get_LocationOnTheZaxis()->get_RolledValue() << " ";
+			ss<<obs_x <<" " << obs_y <<" "<< obs_z << " ";
 			ss<<obs->get_LocationRoll()->get_RolledValue() <<" " << obs->get_LocationPitch()->get_RolledValue() <<" "<< obs->get_LocationYaw()->get_RolledValue();
 
 
