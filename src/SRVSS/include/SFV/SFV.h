@@ -38,6 +38,8 @@ class SFV {
 		bool was_executed_flag;
 		float my_grade;
 
+		std::vector<sfvSubGroup*> * SubGroupsBayFeatureGroupType_ReturnVec;
+
 	public:
 		SFV(SFDPobj * SFDP, std::string ws_folder_url);
 		SFV(std::string SFV_file_name, std::string ws_folder_url);
@@ -67,7 +69,8 @@ class SFV {
 			else { return(my_SFDP); }
 			}
 
-		std::vector<sfvSubGroup*> * get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType GroupType);
+		sfvSubGroup * get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType GroupType);
+		bool get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType GroupType, std::vector<sfvSubGroup *> * SubGroupVec);
 
 		template <class T>
 		void Populate_mySFVsubGroups(ScenarioFeatureGroupType::optional scenarioFeatureType , T fatures_data);

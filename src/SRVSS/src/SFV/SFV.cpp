@@ -44,8 +44,10 @@ SFV::SFV(SFDPobj * SFDP, std::string ws_folder_url)
 		}
 
 	my_rules = new std::vector<Rule *>;
-	my_rules->push_back(new Rule_platform_init_pose_with_no_obj_colisions());
+	my_rules->push_back(new Rule_platform_init_pose_with_no_obj_colisions);
 	my_rules->push_back(new Rule_wp_path_inside_map);
+
+	SubGroupsBayFeatureGroupType_ReturnVec = new std::vector<sfvSubGroup *>;
 }
 
 
@@ -56,7 +58,7 @@ SFV::SFV(std::string SFV_file_name, std::string ws_folder_url)
 	was_rolled_flag=true;
 	my_rules=0;
 	my_sfvSubGroups = new std::vector<sfvSubGroup *>;
-
+	SubGroupsBayFeatureGroupType_ReturnVec = new std::vector<sfvSubGroup *>;
 
 	//Loading file
 	TiXmlDocument *SFVfile = new TiXmlDocument(SFV_file_name);
@@ -103,6 +105,7 @@ SFV::SFV(std::string SFV_file_name, std::string ws_folder_url)
 		}
 
 	std::cout << "my_resource_file_url = " << my_resource_file_url <<std::endl;
+
 }
 
 
@@ -146,20 +149,32 @@ void SFV::Populate_mySFVsubGroups(ScenarioFeatureGroupType::optional scenarioFea
 }
 
 
-std::vector<sfvSubGroup *> * SFV::get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType GroupType)
+sfvSubGroup * SFV::get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType GroupType)
 {
-	std::vector<sfvSubGroup *> * Vec = new std::vector<sfvSubGroup *>;
-
 	for (sfvSubGroup * subGroup_it : * my_sfvSubGroups)
 		{
 		if (subGroup_it->get_Type().value() == GroupType.value())
 			{
-			Vec->push_back(subGroup_it);
+			return(subGroup_it);
 			}
 		}
-	return(Vec);
 }
 
+bool SFV::get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType GroupType, std::vector<sfvSubGroup *> * SubGroupVec)
+{
+	for (sfvSubGroup * subGroup_it : * my_sfvSubGroups)
+		{
+		if (subGroup_it->get_Type().value() == GroupType.value())
+			{
+			SubGroupVec->push_back(subGroup_it);
+			}
+		}
+
+	if (SubGroupVec->empty())
+		return(false);
+	else
+		return(true);
+}
 
 
 bool SFV::roll()
@@ -180,6 +195,7 @@ bool SFV::roll()
 			for (sfvSubGroup * subGroup_it : * my_sfvSubGroups)
 				{
 				std::cout << "Roll of " << subGroup_it->get_Type().str() <<std::endl;
+				std::cout << "failure point !!!" << std::endl;
 				if (! subGroup_it->roll())
 					{
 					roll_fail_flag=true;
@@ -216,7 +232,9 @@ bool SFV::rules_check()
 	for (Rule * rule_it : * my_rules)
 	{
 	 if(! rule_it->isRuleValid(this))
+    	 {
 		 return(false);
+	     }
 	}
 	return(true);
 }

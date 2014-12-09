@@ -23,6 +23,8 @@ private :
 	ScenarioFeature * initial_platform_position_on_map_Y_axis;
 	ScenarioFeature * initial_platform_azimut;
 
+	std::map<char,float> * Implicit_PlatInit_xy;
+
 public :
 	SFVplatformPose(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV);
 	SFVplatformPose(SFVplatformPose * template_SFVplatformPose);

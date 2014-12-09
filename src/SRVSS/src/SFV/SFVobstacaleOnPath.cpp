@@ -47,6 +47,8 @@ SFVObstacleOnPath::SFVObstacleOnPath(ScenarioFeatureGroup * scenfeaturesGroup, S
 	initFeaturesMap();
 	initSubGroupFeatures(scenfeaturesGroup->get_features());
 	set_WasRolledFlag(false);
+
+	Implicit_Obstacle_xyz = new std::map<char,float>;
 }
 
 
@@ -55,6 +57,8 @@ SFVObstacleOnPath::SFVObstacleOnPath(SFVObstacleOnPath * template_subGroup):  sf
 	initFeaturesMap();
 	cloneSubGroupFeatures(template_subGroup);
 	set_WasRolledFlag(false);
+
+	Implicit_Obstacle_xyz = new std::map<char,float>;
 }
 
 SFVObstacleOnPath::SFVObstacleOnPath(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::obstacle_on_path , parent_SFV)
@@ -62,6 +66,8 @@ SFVObstacleOnPath::SFVObstacleOnPath(TiXmlNode * xml_subGroup, SFV * parent_SFV)
 	initFeaturesMap();
 	setSubGroupFeaturesFromXmlElement(xml_subGroup);
 	set_WasRolledFlag(true);
+
+	Implicit_Obstacle_xyz = new std::map<char,float>;
 }
 
 
@@ -117,17 +123,16 @@ TiXmlElement * SFVObstacleOnPath::ToXmlElement(int id)
 
 std::map<char,float> * SFVObstacleOnPath::get_Obstacle_xyz()
 {
+
 	SFV * sfv = get_ParentSFV();
-	if(! sfv)
+	if(! sfv->get_WasRolledFlag())
 	{
 		std::cout << " can't calculate WP_xyz as the SFV wasn't fully rolled " << std::endl;
 		return 0;
 	}
 
-	//std::map<char,float> * Obs_xy = new std::map<char,float>;
-
-	SFVplatformPose *sfv_platPose = ((std::vector<SFVplatformPose*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::platform_pose))->at(0);
-	SFVpath *sfv_path = ((std::vector<SFVpath*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::Path))->at(0);
+	SFVplatformPose *sfv_platPose = (SFVplatformPose*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::platform_pose));
+	SFVpath *sfv_path = (SFVpath*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::Path));
 
 	double plat_x=sfv_platPose->get_PlatInit_xy()->at('x');
 	double plat_y=sfv_platPose->get_PlatInit_xy()->at('y');
@@ -166,23 +171,22 @@ std::map<char,float> * SFVObstacleOnPath::get_Obstacle_xyz()
 
 		// std::cout <<  "obs_x = " << obs_x <<  "  obs_y = " << obs_y << std::endl;
 
-		SFVterraine *sfv_terraine = ((std::vector<SFVterraine*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::map))->at(0);
+		SFVterraine *sfv_terraine = (SFVterraine*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::map));
 		std::string terrain=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terraine->get_TopographicMapIndex()->get_RolledValue());
 		std::string path = ResourceHandler::getInstance(sfv->get_ResourceFile()).getWorldModelsFolderURL();
-		TerrainAnalyzer* m_terrainAnalyzer=new TerrainAnalyzer();
-		m_terrainAnalyzer->loadFile(path+"/"+terrain);
 
+
+		TerrainAnalyzer m_terrainAnalyzer;
+		m_terrainAnalyzer.loadFile(path+"/"+terrain);
 		float terrain_z;
-		m_terrainAnalyzer->getZCoord(obs_x,obs_y,terrain_z);
+		m_terrainAnalyzer.getZCoord(obs_x,obs_y,terrain_z);
 		double obs_z = terrain_z + this->get_LocationOnTheZaxis()->get_RolledValue();
 
-
-
-		std::map<char,float> * Obstacle_xyz = new std::map<char,float>;
-		Obstacle_xyz->insert(std::pair<char,float>('x',obs_x) );
-		Obstacle_xyz->insert(std::pair<char,float>('y',obs_y) );
-		Obstacle_xyz->insert(std::pair<char,float>('z',obs_z) );
-		return(Obstacle_xyz);
+		Implicit_Obstacle_xyz->clear();
+		Implicit_Obstacle_xyz->insert(std::pair<char,float>('x',obs_x) );
+		Implicit_Obstacle_xyz->insert(std::pair<char,float>('y',obs_y) );
+		Implicit_Obstacle_xyz->insert(std::pair<char,float>('z',obs_z) );
+		return(Implicit_Obstacle_xyz);
 }
 
 

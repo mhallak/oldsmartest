@@ -54,10 +54,11 @@ int main(int argc, char** argv)
 				return 0;
 			}
 
-			sfv->printToXML(scenario_folder_path+"/test.SFV");
+			sfv->printToXML(scenario_folder_path+"/scenario.SFV");
 
 			return 0;
 		}
+
 
 	if(std::string(argv[1]).compare("-genSCEN")==0)
 		{
@@ -71,37 +72,6 @@ int main(int argc, char** argv)
 
 			sfv->generate();
 
-			//GazeboScenarioGenerator * ScenGen = new GazeboScenarioGenerator(sfv, scenarios_folder_path);
-			//ScenGen->GenerateScenario();
-
-
-
-
-/*
-			ScenarioCoordinator* cord =ScenarioCoordinatorPool::Instance()->genCoordinator(8992,8993);
-			std::cout << " pool done!!! " << std::endl;
-
-
-
-			cord->startRosCore();
-			std::cout << " core done!!! " << std::endl;
-
-			cord->startGazeboServer();
-			std::cout << " server done!!! " << std::endl;
-
-			cord->launchGazeboClient();
-
-			for (SFVObjects* objs_it : *(sfvComp->getObjects()) )
-			{
-				for (SFVObject* sfvObj : *objs_it->m_objects)
-			     {
-			    	 std::cout << "obj->m_name = " << sfvObj->m_name << std::endl;
-				 cord->spawnGazeboModel<SFVObject>(sfvObj);
-			char c;
-			std::cin >>c;
- 			     }
-			}
-*/
 			return 0;
 		}
 

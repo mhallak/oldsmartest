@@ -25,6 +25,7 @@ private :
 	ScenarioFeature * my_location_Pitch;
 	ScenarioFeature * my_location_Yaw;
 
+	std::map<char,float> * Implicit_Obstacle_xyz;
 
 public :
 	SFVObstacleOnPath(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV);

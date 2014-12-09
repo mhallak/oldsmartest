@@ -152,7 +152,7 @@ std::map<std::string ,BVHModel<RSS> *> * robot_models_map;
 SFV *sfv;
 tf::TransformListener *listener_ptr;
 boost::mutex collision_mutex;
-
+boost::mutex tf_data_mutex;
 /**
  * Grading function for collision detection
  */
@@ -160,12 +160,12 @@ void collision_grader(const ros::TimerEvent&)
 {
     float min_dist = 100;
 
-    // object distance
     std::string part_name;
     BVHModel<RSS> * part_model;
+
 	for (std::map<std::string ,BVHModel<RSS> *>::iterator RobotPart_it=robot_models_map->begin(); RobotPart_it!=robot_models_map->end(); ++RobotPart_it)
 	{
-		part_name = RobotPart_it->first;
+	part_name = RobotPart_it->first;
 		part_model = RobotPart_it->second;
 
 		Vec3f part_p(0,0,0);
@@ -174,7 +174,9 @@ void collision_grader(const ros::TimerEvent&)
 
 		tf::StampedTransform part_transform;
 		try {
+		   listener_ptr->waitForTransform("/world", part_name, ros::Time(0), ros::Duration(1) );
 		   listener_ptr->lookupTransform("/world", part_name ,ros::Time(0), part_transform);
+
 		   part_p.setValue(part_transform.getOrigin().x(),part_transform.getOrigin().y(),part_transform.getOrigin().z());
 		   part_q = Quaternion3f(part_transform.getRotation().w(),part_transform.getRotation().x(),part_transform.getRotation().y(),part_transform.getRotation().z());
 		   part_pose.setTransform(part_q,part_p);
@@ -184,20 +186,19 @@ void collision_grader(const ros::TimerEvent&)
 		   	ROS_ERROR("%s",ex.what());
 		   	return;
 		      }
-
-				for (SFVobsOnPathScattering *obsScattering_it : *((std::vector<SFVobsOnPathScattering*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::obstacles_on_path)) )
+		   	    std::vector<SFVobsOnPathScattering*> *obsOnPathScatterings_vec = new std::vector<SFVobsOnPathScattering*>;
+		   	   	sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::obstacles_on_path, (std::vector<sfvSubGroup*> *)obsOnPathScatterings_vec);
+				for (SFVobsOnPathScattering *obsScattering_it : *obsOnPathScatterings_vec )
 				{
 					for (SFVObstacleOnPath *obs : *(obsScattering_it->get_ObstaclesOnPath()))
 					{
+
 						std::string obs_name = ResourceHandler::getInstance(sfv->get_ResourceFile()).getObjectById(obs->get_ObstacleType()->get_RolledValue());
 
-						double obs_x = obs->get_Obstacle_xyz()->at('x');
-						double obs_y = obs->get_Obstacle_xyz()->at('y');
-						double obs_z = obs->get_Obstacle_xyz()->at('z');
-
-
+						float obs_x = obs->get_Obstacle_xyz()->at('x');
+						float obs_y = obs->get_Obstacle_xyz()->at('y');
+						float obs_z = obs->get_Obstacle_xyz()->at('z');
 						Vec3f obs_p(obs_x, obs_y, obs_z);
-
 
 						Vec3f centers_dist = obs_p - part_p;
 						if ( centers_dist.length() > 10 )
@@ -217,10 +218,14 @@ void collision_grader(const ros::TimerEvent&)
 							if (  min_dist > local_result.min_distance )
 								min_dist = local_result.min_distance;
 						}
+
 					}
+
 				}
 
-				for (SFVobjScattering* objScattering_it : *((std::vector<SFVobjScattering*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::objects)) )
+				std::vector<SFVobjScattering*> *objectsOnPathScatterings_vec = new std::vector<SFVobjScattering*>;
+		   	   	sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::objects, (std::vector<sfvSubGroup*> *)objectsOnPathScatterings_vec);
+				for (SFVobjScattering* objScattering_it : *objectsOnPathScatterings_vec )
 				{
 					for (SFVObject* obj : *(objScattering_it->get_Objects()))
 					{
@@ -229,7 +234,6 @@ void collision_grader(const ros::TimerEvent&)
 						float obj_x = obj->get_Object_xyz()->at('x');
 						float obj_y = obj->get_Object_xyz()->at('y');
 						float obj_z = obj->get_Object_xyz()->at('z');
-
 						Vec3f obj_p(obj_x, obj_y, obj_z);
 
 						Vec3f centers_dist = obj_p - part_p;
@@ -244,15 +248,17 @@ void collision_grader(const ros::TimerEvent&)
 						Transform3f obj_pose(obj_q,obj_p);
 
 						DistanceResult local_result;
-
 						if ( (robot_models_map->find(part_name)!=robot_models_map->end()) && (obs_models_map->find(obj_name.c_str())!=obs_models_map->end()) )
 						{
 							distance(robot_models_map->at(part_name),part_pose,obs_models_map->at(obj_name.c_str()),obj_pose,1,local_result);
 							if (  min_dist > local_result.min_distance )
 								min_dist = local_result.min_distance;
 						}
+
 					}
+
 				}
+
 	}
 
 		//std::cout << " min dist to  =  " <<  min_dist << std::endl;
@@ -278,7 +284,9 @@ void rollover_grader(const ros::TimerEvent&)
 	double roll, pitch, yaw;
 
 	try {
+	   listener_ptr->waitForTransform("/world", "body", ros::Time(0), ros::Duration(1.0) );
 	   listener_ptr->lookupTransform("/world", "body" ,ros::Time(0), rob_body_transform);
+	   //listener_ptr->clear();
 	   tf::Matrix3x3 mat( rob_body_transform.getRotation());
 	   mat.getRPY(roll, pitch, yaw);
 	     }
@@ -295,6 +303,8 @@ void rollover_grader(const ros::TimerEvent&)
 		scenario_pitch_max_ang = std::max( scenario_pitch_max_ang , std::abs((float)pitch) );
 	rollover_mutex.unlock();
 }
+
+
 
 
 
@@ -409,13 +419,24 @@ void load_robot_models()
 	   }
 }
 
+void printUsage()
+{
+	std::cout << "Two variables required SFV_ws_folder and SFV_file_url" << std::endl;
+}
+
 
 int main(int argc, char **argv)
 {
+	if(argc!=3)
+		{
+		printUsage();
+		return 0;
+		}
+
    ros::init(argc, argv, "greader_node");
 
-   std::string SFV_file_url = "/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/scenarios/scenario_1/test.SFV";
-   std::string SFV_ws_folder = "/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/scenarios/scenario_1";
+   std::string SFV_ws_folder = argv[1];       // "/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/scenarios/scenario_1";
+   std::string SFV_file_url = argv[2];        // "/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/scenarios/scenario_1/test.SFV";
    sfv = new SFV(SFV_file_url,SFV_ws_folder);
 
    load_obstacles_models();
@@ -423,7 +444,7 @@ int main(int argc, char **argv)
 
    ros::NodeHandle n;
 
-   tf::TransformListener listener;
+   tf::TransformListener listener(ros::Duration(1),true);
    listener_ptr = &listener;
 
    reset_flag.data = false;
@@ -432,7 +453,7 @@ int main(int argc, char **argv)
    ros::Timer rollover_grader_timer = n.createTimer(ros::Duration(0.1), rollover_grader);
    ros::Timer grades_publishing_timer = n.createTimer(ros::Duration(0.1), grades_publishing);
 
-   greades_pub_ = n.advertise<std_msgs::Float32MultiArray>("/srvss/greade", 100);
+   greades_pub_ = n.advertise<std_msgs::Float32MultiArray>("/srvss/grades", 100);
    reset_pub_ = n.advertise<std_msgs::Bool>("/srvss/scenario_reset", 100);
 
 

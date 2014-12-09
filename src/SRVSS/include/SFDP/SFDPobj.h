@@ -31,7 +31,7 @@ class SFDPobj {
 		std::string my_Grades_file_url;
 
 		int my_division_level;
-		static const int division_limit = 5;
+		static const int division_limit = 0;
 
 		std::vector<SFV *> * my_sampled_SFVs;   // vector of sampled SFVs
 

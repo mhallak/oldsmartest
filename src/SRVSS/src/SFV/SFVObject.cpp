@@ -46,6 +46,8 @@ SFVObject::SFVObject(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV)
 	initFeaturesMap();
 	initSubGroupFeatures(scenfeaturesGroup->get_features());
 	set_WasRolledFlag(false);
+
+	Implicit_Object_xyz = new std::map<char,float>;
 }
 
 
@@ -54,6 +56,8 @@ SFVObject::SFVObject(SFVObject * template_subGroup):  sfvSubGroup(template_subGr
 	initFeaturesMap();
 	cloneSubGroupFeatures(template_subGroup);
 	set_WasRolledFlag(false);
+
+	Implicit_Object_xyz = new std::map<char,float>;
 }
 
 SFVObject::SFVObject(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::object , parent_SFV)
@@ -61,6 +65,8 @@ SFVObject::SFVObject(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(Sc
 	initFeaturesMap();
 	setSubGroupFeaturesFromXmlElement(xml_subGroup);
 	set_WasRolledFlag(true);
+
+	Implicit_Object_xyz = new std::map<char,float>;
 }
 
 
@@ -120,21 +126,21 @@ std::map<char,float> * SFVObject::get_Object_xyz()
 		return 0;
 	}
 
-		SFVterraine *sfv_terraine = ((std::vector<SFVterraine*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::map))->at(0);
+		SFVterraine *sfv_terraine = (SFVterraine*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::map));
 		std::string terrain=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terraine->get_TopographicMapIndex()->get_RolledValue());
 		std::string path = ResourceHandler::getInstance(sfv->get_ResourceFile()).getWorldModelsFolderURL();
-		TerrainAnalyzer* m_terrainAnalyzer=new TerrainAnalyzer();
-		m_terrainAnalyzer->loadFile(path+"/"+terrain);
+		TerrainAnalyzer m_terrainAnalyzer;
+		m_terrainAnalyzer.loadFile(path+"/"+terrain);
 
 		float obj_x, obj_y, map_z;
-		m_terrainAnalyzer->getXYZCoord(this->get_LocationOnTheXaxis()->get_RolledValue(),this->get_LocationOnTheYaxis()->get_RolledValue(), obj_x, obj_y, map_z);
+		m_terrainAnalyzer.getXYZCoord(this->get_LocationOnTheXaxis()->get_RolledValue(),this->get_LocationOnTheYaxis()->get_RolledValue(), obj_x, obj_y, map_z);
 		float obj_z = map_z + this->get_LocationOnTheZaxis()->get_RolledValue();
 
-		std::map<char,float> * Obj_xyz = new std::map<char,float>;
-		Obj_xyz->insert(std::pair<char,float>('x',obj_x) );
-		Obj_xyz->insert(std::pair<char,float>('y',obj_y) );
-		Obj_xyz->insert(std::pair<char,float>('z',obj_z) );
-		return(Obj_xyz);
+		Implicit_Object_xyz->clear();
+		Implicit_Object_xyz->insert(std::pair<char,float>('x',obj_x) );
+		Implicit_Object_xyz->insert(std::pair<char,float>('y',obj_y) );
+		Implicit_Object_xyz->insert(std::pair<char,float>('z',obj_z) );
+		return(Implicit_Object_xyz);
 }
 
 

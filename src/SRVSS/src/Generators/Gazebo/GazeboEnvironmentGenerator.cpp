@@ -36,8 +36,9 @@ GazeboEnvironmentGenerator::~GazeboEnvironmentGenerator() {
 
 void GazeboEnvironmentGenerator::spawnObjects(SFV* sfv,TiXmlElement * element)
 {
-
-	for (SFVobjScattering* objScattering_it : * (std::vector<SFVobjScattering*> *)(sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::objects)))
+	std::vector<SFVobjScattering*> *objects_scatterings_vec = new std::vector<SFVobjScattering*>;
+	sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::objects, (std::vector<sfvSubGroup*> *)objects_scatterings_vec);
+	for (SFVobjScattering* objScattering_it : * objects_scatterings_vec )
 	{
 		for (SFVObject* obj : *objScattering_it->get_Objects())
 		{
@@ -81,7 +82,9 @@ void GazeboEnvironmentGenerator::spawnObjects(SFV* sfv,TiXmlElement * element)
 
 void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFV* sfv,TiXmlElement * element)
 {
-	for (SFVobsOnPathScattering *obsScattering_it : *((std::vector<SFVobsOnPathScattering*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::obstacles_on_path)) )
+	std::vector<SFVobsOnPathScattering*> *obsOnpath_scatterings_vec = new std::vector<SFVobsOnPathScattering*>;
+	sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::obstacles_on_path, (std::vector<sfvSubGroup*> *)obsOnpath_scatterings_vec);
+	for (SFVobsOnPathScattering *obsScattering_it : *obsOnpath_scatterings_vec )
 	{
 		for (SFVObstacleOnPath *obs : *(obsScattering_it->get_ObstaclesOnPath()))
 		{
@@ -135,7 +138,7 @@ void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFV* sfv,TiXmlElement * ele
 
 void GazeboEnvironmentGenerator::spawnPathWpMarks(SFV* sfv,TiXmlElement * element)
 {
-	SFVpath *sfv_Path = ((std::vector<SFVpath*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::Path))->at(0);
+	SFVpath *sfv_Path = (SFVpath*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::Path));
 
     double wp_x, wp_y;
 	for(SFVwp* wp_it : *(sfv_Path->get_PathWPs()))
@@ -179,7 +182,7 @@ void GazeboEnvironmentGenerator::spawnPathWpMarks(SFV* sfv,TiXmlElement * elemen
 
 void GazeboEnvironmentGenerator::spawnTerrain(SFV* sfv,TiXmlElement * element)
 {
-	SFVterraine *sfv_terraine = ((std::vector<SFVterraine*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::map))->at(0);
+	SFVterraine *sfv_terraine = (SFVterraine*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::map));
 	std::string terrain=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terraine->get_TopographicMapIndex()->get_RolledValue());
 
 	TiXmlElement * include = new TiXmlElement( "include" );
@@ -193,7 +196,7 @@ void GazeboEnvironmentGenerator::spawnTerrain(SFV* sfv,TiXmlElement * element)
 
 void GazeboEnvironmentGenerator::spawnPlatformPose(SFV* sfv,TiXmlElement * element)
 {
-	SFVplatformPose *sfv_PlatPose = ((std::vector<SFVplatformPose*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::platform_pose))->at(0);
+	SFVplatformPose *sfv_PlatPose = (SFVplatformPose*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::platform_pose));
 
 	TiXmlElement * include = new TiXmlElement( "include" );
 	element->LinkEndChild(include);
@@ -225,7 +228,7 @@ void GazeboEnvironmentGenerator::spawnPlatformPose(SFV* sfv,TiXmlElement * eleme
 void GazeboEnvironmentGenerator::genEnvFromSFV(SFV* sfv,std::string filename)
 {
 	//load terrain
-	SFVterraine *sfv_terraine = ((std::vector<SFVterraine*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::map))->at(0);
+	SFVterraine *sfv_terraine = (SFVterraine*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::map));
 	std::string terrain=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terraine->get_TopographicMapIndex()->get_RolledValue());
 
 	std::string path = ResourceHandler::getInstance(sfv->get_ResourceFile()).getWorldModelsFolderURL();

@@ -46,8 +46,8 @@ GazeboMissionGenerator::~GazeboMissionGenerator() {
 
 void GazeboMissionGenerator::generateMission(SFV *sfv, std::string fileName)
 {
-	SFVplatformPose *sfv_PlatPose = ((std::vector<SFVplatformPose*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::platform_pose))->at(0);
-	SFVpath *sfv_Path = ((std::vector<SFVpath*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::Path))->at(0);
+	SFVplatformPose *sfv_PlatPose = (SFVplatformPose*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::platform_pose));
+	SFVpath *sfv_Path = (SFVpath*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::Path));
 
 	std::ofstream file;
 	file.open (fileName + ".txt");
@@ -63,7 +63,6 @@ void GazeboMissionGenerator::generateMission(SFV *sfv, std::string fileName)
 	float x, y;
 	for(SFVwp* wp_it : *(sfv_Path->get_PathWPs()))
 	{
-
 		x=wp_it->get_WPxy()->at('x');
 		y=wp_it->get_WPxy()->at('y');
 		file<< x <<" " <<y << " " << 3 << std::endl;
@@ -73,8 +72,8 @@ void GazeboMissionGenerator::generateMission(SFV *sfv, std::string fileName)
 
 void GazeboMissionGenerator::generateMission_ROBIL2(SFV * sfv,std::string fileName)
 {
-	SFVpath *sfv_Path = ((std::vector<SFVpath*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::Path))->at(0);
-	SFVplatformPose *sfv_PlatPose = ((std::vector<SFVplatformPose*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::platform_pose))->at(0);
+	SFVpath *sfv_Path = (SFVpath*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::Path));
+	SFVplatformPose *sfv_PlatPose = (SFVplatformPose*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::platform_pose));
 
 //	nav_msgs::Path wp_path;
 //	geometry_msgs::PoseStamped pose;

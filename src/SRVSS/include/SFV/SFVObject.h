@@ -25,6 +25,7 @@ private :
 	ScenarioFeature * my_location_Pitch;
 	ScenarioFeature * my_location_Yaw;
 
+	std::map<char,float> * Implicit_Object_xyz;
 
 public :
 	SFVObject(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV);
