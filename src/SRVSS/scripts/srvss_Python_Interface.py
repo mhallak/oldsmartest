@@ -126,8 +126,9 @@ class ScenarioLauncher:
         time.sleep(3)	
 
 
-    def launch_grader(self):
-	node = ROSNode("SRVSS", "grader_node", name="grader_node", output="screen")
+    def launch_grader(self, Scenarin_folder):
+	arguments = Scenarin_folder + " " + Scenarin_folder+"/scenario.SFV"
+	node = ROSNode("SRVSS", "grader_node", name="grader_node", output="screen", args=arguments)
 	self.launcher.launch(node)
         time.sleep(3)	
 

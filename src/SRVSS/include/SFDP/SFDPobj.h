@@ -30,9 +30,6 @@ class SFDPobj {
 		std::string my_WS_url;     					  // all output files will be created in this folder
 		std::string my_Grades_file_url;
 
-		int my_division_level;
-		static const int division_limit = 5;
-
 		std::vector<SFV *> * my_sampled_SFVs;   // vector of sampled SFVs
 
 		bool have_been_run;								// Flag to show that the Grades have been calculated
@@ -41,13 +38,15 @@ class SFDPobj {
 
 		std::vector<SFDPobj *> * my_sub_SFDPs;			// vector of sub SFDPs
 		ScenarioFeature * my_ExploretionFeature;		// the feature that is explored (the split performed on it)
+		int my_DivisionLimit;							// the limit of root SFDP devisions in exploration process
+		int my_division_level;
 
 	public :
 
 		SFDPobj(std::string SFDP_file_url, std::string Resources_file_url, std::string WS_url, int division_level);
 		~SFDPobj();
 
-		int ExploreMe(int argc, char** argv);
+		int ExploreMe(int argc, char** argv, int division_limit, int samples_number);
 
 		int ParseMeFromXMLFile();
 		int PrintMeToFile();
@@ -80,6 +79,12 @@ class SFDPobj {
 
 		inline int get_division_level()
 			{ return my_division_level; }
+
+		inline void set_DivisionLimit(int DivisionLimit)
+		    { my_DivisionLimit = DivisionLimit; }
+
+		inline int get_DivisionLimit()
+		    { return(my_DivisionLimit); }
 
 		inline float get_Garade_mean()
 			{ if (have_been_run) return my_Grade_mean; else return 0; }

@@ -9,6 +9,7 @@
 	<arg name="pause" value="-u"/>
 	<arg name="record" value="-r"/>
 	<arg name="record_file_path" value="-O $(arg scenarios_folder_url)/scen_rec.bag"/>
+        <arg name="SFV_file_url" value="$(arg scenarios_folder_url)/scen.SFV"/>
 
 <!-- setting gazebo path for scenario platform and sensors models -->
 	<env name="GAZEBO_MODEL_PATH" value="$(arg world_models_folder_url):$(arg scenarios_folder_url)/scenarioSystemModels"/>
@@ -35,6 +36,6 @@
 
 
 <!-- grader -->
-	<node pkg="SRVSS" type="grader_node" name="grader_node" output="screen"/>
+	<node pkg="SRVSS" type="grader_node" name="grader_node" output="screen" args="$(arg scenarios_folder_url) $(arg SFV_file_url)" />
 
 </launch>

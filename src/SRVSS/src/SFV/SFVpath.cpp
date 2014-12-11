@@ -144,7 +144,7 @@ float SFVpath::get_PathLength()
 		return 0;
 	}
 
-	SFVpath *sfv_path = ((std::vector<SFVpath*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::Path))->at(0);
+	SFVpath *sfv_path = (SFVpath*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::Path));
 
 	float path_length = 0;
 

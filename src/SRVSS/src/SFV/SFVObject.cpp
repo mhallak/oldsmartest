@@ -17,6 +17,10 @@
 #include "SFDP/ScenarioFeatureGroup.h"
 
 #include "SFV/sfvSubGroup.h"
+#include "SFV/SFVterraine.h"
+
+#include "Generators/Gazebo/TerrainAnalyzer.h"
+#include "Resource/ResourceHandler.h"
 
 
 void SFVObject::initFeaturesMap()
@@ -42,6 +46,8 @@ SFVObject::SFVObject(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV)
 	initFeaturesMap();
 	initSubGroupFeatures(scenfeaturesGroup->get_features());
 	set_WasRolledFlag(false);
+
+	Implicit_Object_xyz = new std::map<char,float>;
 }
 
 
@@ -50,6 +56,8 @@ SFVObject::SFVObject(SFVObject * template_subGroup):  sfvSubGroup(template_subGr
 	initFeaturesMap();
 	cloneSubGroupFeatures(template_subGroup);
 	set_WasRolledFlag(false);
+
+	Implicit_Object_xyz = new std::map<char,float>;
 }
 
 SFVObject::SFVObject(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::object , parent_SFV)
@@ -57,6 +65,8 @@ SFVObject::SFVObject(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(Sc
 	initFeaturesMap();
 	setSubGroupFeaturesFromXmlElement(xml_subGroup);
 	set_WasRolledFlag(true);
+
+	Implicit_Object_xyz = new std::map<char,float>;
 }
 
 
@@ -104,6 +114,38 @@ TiXmlElement * SFVObject::ToXmlElement(int id)
 		return(SubGroupfeaturesToXmlElement(id));
 	}
 }
+
+
+
+std::map<char,float> * SFVObject::get_Object_xyz()
+{
+	SFV * sfv = get_ParentSFV();
+	if(! sfv)
+	{
+		std::cout << " can't calculate Object_xyz as the SFV wasn't fully rolled " << std::endl;
+		return 0;
+	}
+
+		SFVterraine *sfv_terraine = (SFVterraine*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::map));
+		std::string terrain=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terraine->get_TopographicMapIndex()->get_RolledValue());
+		std::string path = ResourceHandler::getInstance(sfv->get_ResourceFile()).getWorldModelsFolderURL();
+		TerrainAnalyzer m_terrainAnalyzer;
+		m_terrainAnalyzer.loadFile(path+"/"+terrain);
+
+		float obj_x, obj_y, map_z;
+		m_terrainAnalyzer.getXYZCoord(this->get_LocationOnTheXaxis()->get_RolledValue(),this->get_LocationOnTheYaxis()->get_RolledValue(), obj_x, obj_y, map_z);
+		float obj_z = map_z + this->get_LocationOnTheZaxis()->get_RolledValue();
+
+		Implicit_Object_xyz->clear();
+		Implicit_Object_xyz->insert(std::pair<char,float>('x',obj_x) );
+		Implicit_Object_xyz->insert(std::pair<char,float>('y',obj_y) );
+		Implicit_Object_xyz->insert(std::pair<char,float>('z',obj_z) );
+		return(Implicit_Object_xyz);
+}
+
+
+
+
 
 SFVObject::~SFVObject()
 {

@@ -33,6 +33,8 @@ SFVplatformPose::SFVplatformPose(ScenarioFeatureGroup * scenfeaturesGroup, SFV *
 	initFeaturesMap();
 	initSubGroupFeatures(scenfeaturesGroup->get_features());
 	set_WasRolledFlag(false);
+
+	Implicit_PlatInit_xy = new std::map<char,float>;
 }
 
 
@@ -41,6 +43,8 @@ SFVplatformPose::SFVplatformPose(SFVplatformPose * template_subGroup): sfvSubGro
 	initFeaturesMap();
 	cloneSubGroupFeatures(template_subGroup);
 	set_WasRolledFlag(false);
+
+	Implicit_PlatInit_xy = new std::map<char,float>;
 }
 
 SFVplatformPose::SFVplatformPose(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::platform_pose , parent_SFV)
@@ -48,6 +52,8 @@ SFVplatformPose::SFVplatformPose(TiXmlNode * xml_subGroup, SFV * parent_SFV): sf
 	initFeaturesMap();
 	setSubGroupFeaturesFromXmlElement(xml_subGroup);
 	set_WasRolledFlag(true);
+
+	Implicit_PlatInit_xy = new std::map<char,float>;
 }
 
 bool SFVplatformPose::roll()
@@ -106,24 +112,24 @@ std::map<char,float> * SFVplatformPose::get_PlatInit_xy()
 		return 0;
 	}
 
-	std::map<char,float> * Palt_xy = new std::map<char,float>;
-
-	SFVplatformPose *sfv_platPose = ((std::vector<SFVplatformPose*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::platform_pose))->at(0);
-	SFVterraine *sfv_terraine = ((std::vector<SFVterraine*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::map))->at(0);
+	SFVplatformPose *sfv_platPose = (SFVplatformPose*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::platform_pose));
+	SFVterraine *sfv_terraine = (SFVterraine*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::map));
 
 	//load terrain
 	std::string terrain_name=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terraine->get_TopographicMapIndex()->get_WasRolledFlag());
 	std::string teraine_file_url = ResourceHandler::getInstance(sfv->get_ResourceFile()).getWorldModelsFolderURL();
-	TerrainAnalyzer* terrainA=new TerrainAnalyzer();
-	terrainA->loadFile(teraine_file_url+"/"+terrain_name);
+
+	TerrainAnalyzer terrainA;
+	terrainA.loadFile(teraine_file_url+"/"+terrain_name);
 
 	//get platform initial position
 	float plat_init_x , plat_init_y, plat_init_z ;
-	terrainA->getXYZCoord(sfv_platPose->get_InitPlatformPoseX()->get_RolledValue(),sfv_platPose->get_InitPlatformPoseY()->get_RolledValue(),plat_init_x, plat_init_y ,plat_init_z);
+	terrainA.getXYZCoord(sfv_platPose->get_InitPlatformPoseX()->get_RolledValue(),sfv_platPose->get_InitPlatformPoseY()->get_RolledValue(),plat_init_x, plat_init_y ,plat_init_z);
 
-	Palt_xy->insert(std::pair<char,float>('x',plat_init_x) );
-	Palt_xy->insert(std::pair<char,float>('y',plat_init_y) );
-	return(Palt_xy);
+	Implicit_PlatInit_xy->clear();
+	Implicit_PlatInit_xy->insert(std::pair<char,float>('x',plat_init_x) );
+	Implicit_PlatInit_xy->insert(std::pair<char,float>('y',plat_init_y) );
+	return(Implicit_PlatInit_xy);
 }
 
 SFVplatformPose::~SFVplatformPose()

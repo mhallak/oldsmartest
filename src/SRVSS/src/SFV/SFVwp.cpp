@@ -40,6 +40,8 @@ SFVwp::SFVwp(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV): sfvSub
 	initFeaturesMap();
 	initSubGroupFeatures(scenfeaturesGroup->get_features());
 	set_WasRolledFlag(false);
+
+	Implicit_wp_xy = new std::map<char,float>;
 }
 
 
@@ -48,6 +50,8 @@ SFVwp::SFVwp(SFVwp * template_subGroup): sfvSubGroup(template_subGroup->get_Type
 	initFeaturesMap();
 	cloneSubGroupFeatures(template_subGroup);
 	set_WasRolledFlag(false);
+
+	Implicit_wp_xy = new std::map<char,float>;
 }
 
 SFVwp::SFVwp(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::WayPoint , parent_SFV)
@@ -55,6 +59,8 @@ SFVwp::SFVwp(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFe
 	initFeaturesMap();
 	setSubGroupFeaturesFromXmlElement(xml_subGroup);
 	set_WasRolledFlag(true);
+
+	Implicit_wp_xy = new std::map<char,float>;
 }
 
 
@@ -115,24 +121,24 @@ std::map<char,float> * SFVwp::get_WPxy()
 		return 0;
 	}
 
-	std::map<char,float> * WPxy = new std::map<char,float>;
 
-	SFVplatformPose *sfv_platPose = ((std::vector<SFVplatformPose*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::platform_pose))->at(0);
-	SFVterraine *sfv_terraine = ((std::vector<SFVterraine*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::map))->at(0);
-	SFVpath *sfv_Path = ((std::vector<SFVpath*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::Path))->at(0);
+	SFVplatformPose *sfv_platPose = (SFVplatformPose*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::platform_pose));
+	SFVterraine *sfv_terraine = (SFVterraine*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::map));
+	SFVpath *sfv_Path = (SFVpath*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::Path));
 
 
 	//load terrain
 	std::string terrain_name=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terraine->get_TopographicMapIndex()->get_WasRolledFlag());
 	std::string teraine_file_url = ResourceHandler::getInstance(sfv->get_ResourceFile()).getWorldModelsFolderURL();
-	TerrainAnalyzer* terrainA=new TerrainAnalyzer();
-	terrainA->loadFile(teraine_file_url+"/"+terrain_name);
+
+
+	TerrainAnalyzer terrainA;
+	terrainA.loadFile(teraine_file_url+"/"+terrain_name);
 
 	//get platform initial position
 	float plat_init_x , plat_init_y, plat_init_z , plat_init_azi;
-	terrainA->getXYZCoord(sfv_platPose->get_InitPlatformPoseX()->get_RolledValue(),sfv_platPose->get_InitPlatformPoseY()->get_RolledValue(),plat_init_x, plat_init_y ,plat_init_z);
+	terrainA.getXYZCoord(sfv_platPose->get_InitPlatformPoseX()->get_RolledValue(),sfv_platPose->get_InitPlatformPoseY()->get_RolledValue(),plat_init_x, plat_init_y ,plat_init_z);
 	plat_init_azi = sfv_platPose->get_InitPlatformPoseAzimut()->get_RolledValue();
-
 
 	float wp_x=plat_init_x, wp_y=plat_init_y,  wp_azi = plat_init_azi;
 
@@ -144,9 +150,10 @@ std::map<char,float> * SFVwp::get_WPxy()
 
 			if(wp_it == this)
 				{
-				WPxy->insert(std::pair<char,float>('x',wp_x) );
-				WPxy->insert(std::pair<char,float>('y',wp_y) );
-				return(WPxy);
+				Implicit_wp_xy->clear();
+				Implicit_wp_xy->insert(std::pair<char,float>('x',wp_x) );
+				Implicit_wp_xy->insert(std::pair<char,float>('y',wp_y) );
+				return(Implicit_wp_xy);
 				}
 			}
 

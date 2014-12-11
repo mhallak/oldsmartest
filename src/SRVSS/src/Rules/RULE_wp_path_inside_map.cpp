@@ -30,7 +30,7 @@ bool Rule_wp_path_inside_map::isRuleValid(SFV *sfv)
 	std::cout << " !! checking Rule_wp_path_inside_map --- " ;
 
 
-	SFVpath *sfv_Path = ((std::vector<SFVpath*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::Path))->at(0);
+	SFVpath *sfv_Path = (SFVpath*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::Path));
 	if (sfv_Path->get_PathWPs()->empty())
 		{
 		std::cout << " path first wp hasn't been rolled yet, so the rule has no meaning for now - return true " << std::endl;
@@ -38,14 +38,14 @@ bool Rule_wp_path_inside_map::isRuleValid(SFV *sfv)
 		}
 	else
 		{
-			SFVterraine *sfv_terraine = ((std::vector<SFVterraine*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::map))->at(0);
+			SFVterraine *sfv_terraine = (SFVterraine*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::map));
 			if (! sfv_terraine->get_WasRolledFlag())
 				{
 				std::cout << " terrain hasn't been rolled yet, so the rule can't be evaluated - return false" << std::endl;
 				return false;
 				}
 
-			SFVplatformPose *sfv_platPose = ((std::vector<SFVplatformPose*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::platform_pose))->at(0);
+			SFVplatformPose *sfv_platPose = (SFVplatformPose*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::platform_pose));
 			if (! sfv_platPose->get_WasRolledFlag())
 				{
 				std::cout << " platform initial position hasn't been rolled yet, so the rule can't be evaluated - return false" << std::endl;

@@ -11,6 +11,7 @@
 #include <vector>
 #include "SFV/SFV.h"
 
+
 class SFVObstacleOnPath : public sfvSubGroup  {
 private :
 	ScenarioFeature * my_obstacle_type;
@@ -24,6 +25,7 @@ private :
 	ScenarioFeature * my_location_Pitch;
 	ScenarioFeature * my_location_Yaw;
 
+	std::map<char,float> * Implicit_Obstacle_xyz;
 
 public :
 	SFVObstacleOnPath(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV);
@@ -33,7 +35,7 @@ public :
 	void initFeaturesMap();
 
 	bool roll();
-	std::map<char,float> * get_Obstacle_xy();
+	std::map<char,float> * get_Obstacle_xyz();
 	TiXmlElement * ToXmlElement(int id);
 
 	~SFVObstacleOnPath();

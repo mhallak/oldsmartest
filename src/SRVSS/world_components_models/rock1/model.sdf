@@ -6,8 +6,8 @@
       <collision name="collision">
         <geometry>
           <mesh>
-             <uri>model://rock1/models/rock1.dae</uri>
-	<scale>0.3 0.3 0.3</scale>
+		<uri>model://rock1/models/rock1.dae</uri>
+		<scale>1 1 1</scale>
           </mesh>
         </geometry>
       </collision>
@@ -15,7 +15,7 @@
          <geometry>
           <mesh>
 		<uri>model://rock1/models/rock1.dae</uri>
-	<scale>0.3 0.3 0.3</scale>
+		<scale>1 1 1</scale>
           </mesh>
         </geometry>
       </visual>

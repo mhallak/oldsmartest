@@ -33,7 +33,7 @@ bool Rule_platform_init_pose_with_no_obj_colisions::isRuleValid(SFV *sfv)
 {
 		std::cout << " !! checking Rule_platform_init_pose_with_no_obj_colisions  --- ";
 
-		SFVplatformPose *sfv_PlatPose = ((std::vector<SFVplatformPose*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::platform_pose))->at(0);
+		SFVplatformPose *sfv_PlatPose = (SFVplatformPose*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::platform_pose));
 
 		if (! sfv_PlatPose->get_WasRolledFlag())
 			{
@@ -42,7 +42,8 @@ bool Rule_platform_init_pose_with_no_obj_colisions::isRuleValid(SFV *sfv)
 			}
 
 
-		std::vector<SFVobjScattering*> *objects_scatterings_vec = (std::vector<SFVobjScattering*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::objects);
+		std::vector<SFVobjScattering*> *objects_scatterings_vec = new std::vector<SFVobjScattering*>;
+   	   	sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::objects, (std::vector<sfvSubGroup*> *)objects_scatterings_vec);
 		if (objects_scatterings_vec->empty())
 			{
 			std::cout << " no Object was rolled yet, so the rule has no meaning for now  - return true" << std::endl;
@@ -50,7 +51,7 @@ bool Rule_platform_init_pose_with_no_obj_colisions::isRuleValid(SFV *sfv)
 			}
 
 
-		SFVterraine *sfv_terrain = ((std::vector<SFVterraine*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::map))->at(0);
+		SFVterraine *sfv_terrain = (SFVterraine*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::map));
 		if (! sfv_terrain->get_WasRolledFlag())
 			{
 			std::cout << " terrain hasn't been rolled yet, so the rule can't be evaluated - return false" << std::endl;

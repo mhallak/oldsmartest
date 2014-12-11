@@ -6,16 +6,14 @@
       <collision name="collision">
         <geometry>
           <mesh>
-             <uri>model://barrel1/models/model.dae</uri>
-
+		<uri>model://barrel1/models/barrel1.dae</uri>
           </mesh>
         </geometry>
       </collision>
       <visual name="visual">
          <geometry>
           <mesh>
-		<uri>model://barrel1/models/model.dae</uri>
-
+		<uri>model://barrel1/models/barrel1.dae</uri>
           </mesh>
         </geometry>
       </visual>

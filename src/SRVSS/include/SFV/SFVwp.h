@@ -19,6 +19,8 @@ private :
 	ScenarioFeature * my_relative_angle;
 	ScenarioFeature * my_relative_distance;
 
+	std::map<char,float> * Implicit_wp_xy;
+
 public :
 	SFVwp(ScenarioFeatureGroup * scenfeaturesGroup, SFV * parent_SFV);
 	SFVwp(SFVwp * template_SFVwp);

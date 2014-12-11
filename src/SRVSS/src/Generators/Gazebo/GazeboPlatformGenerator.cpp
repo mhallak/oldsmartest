@@ -16,6 +16,7 @@
 #include "SFV/SFVmass_link.h"
 #include "SFV/SFVfriction_link.h"
 #include "SFV/SFVsensor_link.h"
+#include "SFV/sfvSubGroup.h"
 
 #include <stdlib.h>
 
@@ -59,7 +60,9 @@ void GazeboPlatformGenerator::generatePlatform(SFV * sfv ,std::string filename, 
 
 
 	// set mass links
-	for(SFVmass_link * mass_link_it : * ((std::vector<SFVmass_link*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::mass_link_i)))
+	std::vector<SFVmass_link*> *massLinks_vec = new std::vector<SFVmass_link*>;
+	sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::mass_link_i, (std::vector<sfvSubGroup*> *)massLinks_vec);
+	for(SFVmass_link * mass_link_it : * massLinks_vec )
 	{
 	if(findElementWithAttribute( &link, modelPtr,"link","name",mass_link_it->get_Name()))
 		{
@@ -104,7 +107,9 @@ void GazeboPlatformGenerator::generatePlatform(SFV * sfv ,std::string filename, 
 	}
 
 	// set friction links
-	for(SFVfriction_link * friction_link_it : * ((std::vector<SFVfriction_link*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::friction_link_i)))
+	std::vector<SFVfriction_link*> *frictionLinks_vec = new std::vector<SFVfriction_link*>;
+	sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::friction_link_i, (std::vector<sfvSubGroup*> *)frictionLinks_vec);
+	for(SFVfriction_link * friction_link_it : * frictionLinks_vec)
 	{
 		if(findElementWithAttribute( &link, modelPtr,"link","name",friction_link_it->get_Name()))
 		{
@@ -129,7 +134,9 @@ void GazeboPlatformGenerator::generatePlatform(SFV * sfv ,std::string filename, 
 
 
 	// set sensors links
-	for(SFVsensor_link * sensor_link_it : * ((std::vector<SFVsensor_link*> *)sfv->get_SubGroupsBayFeatureGroupType(ScenarioFeatureGroupType::sensor_link_i)))
+	std::vector<SFVsensor_link*> *sensorsLinks_vec = new std::vector<SFVsensor_link*>;
+	sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::sensor_link_i, (std::vector<sfvSubGroup*> *)sensorsLinks_vec);
+	for(SFVsensor_link * sensor_link_it : * sensorsLinks_vec)
 	{
   		if(findElementWithAttribute( &link, modelPtr,"link","name",sensor_link_it->get_Name()))
 		{
