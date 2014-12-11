@@ -165,7 +165,7 @@ void collision_grader(const ros::TimerEvent&)
 
 	for (std::map<std::string ,BVHModel<RSS> *>::iterator RobotPart_it=robot_models_map->begin(); RobotPart_it!=robot_models_map->end(); ++RobotPart_it)
 	{
-	part_name = RobotPart_it->first;
+    	part_name = RobotPart_it->first;
 		part_model = RobotPart_it->second;
 
 		Vec3f part_p(0,0,0);
@@ -190,6 +190,7 @@ void collision_grader(const ros::TimerEvent&)
 		   	   	sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::obstacles_on_path, (std::vector<sfvSubGroup*> *)obsOnPathScatterings_vec);
 				for (SFVobsOnPathScattering *obsScattering_it : *obsOnPathScatterings_vec )
 				{
+
 					for (SFVObstacleOnPath *obs : *(obsScattering_it->get_ObstaclesOnPath()))
 					{
 
@@ -201,7 +202,7 @@ void collision_grader(const ros::TimerEvent&)
 						Vec3f obs_p(obs_x, obs_y, obs_z);
 
 						Vec3f centers_dist = obs_p - part_p;
-						if ( centers_dist.length() > 10 )
+						if ( centers_dist.length() > 100 )
 						   { continue;	}
 
 						double obs_roll = obs->get_LocationRoll()->get_RolledValue();
@@ -223,10 +224,11 @@ void collision_grader(const ros::TimerEvent&)
 
 				}
 
+
 				std::vector<SFVobjScattering*> *objectsOnPathScatterings_vec = new std::vector<SFVobjScattering*>;
 		   	   	sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::objects, (std::vector<sfvSubGroup*> *)objectsOnPathScatterings_vec);
 				for (SFVobjScattering* objScattering_it : *objectsOnPathScatterings_vec )
-				{
+			    {
 					for (SFVObject* obj : *(objScattering_it->get_Objects()))
 					{
 						std::string obj_name = ResourceHandler::getInstance(sfv->get_ResourceFile()).getObjectById(obj->get_ObjectType()->get_RolledValue());
@@ -250,7 +252,7 @@ void collision_grader(const ros::TimerEvent&)
 						DistanceResult local_result;
 						if ( (robot_models_map->find(part_name)!=robot_models_map->end()) && (obs_models_map->find(obj_name.c_str())!=obs_models_map->end()) )
 						{
-							distance(robot_models_map->at(part_name),part_pose,obs_models_map->at(obj_name.c_str()),obj_pose,1,local_result);
+						//	distance(robot_models_map->at(part_name),part_pose,obs_models_map->at(obj_name.c_str()),obj_pose,1,local_result);
 							if (  min_dist > local_result.min_distance )
 								min_dist = local_result.min_distance;
 						}
@@ -258,6 +260,7 @@ void collision_grader(const ros::TimerEvent&)
 					}
 
 				}
+
 
 	}
 
@@ -274,6 +277,7 @@ void collision_grader(const ros::TimerEvent&)
 boost::mutex rollover_mutex;
 
 /**
+ *
  * Grading function for platform stability
  */
 void rollover_grader(const ros::TimerEvent&)
@@ -352,7 +356,7 @@ void load_obstacles_models()
 		   std::string obj_name = ResourceHandler::getInstance(resours_file).getObjectById(id);
 		   std::string obj_path = obj_dir_path + "/" + obj_name + "/models/" + obj_name + ".obj";
 
-		   std::cout << " obj_path = " << obj_path << std::endl;
+		  // std::cout << " obj_path = " << obj_path << std::endl;
 
 		   std::vector<Vec3f> o_ver;
 		   std::vector<Triangle> o_tri;
@@ -402,7 +406,7 @@ void load_robot_models()
 		   part_obj_uri = robot_model_folder_url + "/" + part_obj_uri.erase( 0 , 8);
 		   part_obj_uri = part_obj_uri.erase(part_obj_uri.length()-3 , part_obj_uri.length() ) + "obj";
 
-		   std::cout << "part_name = " << part_name << std::endl;
+		  // std::cout << "part_name = " << part_name << std::endl;
 
 		   std::vector<Vec3f> p_ver;
 		   std::vector<Triangle> p_tri;
@@ -427,11 +431,15 @@ void printUsage()
 
 int main(int argc, char **argv)
 {
+	std::cout << " i am in grader !!! " << std::endl;
+
+	/*
 	if(argc!=3)
 		{
 		printUsage();
 		return 0;
 		}
+*/
 
    ros::init(argc, argv, "greader_node");
 
@@ -449,9 +457,9 @@ int main(int argc, char **argv)
 
    reset_flag.data = false;
 
-   ros::Timer collision_grader_timer = n.createTimer(ros::Duration(0.1), collision_grader);
-   ros::Timer rollover_grader_timer = n.createTimer(ros::Duration(0.1), rollover_grader);
-   ros::Timer grades_publishing_timer = n.createTimer(ros::Duration(0.1), grades_publishing);
+   ros::Timer collision_grader_timer = n.createTimer(ros::Duration(0.05), collision_grader);
+   ros::Timer rollover_grader_timer = n.createTimer(ros::Duration(0.05), rollover_grader);
+   ros::Timer grades_publishing_timer = n.createTimer(ros::Duration(0.01), grades_publishing);
 
    greades_pub_ = n.advertise<std_msgs::Float32MultiArray>("/srvss/grades", 100);
    reset_pub_ = n.advertise<std_msgs::Bool>("/srvss/scenario_reset", 100);

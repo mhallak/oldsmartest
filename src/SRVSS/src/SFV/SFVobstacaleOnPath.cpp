@@ -131,6 +131,11 @@ std::map<char,float> * SFVObstacleOnPath::get_Obstacle_xyz()
 		return 0;
 	}
 
+	if(! Implicit_Obstacle_xyz->empty())
+	{
+		return(Implicit_Obstacle_xyz);
+	}
+
 	SFVplatformPose *sfv_platPose = (SFVplatformPose*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::platform_pose));
 	SFVpath *sfv_path = (SFVpath*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::Path));
 
@@ -182,7 +187,6 @@ std::map<char,float> * SFVObstacleOnPath::get_Obstacle_xyz()
 		m_terrainAnalyzer.getZCoord(obs_x,obs_y,terrain_z);
 		double obs_z = terrain_z + this->get_LocationOnTheZaxis()->get_RolledValue();
 
-		Implicit_Obstacle_xyz->clear();
 		Implicit_Obstacle_xyz->insert(std::pair<char,float>('x',obs_x) );
 		Implicit_Obstacle_xyz->insert(std::pair<char,float>('y',obs_y) );
 		Implicit_Obstacle_xyz->insert(std::pair<char,float>('z',obs_z) );

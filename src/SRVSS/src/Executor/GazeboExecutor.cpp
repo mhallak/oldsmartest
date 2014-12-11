@@ -70,14 +70,14 @@ int GazeboExecutor::RunScenario(int argc, char** argv)
 	my_launcher->launchRecorder(my_Scenario_folder_url);
 	std::cout << "\033[1;31m Recorder is loaded !!! \033[0m" << std::endl;
 
-	my_launcher->launchGrader();
+	my_launcher->launchGrader(my_Scenario_folder_url);
 	std::cout << "\033[1;31m Grader is loaded !!! \033[0m" << std::endl;
 
 	my_launcher->GazeboUnPause();
 	std::cout << "\033[1;31m Gazebo is Playin !!! \033[0m" << std::endl;
 
 	model_states_sub = n.subscribe("/srvss/grades", 100, scen_grade_Callback);
-	ros::Duration scen_max_duration(90, 0);
+	ros::Duration scen_max_duration(60, 0);
 	ros::Time begin_time = ros::Time::now();
 	ros::Time now_time = ros::Time::now();
 	while ( (! end_scen_flag) && ros::ok() && (now_time - begin_time < scen_max_duration) )

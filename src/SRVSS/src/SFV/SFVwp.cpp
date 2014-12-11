@@ -121,6 +121,10 @@ std::map<char,float> * SFVwp::get_WPxy()
 		return 0;
 	}
 
+	if(! Implicit_wp_xy->empty())
+	{
+		return(Implicit_wp_xy);
+	}
 
 	SFVplatformPose *sfv_platPose = (SFVplatformPose*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::platform_pose));
 	SFVterraine *sfv_terraine = (SFVterraine*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::map));

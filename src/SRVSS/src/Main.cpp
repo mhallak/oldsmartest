@@ -54,7 +54,7 @@ int main(int argc, char** argv)
 				return 0;
 			}
 
-			sfv->printToXML(scenario_folder_path+"/scenario.SFV");
+			sfv->printToXML(scenario_folder_path+"/scen.SFV");
 
 			return 0;
 		}
@@ -74,6 +74,61 @@ int main(int argc, char** argv)
 
 			return 0;
 		}
+
+
+	if(std::string(argv[1]).compare("-MultipleScensGenRun")==0)
+		{
+
+			std::cout << " -OtomaticScensGenRun is runing !!! " << std::endl;
+
+			std::string SFDP_file_path = PATH+argv[2];
+			std::string scenario_folder_path = PATH + argv[3];
+			std::string work_space_folder_url = PATH + argv[4];
+			int num_of_scens = atoi(argv[5]);
+
+
+			SFDPobj * sfdp;
+			sfdp = new SFDPobj(SFDP_file_path,work_space_folder_url,scenario_folder_path,0);
+			if (! sfdp->ParseMeFromXMLFile())
+				{
+				std::cout << "\033[1;31m Failed parse SFDP from file \033[0m " << std::endl;
+				return 0;
+				}
+
+			sfdp->GenMySFVs(num_of_scens);
+			sfdp->RunMySFVs(argc,argv);
+			sfdp->PrintMyResultsToFile();
+
+			return 0;
+		}
+
+
+
+	if(std::string(argv[1]).compare("-DomainEploretion")==0)
+		{
+
+			std::cout << " -OtomaticScensGenRun is runing !!! " << std::endl;
+
+			std::string SFDP_file_path = PATH+argv[2];
+			std::string scenario_folder_path = PATH + argv[3];
+			std::string work_space_folder_url = PATH + argv[4];
+			int division_limit = atoi(argv[5]);
+			int samples_number = atoi(argv[6]);
+
+			SFDPobj * sfdp;
+			sfdp = new SFDPobj(SFDP_file_path,work_space_folder_url,scenario_folder_path,0);
+			if (! sfdp->ParseMeFromXMLFile())
+				{
+				std::cout << "\033[1;31m Failed parse SFDP from file \033[0m " << std::endl;
+				return 0;
+				}
+
+			sfdp->ExploreMe(argc,argv,division_limit,samples_number);
+
+			return 0;
+		}
+
+
 
 	return 0;
 }

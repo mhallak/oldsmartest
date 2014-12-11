@@ -112,6 +112,12 @@ std::map<char,float> * SFVplatformPose::get_PlatInit_xy()
 		return 0;
 	}
 
+
+	if(! Implicit_PlatInit_xy->empty())
+	{
+		return(Implicit_PlatInit_xy);
+	}
+
 	SFVplatformPose *sfv_platPose = (SFVplatformPose*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::platform_pose));
 	SFVterraine *sfv_terraine = (SFVterraine*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::map));
 
@@ -126,7 +132,7 @@ std::map<char,float> * SFVplatformPose::get_PlatInit_xy()
 	float plat_init_x , plat_init_y, plat_init_z ;
 	terrainA.getXYZCoord(sfv_platPose->get_InitPlatformPoseX()->get_RolledValue(),sfv_platPose->get_InitPlatformPoseY()->get_RolledValue(),plat_init_x, plat_init_y ,plat_init_z);
 
-	Implicit_PlatInit_xy->clear();
+	//Implicit_PlatInit_xy->clear();
 	Implicit_PlatInit_xy->insert(std::pair<char,float>('x',plat_init_x) );
 	Implicit_PlatInit_xy->insert(std::pair<char,float>('y',plat_init_y) );
 	return(Implicit_PlatInit_xy);
