@@ -15,7 +15,7 @@
 #include "fcl/distance.h"
 #include "fcl/traversal/traversal_node_bvhs.h"
 
-#include <sdf/sdf.hh>
+#include <sdformat-1.4/sdf/sdf.hh>
 
 #include "SFV/SFV.h"
 #include "SFV/SFVobjScattering.h"
@@ -181,7 +181,7 @@ void collision_grader(const ros::TimerEvent&)
 		   part_q = Quaternion3f(part_transform.getRotation().w(),part_transform.getRotation().x(),part_transform.getRotation().y(),part_transform.getRotation().z());
 		   part_pose.setTransform(part_q,part_p);
 		     }
-		   catch (tf::TransformException &ex)
+		   catch (tf::LookupException &ex)
 		      {
 		   	ROS_ERROR("%s",ex.what());
 		   	return;
@@ -219,9 +219,7 @@ void collision_grader(const ros::TimerEvent&)
 							if (  min_dist > local_result.min_distance )
 								min_dist = local_result.min_distance;
 						}
-
 					}
-
 				}
 
 
@@ -252,7 +250,7 @@ void collision_grader(const ros::TimerEvent&)
 						DistanceResult local_result;
 						if ( (robot_models_map->find(part_name)!=robot_models_map->end()) && (obs_models_map->find(obj_name.c_str())!=obs_models_map->end()) )
 						{
-						//	distance(robot_models_map->at(part_name),part_pose,obs_models_map->at(obj_name.c_str()),obj_pose,1,local_result);
+							distance(robot_models_map->at(part_name),part_pose,obs_models_map->at(obj_name.c_str()),obj_pose,1,local_result);
 							if (  min_dist > local_result.min_distance )
 								min_dist = local_result.min_distance;
 						}

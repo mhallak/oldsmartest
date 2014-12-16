@@ -46,6 +46,9 @@ void setMinimumMaximum(float& mini,float& maxi,float param1,float param2)
 
 int NumberSampler::uniformDiscreteDistribution(int distParam1, int distParam2)
 {
+	if(distParam1==distParam2)
+		return(distParam1);
+
 	int mini,maxi;
 	setMinimumMaximum(mini,maxi,distParam1,distParam2);
 	boost::uniform_int<> dist(mini,maxi);
@@ -57,6 +60,9 @@ int NumberSampler::uniformDiscreteDistribution(int distParam1, int distParam2)
 
 float NumberSampler::uniformContinuousDistribution(float distParam1, float distParam2)
 {
+	if(distParam1==distParam2)
+		return(distParam1);
+
 	float mini=0,maxi=0;
 	setMinimumMaximum(mini,maxi,distParam1,distParam2);
 	boost::uniform_real<> dist(mini,maxi);
@@ -68,6 +74,9 @@ float NumberSampler::uniformContinuousDistribution(float distParam1, float distP
 
 float NumberSampler::normalContinuousDistribution(float distParam1, float distParam2)
 {
+	if(distParam2==0)
+		return(distParam1);
+
 	boost::normal_distribution<> dist(distParam1,distParam2);
 	gen.seed((++seed) + time(NULL));
 	boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > generator(gen, dist);

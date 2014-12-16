@@ -1,21 +1,19 @@
 #include <iostream>
-#include <stdio.h>
-
+#include <tr1/stdio.h>
 #include <string>
+#include <boost/filesystem.hpp>
 
 #include "SFDP/SFDPobj.h"
 #include "Generators/Gazebo/GazeboScenarioGenerator.h"
-
-#include "Synchronizer/ScenarioCoordinatorPool.h"
 
 
 #define PATH std::string("")
 
 void printUsage()
 {
-	std::cout << "usage:" <<std:: endl;
-	std::cout <<"(1) <srvss> -genSFV <sdfp file> <sfv output> <resousc file> # will generate a sfv file according to the sfdp and resource files input " <<std:: endl;
-	std::cout <<"(2) <srvss> -genSCEN <sfv output> <destination folder> <resousc file> # will generate the scenario and launch it" <<std:: endl;
+	std::cout << "usage:" <<std::endl;
+	std::cout <<"(1) <srvss> -genSFV <sdfp file> <sfv output> <resousc file> # will generate a sfv file according to the sfdp and resource files input " <<std::endl;
+	std::cout <<"(2) <srvss> -genSCEN <sfv output> <destination folder> <resousc file> # will generate the scenario and launch it" <<std::endl;
 	exit(1);
 }
 
@@ -47,6 +45,8 @@ int main(int argc, char** argv)
 				return 0;
 			}
 
+			boost::filesystem::remove_all(scenario_folder_path);
+			boost::filesystem::create_directory(scenario_folder_path);
 			SFV * sfv = new SFV(sfdp_root,scenario_folder_path);
 			if (! sfv->roll() )
 			{
@@ -97,7 +97,6 @@ int main(int argc, char** argv)
 
 			sfdp->GenMySFVs(num_of_scens);
 			sfdp->RunMySFVs(argc,argv);
-			sfdp->PrintMyResultsToFile();
 
 			return 0;
 		}

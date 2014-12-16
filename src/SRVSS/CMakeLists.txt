@@ -24,8 +24,6 @@ find_package(Gazebo REQUIRED)
 
 FIND_PACKAGE(PythonLibs 2.7 REQUIRED)
 
-
-
 catkin_package(
     #LIBRARIES  
     INCLUDE_DIRS
@@ -38,7 +36,7 @@ catkin_package(
 )
 
                                                                                                                                                  
-include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${TinyXML_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} /usr/include/sdformat-1.4 ${PYTHON_INCLUDE_DIR} )
+include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${TinyXML_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} ${PYTHON_INCLUDE_DIR} ${SDF_INCLUDE_DIR} )
 
 
 
@@ -206,7 +204,6 @@ SFVobsOnPathScattering
 
 add_library(GazeboMissionGenerator src/Generators/Gazebo/GazeboMissionGenerator.cpp)
 target_link_libraries(GazeboMissionGenerator ${catkin_LIBRARIES}
-#SFV
 SFVpath
 SFVwp
 )
@@ -214,9 +211,8 @@ SFVwp
 add_library(GazeboPlatformGenerator src/Generators/Gazebo/GazeboPlatformGenerator.cpp)
 target_link_libraries(GazeboPlatformGenerator ${catkin_LIBRARIES}
 ResourceHandler
-/usr/lib/libsdformat.so
-#SFV
 SFVmass_link
+${SDF_LIBRARIES}
 )
 
 
@@ -240,26 +236,6 @@ add_library(GazeboExecutor src/Executor/GazeboExecutor.cpp)
 target_link_libraries(GazeboExecutor ${catkin_LIBRARIES}
 scenarioLauncher
 )
-
-
-############################
-#### ScenarioCoordinator ###
-############################
-#add_library(ScenarioCoordinator src/Synchronizer/ScenarioCoordinator.cpp) 
-#target_link_libraries(ScenarioCoordinator ${catkin_LIBRARIES} ${PYTHON_LIBRARY}
-#)
-
-#add_library(ScenarioCoordinatorPoolDestroyer STATIC src/Synchronizer/ScenarioCoordinatorPoolDestroyer.cpp)
-#target_link_libraries(ScenarioCoordinatorPoolDestroyer ${catkin_LIBRARIES}
-#ScenarioCoordinatorPool
-#)
-
-
-#add_library(ScenarioCoordinatorPool STATIC src/Synchronizer/ScenarioCoordinatorPool.cpp)
-#target_link_libraries(ScenarioCoordinatorPool ${catkin_LIBRARIES}
-#ScenarioCoordinator
-#ScenarioCoordinatorPoolDestroyer
-#)
 
 
 
@@ -303,7 +279,7 @@ add_executable(grader_node src/Grader/grader_node.cpp)
 target_link_libraries(grader_node ${catkin_LIBRARIES}
 SFV
 ResourceHandler
-/usr/lib/libsdformat.so
+${SDF_LIBRARIES} #/usr/lib/x86_64-linux-gnu/libsdformat.so
 )
 
 

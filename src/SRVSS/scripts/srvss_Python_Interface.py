@@ -114,7 +114,7 @@ class ScenarioLauncher:
 	self.launcher.launch(node)
         time.sleep(3)	
 
-	node = ROSNode("srvss_bobcat", "worltd_to_bobcat_tf_broadcaster_node",name="worltd_to_bobcat_tf_broadcaster_node" ,output="screen", respawn="false")
+	node = ROSNode("srvss_bobcat", "world_to_bobcat_tf_broadcaster_node",name="worltd_to_bobcat_tf_broadcaster_node" ,output="screen", respawn="false")
 	self.launcher.launch(node)
         time.sleep(3)
 
