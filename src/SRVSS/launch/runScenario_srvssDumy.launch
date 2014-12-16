@@ -27,7 +27,6 @@
 
 <!-- srvss_Dumy -->
 	<include file="$(find srvss_bobcat)/launch/srvss_bobcat.launch"/>
-	<node pkg="tf" type="static_transform_publisher" name="sick_link_broadcaster" args="1 0 0.2 0 0 0 body front_sick 100" />
 	<node pkg="srvss_wp_driver" type="srvss_wp_driver_node" name="srvss_wp_driver_node" args="-file $(arg scenarios_folder_url)/scenarioMission.txt" output="screen" />
 
 

@@ -113,7 +113,11 @@ class ScenarioLauncher:
 	node = ROSNode("robot_state_publisher", "robot_state_publisher",name="robot_state_broadcaster_node", remap_args=remaping ,output="screen", respawn="false")
 	self.launcher.launch(node)
         time.sleep(3)	
-	
+
+	node = ROSNode("srvss_bobcat", "world_to_bobcat_tf_broadcaster_node",name="worltd_to_bobcat_tf_broadcaster_node" ,output="screen", respawn="false")
+	self.launcher.launch(node)
+        time.sleep(3)
+
 	node = ROSNode("tf", "static_transform_publisher",name="sick_link_tf_broadcaster_node", args="1 0 0.2 0 0 0 body front_sick 100" ,output="screen", respawn="false")
 	self.launcher.launch(node)	
         time.sleep(3)
@@ -127,7 +131,8 @@ class ScenarioLauncher:
 
 
     def launch_grader(self, Scenarin_folder):
-	arguments = Scenarin_folder + " " + Scenarin_folder+"/scenario.SFV"
+	arguments = Scenarin_folder + " " + Scenarin_folder+"/scen.SFV"
+	print "I am hear arguments = " + arguments
 	node = ROSNode("SRVSS", "grader_node", name="grader_node", output="screen", args=arguments)
 	self.launcher.launch(node)
         time.sleep(3)	

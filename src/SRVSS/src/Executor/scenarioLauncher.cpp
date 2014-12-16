@@ -101,9 +101,9 @@ void ScenarioLauncher::launchRecorder(std::string Scenarin_folder)
 	PyObject_CallMethod(pInstance, "launch_recorder", "(s)", Scenarin_folder.c_str() , NULL);
 }
 
-void ScenarioLauncher::launchGrader()
+void ScenarioLauncher::launchGrader(std::string Scenarin_folder)
 {
-	PyObject_CallMethod(pInstance, "launch_grader", NULL);
+	PyObject_CallMethod(pInstance, "launch_grader", "(s)", Scenarin_folder.c_str() , NULL);
 }
 
 void ScenarioLauncher::GazeboPause()

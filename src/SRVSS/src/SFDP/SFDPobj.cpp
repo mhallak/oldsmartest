@@ -257,39 +257,6 @@ int SFDPobj::PrintMyResultsToFile()
 	TiXmlElement * xml_results = GetResultsInXML();
 	doc.LinkEndChild(xml_results);
 
-
-/*
-	std::stringstream temp_ss;
-
-	temp_ss.str("");
-	temp_ss << my_Grade_mean;
-	TiXmlElement * xml_mean = new TiXmlElement( "grades_mean" );
-	TiXmlText * mean_val= new TiXmlText( temp_ss.str() );
-	xml_mean->LinkEndChild(mean_val);
-	doc.LinkEndChild(xml_mean);
-
-	temp_ss.str("");
-	temp_ss << my_Grade_std;
-	TiXmlElement * xml_std = new TiXmlElement( "grades_std" );
-	TiXmlText * std_val= new TiXmlText( temp_ss.str() );
-	xml_std->LinkEndChild(std_val);
-	doc.LinkEndChild(xml_std);
-
-	int sfv_idex=0;
-	std::string sfv_name;
-	for (SFV * sfv_it : * my_sampled_SFVs )
-	{
-		sfv_idex = sfv_idex + 1;
-		sfv_name = "sfv_" + std::to_string(sfv_idex);
-		temp_ss.str("");
-		temp_ss << sfv_it->get_Grade();
-		TiXmlElement * xml_grade = new TiXmlElement( sfv_name );
-		TiXmlText * grade_val= new TiXmlText( temp_ss.str() );
-		xml_grade->LinkEndChild(grade_val);
-		doc.LinkEndChild(xml_grade);
-	}
-*/
-
 	doc.SaveFile(my_Grades_file_url.c_str());
 	std::cout << " printing Grades to file : " << my_Grades_file_url << std::endl;
 
@@ -401,22 +368,24 @@ int SFDPobj::SplitMe(ScenarioFeatureGroupType GroupTipe, std::string GroupName ,
 }
 
 
-int SFDPobj::ExploreMe(int argc, char** argv)
+int SFDPobj::ExploreMe(int argc, char** argv, int division_limit, int samples_number)
 {
+    this->set_DivisionLimit(division_limit);
 	this->set_ExploretionFeature(this->finedScenrioFeature(ScenarioFeatureGroupType::obstacles_on_path,"obstacles_on_path" ,ScenarioFeatureType::number_of_obstacles_on_path));
+
 	if ( (! get_ExploretionFeature()))
 		{
 			std::cout << "\033[1;31m  could not Explore because feature to explore wasn't found \033[0m" << std::endl;
 			return 0;
 		}
 
-	if ( my_division_level > division_limit )
+	if ( my_division_level > get_DivisionLimit() )
 	{
 		std::cout << "the division level reached the Division Limit " << std::endl;
 		return 0;
 	}
 
-	if (! GenMySFVs(2) )
+	if (! GenMySFVs(samples_number) )
 	{
 		std::cout << "\033[1;31m the generation of SFVs have failed \033[0m" << std::endl;
 		return 0;
@@ -425,14 +394,14 @@ int SFDPobj::ExploreMe(int argc, char** argv)
 	RunMySFVs(argc,argv);
 
 
-	if (my_division_level <= 2)
+	if (my_division_level < get_DivisionLimit())
 	{
-		if (my_Grade_std > 0.10)
+		if ((my_Grade_std > 0.1) || (samples_number==0) )
 			{
 				SplitMe(ScenarioFeatureGroupType::obstacles_on_path, "obstacles_on_path" ,ScenarioFeatureType::number_of_obstacles_on_path, 0.5);
 				for (SFDPobj * sub_SFDP_it : * my_sub_SFDPs)
 					{
-						sub_SFDP_it->ExploreMe(argc,argv);
+						sub_SFDP_it->ExploreMe(argc,argv,get_DivisionLimit(),samples_number);
 					}
 			}
 	}

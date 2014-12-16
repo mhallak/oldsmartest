@@ -126,6 +126,11 @@ std::map<char,float> * SFVObject::get_Object_xyz()
 		return 0;
 	}
 
+	if(! Implicit_Object_xyz->empty())
+	{
+		return(Implicit_Object_xyz);
+	}
+
 		SFVterraine *sfv_terraine = (SFVterraine*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::map));
 		std::string terrain=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terraine->get_TopographicMapIndex()->get_RolledValue());
 		std::string path = ResourceHandler::getInstance(sfv->get_ResourceFile()).getWorldModelsFolderURL();

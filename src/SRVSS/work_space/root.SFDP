@@ -24,7 +24,7 @@
 		<scenario_feature type="object_i_scaling_factor">
 			<distribution>uniform_continuous</distribution>
 			<dist_param_1>1</dist_param_1>
-			<dist_param_2>5</dist_param_2>
+			<dist_param_2>1</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="object_i_location_on_the_X_axis">
 			<distribution>uniform_continuous</distribution>
@@ -75,7 +75,7 @@
 		<scenario_feature type="obstacle_on_path_i_scaling_factor">
 			<distribution>uniform_continuous</distribution>
 			<dist_param_1>1</dist_param_1>
-			<dist_param_2>5</dist_param_2>
+			<dist_param_2>1</dist_param_2>
 			<feature_dependency type="roll_number">number_of_objects</feature_dependency>
 		</scenario_feature>
 		<scenario_feature type="obstacle_on_path_i_location_along_the_path">
