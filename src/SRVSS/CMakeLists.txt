@@ -36,7 +36,7 @@ catkin_package(
 )
 
                                                                                                                                                  
-include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${TinyXML_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} ${PYTHON_INCLUDE_DIR} ${SDF_INCLUDE_DIR} )
+include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${TinyXML_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} ${PYTHON_INCLUDE_DIR} /usr/include/sdformat-1.4/sdf )
 
 
 
@@ -212,7 +212,7 @@ add_library(GazeboPlatformGenerator src/Generators/Gazebo/GazeboPlatformGenerato
 target_link_libraries(GazeboPlatformGenerator ${catkin_LIBRARIES}
 ResourceHandler
 SFVmass_link
-${SDF_LIBRARIES}
+/usr/lib/x86_64-linux-gnu/libsdformat.so #${SDF_LIBRARIES}
 )
 
 
@@ -279,7 +279,7 @@ add_executable(grader_node src/Grader/grader_node.cpp)
 target_link_libraries(grader_node ${catkin_LIBRARIES}
 SFV
 ResourceHandler
-${SDF_LIBRARIES} #/usr/lib/x86_64-linux-gnu/libsdformat.so
+/usr/lib/x86_64-linux-gnu/libsdformat.so #${SDF_LIBRARIES}
 )
 
 
