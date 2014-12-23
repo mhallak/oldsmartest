@@ -59,7 +59,7 @@ class ScenarioLauncher:
 	os.environ["GAZEBO_MODEL_PATH"] = srvss_pkg_path+"/world_components_models/:" + Scenarin_folder + "/scenarioSystemModels/"
 
 	bobcat_pkg_path = rospack.get_path('bobcat')
-	urdf_file = bobcat_pkg_path +"/urdf/BOBCAT.URDF"
+	urdf_file = bobcat_pkg_path +"/urdf/BOBCAT_sdf_model.URDF"
         robot_urdf_file = open(urdf_file)
 	robot_urdf = robot_urdf_file.read()
 	rospy.set_param("/robot_description", robot_urdf )
@@ -68,8 +68,8 @@ class ScenarioLauncher:
 
     def launch_platform_controls_spawner(self):
 	rospack = rospkg.RosPack()
-	bobcat_pkg_path = rospack.get_path('bobcat')
-	bobcat_controllers_yaml = bobcat_pkg_path +"/config/bobcat_gazebo_control.yaml"
+	bobcat_pkg_path = rospack.get_path('bobcat_gazebo')
+	bobcat_controllers_yaml = bobcat_pkg_path +"/config/bobcat_gazebo_control_sdf_model.yaml"
 	paramlist=rosparam.load_file(bobcat_controllers_yaml, default_namespace='' ,verbose=True)
 	for params, ns in paramlist:
     		rosparam.upload_params(ns,params)
@@ -116,30 +116,38 @@ class ScenarioLauncher:
     		rosparam.upload_params(ns,params)	
 
 	# == MONITORING == -->
+	print "Loading MONITORING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	node = ROSNode("ssm", "ssm_fsm_states_tracker_node",name="ssm_fsm_states_tracker_node",output="screen")
 	self.launcher.launch(node)
 	node = ROSNode("ssm", "ssm_heartbeat_monitor_node",name="ssm_heartbeat_monitor_node",output="screen")
 	self.launcher.launch(node)
 	node = ROSNode("ssm", "ssm_node",name="ssm_node",output="screen")
-	self.launcher.launch(node)	
+	self.launcher.launch(node)
+        #time.sleep(3)	
 	# ================ -->
 
 	# == PERCEPTION == -->
-	node = ROSNode("sensors", "sensors_node",name="sensors_node",output="screen")
+	#print "Loading PERCEPTION-sensors_node  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"  --  Not Working therefore stuck the loading process, not critical for robil2
+	#node = ROSNode("sensors", "sensors_node",name="sensors_node",output="screen",respawn="true")
+	#self.launcher.launch(node)
+	print "Loading PERCEPTION-iedsim_node  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	node = ROSNode("iedsim", "iedsim_node",name="iedsim_node",output="screen",respawn="true")
 	self.launcher.launch(node)
-	node = ROSNode("iedsim", "iedsim_node",name="iedsim_node",output="screen")
+	print "Loading PERCEPTION-per_node  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	node = ROSNode("per", "per_node",name="per_node",output="screen",respawn="true")
 	self.launcher.launch(node)
-	node = ROSNode("per", "per_node",name="per_node",output="screen")
+	print "Loading PERCEPTION-loc_node  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	node = ROSNode("loc", "loc_node",name="loc_node",output="screen",respawn="true")
 	self.launcher.launch(node)
-	node = ROSNode("loc", "loc_node",name="loc_node",output="screen")
-	self.launcher.launch(node)
+        time.sleep(3)
 	# ================ -->
 
 
 	# -- MISSION CONTROL  -->
-	node = ROSNode("smme", "smme_node",name="smme_node",output="screen")
+	print "Loading MISSION CONTRO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	node = ROSNode("smme", "smme_node",name="smme_node",output="screen",respawn="true")
 	self.launcher.launch(node)
-	node = ROSNode("wsm", "wsm_node",name="wsm_node",output="screen")
+	node = ROSNode("wsm", "wsm_node",name="wsm_node",output="screen",respawn="true")
 	self.launcher.launch(node)
 	node = ROSNode("ocu", "ocu_node",name="ocu_node",output="screen")
 	self.launcher.launch(node)
@@ -147,16 +155,56 @@ class ScenarioLauncher:
 
 
 	#-- == NAVIGATION == -->
-	node = ROSNode("smme", "smme_node",name="smme_node",output="screen")
+	print "Loading NAVIGATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	rospack = rospkg.RosPack()
+	pp_pkg_path = rospack.get_path('pp')
+	costmap_common_params = pp_pkg_path +"/params/costmap_common_params.yaml"
+	paramlist=rosparam.load_file(costmap_common_params, default_namespace='move_base/global_costmap' ,verbose=True)
+	for params, ns in paramlist:
+    		rosparam.upload_params(ns,params)
+
+	paramlist=rosparam.load_file(costmap_common_params, default_namespace='move_base/local_costmap' ,verbose=True)
+	for params, ns in paramlist:
+    		rosparam.upload_params(ns,params)
+
+	local_costmap_params = pp_pkg_path +"/params/local_costmap_params.yaml"
+	paramlist=rosparam.load_file(local_costmap_params, default_namespace='move_base' ,verbose=True)
+	for params, ns in paramlist:
+    		rosparam.upload_params(ns,params)
+
+
+	global_costmap_params = pp_pkg_path +"/params/global_costmap_params.yaml"
+	paramlist=rosparam.load_file(global_costmap_params, default_namespace='move_base' ,verbose=True)
+	for params, ns in paramlist:
+    		rosparam.upload_params(ns,params)
+
+
+	base_local_planner_params = pp_pkg_path +"/params/base_local_planner_params.yaml"
+	paramlist=rosparam.load_file(base_local_planner_params, default_namespace='move_base' ,verbose=True)
+	for params, ns in paramlist:
+    		rosparam.upload_params(ns,params)
+
+
+	node = ROSNode("move_base", "move_base",name="move_base",output="screen")
 	self.launcher.launch(node)
 
+	node = ROSNode("pp", "pp_node",name="pp_node",output="screen")
+	self.launcher.launch(node)
 
-	<include file="$(find pp)/launch/navigation.launch" />
-	<node name="llc_node" type="llc_node" pkg="llc" output="screen"/>
-	<!-- ================ -->
+	node = ROSNode("wpd", "wpd_node",name="wpd_node",output="screen")
+	self.launcher.launch(node)
+
+	node = ROSNode("llc", "llc_node",name="llc_node",output="screen",respawn="true")
+	self.launcher.launch(node)
+        time.sleep(3)
+
+	arguments = "-d 40 "+ Scenarin_folder + "/scenarioMission.bag"
+	node = ROSNode("rosbag", "play",name="rosbag_Mission_node",output="screen",respawn="true", args=arguments)
+	self.launcher.launch(node)
+        # ================ -->
 
 
-	os.system("roslaunch robil2conf frameworkInit.launch")
+	#os.system("roslaunch robil2conf frameworkInit.launch")
 	#arguments = "-file " + Scenarin_folder + "/scenarioMission.txt"
 	#node = ROSNode("srvss_wp_driver", "srvss_wp_driver_node",name="srvss_wp_driver_node", args=arguments , respawn="false") # output="screen"
 	#self.launcher.launch(node)	
@@ -169,9 +217,9 @@ class ScenarioLauncher:
 	self.launcher.launch(node)
         time.sleep(3)	
 	
-	node = ROSNode("tf", "static_transform_publisher",name="sick_link_tf_broadcaster_node", args="1 0 0.2 0 0 0 body front_sick 100" ,output="screen", respawn="false")
-	self.launcher.launch(node)	
-        time.sleep(3)
+	#node = ROSNode("tf", "static_transform_publisher",name="sick_link_tf_broadcaster_node", args="1 0 0.2 0 0 0 body front_sick 100" ,output="screen", respawn="false")
+	#self.launcher.launch(node)	
+        #time.sleep(3)
 
 
     def launch_recorder(self, Scenarin_folder):
@@ -181,10 +229,12 @@ class ScenarioLauncher:
         time.sleep(3)	
 
 
-    def launch_grader(self):
-	node = ROSNode("SRVSS", "grader_node", name="grader_node", output="screen")
+    def launch_grader(self, Scenarin_folder):
+	arguments = Scenarin_folder + " " + Scenarin_folder+"/scen.SFV"
+	node = ROSNode("SRVSS", "grader_node", name="grader_node", output="screen", args=arguments)
 	self.launcher.launch(node)
         time.sleep(3)	
+
 
 
 

@@ -1,7 +1,7 @@
 <!-- -*- mode: XML -*- -->
 <launch>    
 
-	<arg name="scen" default="scenarios/scenario_1"/> 
+	<arg name="scen" default="work_space/scenario_1"/> 
 
 	<arg name="scenarios_folder_url" value="$(find SRVSS)/$(arg scen)"/>
 	<arg name="world_models_folder_url" value="$(find SRVSS)/world_components_models"/>
@@ -9,6 +9,7 @@
 	<arg name="pause" value="-u"/>
 	<arg name="record" value="-r"/>
 	<arg name="record_file_path" value="-O $(arg scenarios_folder_url)/scen_rec.bag"/>
+        <arg name="SFV_file_url" value="$(arg scenarios_folder_url)/scen.SFV"/>
 
 <!-- setting gazebo path for scenario platform and sensors models -->
 	<env name="GAZEBO_MODEL_PATH" value="$(arg world_models_folder_url):$(arg scenarios_folder_url)/scenarioSystemModels"/>
@@ -17,7 +18,7 @@
 	<param name="/use_sim_time" value="true" />
 
 <!-- start gazebo server-->
-	<node name="gazebo" pkg="gazebo_ros" type="gzserver" respawn="false" output="screen" args="$(arg pause) $(arg world_name)" />
+	<node name="gazebo" pkg="gazebo_ros" type="gzserver" respawn="false" output="screen" args="$(arg world_name)" />
 	
 
 <!-- start gazebo client -->
@@ -25,17 +26,19 @@
 
 
 <!-- Robil2 -->
-	<param name="robot_description" command="cat $(find bobcat)/urdf/BOBCAT.URDF" />
-	<include file="$(find bobcat_gazebo)/launch/bobcat_gazebo_control.launch" />
+	<param name="robot_description" command="cat $(find bobcat)/urdf/BOBCAT_sdf_model.URDF" />
+<!--	<param name="robot_descriptionSDF" command="cat $(find bobcat)/urdf/bobcatSDF.sdf" /> -->
+
+	<include file="$(find bobcat_gazebo)/launch/bobcat_gazebo_control_sdf_model.launch" />
 	<node name="RateToEffort" pkg="rate2effort" type="rate2effort" cwd="node" output="screen" />
 	<include file="$(find robil2conf)/frameworkInit.launch" />
 
 <!-- Missio -->
-	<node name="mission_bag_player" pkg="rosbag" type="play" args="-d 5 $(arg scenarios_folder_url)/scenarioMission.bag" output="screen" />
- 
+	<node name="mission_bag_player" pkg="rosbag" type="play" args="-d 40 $(arg scenarios_folder_url)/scenarioMission.bag" output="screen" />
+
 
 <!-- grader -->
-	<node pkg="SRVSS" type="grader_node" name="grader_node" output="screen"/>
+	<node pkg="SRVSS" type="grader_node" name="grader_node" output="screen" args="$(arg scenarios_folder_url) $(arg SFV_file_url)" />
 
 
 <!-- start RosBag recording 

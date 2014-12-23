@@ -18,7 +18,7 @@ ScenarioLauncher::ScenarioLauncher()
 	char *g="";
 	PySys_SetArgv(1, &g);
 
-	pName = PyString_FromString("srvss_Python_Interface");	// Build the name object
+	pName = PyString_FromString("srvss_Python_Interface_for_robil2");	// Build the name object
 
 	pModule = PyImport_Import(pName);             // Load the module object
 	if ( ! pModule)

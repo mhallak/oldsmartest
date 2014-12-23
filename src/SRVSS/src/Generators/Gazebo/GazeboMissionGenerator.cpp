@@ -30,6 +30,7 @@
 #include "nav_msgs/Odometry.h"
 #include "robil_msgs/AssignMission.h"
 #include "robil_msgs/AssignMissionTask.h"
+#include "robil_msgs/AssignManipulatorTask.h"
 
 #include "SFV/SFV.h"
 #include "SFV/SFVpath.h"
@@ -75,49 +76,75 @@ void GazeboMissionGenerator::generateMission_ROBIL2(SFV * sfv,std::string fileNa
 	SFVpath *sfv_Path = (SFVpath*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::Path));
 	SFVplatformPose *sfv_PlatPose = (SFVplatformPose*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::platform_pose));
 
-//	nav_msgs::Path wp_path;
-//	geometry_msgs::PoseStamped pose;
+	rosbag::Bag bag;
+	bag.open(fileName + ".bag", rosbag::bagmode::Write);
+
+////
+
+	robil_msgs::AssignManipulatorTask robilManipulatioTask;
+	robilManipulatioTask.header.seq = 1;
+	robilManipulatioTask.task_id = "10";
+	robilManipulatioTask.task_description = "raising of the arm task";
+
+	robil_msgs::AssignManipulatorTaskStep robilManipulationTaskStep;
+	robilManipulationTaskStep.id = 1;
+	robilManipulationTaskStep.type = 1;
+	robilManipulationTaskStep.value = 0.2;
+	robilManipulationTaskStep.blade_relativity = 0;
+	robilManipulationTaskStep.success_timeout = 5;
+	robilManipulationTaskStep.duration_at_end = 2;
+	robilManipulatioTask.steps.push_back(robilManipulationTaskStep);
+
+	ros::Time dumy_play_time(0,1);
+	bag.write("/OCU/SMME/ManipulationTask",dumy_play_time,robilManipulatioTask);  // the SMME need one task to weak up
+	ros::Time man_task_play_time(1,0);
+	bag.write("/OCU/SMME/ManipulationTask",man_task_play_time,robilManipulatioTask);
+
+////
 
 	robil_msgs::AssignNavTask robilNavTask;
-	nav_msgs::Odometry wp;
+	robilNavTask.header.seq = 2;
+	robilNavTask.task_id = "20";
+	robilNavTask.task_description = "navigation task";
 
+	nav_msgs::Odometry wp;
 	float plat_init_x = sfv_PlatPose->get_PlatInit_xy()->at('x');
 	float plat_init_y = sfv_PlatPose->get_PlatInit_xy()->at('y');
-
 	for(SFVwp* wp_it : *(sfv_Path->get_PathWPs()))
 	{
-/*		pose.pose.position.x = wp_it->get_WPxy()->at('x') - plat_init_x;
-		pose.pose.position.y = wp_it->get_WPxy()->at('y') - plat_init_y;
-		wp_path.poses.push_back(pose);
-	*/
-
-		//wp = new nav_msgs::Odometry();
 		wp.pose.pose.position.x = wp_it->get_WPxy()->at('x') - plat_init_x;
 		wp.pose.pose.position.y = wp_it->get_WPxy()->at('y') - plat_init_y;
 		robilNavTask.waypoints.push_back(wp);
 	}
-	robilNavTask.task_id= std::to_string(100);
 
 
-	rosbag::Bag bag;
-	bag.open(fileName + ".bag", rosbag::bagmode::Write);
+	ros::Time nav_task_play_time(2,0);
+	bag.write("/OCU/SMME/NavigationTask",nav_task_play_time,robilNavTask);
 
-	ros::Time task_play_time(1,0);
-	bag.write("/OCU/SMME/NavigationTask",task_play_time,robilNavTask);
+
+/////
 
 	robil_msgs::AssignMission robilMission;
-	robilMission.mission_id = std::to_string(101);
+	robilMission.mission_description = "navigation task";
+	robilMission.mission_id = "1001";
+
 	robil_msgs::AssignMissionTask mission_task;
-	mission_task.task_id = "100";
+	mission_task.task_id = "10";
+	robilMission.tasks.push_back(mission_task);
+	mission_task.task_id = "20";
 	robilMission.tasks.push_back(mission_task);
 
-	ros::Time mission_play_time(2,0);
+	ros::Time mission_play_time(3,0);
 	bag.write("/OCU/SMME/MissionPlan",mission_play_time,robilMission);
 
+////
+
 	std_msgs::String play;
-	play.data = "/mission/101/StartMission";
-	ros::Time play_time(7,0);
+	play.data = "/mission/1001/StartMission";
+	ros::Time play_time(4,0);
 	bag.write("/decision_making/events",play_time,play);
+	ros::Time play2_time(5,0);
+	bag.write("/decision_making/events",play2_time,play);   // one play some times not enoth
 
 
 	bag.close();

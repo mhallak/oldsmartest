@@ -184,7 +184,8 @@ void collision_grader(const ros::TimerEvent&)
 		   catch (tf::LookupException &ex)
 		      {
 		   	ROS_ERROR("%s",ex.what());
-		   	return;
+		   	continue;
+		   	// return;
 		      }
 		   	    std::vector<SFVobsOnPathScattering*> *obsOnPathScatterings_vec = new std::vector<SFVobsOnPathScattering*>;
 		   	   	sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::obstacles_on_path, (std::vector<sfvSubGroup*> *)obsOnPathScatterings_vec);

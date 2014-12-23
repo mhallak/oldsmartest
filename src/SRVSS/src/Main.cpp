@@ -6,7 +6,6 @@
 #include "SFDP/SFDPobj.h"
 #include "Generators/Gazebo/GazeboScenarioGenerator.h"
 
-
 #define PATH std::string("")
 
 void printUsage()
@@ -16,6 +15,7 @@ void printUsage()
 	std::cout <<"(2) <srvss> -genSCEN <sfv output> <destination folder> <resousc file> # will generate the scenario and launch it" <<std::endl;
 	exit(1);
 }
+
 
 int main(int argc, char** argv)
 {
@@ -128,6 +128,46 @@ int main(int argc, char** argv)
 		}
 
 
+	if(std::string(argv[1]).compare("-ScenarioReplications")==0)
+		{
+
+		std::string SFV_root_file = PATH + argv[2];
+		std::string WS_folder_path = PATH + argv[3];
+		int SampNum = std::stoi(argv[4]);
+
+		TiXmlElement * sampsXML = new TiXmlElement("samples");
+
+		for (int sfv_i=1; sfv_i<=SampNum ; sfv_i++)
+		{
+			std::string scenario_folder_path = WS_folder_path +"/sfv_run_" + std::to_string(sfv_i);
+
+			boost::filesystem::remove_all(scenario_folder_path);
+			boost::filesystem::create_directory(scenario_folder_path);
+
+			SFV * sfv = new SFV(SFV_root_file,scenario_folder_path);
+			sfv->printToXML(scenario_folder_path+"/scen.SFV");
+			sfv->execute(argc,argv);
+
+			std::string sfv_name = "sfv_" + std::to_string(sfv_i);
+			std::stringstream temp_ss;
+			temp_ss.str("");
+			temp_ss << sfv->get_Grade();
+			TiXmlElement * xml_grade = new TiXmlElement( sfv_name );
+			TiXmlText * grade_val= new TiXmlText( temp_ss.str() );
+			xml_grade->LinkEndChild(grade_val);
+			sampsXML->LinkEndChild(xml_grade);
+		}
+
+		    std::string Grades_file_url = WS_folder_path + "/grades.xml";
+			TiXmlDocument doc(Grades_file_url);
+			TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
+			doc.LinkEndChild(decl);
+			doc.LinkEndChild(sampsXML);
+			doc.SaveFile(Grades_file_url.c_str());
+			std::cout << " printing Grades to file : " << Grades_file_url << std::endl;
+
+			return 0;
+		}
 
 	return 0;
 }

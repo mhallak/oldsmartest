@@ -1,7 +1,7 @@
 <!-- -*- mode: XML -*- -->
 <launch>    
 
-	<arg name="scen" default="scenarios/scenario_1"/> 
+	<arg name="scen" default="work_space/scenario_1"/> 
 
 	<arg name="scenarios_folder_url" value="$(find SRVSS)/$(arg scen)"/>
 	<arg name="world_models_folder_url" value="$(find SRVSS)/world_components_models"/>

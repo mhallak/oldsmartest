@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<robot_components_models name="Sahar" dirPath="/home/userws3/.gazebo/models">
+<robot_components_models name="Sahar" dirPath="/home/dany/.gazebo/models">
 
 	<platform name="bobcat"/>
 	<sensor name="GPS_INS"/>
@@ -15,7 +15,7 @@
 
 
 
-<world_components_models dirPath="/home/userws3/dany_ws/src/Simulation/srvss/src/SRVSS/world_components_models">
+<world_components_models dirPath="/home/dany/robil2/src/Simulation/srvss/src/SRVSS/world_components_models">
 
 	<terrain id="0">srvss_terrain0</terrain>
 	<terrain id="1">srvss_terrain1</terrain>
