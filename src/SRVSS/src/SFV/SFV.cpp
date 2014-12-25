@@ -195,7 +195,6 @@ bool SFV::roll()
 			for (sfvSubGroup * subGroup_it : * my_sfvSubGroups)
 				{
 				std::cout << "Roll of " << subGroup_it->get_Type().str() <<std::endl;
-				std::cout << "failure point !!!" << std::endl;
 				if (! subGroup_it->roll())
 					{
 					roll_fail_flag=true;
@@ -295,7 +294,7 @@ int SFV::execute(int argc, char** argv)
 {
 	generate();
 
-	GazeboExecutor * ScenExe = new GazeboExecutor(my_ws_folder_url);
+	GazeboExecutor * ScenExe = new GazeboExecutor(this);
 	if (! ScenExe->RunScenario(argc,argv))
 	{
 		std::cout << "\033[1;31m Execution of SFVs scenario have failed \033[0m"<< std::endl;

@@ -10,19 +10,23 @@
 
 #include <string>
 #include "Executor/scenarioLauncher.h"
+#include "SFV/SFV.h"
 
 class GazeboExecutor {
 	private :
 
 		std::string my_Scenario_folder_url;
 		std::string my_Grades_file_url;
+
+		std::string my_pyInterface;
+
 		double my_scenario_graede;
 		bool was_executed_flag;
 
 		ScenarioLauncher *my_launcher;
 
 	public :
-		GazeboExecutor(std::string Scenario_folder_url);
+		GazeboExecutor(SFV *sfv);
 		~GazeboExecutor();
 
 		int RunScenario(int argc, char** argv);

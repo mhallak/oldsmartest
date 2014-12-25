@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 
+<robot_PyInterface name="PyInterface_robil2"/>
+
 <robot_components_models name="Sahar" dirPath="/home/dany/.gazebo/models">
 
 	<platform name="bobcat"/>
@@ -23,6 +25,7 @@
 	<terrain id="3">shetah_nisuy</terrain>
 	<terrain id="4">terrainWithRoad</terrain>
 	<terrain id="5">terrain100x100</terrain>
+	<terrain id="6">terrain_50mX50m:25mmX25mm</terrain>
 
 
 	<object id="1">barrel1</object>

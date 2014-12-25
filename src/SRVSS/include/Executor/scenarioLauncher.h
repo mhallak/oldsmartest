@@ -19,7 +19,7 @@ class ScenarioLauncher
 		PyObject *pInstance;
 
 	public:
-		ScenarioLauncher();
+		ScenarioLauncher(std::string pyInterface);
 		~ScenarioLauncher();
 
 		void start_launcher();

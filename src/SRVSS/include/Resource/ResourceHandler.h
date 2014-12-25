@@ -27,6 +27,8 @@ private:
 	std::string my_WorldModelsFolderURL;
 	std::map <std::string, std::map<int,std::string>*>* m_resourceMap;
 
+	std::string my_Robot_PyInterface;
+
 	std::string getResource(std::string name,int id);
 
 public:
@@ -64,6 +66,11 @@ public:
 	inline std::vector <std::string *> * getRobotSensorsNames()
 				{	if ( ! my_RobotSensorsNames->empty() )  { return my_RobotSensorsNames; }
 					else  { std::cout << "\033[1;31m No RobotSensorsNames where set \033[1;31m"<< std::endl; 	return 0;   } }
+
+	inline std::string getRobotPyInterface()
+				{	if ( my_Robot_PyInterface != "")  { return my_Robot_PyInterface; }
+					else  { std::cout << "\033[1;31m No my_Robot_PyInterface was set \033[1;31m"<< std::endl; 	return 0;   } }
+
 
 };
 
