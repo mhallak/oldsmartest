@@ -20,6 +20,9 @@
 #include "SFV/SFV.h"
 #include "SFV/SFVobjScattering.h"
 #include "SFV/SFVobsOnPathScattering.h"
+#include "SFV/SFVpath.h"
+#include "SFV/SFVwp.h"
+
 #include "Resource/ResourceHandler.h"
 
 using namespace fcl;
@@ -33,7 +36,7 @@ using namespace fcl;
 float scenario_obj_min_dist = 100;
 float scenario_roll_max_ang = 0;
 float scenario_pitch_max_ang = 0;
-
+float scenario_goalWP_min_dis = 100;
 
 
 
@@ -309,6 +312,45 @@ void rollover_grader(const ros::TimerEvent&)
 
 
 
+// variable used by the distance_to_goalWP_grader function
+boost::mutex goalWP_mutex;
+
+/**
+ *
+ * Grading function for reaching goalWP
+ */
+void distance_to_goalWP_grader(const ros::TimerEvent&)
+{
+	tf::StampedTransform rob_body_transform;
+
+	try {
+	   listener_ptr->waitForTransform("/world", "body", ros::Time(0), ros::Duration(1.0) );
+	   listener_ptr->lookupTransform("/world", "body" ,ros::Time(0), rob_body_transform);
+	     }
+	   catch (tf::TransformException &ex)
+	      {
+	   	ROS_ERROR("%s",ex.what());
+	   	return;
+	      }
+
+	   float rob_x = rob_body_transform.getOrigin().x();
+	   float rob_y = rob_body_transform.getOrigin().y();
+
+	   SFVpath *sfv_Path = (SFVpath*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::Path));
+	   SFVwp *goalWP = sfv_Path->get_PathWPs()->back();
+	   float goalWP_x = goalWP->get_WPxy()->at('x');
+	   float goalWP_y = goalWP->get_WPxy()->at('y');
+
+	   float goalWP_dis = std::sqrt((rob_x-goalWP_x)*(rob_x-goalWP_x) + (rob_y-goalWP_y)*(rob_y-goalWP_y));
+
+
+	   //std::cout << " goalWP_dis = " << goalWP_dis << std::endl;
+
+	   goalWP_mutex.lock();
+		scenario_goalWP_min_dis = std::min( scenario_goalWP_min_dis , goalWP_dis);
+	   goalWP_mutex.unlock();
+}
+
 
 
 // grades publishing
@@ -322,10 +364,13 @@ void grades_publishing(const ros::TimerEvent&)
 
 	collision_mutex.lock();
 	rollover_mutex.lock();
+	goalWP_mutex.lock();
 
     	greads_array.data.push_back(scenario_obj_min_dist);
   		greads_array.data.push_back(scenario_roll_max_ang);
   		greads_array.data.push_back(scenario_pitch_max_ang);
+
+  		greads_array.data.push_back(scenario_goalWP_min_dis);
 
   		greades_pub_.publish(greads_array);
 
@@ -338,6 +383,7 @@ void grades_publishing(const ros::TimerEvent&)
 
    collision_mutex.unlock();
    rollover_mutex.unlock();
+   goalWP_mutex.unlock();
 }
 
 /**
@@ -458,7 +504,11 @@ int main(int argc, char **argv)
 
    ros::Timer collision_grader_timer = n.createTimer(ros::Duration(0.05), collision_grader);
    ros::Timer rollover_grader_timer = n.createTimer(ros::Duration(0.05), rollover_grader);
+
+   ros::Timer goalWPdis_grader_timer = n.createTimer(ros::Duration(0.01), distance_to_goalWP_grader);
+
    ros::Timer grades_publishing_timer = n.createTimer(ros::Duration(0.01), grades_publishing);
+
 
    greades_pub_ = n.advertise<std_msgs::Float32MultiArray>("/srvss/grades", 100);
    reset_pub_ = n.advertise<std_msgs::Bool>("/srvss/scenario_reset", 100);

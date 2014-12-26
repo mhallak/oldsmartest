@@ -59,6 +59,8 @@ class SFV {
 			{ if (! my_sfvSubGroups->empty() ) { return my_sfvSubGroups; }
 				  else { std::cout << "\033[1;31m SFV SubGroups vector is empty \033[0m" << std::endl; return(0); } }
 
+		inline std::string get_WSfolder()
+			{ return(my_ws_folder_url); }
 
 		inline std::string get_ResourceFile()
 			{ return(my_resource_file_url); }

@@ -52,9 +52,8 @@ bool Rule_wp_path_inside_map::isRuleValid(SFV *sfv)
 				return false;
 				}
 
-
 		//load terrain
-		std::string terrain_name=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terraine->get_TopographicMapIndex()->get_WasRolledFlag());
+		std::string terrain_name=ResourceHandler::getInstance(sfv->get_ResourceFile()).getTerrainById(sfv_terraine->get_TopographicMapIndex()->get_RolledValue());
 		std::string teraine_file_url = ResourceHandler::getInstance(sfv->get_ResourceFile()).getWorldModelsFolderURL();
 		TerrainAnalyzer* terrainA=new TerrainAnalyzer();
 		terrainA->loadFile(teraine_file_url+"/"+terrain_name);

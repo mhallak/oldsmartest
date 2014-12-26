@@ -42,6 +42,17 @@ ResourceHandler::ResourceHandler(std::string resources_file_path) {
 		//search for an sdfp element to parse
 		for ( pChild = doc.FirstChild(); pChild != 0; pChild = pChild->NextSibling())
 		{
+			if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("robot_PyInterface")==0)
+						{
+							for ( TiXmlAttribute *PyInterface_xmlAttribute = pChild->ToElement()->FirstAttribute(); PyInterface_xmlAttribute != 0; PyInterface_xmlAttribute = PyInterface_xmlAttribute->Next())
+							{
+								if(PyInterface_xmlAttribute->NameTStr().compare("name")==0)
+								{
+									my_Robot_PyInterface=PyInterface_xmlAttribute->ValueStr();
+								}
+							}
+						}
+
 			if(pChild->Type()==XML_ELEMENT && pChild->ValueStr().compare("world_components_models")==0)
 			{
 				for ( TiXmlAttribute * world_components_xmlAttribute = pChild->ToElement()->FirstAttribute(); world_components_xmlAttribute != 0; world_components_xmlAttribute = world_components_xmlAttribute->Next())

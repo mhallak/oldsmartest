@@ -140,9 +140,11 @@ std::map<char,float> * SFVwp::get_WPxy()
 	terrainA.loadFile(teraine_file_url+"/"+terrain_name);
 
 	//get platform initial position
-	float plat_init_x , plat_init_y, plat_init_z , plat_init_azi;
-	terrainA.getXYZCoord(sfv_platPose->get_InitPlatformPoseX()->get_RolledValue(),sfv_platPose->get_InitPlatformPoseY()->get_RolledValue(),plat_init_x, plat_init_y ,plat_init_z);
-	plat_init_azi = sfv_platPose->get_InitPlatformPoseAzimut()->get_RolledValue();
+	//float plat_init_x , plat_init_y, plat_init_z , plat_init_azi;
+	//terrainA.getXYZCoord(sfv_platPose->get_InitPlatformPoseX()->get_RolledValue(),sfv_platPose->get_InitPlatformPoseY()->get_RolledValue(),plat_init_x, plat_init_y ,plat_init_z);
+	float plat_init_x = sfv_platPose->get_PlatInit_xy()->at('x');
+	float plat_init_y = sfv_platPose->get_PlatInit_xy()->at('y');
+	float plat_init_azi = sfv_platPose->get_InitPlatformPoseAzimut()->get_RolledValue();
 
 	float wp_x=plat_init_x, wp_y=plat_init_y,  wp_azi = plat_init_azi;
 
