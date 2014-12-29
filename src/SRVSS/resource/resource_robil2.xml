@@ -27,7 +27,6 @@
 	<terrain id="5">terrain100x100</terrain>
 	<terrain id="6">terrain_50mX50m:25mmX25mm</terrain>
 
-
 	<object id="1">barrel1</object>
 	<object id="2">rock1</object>
 	<object id="3">tree1</object>

@@ -41,8 +41,12 @@
 	<node pkg="SRVSS" type="grader_node" name="grader_node" output="screen" args="$(arg scenarios_folder_url) $(arg SFV_file_url)" />
 
 
-<!-- start RosBag recording 
-	<node name="rosbag_recorder" pkg="rosbag" type="record" args="-a $(arg record_file_path)" />
--->
+<!-- start RosBag recording -->
+	<node name="rosbag_recorder" pkg="rosbag" type="record" args="--all $(arg record_file_path) --exclude /SENSORS/(.*)|/LOC/Pose|/LOC/Velocity|/Sahar/(.*)|/OCU/(.*)|/LLC/(.*)|/PER/(.*)|/WPD/(.*)|/WSM/(.*)|/flea3/(.*)|/right_sick/(.*)|/left_sick/(.*)|/heartbeat|/gazebo/model_states|/clock" />
 
 </launch>
+
+
+
+
+

@@ -198,26 +198,15 @@ class ScenarioLauncher:
         # ================ -->
 
 
-	#os.system("roslaunch robil2conf frameworkInit.launch")
-	#arguments = "-file " + Scenarin_folder + "/scenarioMission.txt"
-	#node = ROSNode("srvss_wp_driver", "srvss_wp_driver_node",name="srvss_wp_driver_node", args=arguments , respawn="false") # output="screen"
-	#self.launcher.launch(node)	
-        #time.sleep(3)
-
-
     def launch_robot_tf_broadcaster(self):
 	remaping = [ ("/joint_states" , "/Sahar/joint_states") ] 
 	node = ROSNode("robot_state_publisher", "robot_state_publisher",name="robot_state_broadcaster_node", remap_args=remaping ,output="screen", respawn="false")
 	self.launcher.launch(node)
         time.sleep(3)	
-	
-	#node = ROSNode("tf", "static_transform_publisher",name="sick_link_tf_broadcaster_node", args="1 0 0.2 0 0 0 body front_sick 100" ,output="screen", respawn="false")
-	#self.launcher.launch(node)	
-        #time.sleep(3)
 
 
     def launch_recorder(self, Scenarin_folder):
-	arguments = "-a -O " + Scenarin_folder + "/scen_rec.bag"
+	arguments = "-O " + Scenarin_folder + "/scen_rec.bag --all --exclude /SENSORS/(.*)|/LOC/Pose|/LOC/Velocity|/Sahar/(.*)|/OCU/(.*)|/LLC/(.*)|/PER/(.*)|/WPD/(.*)|/WSM/(.*)|/flea3/(.*)|/right_sick/(.*)|/left_sick/(.*)|/heartbeat|/gazebo/model_states|/clock"
 	node = ROSNode("rosbag", "record", name="rosbag_recorde_node", args=arguments)
 	self.launcher.launch(node)
         time.sleep(3)	

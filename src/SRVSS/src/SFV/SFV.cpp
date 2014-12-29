@@ -29,6 +29,9 @@
 #include "Generators/Gazebo/GazeboScenarioGenerator.h"
 #include "Executor/GazeboExecutor.h"
 
+#include "std_msgs/Float32MultiArray.h"
+
+
 class sfvSubGroup;
 SFV::SFV(SFDPobj * SFDP, std::string ws_folder_url)
 {
