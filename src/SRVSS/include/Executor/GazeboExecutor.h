@@ -11,6 +11,8 @@
 #include <string>
 #include "Executor/scenarioLauncher.h"
 #include "SFV/SFV.h"
+#include "std_msgs/Float32MultiArray.h"
+
 
 class GazeboExecutor {
 	private :
@@ -20,7 +22,8 @@ class GazeboExecutor {
 
 		std::string my_pyInterface;
 
-		double my_scenario_graede;
+		//double my_scenario_graede;
+		std_msgs::Float32MultiArray::ConstPtr  my_scenario_graede;
 		bool was_executed_flag;
 
 		ScenarioLauncher *my_launcher;
@@ -33,7 +36,7 @@ class GazeboExecutor {
 		int PrintResultsToFile();
 
 		inline double get_scenario_grade()
-			{	return my_scenario_graede; }
+			{	return my_scenario_graede->data[0]; }
 
 		inline std::string get_Scenario_folder_url()
 			{	return my_Scenario_folder_url; }
@@ -41,8 +44,7 @@ class GazeboExecutor {
 		inline bool get_wasExecutedFlag()
 			{	return was_executed_flag;	}
 
-		inline double get_ScenarioGraede()
-			{	return my_scenario_graede; }
+
 };
 
 

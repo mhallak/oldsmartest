@@ -13,13 +13,13 @@
 	<scenario_feature_group type="objects" name="objects">
 		<scenario_feature type="number_of_objects">
 			<distribution>uniform_discrete</distribution>
-			<dist_param_1>3</dist_param_1>
-			<dist_param_2>3</dist_param_2>
+			<dist_param_1>7</dist_param_1>
+			<dist_param_2>10</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="object_i_type">
 			<distribution>uniform_discrete</distribution>
 			<dist_param_1>1</dist_param_1>
-			<dist_param_2>4</dist_param_2>
+			<dist_param_2>3</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="object_i_scaling_factor">
 			<distribution>uniform_continuous</distribution>
@@ -300,7 +300,7 @@
 		<scenario_feature type="wp_i_relative_distance">
 			<distribution>uniform_continuous</distribution>
 			<dist_param_1>10</dist_param_1>
-			<dist_param_2>15</dist_param_2>
+			<dist_param_2>20</dist_param_2>
 			<feature_dependency type="roll_number">number_of_way_points</feature_dependency>
 		</scenario_feature> 
 		<scenario_feature type="wp_i_relative_angle">

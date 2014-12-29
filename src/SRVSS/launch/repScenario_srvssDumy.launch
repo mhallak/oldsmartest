@@ -10,10 +10,8 @@
 	<arg name="play_record" value="-p"/>
 	<arg name="ros_record_path" value="$(arg scenarios_folder_url)/scen_rec.bag"/>
 
-
 <!-- setting gazebo path for scenario platform and sensors models -->
 	<env name="GAZEBO_MODEL_PATH" value="$(arg world_models_folder_url):$(arg scenarios_folder_url)/scenarioSystemModels"/>
-
 
 <!-- start gazebo server-->
 	<param name="robot_description" command="cat $(find srvss_bobcat)/urdf/BOBCAT.URDF" />

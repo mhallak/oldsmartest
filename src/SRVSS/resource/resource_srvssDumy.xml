@@ -3,7 +3,7 @@
  
 <robot_PyInterface name="PyInterface_srvssDumy"/>
 
-<robot_components_models name="srvss_bobcat" dirPath="/home/dany/robil2/src/Simulation/srvss_bobcat/sdf_models">
+<robot_components_models name="srvss_bobcat" dirPath="~/robil2/src/Simulation/srvss_bobcat/sdf_models">
 
 	<platform name="srvss_bobcat"/>
 	<sensor name="GPS_INS"/>
@@ -12,7 +12,7 @@
 </robot_components_models>
 
 
-<world_components_models dirPath="/home/dany/robil2/src/Simulation/srvss/src/SRVSS/world_components_models">
+<world_components_models dirPath="~/robil2/src/Simulation/srvss/src/SRVSS/world_components_models">
 
 	<terrain id="0">srvss_terrain0</terrain>
 	<terrain id="1">srvss_terrain1</terrain>
