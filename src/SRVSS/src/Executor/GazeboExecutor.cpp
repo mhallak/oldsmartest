@@ -22,7 +22,6 @@
 GazeboExecutor::GazeboExecutor(SFV *sfv)
 {
 	my_Scenario_folder_url = sfv->get_WSfolder(); //Scenario_folder_url;
-	my_Grades_file_url = my_Scenario_folder_url + "/SFV_execution_grades.xml";
 
 	my_pyInterface = ResourceHandler::getInstance(sfv->get_ResourceFile()).getRobotPyInterface();
 
@@ -40,11 +39,10 @@ GazeboExecutor::~GazeboExecutor()
 }
 
 //double temp_grade;
-std_msgs::Float32MultiArray::ConstPtr temp_grade;
+std_msgs::Float32MultiArray::ConstPtr temp_grades;
 void scen_grade_Callback(const std_msgs::Float32MultiArray::ConstPtr &msg)
 {
-	//temp_grade = msg->data[0];
-	temp_grade = msg ;
+	temp_grades = msg ;
 }
 
 int GazeboExecutor::RunScenario(int argc, char** argv)
@@ -85,7 +83,7 @@ int GazeboExecutor::RunScenario(int argc, char** argv)
 
 
 	model_states_sub = n.subscribe("/srvss/grades", 100, scen_grade_Callback);
-	ros::Duration scen_max_duration(60, 0);
+	ros::Duration scen_max_duration(30, 0);
 	ros::Time begin_time = ros::Time::now();
 	ros::Time now_time = ros::Time::now();
 	while ( (! end_scen_flag) && ros::ok() && (now_time - begin_time < scen_max_duration) )
@@ -97,7 +95,7 @@ int GazeboExecutor::RunScenario(int argc, char** argv)
 	//char c;
 	//std::cin >>c;
 
-	my_scenario_graede = temp_grade;
+	my_scenario_graedes = temp_grades;
 	was_executed_flag = true;
 
 	my_launcher->GazeboPause();
@@ -111,46 +109,4 @@ int GazeboExecutor::RunScenario(int argc, char** argv)
 	return 1;
 }
 
-
-int GazeboExecutor::PrintResultsToFile()
-{
-	if (! was_executed_flag)
-	{
-		std::cout << " \033[1;31m can't print results file because the SFV havn't been executed yet \033[0m" << std::endl;
-		return 0;
-	}
-
-	TiXmlDocument doc(my_Grades_file_url);
-	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
-	doc.LinkEndChild(decl);
-
-	TiXmlElement * xml_results = new TiXmlElement( "SFV_execution_grades" );
-	xml_results->SetAttribute("version","1.0");
-	doc.LinkEndChild(xml_results);
-
-	std::stringstream temp_ss;
-/*
-	temp_ss.str("");
-	temp_ss << my_scenario_graede->data[0];
-	TiXmlElement * xml_min_dist = new TiXmlElement( "minimal_distant_grade" );
-	TiXmlText * min_dist_val= new TiXmlText( temp_ss.str() );
-	xml_min_dist->LinkEndChild(min_dist_val);
-	doc.LinkEndChild(xml_min_dist);
-*/
-
-	for (int i=0  ; i < my_scenario_graede->data.size() ; i++)
-	{
-		temp_ss.str("");
-		temp_ss << my_scenario_graede->data[i];
-		TiXmlElement * xml_grade = new TiXmlElement( "grade" );
-		TiXmlText * xml_grade_val = new TiXmlText( temp_ss.str() );
-		xml_grade->LinkEndChild(xml_grade_val);
-		doc.LinkEndChild(xml_grade);
-	}
-
-	doc.SaveFile(my_Grades_file_url.c_str());
-	std::cout << " printing Grades to file : " << my_Grades_file_url << std::endl;
-
-	return 1;
-}
 

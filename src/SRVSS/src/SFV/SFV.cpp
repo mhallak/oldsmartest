@@ -304,12 +304,65 @@ int SFV::execute(int argc, char** argv)
 		return(0);
 	}
 
-	ScenExe->PrintResultsToFile();
-	my_grade = ScenExe->get_scenario_grade();
+	my_grades = ScenExe->get_scenario_grades();
 	was_executed_flag = true;
+	PrintResultsToFile();
 
 	return 1;
 }
+
+
+TiXmlElement *SFV::get_GradesAsXMLElement()
+{
+	if (! was_executed_flag)
+	{
+		std::cout << " \033[1;31m can't create Grades XML element because the SFV havn't been executed yet \033[0m" << std::endl;
+		return 0;
+	}
+
+	TiXmlElement * xml_grades = new TiXmlElement( "grades" );
+
+	std::stringstream temp_ss;
+	for (int i=0  ; i < my_grades->data.size() ; i++)
+	{
+		temp_ss.str("");
+		temp_ss << my_grades->data[i];
+		TiXmlElement * xml_grade = new TiXmlElement( "grade" );
+		TiXmlText * xml_grade_val = new TiXmlText( temp_ss.str() );
+		xml_grade->LinkEndChild(xml_grade_val);
+		xml_grades->LinkEndChild(xml_grade);
+	}
+	return(xml_grades);
+}
+
+
+int SFV::PrintResultsToFile()
+{
+	if (! was_executed_flag)
+	{
+		std::cout << " \033[1;31m can't print results file because the SFV havn't been executed yet \033[0m" << std::endl;
+		return 0;
+	}
+
+	std::string my_Grades_file_url = get_WSfolder() + "/SFV_execution_grades.xml";
+
+	TiXmlDocument doc(my_Grades_file_url);
+	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
+	doc.LinkEndChild(decl);
+
+	TiXmlElement * xml_results = new TiXmlElement( "SFV_execution_grades" );
+	xml_results->SetAttribute("version","1.0");
+	doc.LinkEndChild(xml_results);
+
+	TiXmlElement * xml_grades = get_GradesAsXMLElement();
+	doc.LinkEndChild(xml_grades);
+
+	doc.SaveFile(my_Grades_file_url.c_str());
+	std::cout << " printing Grades to file : " << my_Grades_file_url << std::endl;
+
+	return 1;
+}
+
 
 
 SFV::~SFV()
