@@ -31,13 +31,10 @@ int main(int argc, char** argv)
 				sfv->execute(argc,argv);
 
 				std::string sfv_name = "sfv_" + std::to_string(sfv_i);
-				std::stringstream temp_ss;
-				temp_ss.str("");
-				temp_ss << sfv->get_Grade();
-				TiXmlElement * xml_grade = new TiXmlElement( sfv_name );
-				TiXmlText * grade_val= new TiXmlText( temp_ss.str() );
-				xml_grade->LinkEndChild(grade_val);
-				sampsXML->LinkEndChild(xml_grade);
+				TiXmlElement * xml_sfv = new TiXmlElement( sfv_name );
+				TiXmlElement * xml_grades = sfv->get_GradesAsXMLElement();
+				xml_sfv->LinkEndChild(xml_grades);
+				sampsXML->LinkEndChild(xml_sfv);
 			}
 
 			    std::string Grades_file_url = WS_folder_path + "/grades.xml";

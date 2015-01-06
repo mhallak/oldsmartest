@@ -19,6 +19,8 @@
 
 #include "Rules/Rule.h"
 
+#include "std_msgs/Float32MultiArray.h"
+
 
 class SFDPobj;
 class sfvSubGroup;
@@ -36,7 +38,8 @@ class SFV {
 		std::vector<Rule *> * my_rules;
 
 		bool was_executed_flag;
-		float my_grade;
+		//float my_grade;
+		std_msgs::Float32MultiArray::ConstPtr  my_grades;
 
 		std::vector<sfvSubGroup*> * SubGroupsBayFeatureGroupType_ReturnVec;
 
@@ -52,8 +55,10 @@ class SFV {
 		int generate();
 		int execute(int argc, char** argv);
 
-		~SFV();
+		TiXmlElement *get_GradesAsXMLElement();
+		int PrintResultsToFile();
 
+		~SFV();
 
 		inline std::vector<sfvSubGroup *> * get_sfvSubGroups()
 			{ if (! my_sfvSubGroups->empty() ) { return my_sfvSubGroups; }
@@ -84,8 +89,8 @@ class SFV {
 		inline bool get_WasExecutedFlag()
 			{ return(was_executed_flag); }
 
-		inline float get_Grade()
-			{ if (was_executed_flag) { return my_grade; }
+		inline std_msgs::Float32MultiArray::ConstPtr get_Grades()
+			{ if (was_executed_flag) { return my_grades; }
 				else { std::cout << "\033[1;31m SFV wasn't executed yet \033[0m" << std::endl; return(0); } }
 
 };

@@ -37,7 +37,10 @@ SFDPobj::SFDPobj(std::string SFDP_file_url, std::string Resources_file_url, std:
 	my_sampled_SFVs = new std::vector<SFV *>;
 	my_sub_SFDPs = new std::vector<SFDPobj *>;
 
-	my_ExploretionFeature = new ScenarioFeature(); ;
+	my_ExploretionFeature = new ScenarioFeature();
+
+	my_Grades_means = new std::vector<float>;
+	my_Grades_stds = new std::vector<float>;
 }
 
 
@@ -166,20 +169,34 @@ int SFDPobj::GenMySFVs(int samp_num)
 int SFDPobj::RunMySFVs(int argc, char** argv)
 {
 	int sfv_index=0;
-	float sum = 0;
-	float sum_of_squers = 0;
+	std::vector<float> grads_sums;
+	std::vector<float> grads_sums_of_squers;
 
 	for (SFV * sfv_it : * my_sampled_SFVs )
 	{
 		sfv_it->execute(argc, argv);
 		if (sfv_it->get_WasExecutedFlag())
 			{
-			sum = sum + sfv_it->get_Grade();
-			sum_of_squers = sum_of_squers + (sfv_it->get_Grade())*(sfv_it->get_Grade());
+			for(int i=0 ; i<(sfv_it->get_Grades())->data.size() ; i++)
+				{
+					float grade = sfv_it->get_Grades()->data[i];
+					if (grads_sums.size()<=i)
+						{
+						float new_grades_sum = grade;
+						grads_sums.push_back(new_grades_sum);
+						float new_grades_sqr = grade*grade;
+						grads_sums_of_squers.push_back(new_grades_sqr);
+						}
+					else
+						{
+						grads_sums[i] = grads_sums[i] + grade;
+						grads_sums_of_squers[i] = grads_sums_of_squers[i] + grade*grade;
+						}
+				}
+
 			sfv_index++;
 			}
 	}
-
 
 	if (sfv_index == 0)
 		{
@@ -187,13 +204,67 @@ int SFDPobj::RunMySFVs(int argc, char** argv)
 		return(0);
 		}
 
-	my_Grade_mean = sum/sfv_index;												  // E(x) = sum(x)/n
-	my_Grade_std = sqrt(sum_of_squers/sfv_index - my_Grade_mean*my_Grade_mean);   // Var(x) = E(x^2) - [E(x)]^2
+	for (int i=0 ; i<grads_sums.size() ; i++ )
+	 {
+		float Grade_mean = grads_sums[i]/sfv_index;							// E(x) = sum(x)/n
+		float GradeSqer_mean = grads_sums_of_squers[i]/sfv_index;			// E(x^2) = sum(x^2)/n
+
+		my_Grades_means->push_back(Grade_mean);
+		my_Grades_stds->push_back(sqrt(GradeSqer_mean - Grade_mean*Grade_mean));    // Var(x) = E(x^2) - [E(x)]^2
+	 }
+
 	have_been_run = true;
     PrintMyResultsToFile();
 
 	return 1;
 }
+
+
+TiXmlElement * SFDPobj::get_StatisticsInXML()
+{
+	if (! have_been_run)
+	{
+		std::cout << " \033[1;31m can't return Statistics In XML because the SFVs havn't been run yet \033[0m" << std::endl;
+		return 0;
+	}
+
+	TiXmlElement * StatisticsXML = new TiXmlElement("Statistics");
+	for (int i=0; i<my_Grades_means->size(); i++)
+		{
+		TiXmlElement * GradeXML = new TiXmlElement("Grade_"+std::to_string(i));
+
+		GradeXML->SetAttribute("mean", std::to_string(my_Grades_means->at(i)));
+		GradeXML->SetAttribute("std", std::to_string(my_Grades_stds->at(i)));
+		StatisticsXML->LinkEndChild(GradeXML);
+		}
+	return(StatisticsXML);
+}
+
+TiXmlElement * SFDPobj::get_SFVsGradesInXML()
+{
+	if (! have_been_run)
+	{
+		std::cout << " \033[1;31m can't return SFVs Grades In XML because the SFVs havn't been run yet \033[0m" << std::endl;
+		return 0;
+	}
+
+	TiXmlElement * SFV_GradesXML = new TiXmlElement("SFV_Grades");
+	int sfv_idex=0;
+	std::string sfv_name;
+	for (SFV * sfv_it : * my_sampled_SFVs )
+		{
+			sfv_idex = sfv_idex + 1;
+			sfv_name = "sfv_" + std::to_string(sfv_idex);
+
+			TiXmlElement * xml_sfv_grades = new TiXmlElement( sfv_name );
+			xml_sfv_grades = sfv_it->get_GradesAsXMLElement();
+			SFV_GradesXML->LinkEndChild(xml_sfv_grades);
+		}
+
+	return(SFV_GradesXML);
+}
+
+
 
 TiXmlElement * SFDPobj::GetResultsInXML()
 {
@@ -207,28 +278,12 @@ TiXmlElement * SFDPobj::GetResultsInXML()
 	resultsXML->SetAttribute("dist_param_1", std::to_string(my_ExploretionFeature->get_dist_param_1()));
 	resultsXML->SetAttribute("dist_param_2", std::to_string(my_ExploretionFeature->get_dist_param_2()));
 
-	TiXmlElement * sampsXML = new TiXmlElement("samples");
-	sampsXML->SetAttribute("mean", std::to_string(my_Grade_mean));
-	sampsXML->SetAttribute("std", std::to_string(my_Grade_std));
-	resultsXML->LinkEndChild(sampsXML);
 
-	std::stringstream temp_ss;
-	temp_ss.str("");
+	TiXmlElement * StatisticsXML = get_StatisticsInXML();
+	resultsXML->LinkEndChild(StatisticsXML);
 
-	int sfv_idex=0;
-	std::string sfv_name;
-	for (SFV * sfv_it : * my_sampled_SFVs )
-		{
-			sfv_idex = sfv_idex + 1;
-			sfv_name = "sfv_" + std::to_string(sfv_idex);
-			temp_ss.str("");
-			temp_ss << sfv_it->get_Grade();
-			TiXmlElement * xml_grade = new TiXmlElement( sfv_name );
-			TiXmlText * grade_val= new TiXmlText( temp_ss.str() );
-			xml_grade->LinkEndChild(grade_val);
-			sampsXML->LinkEndChild(xml_grade);
-		}
-
+	TiXmlElement * SFV_GradesXML = get_SFVsGradesInXML();
+	resultsXML->LinkEndChild(SFV_GradesXML);
 
 	TiXmlElement * subSFDPsXML = new TiXmlElement("subSFDPs");
 	resultsXML->LinkEndChild(subSFDPsXML);
@@ -396,7 +451,7 @@ int SFDPobj::ExploreMe(int argc, char** argv, int division_limit, int samples_nu
 
 	if (my_division_level < get_DivisionLimit())
 	{
-		if ((my_Grade_std > 0.1) || (samples_number==0) )
+		if ((my_Grades_stds->at(0) > 0.1) || (samples_number==0) )
 			{
 				SplitMe(ScenarioFeatureGroupType::obstacles_on_path, "obstacles_on_path" ,ScenarioFeatureType::number_of_obstacles_on_path, 0.5);
 				for (SFDPobj * sub_SFDP_it : * my_sub_SFDPs)

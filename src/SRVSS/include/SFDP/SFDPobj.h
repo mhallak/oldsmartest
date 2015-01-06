@@ -33,8 +33,8 @@ class SFDPobj {
 		std::vector<SFV *> * my_sampled_SFVs;   // vector of sampled SFVs
 
 		bool have_been_run;								// Flag to show that the Grades have been calculated
-		float my_Grade_mean;    		 				// Grade refers to the my_sampled_SFVs
-		float my_Grade_std;
+		std::vector<float> * my_Grades_means;			// Grade refers to the my_sampled_SFVs
+		std::vector<float> * my_Grades_stds;
 
 		std::vector<SFDPobj *> * my_sub_SFDPs;			// vector of sub SFDPs
 		ScenarioFeature * my_ExploretionFeature;		// the feature that is explored (the split performed on it)
@@ -51,6 +51,8 @@ class SFDPobj {
 		int ParseMeFromXMLFile();
 		int PrintMeToFile();
 
+		TiXmlElement * get_StatisticsInXML();
+		TiXmlElement * get_SFVsGradesInXML();
 		TiXmlElement * GetResultsInXML();
 		int PrintMyResultsToFile();
 
@@ -86,11 +88,11 @@ class SFDPobj {
 		inline int get_DivisionLimit()
 		    { return(my_DivisionLimit); }
 
-		inline float get_Garade_mean()
-			{ if (have_been_run) return my_Grade_mean; else return 0; }
+		inline std::vector<float> * get_Garades_means()
+			{ if (have_been_run) return my_Grades_means; else return 0; }
 
-		inline float get_Garade_std()
-			{ if (have_been_run) return my_Grade_std; else return 0; }
+		inline std::vector<float> * get_Garades_stds()
+			{ if (have_been_run) return my_Grades_stds; else return 0; }
 
 		inline std::vector<ScenarioFeatureGroup*> * get_FeatureGroups()
 			{if (! my_featureGroups->empty() ) return my_featureGroups; else return 0; }

@@ -476,8 +476,6 @@ void printUsage()
 
 int main(int argc, char **argv)
 {
-	std::cout << " i am in grader !!! " << std::endl;
-
 	/*
 	if(argc!=3)
 		{
