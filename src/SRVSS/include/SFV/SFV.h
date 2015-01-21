@@ -38,7 +38,6 @@ class SFV {
 		std::vector<Rule *> * my_rules;
 
 		bool was_executed_flag;
-		//float my_grade;
 		std_msgs::Float32MultiArray::ConstPtr  my_grades;
 
 		std::vector<sfvSubGroup*> * SubGroupsBayFeatureGroupType_ReturnVec;

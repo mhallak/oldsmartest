@@ -60,6 +60,7 @@ SFVObject::SFVObject(SFVObject * template_subGroup):  sfvSubGroup(template_subGr
 	Implicit_Object_xyz = new std::map<char,float>;
 }
 
+
 SFVObject::SFVObject(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::object , parent_SFV)
 {
 	initFeaturesMap();
