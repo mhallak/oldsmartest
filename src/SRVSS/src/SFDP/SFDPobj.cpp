@@ -119,7 +119,6 @@ int SFDPobj::GenMySFVs(int samp_num)
 	SFV * sfv_temp;
 	std::string file_url;
 
-	int success;
 	int success_num=0;
 	int sfv_index=1;
 

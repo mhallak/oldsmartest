@@ -17,6 +17,7 @@ public:
 
 	void generateMission(SFV *sfv, std::string fileName);
 	void generateMission_ROBIL2(SFV *sfv, std::string fileName);
+    void SaharGenerateMissionToOCU(SFV *sfv, std::string fileName);
 
 	void generate(SFV * sfv, std::string scenario_folder_url);
 

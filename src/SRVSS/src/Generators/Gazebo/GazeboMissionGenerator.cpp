@@ -44,7 +44,197 @@ GazeboMissionGenerator::~GazeboMissionGenerator() {
 	// TODO Auto-generated destructor stub
 }
 
+void GazeboMissionGenerator::SaharGenerateMissionToOCU(SFV *sfv, std::string fileName)
+{
+	SFVpath *sfv_Path = (SFVpath*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::Path));
 
+	TiXmlDocument doc(fileName);
+	TiXmlDeclaration * dec_XML = new TiXmlDeclaration( "1.0", "utf-8", "" );
+	doc.LinkEndChild(dec_XML);
+	TiXmlElement * DataSourceXML = new TiXmlElement( "DataSource" );
+	DataSourceXML->SetAttribute("xmlns:xsi","http://www.w3.org/2001/XMLSchema-instance");
+	//DataSourceXML->SetAttribute("temp","temp1");
+	doc.LinkEndChild(DataSourceXML);
+
+	TiXmlElement *Missions_XML = new TiXmlElement ("Missions");
+	DataSourceXML->LinkEndChild(Missions_XML);
+	TiXmlElement *Mission_XML = new TiXmlElement ("Mission");
+	Missions_XML->LinkEndChild(Mission_XML);
+
+		TiXmlElement *MissionID_XML = new  TiXmlElement ("MissionID");
+		TiXmlText * MissionID_value = new TiXmlText("0");
+		MissionID_XML->LinkEndChild(MissionID_value);
+		Mission_XML->LinkEndChild(MissionID_XML);
+
+		TiXmlElement *MissionAssignerID_XML = new  TiXmlElement ("MissionAssignerID");
+		TiXmlText * MissionAssignerID_value = new TiXmlText("0");
+		MissionAssignerID_XML->LinkEndChild(MissionAssignerID_value);
+		Mission_XML->LinkEndChild(MissionAssignerID_XML);
+
+		TiXmlElement *MissionExecuterID_XML = new  TiXmlElement ("MissionExecuterID");
+		TiXmlText * MissionExecuterID_value = new TiXmlText("0");
+		MissionExecuterID_XML->LinkEndChild(MissionExecuterID_value);
+		Mission_XML->LinkEndChild(MissionExecuterID_XML);
+
+		TiXmlElement *PresenceVector_XML = new  TiXmlElement ("PresenceVector");
+		TiXmlText * PresenceVector_value = new TiXmlText("0");
+		PresenceVector_XML->LinkEndChild(PresenceVector_value);
+		Mission_XML->LinkEndChild(PresenceVector_XML);
+
+		TiXmlElement *AutonomyLevel_XML = new  TiXmlElement ("AutonomyLevel");
+		TiXmlText * AutonomyLevel_value = new TiXmlText("Manual");
+		AutonomyLevel_XML->LinkEndChild(AutonomyLevel_value);
+		Mission_XML->LinkEndChild(AutonomyLevel_XML);
+
+		TiXmlElement *UnmannedSystem_XML = new  TiXmlElement ("UnmannedSystem");
+		TiXmlText * UnmannedSystem_value = new TiXmlText("0");
+		UnmannedSystem_XML->LinkEndChild(UnmannedSystem_value);
+		Mission_XML->LinkEndChild(UnmannedSystem_XML);
+
+		TiXmlElement *WeatherConditionm_XML = new  TiXmlElement ("WeatherCondition");
+		TiXmlText * WeatherCondition_value = new TiXmlText("Sunny");
+		WeatherConditionm_XML->LinkEndChild(WeatherCondition_value);
+		Mission_XML->LinkEndChild(WeatherConditionm_XML);
+
+		TiXmlElement *Missions_Duration_XML = new  TiXmlElement ("Duration");
+		TiXmlText * Missions_Duration_value = new TiXmlText("0");
+		Missions_Duration_XML->LinkEndChild(Missions_Duration_value);
+		Mission_XML->LinkEndChild(Missions_Duration_XML);
+
+		TiXmlElement *OperationalArea_XML = new  TiXmlElement ("OperationalArea");
+		TiXmlText * OperationalArea_value = new TiXmlText("0");
+		OperationalArea_XML->LinkEndChild(OperationalArea_value);
+		Mission_XML->LinkEndChild(OperationalArea_XML);
+		TiXmlElement *ParentMissionID_XML = new  TiXmlElement ("ParentMissionID");
+		TiXmlText * ParentMissionID_value = new TiXmlText("0");
+		ParentMissionID_XML->LinkEndChild(ParentMissionID_value);
+		Mission_XML->LinkEndChild(ParentMissionID_XML);
+
+		TiXmlElement *MissionStartID_XML = new  TiXmlElement ("MissionStartID");
+		TiXmlText * MissionStartID_value = new TiXmlText("10");
+		MissionStartID_XML->LinkEndChild(MissionStartID_value);
+		Mission_XML->LinkEndChild(MissionStartID_XML);
+
+
+		TiXmlElement *MissionEndID_XML = new  TiXmlElement ("MissionEndID");
+		Mission_XML->LinkEndChild(MissionEndID_XML);
+
+			TiXmlElement *unsignedShort_XML = new  TiXmlElement ("unsignedShort");
+			TiXmlText * unsignedShort_value = new TiXmlText("20");
+			unsignedShort_XML->LinkEndChild(unsignedShort_value);
+			MissionEndID_XML->LinkEndChild(unsignedShort_XML);
+
+		TiXmlElement *Tasks_XML = new TiXmlElement("Tasks");
+		Mission_XML->LinkEndChild(Tasks_XML);
+
+			TiXmlElement *Start_Task_XML = new TiXmlElement("Task");
+			Start_Task_XML->SetAttribute("xsi:type","TaskStart");
+			Tasks_XML->LinkEndChild(Start_Task_XML);
+
+				TiXmlElement *TaskType_XML = new  TiXmlElement ("TaskType");
+				TiXmlText * TaskType_value = new TiXmlText("start");
+				TaskType_XML->LinkEndChild(TaskType_value);
+				Start_Task_XML->LinkEndChild(TaskType_XML);
+
+				TiXmlElement *TaskID_XML = new  TiXmlElement ("TaskID");
+				TiXmlText * TaskID_value = new TiXmlText("10");
+				TaskID_XML->LinkEndChild(TaskID_value);
+				Start_Task_XML->LinkEndChild(TaskID_XML);
+
+				TiXmlElement *TaskAssignerID_XML = new  TiXmlElement ("TaskAssignerID");
+				TiXmlText * TaskAssignerID_value = new TiXmlText("0");
+				TaskAssignerID_XML->LinkEndChild(TaskAssignerID_value);
+				Start_Task_XML->LinkEndChild(TaskAssignerID_XML);
+
+				TiXmlElement *TaskExecuterID_XML = new  TiXmlElement ("TaskExecuterID");
+				TiXmlText * TaskExecuterID_value = new TiXmlText("0");
+				TaskExecuterID_XML->LinkEndChild(TaskExecuterID_value);
+				Start_Task_XML->LinkEndChild(TaskExecuterID_XML);
+
+				TiXmlElement *Task_Duration_XML = new  TiXmlElement ("Duration");
+				TiXmlText * Task_Duration_value = new TiXmlText("0");
+				Task_Duration_XML->LinkEndChild(Task_Duration_value);
+				Start_Task_XML->LinkEndChild(Task_Duration_XML);
+/*
+	TiXmlElement *StepIDs_XML = new  TiXmlElement ("StepIDs");
+	Start_Task_XML->LinkEndChild(StepIDs_XML);
+*/
+
+
+/*
+
+	TiXmlElement *Task_XML = new  TiXmlElement ("Task");
+	Tasks_XML->SetAttribute("xsi:type","TaskNav");
+	Tasks_XML->LinkEndChild(Task_XML);
+
+
+	TiXmlElement *TaskType_XML = new  TiXmlElement ("TaskType");
+	TiXmlText * TaskType_value = new TiXmlText("Nav");
+	TaskType_XML->LinkEndChild(TaskType_value);
+	Task_XML->LinkEndChild(TaskType_XML);
+
+	TiXmlElement *TaskID_XML = new  TiXmlElement ("TaskID");
+	TiXmlText * TaskID_value = new TiXmlText("Nav");
+	TaskID_XML->LinkEndChild(TaskID_value);
+	Tasks_XML->LinkEndChild(TaskID_XML);
+
+	TiXmlElement *TaskID_XML = new  TiXmlElement ("TaskID");
+	TiXmlText * TaskID_value = new TiXmlText("10005");
+	TaskID_XML->LinkEndChild(TaskID_value);
+	Tasks_XML->LinkEndChild(TaskID_XML);
+
+	TiXmlElement *TaskAssignerID_XML = new  TiXmlElement ("TaskAssignerID");
+	TiXmlText * TaskAssignerID_value = new TiXmlText("10005");
+	TaskAssignerID_XML->LinkEndChild(TaskAssignerID_value);
+	Tasks_XML->LinkEndChild(TaskAssignerID_XML);
+
+	TiXmlElement *TaskExecuterID_XML = new  TiXmlElement ("TaskExecuterID");
+	TiXmlText * TaskExecuterID_value = new TiXmlText("0");
+	TaskExecuterID_XML->LinkEndChild(TaskExecuterID_value);
+	Tasks_XML->LinkEndChild(TaskExecuterID_XML);
+
+	TiXmlElement *Duration_XML = new  TiXmlElement ("Duration");
+	TiXmlText * TaskExecuterID_value = new TiXmlText("0");
+	Duration_XML->LinkEndChild(TaskExecuterID_value);
+	Tasks_XML->LinkEndChild(Duration_XML);
+
+	TiXmlElement *NavPath_XML = new  TiXmlElement ("NavPath");
+	Tasks_XML->LinkEndChild(NavPath_XML);
+
+*/
+
+/*
+	<NavPath>
+	            <Points>
+	              <Point ID="11">
+	                <Latitude>32.0110696593482</Latitude>
+	                <Longitude>34.9118124912161</Longitude>
+	                <Altitude>0</Altitude>
+	                <Heading>0</Heading>
+	                <Speed>5</Speed>
+	                <Action>None</Action>
+	                <Feature>
+	                  <Feature>
+	                    <FeatureClass>ObjectID</FeatureClass>
+	                    <DataType>LongInteger</DataType>
+	                    <Value>11</Value>
+	                  </Feature>
+	                  <Feature>
+	                    <FeatureClass>ObjectClassID</FeatureClass>
+	                    <DataType>ShortInteger</DataType>
+	                    <Value>4</Value>
+	                  </Feature>
+	                  <Feature>
+	                    <FeatureClass>Speed</FeatureClass>
+	                    <DataType>Float</DataType>
+	                    <Value>0</Value>
+	                  </Feature>
+	                </Feature>
+	              </Point>
+*/
+
+	doc.SaveFile(fileName.c_str());
+}
 void GazeboMissionGenerator::generateMission(SFV *sfv, std::string fileName)
 {
 	SFVplatformPose *sfv_PlatPose = (SFVplatformPose*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::platform_pose));
@@ -148,28 +338,6 @@ void GazeboMissionGenerator::generateMission_ROBIL2(SFV * sfv,std::string fileNa
 
 
 	bag.close();
-/*
-	robil_msgs::Path Robil2_path;
-	Robil2_path.waypoints = wp_path;
-	Robil2_path.is_heading_defined = false;
-	Robil2_path.is_ip_defined = false;
-
-	std::stringstream ss;
-	ss<<Robil2_path;
-	//std::cout<< ss.str() << std::endl;
-
-	ros::Time play_time(10,0);
-	rosbag::Bag bag;
-	bag.open(fileName + ".bag", rosbag::bagmode::Write);
-	bag.write("/SMME/GlobalPath",play_time,Robil2_path);
-	bag.close();
-
-
-	std::ofstream file;
-	file.open(fileName + ".yaml");
-	file << ss.str();
-	file.close();
-	*/
 }
 
 
@@ -183,5 +351,10 @@ void GazeboMissionGenerator::generate(SFV * sfv , std::string scenario_folder_ur
 
 	std::cout << "\033[1;36m Producing " << temp << ".bag \033[1;36m" << std::endl;
 	generateMission_ROBIL2(sfv, temp);
+
+
+	std::cout << "\033[1;36m Producing " << temp << ".xml \033[1;36m" << std::endl;
+	SaharGenerateMissionToOCU(sfv, temp);
+
 }
 

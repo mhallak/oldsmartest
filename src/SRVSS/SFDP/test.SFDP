@@ -284,7 +284,7 @@
 		</scenario_feature> 
 		<scenario_feature type="initial_platform_azimut_on_map">
 			<distribution>uniform_continuous</distribution>
-			<dist_param_1>1.00</dist_param_1>
+			<dist_param_1>1.57</dist_param_1>
 			<dist_param_2>1.57</dist_param_2>
 		</scenario_feature>
 	 </scenario_feature_group>
