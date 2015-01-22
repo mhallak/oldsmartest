@@ -106,9 +106,7 @@ SFV::SFV(std::string SFV_file_name, std::string ws_folder_url)
 			Populate_mySFVsubGroups<TiXmlNode*>(ScenarioFeatureGroupType::get_by_name(featureGroup_xml->ValueStr().c_str()).get(), featureGroup_xml);
 			}
 		}
-
 	std::cout << "my_resource_file_url = " << my_resource_file_url <<std::endl;
-
 }
 
 

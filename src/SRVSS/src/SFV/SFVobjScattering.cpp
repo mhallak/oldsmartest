@@ -124,10 +124,13 @@ TiXmlElement * SFVobjScattering::ToXmlElement(int id)
 		xml_sub_group->SetAttribute("ID",std::to_string(id));
 
 		int id=1;
-		for (SFVObject * obj_it : * get_Objects())
+		if ( get_NumberOfObjects()->get_RolledValue() > 0 )
 		{
-			xml_sub_group->LinkEndChild(obj_it->ToXmlElement(id));
-			id++;
+			for (SFVObject * obj_it : * get_Objects())
+			{
+				xml_sub_group->LinkEndChild(obj_it->ToXmlElement(id));
+				id++;
+			}
 		}
 
 		return(xml_sub_group);

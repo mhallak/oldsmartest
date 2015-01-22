@@ -19,6 +19,7 @@ m_featureGroupType(ScenarioFeatureGroupType::unknown_feature_group)
 	m_name="";
 	m_features=(new std::vector<ScenarioFeature *>);
 }
+
 ScenarioFeatureGroup::ScenarioFeatureGroup(std::string featureType):
 	m_featureGroupType(ScenarioFeatureGroupType::parseString(featureType.c_str()))
 {

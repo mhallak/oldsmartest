@@ -191,77 +191,85 @@ void collision_grader(const ros::TimerEvent&)
 		   	// return;
 		      }
 		   	    std::vector<SFVobsOnPathScattering*> *obsOnPathScatterings_vec = new std::vector<SFVobsOnPathScattering*>;
-		   	   	sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::obstacles_on_path, (std::vector<sfvSubGroup*> *)obsOnPathScatterings_vec);
-				for (SFVobsOnPathScattering *obsScattering_it : *obsOnPathScatterings_vec )
-				{
-
-					for (SFVObstacleOnPath *obs : *(obsScattering_it->get_ObstaclesOnPath()))
+		   	   	if (sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::obstacles_on_path, (std::vector<sfvSubGroup*> *)obsOnPathScatterings_vec) );
+		   	   	{
+					for (SFVobsOnPathScattering *obsScattering_it : *obsOnPathScatterings_vec )
 					{
-
-						std::string obs_name = ResourceHandler::getInstance(sfv->get_ResourceFile()).getObjectById(obs->get_ObstacleType()->get_RolledValue());
-
-						float obs_x = obs->get_Obstacle_xyz()->at('x');
-						float obs_y = obs->get_Obstacle_xyz()->at('y');
-						float obs_z = obs->get_Obstacle_xyz()->at('z');
-						Vec3f obs_p(obs_x, obs_y, obs_z);
-
-						Vec3f centers_dist = obs_p - part_p;
-						if ( centers_dist.length() > 100 )
-						   { continue;	}
-
-						double obs_roll = obs->get_LocationRoll()->get_RolledValue();
-						double obs_pitch = obs->get_LocationPitch()->get_RolledValue();
-						double obs_yaw = obs->get_LocationYaw()->get_RolledValue();
-						Quaternion3f obs_q = Quanterion3f_from_RPY(obs_roll,obs_pitch,obs_yaw);
-
-						Transform3f obs_pose(obs_q,obs_p);
-
-						DistanceResult local_result;
-						if ( (robot_models_map->find(part_name)!=robot_models_map->end()) && (obs_models_map->find(obs_name.c_str())!=obs_models_map->end()) )
+						if ( obsScattering_it->get_NumberOfObstaclesOnPath()->get_RolledValue() > 0 )
 						{
-							distance(robot_models_map->at(part_name),part_pose,obs_models_map->at(obs_name.c_str()),obs_pose,1,local_result);
-							if (  min_dist > local_result.min_distance )
-								min_dist = local_result.min_distance;
+							for (SFVObstacleOnPath *obs : *(obsScattering_it->get_ObstaclesOnPath()))
+							{
+
+								std::string obs_name = ResourceHandler::getInstance(sfv->get_ResourceFile()).getObjectById(obs->get_ObstacleType()->get_RolledValue());
+
+								float obs_x = obs->get_Obstacle_xyz()->at('x');
+								float obs_y = obs->get_Obstacle_xyz()->at('y');
+								float obs_z = obs->get_Obstacle_xyz()->at('z');
+								Vec3f obs_p(obs_x, obs_y, obs_z);
+
+								Vec3f centers_dist = obs_p - part_p;
+								if ( centers_dist.length() > 100 )
+								   { continue;	}
+
+								double obs_roll = obs->get_LocationRoll()->get_RolledValue();
+								double obs_pitch = obs->get_LocationPitch()->get_RolledValue();
+								double obs_yaw = obs->get_LocationYaw()->get_RolledValue();
+								Quaternion3f obs_q = Quanterion3f_from_RPY(obs_roll,obs_pitch,obs_yaw);
+
+								Transform3f obs_pose(obs_q,obs_p);
+
+								DistanceResult local_result;
+								if ( (robot_models_map->find(part_name)!=robot_models_map->end()) && (obs_models_map->find(obs_name.c_str())!=obs_models_map->end()) )
+								{
+									distance(robot_models_map->at(part_name),part_pose,obs_models_map->at(obs_name.c_str()),obs_pose,1,local_result);
+									if (  min_dist > local_result.min_distance )
+										min_dist = local_result.min_distance;
+								}
+							}
 						}
 					}
-				}
+		   	   	}
 
 
 				std::vector<SFVobjScattering*> *objectsOnPathScatterings_vec = new std::vector<SFVobjScattering*>;
-		   	   	sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::objects, (std::vector<sfvSubGroup*> *)objectsOnPathScatterings_vec);
-				for (SFVobjScattering* objScattering_it : *objectsOnPathScatterings_vec )
-			    {
-					for (SFVObject* obj : *(objScattering_it->get_Objects()))
+		   	   	if (sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::objects, (std::vector<sfvSubGroup*> *)objectsOnPathScatterings_vec) );
+		   	   	{
+					for (SFVobjScattering* objScattering_it : *objectsOnPathScatterings_vec )
 					{
-						std::string obj_name = ResourceHandler::getInstance(sfv->get_ResourceFile()).getObjectById(obj->get_ObjectType()->get_RolledValue());
-
-						float obj_x = obj->get_Object_xyz()->at('x');
-						float obj_y = obj->get_Object_xyz()->at('y');
-						float obj_z = obj->get_Object_xyz()->at('z');
-						Vec3f obj_p(obj_x, obj_y, obj_z);
-
-						Vec3f centers_dist = obj_p - part_p;
-						if ( centers_dist.length() > 10 )
-						   { continue;	}
-
-						double obj_roll = obj->get_LocationRoll()->get_RolledValue();
-						double obj_pitch = obj->get_LocationPitch()->get_RolledValue();
-						double obj_yaw = obj->get_LocationYaw()->get_RolledValue();
-						Quaternion3f obj_q = Quanterion3f_from_RPY(obj_roll,obj_pitch,obj_yaw);
-
-						Transform3f obj_pose(obj_q,obj_p);
-
-						DistanceResult local_result;
-						if ( (robot_models_map->find(part_name)!=robot_models_map->end()) && (obs_models_map->find(obj_name.c_str())!=obs_models_map->end()) )
+						if ( objScattering_it->get_NumberOfObjects()->get_RolledValue() > 0 )
 						{
-							distance(robot_models_map->at(part_name),part_pose,obs_models_map->at(obj_name.c_str()),obj_pose,1,local_result);
-							if (  min_dist > local_result.min_distance )
-								min_dist = local_result.min_distance;
+							for (SFVObject* obj : *(objScattering_it->get_Objects()))
+							{
+								std::string obj_name = ResourceHandler::getInstance(sfv->get_ResourceFile()).getObjectById(obj->get_ObjectType()->get_RolledValue());
+
+								float obj_x = obj->get_Object_xyz()->at('x');
+								float obj_y = obj->get_Object_xyz()->at('y');
+								float obj_z = obj->get_Object_xyz()->at('z');
+								Vec3f obj_p(obj_x, obj_y, obj_z);
+
+								Vec3f centers_dist = obj_p - part_p;
+								if ( centers_dist.length() > 10 )
+								   { continue;	}
+
+								double obj_roll = obj->get_LocationRoll()->get_RolledValue();
+								double obj_pitch = obj->get_LocationPitch()->get_RolledValue();
+								double obj_yaw = obj->get_LocationYaw()->get_RolledValue();
+								Quaternion3f obj_q = Quanterion3f_from_RPY(obj_roll,obj_pitch,obj_yaw);
+
+								Transform3f obj_pose(obj_q,obj_p);
+
+								DistanceResult local_result;
+								if ( (robot_models_map->find(part_name)!=robot_models_map->end()) && (obs_models_map->find(obj_name.c_str())!=obs_models_map->end()) )
+								{
+									distance(robot_models_map->at(part_name),part_pose,obs_models_map->at(obj_name.c_str()),obj_pose,1,local_result);
+									if (  min_dist > local_result.min_distance )
+										min_dist = local_result.min_distance;
+								}
+
+							}
 						}
-
 					}
-
-				}
+		   	   	}
 
 
 	}
