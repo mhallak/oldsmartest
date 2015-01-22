@@ -124,10 +124,13 @@ TiXmlElement * SFVobsOnPathScattering::ToXmlElement(int id)
 		xml_sub_group->SetAttribute("ID",std::to_string(id));
 
 		int id=1;
-		for (SFVObstacleOnPath * obs_it : * get_ObstaclesOnPath())
+		if ( get_NumberOfObstaclesOnPath()->get_RolledValue() > 0 )
 		{
-			xml_sub_group->LinkEndChild(obs_it->ToXmlElement(id));
-			id++;
+			for (SFVObstacleOnPath * obs_it : * get_ObstaclesOnPath())
+			{
+				xml_sub_group->LinkEndChild(obs_it->ToXmlElement(id));
+				id++;
+			}
 		}
 
 		return(xml_sub_group);

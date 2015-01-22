@@ -18,7 +18,7 @@
 #include <math.h>
 
 #include <iostream>
-
+#include <vector>
 
 Rule_platform_init_pose_with_no_obj_colisions::Rule_platform_init_pose_with_no_obj_colisions() {
 	// TODO Auto-generated constructor stub
@@ -70,22 +70,25 @@ bool Rule_platform_init_pose_with_no_obj_colisions::isRuleValid(SFV *sfv)
 
 		for (SFVobjScattering* obj_scat_it : * objects_scatterings_vec )
 		{
-			for (SFVObject *obj : *(obj_scat_it->get_Objects()))
+			if ( obj_scat_it->get_NumberOfObjects()->get_RolledValue() > 0 )
 			{
-			// TODO platform and objects orientation shall be also taken to consideration
-
-				float obj_x, obj_y, obj_z;
-				terrainA->getXYZCoord(obj->get_LocationOnTheXaxis()->get_RolledValue(),obj->get_LocationOnTheYaxis()->get_RolledValue(),obj_x, obj_y ,obj_z);
-
-				float dx = plat_init_x - obj_x;
-				float dy = plat_init_y - obj_y;
-
-				float dis = std::sqrt(std::pow(dx,2) + std::pow(dy,2));
-
-				if(dis <= 2.5)
+				for (SFVObject *obj : *(obj_scat_it->get_Objects()))
 				{
-					std::cout << " object at obj_x="<< obj_x <<" obj_y=" << obj_y << " is closer than 2.5m to the platform at plat_x="<< plat_init_x <<" plat_y=" << plat_init_y <<" - return false" << std::endl;
-					return false; // obj is closer than 5m to the platform
+				// TODO platform and objects orientation shall be also taken to consideration
+
+					float obj_x, obj_y, obj_z;
+					terrainA->getXYZCoord(obj->get_LocationOnTheXaxis()->get_RolledValue(),obj->get_LocationOnTheYaxis()->get_RolledValue(),obj_x, obj_y ,obj_z);
+
+					float dx = plat_init_x - obj_x;
+					float dy = plat_init_y - obj_y;
+
+					float dis = std::sqrt(std::pow(dx,2) + std::pow(dy,2));
+
+					if(dis <= 2.5)
+					{
+						std::cout << " object at obj_x="<< obj_x <<" obj_y=" << obj_y << " is closer than 2.5m to the platform at plat_x="<< plat_init_x <<" plat_y=" << plat_init_y <<" - return false" << std::endl;
+						return false; // obj is closer than 5m to the platform
+					}
 				}
 			}
 		}
