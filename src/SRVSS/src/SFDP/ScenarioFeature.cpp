@@ -23,6 +23,7 @@ ScenarioFeature::ScenarioFeature(std::string featureType):
 	rolled_value=0;
 }
 
+
 ScenarioFeature::ScenarioFeature():
 	m_featureType(ScenarioFeatureType::unknown_feature),
 	m_distType(ScenarioFeatureDistributionType::unknown_distribution),
@@ -35,7 +36,6 @@ ScenarioFeature::ScenarioFeature():
 
 ScenarioFeature::ScenarioFeature(ScenarioFeature * source_ScenarioFeature)
 {
-
 	m_featureType=source_ScenarioFeature->get_featureType();
 	m_distType=source_ScenarioFeature->get_distType();
 	m_dist_param_1=source_ScenarioFeature->get_dist_param_1();
@@ -44,6 +44,7 @@ ScenarioFeature::ScenarioFeature(ScenarioFeature * source_ScenarioFeature)
 	was_rolled_flag=false;
 	rolled_value=0;
 }
+
 
 
 ScenarioFeature::ScenarioFeature(TiXmlNode* xml_ScenarioFeature):

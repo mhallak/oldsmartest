@@ -28,8 +28,8 @@ class ScenarioFeature {
 	float rolled_value;
 
 public:
-	ScenarioFeature(std::string featureType);
 	ScenarioFeature();
+	ScenarioFeature(std::string featureType);
 	ScenarioFeature(ScenarioFeature * source_ScenarioFeature);
 	ScenarioFeature(TiXmlNode* xml_ScenarioFeature);
 	virtual ~ScenarioFeature();
@@ -54,6 +54,10 @@ public:
 	inline float get_RolledValue()
 		{ if (was_rolled_flag) return(rolled_value); else return(0); }
 
+	inline void set_RolledValue(float val)
+		{ if (was_rolled_flag) { std::cout << "\033[1;31m !!! Replacing previous value !!! \033[0m" << std::endl; }
+		  rolled_value = val;  was_rolled_flag = true;
+		}
 
 	int parseScenarioFeatureFromXML(TiXmlNode* xmlFeature);
 	TiXmlElement *toXMLElement();

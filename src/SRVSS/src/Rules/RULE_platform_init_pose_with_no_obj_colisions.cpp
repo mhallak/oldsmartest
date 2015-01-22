@@ -70,6 +70,7 @@ bool Rule_platform_init_pose_with_no_obj_colisions::isRuleValid(SFV *sfv)
 
 		for (SFVobjScattering* obj_scat_it : * objects_scatterings_vec )
 		{
+			//std::cout << " obj_scat_it->get_NumberOfObjects()->get_RolledValue() = " << obj_scat_it->get_NumberOfObjects()->get_RolledValue() << std::endl;
 			if ( obj_scat_it->get_NumberOfObjects()->get_RolledValue() > 0 )
 			{
 				for (SFVObject *obj : *(obj_scat_it->get_Objects()))

@@ -49,16 +49,20 @@ SFVobsOnPathScattering::SFVobsOnPathScattering(SFVobsOnPathScattering * template
 SFVobsOnPathScattering::SFVobsOnPathScattering(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::obstacles_on_path , parent_SFV)
 {
 	initFeaturesMap();
+	my_num_of_obsOnpath = new ScenarioFeature("number_of_obstacles_on_path");
 	my_ObstaclesOnpath = new std::vector<SFVObstacleOnPath *>;
 
 	TiXmlNode* XmlSubGroup_it = 0 ;
+	int num_of_obs = 0;
 	for ( XmlSubGroup_it = xml_subGroup->FirstChild(); XmlSubGroup_it != 0; XmlSubGroup_it = XmlSubGroup_it->NextSibling())
 		{
 		if (XmlSubGroup_it->Type()==XML_ELEMENT)
 			{
 			my_ObstaclesOnpath->push_back( new SFVObstacleOnPath(XmlSubGroup_it,parent_SFV));
+			num_of_obs++;
 			}
 		}
+	my_num_of_obsOnpath->set_RolledValue(num_of_obs);
 	set_WasRolledFlag(true);
 }
 

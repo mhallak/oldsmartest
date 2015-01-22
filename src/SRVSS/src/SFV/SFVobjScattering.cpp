@@ -49,16 +49,20 @@ SFVobjScattering::SFVobjScattering(SFVobjScattering * template_subGroup): sfvSub
 SFVobjScattering::SFVobjScattering(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::objects , parent_SFV)
 {
 	initFeaturesMap();
+	my_num_of_objects = new ScenarioFeature("number_of_objects");
 	my_Objects = new std::vector<SFVObject *>;
 
 	TiXmlNode* XmlSubGroup_it = 0 ;
+	int num_of_objects = 0;
 	for ( XmlSubGroup_it = xml_subGroup->FirstChild(); XmlSubGroup_it != 0; XmlSubGroup_it = XmlSubGroup_it->NextSibling())
 		{
 		if (XmlSubGroup_it->Type()==XML_ELEMENT)
 			{
-			my_Objects->push_back( new SFVObject(XmlSubGroup_it,parent_SFV));
+			my_Objects->push_back( new SFVObject(XmlSubGroup_it,parent_SFV) );
+			num_of_objects++;
 			}
 		}
+	my_num_of_objects->set_RolledValue(num_of_objects);
 	set_WasRolledFlag(true);
 }
 
@@ -102,6 +106,8 @@ bool SFVobjScattering::roll()
 			{
 			set_WasRolledFlag(true);
 			std::cout << "\033[1;32m Succeed to roll " << this->get_Type() << " attempt = " << roll_attemp << " / " << roll_attemps_limit << "\033[0m"<< std::endl;
+
+			std::cout << "my_num_of_objects->get_RolledValue() = " << my_num_of_objects->get_RolledValue() << std::endl;
 			return(true);
 			}
 		roll_attemp++;

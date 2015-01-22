@@ -14,7 +14,7 @@
 		<scenario_feature type="number_of_objects">
 			<distribution>uniform_discrete</distribution>
 			<dist_param_1>0</dist_param_1>
-			<dist_param_2>0</dist_param_2>
+			<dist_param_2>1</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="object_i_type">
 			<distribution>uniform_discrete</distribution>
@@ -64,7 +64,7 @@
 		<scenario_feature type="number_of_obstacles_on_path">
 			<distribution>uniform_discrete</distribution>
 			<dist_param_1>0</dist_param_1>
-			<dist_param_2>0</dist_param_2>
+			<dist_param_2>1</dist_param_2>
 		</scenario_feature>
 		<scenario_feature type="obstacle_on_path_i_type">
 			<distribution>uniform_discrete</distribution>

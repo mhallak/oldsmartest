@@ -36,14 +36,14 @@ GazeboEnvironmentGenerator::~GazeboEnvironmentGenerator() {
 void GazeboEnvironmentGenerator::spawnObjects(SFV* sfv,TiXmlElement * element)
 {
 	std::vector<SFVobjScattering*> *objects_scatterings_vec = new std::vector<SFVobjScattering*>;
-	if (! (sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::objects, (std::vector<sfvSubGroup*> *)objects_scatterings_vec)) );
+	if (! ( sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::objects, (std::vector<sfvSubGroup*> *)objects_scatterings_vec)) )
 		{ return; }
 
-	for (SFVobjScattering* objScattering_it : * objects_scatterings_vec )
+	for (SFVobjScattering* obj_scat_it : * objects_scatterings_vec )
 	{
-		if ( objScattering_it->get_NumberOfObjects()->get_RolledValue() > 0 )
+		if ( obj_scat_it->get_NumberOfObjects()->get_RolledValue() > 0 )
 		{
-			for (SFVObject* obj : *objScattering_it->get_Objects())
+			for (SFVObject* obj : *obj_scat_it->get_Objects())
 			{
 				TiXmlElement * include = new TiXmlElement( "include" );
 				element->LinkEndChild(include);
@@ -87,7 +87,7 @@ void GazeboEnvironmentGenerator::spawnObjects(SFV* sfv,TiXmlElement * element)
 void GazeboEnvironmentGenerator::spawnObstacleOnPath(SFV* sfv,TiXmlElement * element)
 {
 	std::vector<SFVobsOnPathScattering*> *obsOnpath_scatterings_vec = new std::vector<SFVobsOnPathScattering*>;
-	if ( ! (sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::obstacles_on_path, (std::vector<sfvSubGroup*> *)obsOnpath_scatterings_vec) ) );
+	if ( ! (sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::obstacles_on_path, (std::vector<sfvSubGroup*> *)obsOnpath_scatterings_vec) ) )
 	 { return; }
 
 	for (SFVobsOnPathScattering *obsScattering_it : *obsOnpath_scatterings_vec )

@@ -49,16 +49,20 @@ SFVpath::SFVpath(SFVpath * template_subGroup): sfvSubGroup(template_subGroup->ge
 SFVpath::SFVpath(TiXmlNode * xml_subGroup, SFV * parent_SFV): sfvSubGroup(ScenarioFeatureGroupType::Path , parent_SFV)
 {
 	initFeaturesMap();
+	my_number_of_wp = new ScenarioFeature("number_of_way_points");
 	my_PathWPs = new std::vector<SFVwp *>;
 
 	TiXmlNode* XmlSubGroup_it = 0 ;
+	int num_of_wp = 0;
 	for ( XmlSubGroup_it = xml_subGroup->FirstChild(); XmlSubGroup_it != 0; XmlSubGroup_it = XmlSubGroup_it->NextSibling())
 		{
 		if (XmlSubGroup_it->Type()==XML_ELEMENT)
 			{
 			my_PathWPs->push_back( new SFVwp(XmlSubGroup_it,parent_SFV));
+			num_of_wp++;
 			}
 		}
+	my_number_of_wp->set_RolledValue(num_of_wp);
 	set_WasRolledFlag(true);
 }
 
