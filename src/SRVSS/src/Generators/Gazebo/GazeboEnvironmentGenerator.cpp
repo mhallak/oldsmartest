@@ -169,7 +169,7 @@ void GazeboEnvironmentGenerator::spawnPathWpMarks(SFV* sfv,TiXmlElement * elemen
 		std::stringstream ss;
 		float mark_x = wp_x, mark_y = wp_y, mark_z;
 		m_terrainAnalyzer->getZCoord(mark_x,mark_y,mark_z);
-		ss<<mark_x <<" " << mark_y <<" "<< mark_z << " ";
+		ss<<mark_x <<" " << mark_y <<" "<< mark_z+0 << " ";
 		ss<<0 <<" " << 0 <<" "<< 0;
 		TiXmlText * pose_text = new TiXmlText(ss.str());
 		ss.str("");

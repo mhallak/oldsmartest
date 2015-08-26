@@ -2,3 +2,6 @@
 *devel*
 *CMakeFiles*
 *catkin_generated*
+/src/SRVSS/work_space/
+*~
+*.pyc

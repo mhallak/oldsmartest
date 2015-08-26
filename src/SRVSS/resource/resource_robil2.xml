@@ -2,7 +2,7 @@
 
 <robot_PyInterface name="PyInterface_robil2"/>
 
-<robot_components_models name="Sahar" dirPath="/home/dany/.gazebo/models">
+<robot_components_models name="Sahar" dirPath="/home/robil/.gazebo/models">
 
 	<platform name="bobcat"/>
 	<sensor name="GPS_INS"/>
@@ -17,7 +17,7 @@
 
 
 
-<world_components_models dirPath="/home/dany/srvss_ws/src/SRVSS/world_components_models">
+<world_components_models dirPath="/home/robil/srvss_ws/src/SRVSS/world_components_models">
 
 	<terrain id="0">srvss_terrain0</terrain>
 	<terrain id="1">srvss_terrain1</terrain>
@@ -26,6 +26,9 @@
 	<terrain id="4">terrainWithRoad</terrain>
 	<terrain id="5">terrain100x100</terrain>
 	<terrain id="6">terrain_50mX50m:25mmX25mm</terrain>
+	<terrain id="7">nisuy100x100x2</terrain>
+	<terrain id="8">nisuy100x100x3</terrain>
+	<terrain id="9">nisuy100x100x5</terrain>
 
 	<object id="1">barrel1</object>
 	<object id="2">rock1</object>
