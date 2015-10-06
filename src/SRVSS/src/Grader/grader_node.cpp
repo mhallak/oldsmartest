@@ -1,8 +1,10 @@
 #include <iostream>
+#include <fstream>
 #include <cmath>      // std::abs()
 #include <string>
 #include <map>
 #include <vector>
+#include <ros/console.h>
 
 #include "ros/ros.h"
 #include "std_msgs/Float32MultiArray.h"
@@ -37,7 +39,7 @@ float scenario_obj_min_dist = 100;
 float scenario_roll_max_ang = 0;
 float scenario_pitch_max_ang = 0;
 float scenario_goalWP_min_dis = 100;
-
+//std::string PATH = "null" ;
 
 
 /**
@@ -156,6 +158,7 @@ SFV *sfv;
 tf::TransformListener *listener_ptr;
 boost::mutex collision_mutex;
 boost::mutex tf_data_mutex;
+
 /**
  * Grading function for collision detection
  */
@@ -275,6 +278,9 @@ void collision_grader(const ros::TimerEvent&)
 	}
 
 		//std::cout << " min dist to  =  " <<  min_dist << std::endl;
+		ROS_DEBUG_NAMED("MinD2Obj", "Minimum Distance to Object  = %f",min_dist);
+		//ROS_INFO(" obj_path = %s " , obj_path.c_str());
+		//std::cout << " Object Path  =  " <<  PATH << std::endl;
 
 		collision_mutex.lock();
 			scenario_obj_min_dist = std::min(scenario_obj_min_dist , min_dist);
@@ -311,7 +317,7 @@ void rollover_grader(const ros::TimerEvent&)
 	      }
 
 	   //std::cout << " roll = " << roll << std::endl;
-
+	   ROS_DEBUG_NAMED("Roll", "Roll Grade  = %f",roll);
 	rollover_mutex.lock();
 		scenario_roll_max_ang = std::max( scenario_roll_max_ang , std::abs((float)roll) );
 		scenario_pitch_max_ang = std::max( scenario_pitch_max_ang , std::abs((float)pitch) );
@@ -353,7 +359,7 @@ void distance_to_goalWP_grader(const ros::TimerEvent&)
 
 
 	   //std::cout << " goalWP_dis = " << goalWP_dis << std::endl;
-
+		ROS_DEBUG_NAMED("DfromGoal", "Distance from Goal Way Point  = %f",goalWP_dis);
 	   goalWP_mutex.lock();
 		scenario_goalWP_min_dis = std::min( scenario_goalWP_min_dis , goalWP_dis);
 	   goalWP_mutex.unlock();
@@ -402,7 +408,7 @@ void load_obstacles_models()
     obs_models_map = new std::map<std::string ,BVHModel<RSS> *>;
     std::string resours_file = sfv->get_ResourceFile();
     std::string obj_dir_path= ResourceHandler::getInstance(resours_file).getWorldModelsFolderURL();
-
+    std::ofstream mf;mf.open ("graders_obstacles_path.txt"); // Created in ~/.ros
 	   int id=1;
 	   while(ResourceHandler::getInstance(resours_file).getObjectById(id) != "")
 	   {
@@ -410,7 +416,15 @@ void load_obstacles_models()
 		   std::string obj_path = obj_dir_path + "/" + obj_name + "/models/" + obj_name + ".obj";
 
 		  // std::cout << " obj_path = " << obj_path << std::endl;
+		  // ROS_DEBUG_NAMED("Obj_Path", "Obj_Path  = %s" , obj_path.c_str());
+			
+	  		mf << obj_path.c_str();
+			mf << "\n";
+		        
+		   // ROS_INFO(" obj_path = %s " , obj_path.c_str());
+			//PATH = obj_path.c_str();
 
+			
 		   std::vector<Vec3f> o_ver;
 		   std::vector<Triangle> o_tri;
 		   loadOBJFile( obj_path.c_str() , o_ver, o_tri);
@@ -425,6 +439,7 @@ void load_obstacles_models()
 
 		   id++;
 	   }
+   mf.close();
 }
 
 /**
@@ -437,9 +452,10 @@ void load_robot_models()
 	std::string resours_file = sfv->get_ResourceFile();
 	std::string robot_model_folder_url = ResourceHandler::getInstance(resours_file).getRobotModelsFolderURL();
 	std::string robot_model_url = robot_model_folder_url + "/" +  ResourceHandler::getInstance(resours_file).getRobotPlatformName() + "/model.sdf";
-
+        std::ofstream mf;mf.open ("graders_robot_path.txt"); // Created in ~/.ros
 	//std::cout << "robot_model_url = " << robot_model_url << std::endl;
-
+		  	mf << robot_model_url.c_str();
+			mf << "\n";
 	sdf::SDFPtr sdfPtr(new sdf::SDF());
 	init(sdfPtr);
 	sdf::readFile(robot_model_url,sdfPtr);
@@ -460,7 +476,8 @@ void load_robot_models()
 		   part_obj_uri = part_obj_uri.erase(part_obj_uri.length()-3 , part_obj_uri.length() ) + "obj";
 
 		  // std::cout << "part_name = " << part_name << std::endl;
-
+		  	mf << part_name.c_str();
+			mf << "\n";
 		   std::vector<Vec3f> p_ver;
 		   std::vector<Triangle> p_tri;
 		   loadOBJFile( part_obj_uri.c_str() , p_ver, p_tri);
@@ -474,6 +491,7 @@ void load_robot_models()
 		   robot_models_map->insert(pair_partName_obj);
 		   }
 	   }
+	mf.close();
 }
 
 void printUsage()
