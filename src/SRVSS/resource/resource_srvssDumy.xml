@@ -3,16 +3,16 @@
  
 <robot_PyInterface name="PyInterface_srvssDumy"/>
 
-<robot_components_models name="srvss_bobcat" dirPath="/home/robil/robil2/src/Simulation/srvss_bobcat/sdf_models">
+<robot_components_models name="srvss_bobcat" dirPath="/home/dany/srvss_ws/src/srvss_dummy/srvss_bobcat/sdf_models">
 
 	<platform name="srvss_bobcat"/>
-	<sensor name="GPS_INS"/>
-	<sensor name="gpu_sick"/>
+	<sensor name="srvss_GPS_INS"/>
+	<sensor name="srvss_gpu_sick"/>
 
 </robot_components_models>
 
 
-<world_components_models dirPath="/home/robil/srvss_ws/src/SRVSS/world_components_models">
+<world_components_models dirPath="/home/dany/srvss_ws/src/SRVSS/world_components_models">
 
 	<terrain id="0">srvss_terrain0</terrain>
 	<terrain id="1">srvss_terrain1</terrain>
