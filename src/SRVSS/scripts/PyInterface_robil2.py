@@ -29,7 +29,7 @@ class ScenarioLauncher:
 
     def stop_launcher(self):
 	self.launcher.stop()
-        time.sleep(10)
+        time.sleep(60)
 
 
     def runGazeboServer(self, Scenarin_folder):
@@ -206,7 +206,9 @@ class ScenarioLauncher:
 
 
     def launch_recorder(self, Scenarin_folder):
-	arguments = "-O " + Scenarin_folder + "/scen_rec.bag --all --exclude /SENSORS/(.*)|/LOC/Pose|/LOC/Velocity|/Sahar/(.*)|/OCU/(.*)|/LLC/(.*)|/PER/(.*)|/WPD/(.*)|/WSM/(.*)|/flea3/(.*)|/right_sick/(.*)|/left_sick/(.*)|/heartbeat|/gazebo/model_states|/clock"
+	arguments = "-O " + Scenarin_folder + "/scen_rec.bag --all --exclude /SENSORS/CAM/(.*)|/SENSORS/IBEO/(.*)|/Sahar/(.*)|/OCU/(.*)|/PER/Map|/WSM/(.*)|/flea3/(.*)|/right_sick/(.*)|/left_sick/(.*)|/gazebo/model_states|/clock"
+#       arguments = "-O " + Scenarin_folder + "/scen_rec.bag --all --exclude /SENSORS/(.*)|/LOC/Velocity|/Sahar/(.*)|/OCU/(.*)|/LLC/(.*)|/PER/(.*)|/WPD/(.*)|/WSM/(.*)|/flea3/(.*)|/right_sick/(.*)|/left_sick/(.*)|/heartbeat|/gazebo/model_states|/clock"
+#	arguments = "-O " + Scenarin_folder + "/scen_rec.bag --all --exclude /SENSORS/(.*)|/LOC/Pose|/LOC/Velocity|/Sahar/(.*)|/OCU/(.*)|/LLC/(.*)|/PER/(.*)|/WPD/(.*)|/WSM/(.*)|/flea3/(.*)|/right_sick/(.*)|/left_sick/(.*)|/heartbeat|/gazebo/model_states|/clock"
 	node = ROSNode("rosbag", "record", name="rosbag_recorde_node", args=arguments)
 	self.launcher.launch(node)
         time.sleep(3)	

@@ -83,7 +83,7 @@ int GazeboExecutor::RunScenario(int argc, char** argv)
 
 
 	model_states_sub = n.subscribe("/srvss/grades", 100, scen_grade_Callback);
-	ros::Duration scen_max_duration(30, 0);
+	ros::Duration scen_max_duration(300, 0);
 	ros::Time begin_time = ros::Time::now();
 	ros::Time now_time = ros::Time::now();
 	while ( (! end_scen_flag) && ros::ok() && (now_time - begin_time < scen_max_duration) )

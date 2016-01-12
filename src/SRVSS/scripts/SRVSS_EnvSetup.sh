@@ -5,8 +5,7 @@
 SRVSS_dir=$(rospack find SRVSS)
 
 #replacing environment models in .gazebo in order to avoid collisions in the greading process
-cp $SRVSS_dir/world_components_models/. $HOME/.gazebo/models/ -R
-
+cp -R $SRVSS_dir/world_components_models/. $HOME/.gazebo/models/
 
 Robot_meshes_dir=$HOME/.gazebo/models/bobcat/meshes/
 
