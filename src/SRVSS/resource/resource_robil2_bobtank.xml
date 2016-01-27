@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 
-<robot_PyInterface name="PyInterface_robil2"/>
+<robot_PyInterface name="PyInterface_robil2_bobtank"/>
 
 <robot_components_models name="Sahar" dirPath="/home/robil/robil2/src/Simulation/live_bobcat/sdf_models">
 
-	<platform name="bobcat"/>
+	<platform name="bobtank"/>
 	<sensor name="GPS_INS"/>
 	<sensor name="IBEO"/>
 	<sensor name="SICK"/>
@@ -13,6 +13,9 @@
 	<sensor name="FLEA3_R"/>
 	<sensor name="wire_sensor"/>
 	<sensor name="wire_sensor_mount"/>
+	
+	<sensor name="tracks"/>
+
 
 </robot_components_models>
 

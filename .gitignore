@@ -6,4 +6,11 @@
 *~
 *.pyc
 /install/*
-core
+*.project
+*.cproject
+CMakeCache.txt
+CTestTestfile.cmake
+*/*/gtest/*
+Makefile
+cmake_install.cmake
+

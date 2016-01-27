@@ -3,15 +3,13 @@
 
 #locate SRVSS package
 SRVSS_dir=$(rospack find SRVSS)
+TARGET_DIR=$ROBIL2/src/Simulation/live_bobcat/sdf_models/
 
 #replacing environment models in .gazebo in order to avoid collisions in the greading process
 cp -R $SRVSS_dir/world_components_models/. $HOME/.gazebo/models/
 
-Robot_meshes_dir=$HOME/.gazebo/models/bobcat/meshes/
+find $TARGET_DIR -name "*.stl" -exec bash -c 'meshlabserver -i $0 -o ${0/stl/obj}' {} \;
+find $TARGET_DIR -name "*.STL" -exec bash -c 'meshlabserver -i $0 -o ${0/STL/obj}' {} \;
+echo "TARGET_DIR = $TARGET_DIR"
 
-find $Robot_meshes_dir -name "*.stl" -exec bash -c 'meshlabserver -i $0 -o ${0/stl/obj}' {} \;
-find $Robot_meshes_dir -name "*.STL" -exec bash -c 'meshlabserver -i $0 -o ${0/STL/obj}' {} \;
-
-echo "Robot_meshes_dir = $Robot_meshes_dir"
-
-
+exit 0

@@ -12,4 +12,6 @@
 
      <node pkg="SRVSS" type="mainGen" name="SRVSS_Multiple_Scenarios_GenRun" args="-MultipleScensGenRun $(arg SFDP_file_url) $(arg work_space_folder_url) $(arg resource_file_url) $(arg ScenNum)" output="screen"/>
 
+     <node name="robil2rviz" type="robil2rviz" pkg="robil2rviz" output="screen"/>
+
 </launch>
