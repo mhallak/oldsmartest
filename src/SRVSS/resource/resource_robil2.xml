@@ -40,5 +40,8 @@
 	<object id="7">tree3</object>
 	<object id="8">tree4</object>
 	<object id="9">barrier1</object>
+	<object id="10">d9</object>
+	<object id="11">hammer</object>
+	<object id="12">sayeret_egoz_soldier</object>
 
 </world_components_models>

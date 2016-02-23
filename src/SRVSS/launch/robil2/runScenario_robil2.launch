@@ -47,7 +47,8 @@
 	<node name="rosbag_recorder" pkg="rosbag" type="record" args=" --all $(arg record_file_path) --exclude /SENSORS/CAM/(.*)|/SENSORS/IBEO/(.*)|/Sahar/(.*)|/PER/Map|/WSM/(.*)|/flea3/(.*)|/right_sick/(.*)|/left_sick/(.*)|/gazebo/model_states|/clock" /> 
 
 	
-
+<!-- start RViZ -->
+	<node name="robil2rviz" type="robil2rviz" pkg="robil2rviz" output="screen"/>
 	
 	
 </launch>
