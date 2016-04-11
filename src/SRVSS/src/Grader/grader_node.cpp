@@ -167,6 +167,7 @@ std::string robot_name;
 
 /**
  * Grading function for collision detection
+ *    TODO : collision_grader should use gazebo_msgs::GetLinkState, but this service msg don't exist in gazebo2.2
  */
 void collision_grader(const ros::TimerEvent&)
 {
