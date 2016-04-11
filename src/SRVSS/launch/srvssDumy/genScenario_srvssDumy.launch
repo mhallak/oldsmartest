@@ -4,7 +4,7 @@
 
      <arg name="scen" default="scenario_1"/> 
     
-     <arg name="SFDP_file_url" value="$(find SRVSS)/SFDP/test.SFDP"/>
+     <arg name="SFDP_file_url" value="$(find SRVSS)/SFDP/dummy.SFDP"/>
      <arg name="resource_file_url" value="$(find SRVSS)/resource/resource_srvssDumy.xml"/>
      <arg name="scenarios_folder_url" value="$(find SRVSS)/work_space/$(arg scen)"/>
      <arg name="SFV_file_url" value="$(arg scenarios_folder_url)/scen.SFV"/>

@@ -8,9 +8,9 @@ running the hammvee :
 
 1. Loading in Gazebo
 
-   roslaunch live_hammvee hammvee_empty_world.launch
+   roslaunch hammvee hammvee_empty_world.launch
    or 
-   roslaunch live_hammvee hammvee_testworld.launch
+   roslaunch hammvee hammvee_testworld.launch
 
 2. Controlling the hammvee
 
