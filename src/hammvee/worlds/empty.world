@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<!-- Written By : Sagi Vald -->
+<sdf version="1.4">        <!-- Setting World Parameters -->
+  <world name="default">
+    <include>
+      <uri>model://ground_plane</uri>   <!-- Loading Group Plane -->
+    </include>
+    <include>
+      <uri>model://sun</uri>		 <!-- Loading Sun -->
+    </include>
+    <include>
+      <uri>model://hammvee</uri>	 <!-- Loading Hammvee robotic model -->
+      <name>hammvee</name>
+      <pose>0.0 0.0 0.3 0 0 0</pose>
+    </include>
+  </world>
+</sdf>

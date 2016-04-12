@@ -17,6 +17,9 @@
 #include "fcl/distance.h"
 #include "fcl/traversal/traversal_node_bvhs.h"
 
+#include "gazebo_msgs/GetModelState.h"
+#include "gazebo_msgs/ModelState.h"
+
 #include <sdformat-1.4/sdf/sdf.hh>
 
 #include "SFV/SFV.h"
@@ -159,8 +162,12 @@ tf::TransformListener *listener_ptr;
 boost::mutex collision_mutex;
 boost::mutex tf_data_mutex;
 
+ros::ServiceClient gazebo_GetModelState_client;
+std::string robot_name;
+
 /**
  * Grading function for collision detection
+ *    TODO : collision_grader should use gazebo_msgs::GetLinkState, but this service msg don't exist in gazebo2.2
  */
 void collision_grader(const ros::TimerEvent&)
 {
@@ -169,30 +176,37 @@ void collision_grader(const ros::TimerEvent&)
     std::string part_name;
     BVHModel<RSS> * part_model;
 
+    gazebo_msgs::GetModelState ModelState;
+
 	for (std::map<std::string ,BVHModel<RSS> *>::iterator RobotPart_it=robot_models_map->begin(); RobotPart_it!=robot_models_map->end(); ++RobotPart_it)
 	{
     	part_name = RobotPart_it->first;
 		part_model = RobotPart_it->second;
 
-		Vec3f part_p(0,0,0);
-		Quaternion3f part_q;
-		Transform3f part_pose;
 
+		ModelState.request.relative_entity_name = "world";
+		ModelState.request.model_name = robot_name;
+		gazebo_GetModelState_client.call(ModelState);
+
+		Vec3f robot_p = Vec3f(ModelState.response.pose.position.x,ModelState.response.pose.position.y,ModelState.response.pose.position.z);
+		Quaternion3f robot_q = Quaternion3f(ModelState.response.pose.orientation.w,ModelState.response.pose.orientation.x,ModelState.response.pose.orientation.y,ModelState.response.pose.orientation.z);
+		Transform3f robot_pose = Transform3f(robot_q,robot_p);
+
+
+		Transform3f part_in_the_world;
 		tf::StampedTransform part_transform;
 		try {
-		   listener_ptr->waitForTransform("/world", part_name, ros::Time(0), ros::Duration(1) );
-		   listener_ptr->lookupTransform("/world", part_name ,ros::Time(0), part_transform);
+		   listener_ptr->waitForTransform("/body", part_name, ros::Time(0), ros::Duration(1) );
+		   listener_ptr->lookupTransform("/body", part_name ,ros::Time(0), part_transform);
 
-		   part_p.setValue(part_transform.getOrigin().x(),part_transform.getOrigin().y(),part_transform.getOrigin().z());
-		   part_q = Quaternion3f(part_transform.getRotation().w(),part_transform.getRotation().x(),part_transform.getRotation().y(),part_transform.getRotation().z());
-		   part_pose.setTransform(part_q,part_p);
-		     }
-		   catch (tf::LookupException &ex)
-		      {
-		   	ROS_ERROR("%s",ex.what());
-		   	continue;
-		   	// return;
-		      }
+		   Vec3f part_p = Vec3f(part_transform.getOrigin().x(),part_transform.getOrigin().y(),part_transform.getOrigin().z());
+		   Quaternion3f part_q = Quaternion3f(part_transform.getRotation().w(),part_transform.getRotation().x(),part_transform.getRotation().y(),part_transform.getRotation().z());
+		   Transform3f part_pose_in_the_robot = Transform3f(part_q,part_p);
+
+		   Transform3f part_in_the_world = robot_pose * part_pose_in_the_robot;
+
+
+
 		   	    std::vector<SFVobsOnPathScattering*> *obsOnPathScatterings_vec = new std::vector<SFVobsOnPathScattering*>;
 		   	   	if (sfv->get_VecOfSubGroupsByFeatureGroupType(ScenarioFeatureGroupType::obstacles_on_path, (std::vector<sfvSubGroup*> *)obsOnPathScatterings_vec) );
 		   	   	{
@@ -210,7 +224,7 @@ void collision_grader(const ros::TimerEvent&)
 								float obs_z = obs->get_Obstacle_xyz()->at('z');
 								Vec3f obs_p(obs_x, obs_y, obs_z);
 
-								Vec3f centers_dist = obs_p - part_p;
+								Vec3f centers_dist = obs_p - robot_p;
 								if ( centers_dist.length() > 100 )
 								   { continue;	}
 
@@ -224,7 +238,7 @@ void collision_grader(const ros::TimerEvent&)
 								DistanceResult local_result;
 								if ( (robot_models_map->find(part_name)!=robot_models_map->end()) && (obs_models_map->find(obs_name.c_str())!=obs_models_map->end()) )
 								{
-									distance(robot_models_map->at(part_name),part_pose,obs_models_map->at(obs_name.c_str()),obs_pose,1,local_result);
+									distance(robot_models_map->at(part_name),part_in_the_world,obs_models_map->at(obs_name.c_str()),obs_pose,1,local_result);
 									if (  min_dist > local_result.min_distance )
 										min_dist = local_result.min_distance;
 								}
@@ -250,7 +264,7 @@ void collision_grader(const ros::TimerEvent&)
 								float obj_z = obj->get_Object_xyz()->at('z');
 								Vec3f obj_p(obj_x, obj_y, obj_z);
 
-								Vec3f centers_dist = obj_p - part_p;
+								Vec3f centers_dist = obj_p - robot_p;
 								if ( centers_dist.length() > 10 )
 								   { continue;	}
 
@@ -264,7 +278,7 @@ void collision_grader(const ros::TimerEvent&)
 								DistanceResult local_result;
 								if ( (robot_models_map->find(part_name)!=robot_models_map->end()) && (obs_models_map->find(obj_name.c_str())!=obs_models_map->end()) )
 								{
-									distance(robot_models_map->at(part_name),part_pose,obs_models_map->at(obj_name.c_str()),obj_pose,1,local_result);
+									distance(robot_models_map->at(part_name),part_in_the_world,obs_models_map->at(obj_name.c_str()),obj_pose,1,local_result);
 									if (  min_dist > local_result.min_distance )
 										min_dist = local_result.min_distance;
 								}
@@ -273,12 +287,18 @@ void collision_grader(const ros::TimerEvent&)
 						}
 					}
 		   	   	}
-
+			}
+		catch (tf::LookupException &ex)
+		      {
+		   	ROS_ERROR("%s",ex.what());
+		   	continue;
+		   	// return;
+		      }
 
 	}
 
 		//std::cout << " min dist to  =  " <<  min_dist << std::endl;
-		ROS_DEBUG_NAMED("MinD2Obj", "Minimum Distance to Object  = %f",min_dist);
+		//ROS_DEBUG_NAMED("MinD2Obj", "Minimum Distance to Object  = %f",min_dist);
 		//ROS_INFO(" obj_path = %s " , obj_path.c_str());
 		//std::cout << " Object Path  =  " <<  PATH << std::endl;
 
@@ -303,18 +323,16 @@ void rollover_grader(const ros::TimerEvent&)
 
 	double roll, pitch, yaw;
 
-	try {
-	   listener_ptr->waitForTransform("/world", "body", ros::Time(0), ros::Duration(1.0) );
-	   listener_ptr->lookupTransform("/world", "body" ,ros::Time(0), rob_body_transform);
-	   //listener_ptr->clear();
-	   tf::Matrix3x3 mat( rob_body_transform.getRotation());
+
+	   gazebo_msgs::GetModelState ModelState;
+
+	   ModelState.request.relative_entity_name = "world";
+	   ModelState.request.model_name = robot_name;
+	   gazebo_GetModelState_client.call(ModelState);
+
+	   tf::Quaternion model_q(ModelState.response.pose.orientation.x,ModelState.response.pose.orientation.y,ModelState.response.pose.orientation.z,ModelState.response.pose.orientation.w);
+	   tf::Matrix3x3 mat(model_q);
 	   mat.getRPY(roll, pitch, yaw);
-	     }
-	   catch (tf::TransformException &ex)
-	      {
-	   	ROS_ERROR("%s",ex.what());
-	   	return;
-	      }
 
 	   //std::cout << " roll = " << roll << std::endl;
 	   ROS_DEBUG_NAMED("Roll", "Roll Grade  = %f",roll);
@@ -335,20 +353,14 @@ boost::mutex goalWP_mutex;
  */
 void distance_to_goalWP_grader(const ros::TimerEvent&)
 {
-	tf::StampedTransform rob_body_transform;
+		gazebo_msgs::GetModelState ModelState;
 
-	try {
-	   listener_ptr->waitForTransform("/world", "body", ros::Time(0), ros::Duration(1.0) );
-	   listener_ptr->lookupTransform("/world", "body" ,ros::Time(0), rob_body_transform);
-	     }
-	   catch (tf::TransformException &ex)
-	      {
-	   	ROS_ERROR("%s",ex.what());
-	   	return;
-	      }
+		ModelState.request.relative_entity_name = "world";
+		ModelState.request.model_name = robot_name;
+		gazebo_GetModelState_client.call(ModelState);
 
-	   float rob_x = rob_body_transform.getOrigin().x();
-	   float rob_y = rob_body_transform.getOrigin().y();
+	   float rob_x = ModelState.response.pose.position.x;
+	   float rob_y = ModelState.response.pose.position.y;
 
 	   SFVpath *sfv_Path = (SFVpath*)(sfv->get_SubGroupByFeatureGroupType(ScenarioFeatureGroupType::Path));
 	   SFVwp *goalWP = sfv_Path->get_PathWPs()->back();
@@ -451,7 +463,8 @@ void load_robot_models()
 
 	std::string resours_file = sfv->get_ResourceFile();
 	std::string robot_model_folder_url = ResourceHandler::getInstance(resours_file).getRobotModelsFolderURL();
-	std::string robot_model_url = robot_model_folder_url + "/" +  ResourceHandler::getInstance(resours_file).getRobotPlatformName() + "/model.sdf";
+	robot_name = ResourceHandler::getInstance(resours_file).getRobotPlatformName();
+	std::string robot_model_url = robot_model_folder_url + "/" +  robot_name + "/model.sdf";
         std::ofstream mf;mf.open ("graders_robot_path.txt"); // Created in ~/.ros
 	//std::cout << "robot_model_url = " << robot_model_url << std::endl;
 		  	mf << robot_model_url.c_str();
@@ -500,6 +513,7 @@ void printUsage()
 }
 
 
+
 int main(int argc, char **argv)
 {
 	/*
@@ -524,14 +538,16 @@ int main(int argc, char **argv)
    tf::TransformListener listener(ros::Duration(1),true);
    listener_ptr = &listener;
 
+   gazebo_GetModelState_client = n.serviceClient<gazebo_msgs::GetModelState>("/gazebo/get_model_state");
+
    reset_flag.data = false;
 
-   ros::Timer collision_grader_timer = n.createTimer(ros::Duration(0.05), collision_grader);
-   ros::Timer rollover_grader_timer = n.createTimer(ros::Duration(0.05), rollover_grader);
+   ros::Timer collision_grader_timer = n.createTimer(ros::Duration(0.1), collision_grader);
+   ros::Timer rollover_grader_timer = n.createTimer(ros::Duration(0.1), rollover_grader);
 
-   ros::Timer goalWPdis_grader_timer = n.createTimer(ros::Duration(0.01), distance_to_goalWP_grader);
+   ros::Timer goalWPdis_grader_timer = n.createTimer(ros::Duration(0.2), distance_to_goalWP_grader);
 
-   ros::Timer grades_publishing_timer = n.createTimer(ros::Duration(0.01), grades_publishing);
+   ros::Timer grades_publishing_timer = n.createTimer(ros::Duration(0.1), grades_publishing);
 
 
    greades_pub_ = n.advertise<std_msgs::Float32MultiArray>("/srvss/grades", 100);
