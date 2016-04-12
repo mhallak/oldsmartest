@@ -462,9 +462,10 @@ void load_robot_models()
 	robot_models_map = new std::map<std::string ,BVHModel<RSS> *>;
 
 	std::string resours_file = sfv->get_ResourceFile();
+	robot_name = ResourceHandler::getInstance(resours_file).getRobotName();
+
 	std::string robot_model_folder_url = ResourceHandler::getInstance(resours_file).getRobotModelsFolderURL();
-	robot_name = ResourceHandler::getInstance(resours_file).getRobotPlatformName();
-	std::string robot_model_url = robot_model_folder_url + "/" +  robot_name + "/model.sdf";
+	std::string robot_model_url = robot_model_folder_url + "/" +  ResourceHandler::getInstance(resours_file).getRobotPlatformName() + "/model.sdf";
         std::ofstream mf;mf.open ("graders_robot_path.txt"); // Created in ~/.ros
 	//std::cout << "robot_model_url = " << robot_model_url << std::endl;
 		  	mf << robot_model_url.c_str();
