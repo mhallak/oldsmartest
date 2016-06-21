@@ -5,7 +5,7 @@
 <robot_components_models name="Sahar" dirPath="/home/robil/robil2/src/Simulation/live_bobcat/sdf_models">
 
 	<platform name="bobtank"/>
-	<sensor name="GPS_INS"/>
+	<sensor name="IPON"/>
 	<sensor name="IBEO"/>
 	<sensor name="SICK"/>
 	<sensor name="FLEA3"/>
