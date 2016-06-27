@@ -479,6 +479,8 @@ void load_robot_models()
 	   {
 		   for (sdf::ElementPtr sdfCollisionPtr=sdfLinkPtr->GetElement("collision"); sdfCollisionPtr; sdfCollisionPtr=sdfCollisionPtr->GetNextElement("collision"))
 		   {
+			   if (sdfCollisionPtr->GetElement("geometry")->HasElement("mesh"))
+			   {
 		   sdfUriPtr=sdfCollisionPtr->GetElement("geometry")->GetElement("mesh")->GetElement("uri");
 		   std::string part_obj_uri = sdfUriPtr->GetValue()->GetAsString();
 
@@ -489,7 +491,7 @@ void load_robot_models()
 		   part_obj_uri = robot_model_folder_url + "/" + part_obj_uri.erase( 0 , 8);
 		   part_obj_uri = part_obj_uri.erase(part_obj_uri.length()-3 , part_obj_uri.length() ) + "obj";
 
-		  // std::cout << "part_name = " << part_name << std::endl;
+		   //std::cout << "part_name = " << part_name << std::endl;
 		  	mf << part_name.c_str();
 			mf << "\n";
 		   std::vector<Vec3f> p_ver;
@@ -503,6 +505,11 @@ void load_robot_models()
 
 		   std::pair<std::string ,BVHModel<RSS> *> pair_partName_obj =  std::pair<std::string ,BVHModel<RSS> *>( part_name , part_model);
 		   robot_models_map->insert(pair_partName_obj);
+			   }
+			   else
+			   {
+				  // std::cout << "Grader Warning !!! : part_name = " << sdfCollisionPtr->GetAttribute("name")->GetAsString() << " has no mesh " << std::endl;
+			   }
 		   }
 	   }
 	mf.close();

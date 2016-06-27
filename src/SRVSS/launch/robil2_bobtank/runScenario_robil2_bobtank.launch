@@ -24,12 +24,13 @@
 <!-- start gazebo client -->
 	<node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
 
+<!-- bobtank arm controller -->
+	<include file="$(find bobcat_model)/launch/bobcat_arm_controler.launch" />
 
-<!-- Robil2_bobtank -->
-        <include file="$(find bobcat_model)/launch/bobcat_arm_controler.launch" />
-
+<!-- Robil2_bobtank framework-->
 	<include file="$(find robil2conf)/frameworkInit.launch" />
 
+	
 <!-- Mission -->
 	<node name="mission_bag_player" pkg="rosbag" type="play" args="-d 40 $(arg scenarios_folder_url)/scenarioMission.bag" output="screen" />
 
