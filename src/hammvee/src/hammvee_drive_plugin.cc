@@ -149,7 +149,7 @@ namespace gazebo
 		  // Recieving referance steering angle
 		  steering_angle_ref=msg->data;
 		  // Reseting timer every time LLC publishes message
-		  steering_timer.Start();
+		  steering_timer.Reset();
 	  steering_angle_ref_mutex.unlock();
 	}
 
@@ -160,7 +160,7 @@ namespace gazebo
 		  // Recieving referance hammer velocity
 		  velocity_ref=msg->data;
 		  // Reseting timer every time LLC publishes message
-		  velocity_timer.Start();
+		  velocity_timer.Reset();
 	  velocity_ref_mutex.unlock();
 
 	}
