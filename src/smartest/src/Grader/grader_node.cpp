@@ -20,7 +20,11 @@
 #include "gazebo_msgs/GetModelState.h"
 #include "gazebo_msgs/ModelState.h"
 
-#include <sdformat-1.4/sdf/sdf.hh>
+//#include <sdformat-1.4/sdf/sdf.hh>  worked with ros Indigo
+#include <sdformat-2.3/sdf/sdf.hh> //working with ros Jade
+
+
+
 
 #include "SFV/SFV.h"
 #include "SFV/SFVobjScattering.h"
