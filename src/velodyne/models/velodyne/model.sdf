@@ -7,10 +7,16 @@
 
  <plugin name="velodyne_control" filename="libvelodyne.so"> 
        <rate>1.0</rate>       <!-- HZ -->
-       <angleRes>1.0</angleRes> 
+       <angleRes>1.0</angleRes> <!-- horiz resolution -->
        <verticalAngleResolution>1.333355</verticalAngleResolution>   <!-- for validation and RVIZ publish calculate -->
        <RVIZPublishRate>10.0</RVIZPublishRate>  <!-- HZ -->
        <topic>/SENSORS/VELODYNE</topic>
+       <x>0</x>
+       <y>0</y>
+       <z>0</z>
+       <roll>0</roll>
+       <pitch>0</pitch>
+       <yaw>0</yaw>
  </plugin> 
 
  

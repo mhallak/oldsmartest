@@ -15,6 +15,8 @@
 #include "sensor_msgs/PointCloud.h"
 #include "geometry_msgs/Point32.h"
 #include <boost/thread.hpp>
+#include <string>
+#include <tf/transform_broadcaster.h>
 
 #include <math.h>
 
@@ -31,7 +33,23 @@ namespace gazebo
     public:
 	velodyne() {}
 
+	tf::Transform transformBuilder(float x,float y,float z,float Roll,float Pitch,float Yaw)
+	{
+		 tf::Transform transform;
+		 transform.setOrigin( tf::Vector3(x, y, z) );
 
+		 tf::Quaternion q;
+		 q.setRPY(Roll,Pitch,Yaw);
+		 transform.setRotation(q);
+		 return(transform);
+	}
+
+	void TF_Broadcast(double x, double y, double z, double Roll, double Pitch, double Yaw, std::string frame_id, std::string child_frame_id)
+	{
+		 static tf::TransformBroadcaster br;
+		 tf::StampedTransform st(transformBuilder(x,y,z,Roll,Pitch,Yaw), ros::Time::now(), frame_id, child_frame_id);
+		 br.sendTransform(st);
+	}
 
 	void thread_RVIZ()
 	{
@@ -39,7 +57,7 @@ namespace gazebo
 		while(true)
 		{
 			ros::Time newRosTime = ros::Time::now();
-			double diff = newRosTime.toSec() - lastUpdateTime.toSec() - RVIZPublishRate;
+			double diff = (newRosTime.toSec() - lastUpdateTime.toSec()) - (1/RVIZPublishRate);
 			if(diff > 0.0001)
 			{
 				RVIZ_Publisher();
@@ -60,78 +78,93 @@ namespace gazebo
 		{
 			int tick = (int)(dgree);
 			lastDegree = dgree;
-
 			getRanges(tick);
+
+			// TF publish
+			//if(tf_x != 0 || tf_y != 0 || tf_z != 0 || tf_roll != 0 || tf_pitch != 0 || tf_yaw != 0)
+			TF_Broadcast(tf_x, tf_y, tf_z, tf_roll, tf_pitch, tf_yaw, model->GetParentModel()->GetName(), "velodyne");
 		}
+
      }
 
      void initSensors(string modelName)
      {
-   	  sensors::SensorPtr ray1, ray2, ray3, ray4, ray5, ray6, ray7, ray8, ray9, ray10;
-   	  ray1 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray");
-   	  ray2 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_2");
-   	  ray3 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_3");
-   	  ray4 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_4");
-   	  ray5 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_5");
-   	  ray6 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_6");
-   	  ray7 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_7");
-   	  ray8 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_8");
-   	  ray9 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_9");
-   	  ray10 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_10");
-   	  if(!ray1 || !ray2 || !ray3 || !ray4 || !ray5 || !ray6 || !ray7 || !ray8 || !ray9 || !ray10)
+    	 for(int i = 0 ; i < numOfRays ; i++)
+    	 {
+    		 string nameOfRay = "velodyne_ray_" + std::to_string(i);
+    		 myRays.insert(myRays.begin(), boost::dynamic_pointer_cast<sensors::RaySensor>(sensors::SensorManager::Instance()->GetSensor(nameOfRay)));
+
+    		 VerticalAngelResolutionReal[i] = (myRays[i]->GetAngleResolution() * 180 / M_PI);
+    	   	  if((int)(VerticalAngelResolutionReal[i] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
+    	   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_%d", i);
+    	 }
+//   	  sensors::SensorPtr ray1, ray2, ray3, ray4, ray5, ray6, ray7, ray8, ray9, ray10;
+//   	  ray1 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray");
+//   	  ray2 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_2");
+//   	  ray3 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_3");
+//   	  ray4 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_4");
+//   	  ray5 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_5");
+//   	  ray6 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_6");
+//   	  ray7 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_7");
+//   	  ray8 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_8");
+//   	  ray9 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_9");
+//   	  ray10 = sensors::SensorManager::Instance()->GetSensor("velodyne_ray_10");
+   	  if(myRays.size() != numOfRays)
       {
    		std::string error = "velodyne Sensor Model \"" + modelName + "\" failed to locate his sub-sensor.\n(Do the names in the .sdf match the names in the .cpp?)\n";
    		gzthrow(error);
    		return;
       }
-   	  myRay_1 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray1);
-   	  myRay_2 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray2);
-   	  myRay_3 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray3);
-   	  myRay_4 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray4);
-   	  myRay_5 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray5);
-   	  myRay_6 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray6);
-   	  myRay_7 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray7);
-   	  myRay_8 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray8);
-   	  myRay_9 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray9);
-   	  myRay_10 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray10);
 
-   	  if(!myRay_1 || !myRay_2 || !myRay_3 || !myRay_4 || !myRay_5 || !myRay_6 || !myRay_7 || !myRay_8 || !myRay_9 || !myRay_10)
-   	  {
-   		std::string error = "velodyne Sensor Model \"" + modelName + "\" found that it's sensor arent of class RaySensor. You must be really messed up\n";
-   		gzthrow(error);
-   		return;
-      }
+//   	  myRay_1 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray1);
+//   	  myRay_2 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray2);
+//   	  myRay_3 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray3);
+//   	  myRay_4 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray4);
+//   	  myRay_5 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray5);
+//   	  myRay_6 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray6);
+//   	  myRay_7 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray7);
+//   	  myRay_8 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray8);
+//   	  myRay_9 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray9);
+//   	  myRay_10 = boost::dynamic_pointer_cast<sensors::RaySensor>(ray10);
+//
+//   	  if(!myRay_1 || !myRay_2 || !myRay_3 || !myRay_4 || !myRay_5 || !myRay_6 || !myRay_7 || !myRay_8 || !myRay_9 || !myRay_10)
+//   	  {
+//   		std::string error = "velodyne Sensor Model \"" + modelName + "\" found that it's sensor arent of class RaySensor. You must be really messed up\n";
+//   		gzthrow(error);
+//   		return;
+//      }
 
-   	  VerticalAngelResolutionReal[0] = (myRay_1->GetAngleResolution() * 180 / M_PI);
-   	  if((int)(VerticalAngelResolutionReal[0] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
-   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_1");
-   	  VerticalAngelResolutionReal[1] = (myRay_2->GetAngleResolution() * 180 / M_PI);
-   	  if((int)(VerticalAngelResolutionReal[1] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
-   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_2");
-   	  VerticalAngelResolutionReal[2] = (myRay_3->GetAngleResolution() * 180 / M_PI);
-   	  if((int)(VerticalAngelResolutionReal[2] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
-   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_3");
-   	  VerticalAngelResolutionReal[3] = (myRay_4->GetAngleResolution() * 180 / M_PI);
-   	  if((int)(VerticalAngelResolutionReal[3] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
-   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_4");
-   	  VerticalAngelResolutionReal[4] = (myRay_5->GetAngleResolution() * 180 / M_PI);
-   	  if((int)(VerticalAngelResolutionReal[4] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
-   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_5");
-   	  VerticalAngelResolutionReal[5] = (myRay_6->GetAngleResolution() * 180 / M_PI);
-   	  if((int)(VerticalAngelResolutionReal[5] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
-   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_6");
-   	  VerticalAngelResolutionReal[6] = (myRay_7->GetAngleResolution() * 180 / M_PI);
-   	  if((int)(VerticalAngelResolutionReal[6] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
-   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_7");
-   	  VerticalAngelResolutionReal[7] = (myRay_8->GetAngleResolution() * 180 / M_PI);
-   	  if((int)(VerticalAngelResolutionReal[7] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
-   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_8");
-   	  VerticalAngelResolutionReal[8] = (myRay_9->GetAngleResolution() * 180 / M_PI);
-   	  if((int)(VerticalAngelResolutionReal[8] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
-   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_9");
-   	  VerticalAngelResolutionReal[9] = (myRay_10->GetAngleResolution() * 180 / M_PI);
-   	  if((int)(VerticalAngelResolutionReal[9] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
-   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_10");
+//
+//   	  VerticalAngelResolutionReal[0] = (myRay_1->GetAngleResolution() * 180 / M_PI);
+//   	  if((int)(VerticalAngelResolutionReal[0] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
+//   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_1");
+//   	  VerticalAngelResolutionReal[1] = (myRay_2->GetAngleResolution() * 180 / M_PI);
+//   	  if((int)(VerticalAngelResolutionReal[1] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
+//   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_2");
+//   	  VerticalAngelResolutionReal[2] = (myRay_3->GetAngleResolution() * 180 / M_PI);
+//   	  if((int)(VerticalAngelResolutionReal[2] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
+//   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_3");
+//   	  VerticalAngelResolutionReal[3] = (myRay_4->GetAngleResolution() * 180 / M_PI);
+//   	  if((int)(VerticalAngelResolutionReal[3] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
+//   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_4");
+//   	  VerticalAngelResolutionReal[4] = (myRay_5->GetAngleResolution() * 180 / M_PI);
+//   	  if((int)(VerticalAngelResolutionReal[4] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
+//   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_5");
+//   	  VerticalAngelResolutionReal[5] = (myRay_6->GetAngleResolution() * 180 / M_PI);
+//   	  if((int)(VerticalAngelResolutionReal[5] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
+//   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_6");
+//   	  VerticalAngelResolutionReal[6] = (myRay_7->GetAngleResolution() * 180 / M_PI);
+//   	  if((int)(VerticalAngelResolutionReal[6] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
+//   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_7");
+//   	  VerticalAngelResolutionReal[7] = (myRay_8->GetAngleResolution() * 180 / M_PI);
+//   	  if((int)(VerticalAngelResolutionReal[7] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
+//   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_8");
+//   	  VerticalAngelResolutionReal[8] = (myRay_9->GetAngleResolution() * 180 / M_PI);
+//   	  if((int)(VerticalAngelResolutionReal[8] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
+//   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_9");
+//   	  VerticalAngelResolutionReal[9] = (myRay_10->GetAngleResolution() * 180 / M_PI);
+//   	  if((int)(VerticalAngelResolutionReal[9] * 100) != (int)(verticalAngleResolutionFromSDF * 100))
+//   		  ROS_WARN("velodyne: the parameter 'verticalAngleResolution' is not equal to GetAngleResolution() in Ray_10");
 
      }
 
@@ -197,7 +230,7 @@ namespace gazebo
 	  // Store the model pointer for convenience.
 	  this->model = _model;
 
-  	  // Get the joint.
+	  // Get the joint.
 	  std::string jointName = "velodyne::velodyne_joint";
 	  if (_sdf->HasElement("jointName"))
 	  {
@@ -235,7 +268,7 @@ namespace gazebo
    		  ROS_WARN("velodyne: there is no 'verticalAngleResolution' parameter in the SDF (validation parameter)");
 
 	  // Default to 1HZ velocity
-	  rate = 10.0;
+	  rate = 1.0;
 	  // Check that the velocity element exists, then read the value
 	  if (_sdf->HasElement("rate"))
 	  {
@@ -257,11 +290,41 @@ namespace gazebo
 	  }
    	  _marker_pub = _nodeHandle.advertise<sensor_msgs::PointCloud>(topic, 10);
 
+	  //get num of rays
+	  numOfRays = 10;
+	  if (_sdf->HasElement("numOfRays"))
+	  {
+		  numOfRays = _sdf->Get<double>("numOfRays");
+	  }
+
+	  //init sensors
 	  initSensors(_model->GetName());
 
 	  lastDegree = -1;
 	  _threadRVIZ=boost::thread(&velodyne::thread_RVIZ,this);
 	  this->_updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&velodyne::OnUpdate, this, _1));
+
+
+	  if (_sdf->HasElement("tf_x") && _sdf->HasElement("tf_y") && _sdf->HasElement("tf_z") && _sdf->HasElement("tf_roll") && _sdf->HasElement("tf_pitch") && _sdf->HasElement("tf_yaw"))
+	  {
+		  tf_x = _sdf->Get<double>("tf_x");
+		  tf_y = _sdf->Get<double>("tf_y");
+		  tf_z = _sdf->Get<double>("tf_z");
+		  tf_roll = _sdf->Get<double>("tf_roll");
+		  tf_pitch = _sdf->Get<double>("tf_pitch");
+		  tf_yaw = _sdf->Get<double>("tf_yaw");
+	  }
+	  else
+	  {
+		  tf_x = 0;
+		  tf_y = 0;
+		  tf_z = 0;
+		  tf_roll = 0;
+		  tf_pitch = 0;
+		  tf_yaw = 0;
+
+		  ROS_DEBUG("velodyne: ERROR in reading tf_x, tf_y, tf_z, tf_r, tf_p, tf_y parameters");
+	  }
 	}
 
 	void RVIZ_Publisher()
@@ -271,6 +334,10 @@ namespace gazebo
 		{
 			for(int j = 0 ; j < NUM_OF_PLANS ; j++)
 			{
+
+				if(rangesArray[i][j] > 69 )
+					continue;
+
 				geometry_msgs::Point32 point;
 				double yaw_ang = i * (3.14159 /180);
 				double pitch_ang((j-23) * verticalAngleResolutionFromSDF * (3.14159 /180));
@@ -281,16 +348,18 @@ namespace gazebo
 			}
 		}
 		points.header.stamp = ros::Time();
-		points.header.frame_id = "map";
+		points.header.frame_id = "velodyne";
 
 		_marker_pub.publish(points);
 	}
 
+
     physics::ModelPtr model;
     physics::JointPtr joint;
-    //boost::shared_ptr<physics::Joint> joint;
     common::PID pid;
 
+    vector<gazebo::sensors::RaySensorPtr> myRays;
+    int numOfRays;
     gazebo::sensors::RaySensorPtr myRay_1;
     gazebo::sensors::RaySensorPtr myRay_2;
     gazebo::sensors::RaySensorPtr myRay_3;
@@ -317,6 +386,10 @@ namespace gazebo
     ros::NodeHandle		_nodeHandle;
 
     boost::thread _threadRVIZ;
+
+    ros::NodeHandle n;
+    tf::Transform _laser_TF_point_of_origin;
+    double tf_x,tf_y,tf_z,tf_roll,tf_pitch,tf_yaw;
 
   };
 
