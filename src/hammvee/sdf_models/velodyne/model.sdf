@@ -9,7 +9,7 @@
        <rate>10.0</rate>       <!-- HZ -->
        <angleRes>1.0</angleRes> <!-- horiz resolution -->
        <verticalAngleResolution>1.333355</verticalAngleResolution>   <!-- for validation and RVIZ publish calculate -->
-       <RVIZPublishRate>10.0</RVIZPublishRate>  <!-- HZ -->
+      <!-- <RVIZPublishRate>10.0</RVIZPublishRate>   HZ -->
        <topic>/SENSORS/VELODYNE</topic>
        <tf_x>0</tf_x>
        <tf_y>2</tf_y>
