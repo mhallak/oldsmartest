@@ -15,11 +15,6 @@ find_package(tf REQUIRED)
 find_package(gazebo REQUIRED)
 
 
-## Generate messages in the 'msg' folder
- add_message_files(
-   FILES
-   MultiLaserScan.msg
- )
 
 ## Generate added messages and services with any dependencies listed here
  generate_messages(

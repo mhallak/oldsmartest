@@ -22,6 +22,7 @@
 
 #define NUM_OF_PLANS 32
 #define NUM_OF_RAY_SENSORS 36
+#define ANGULAR_STEPS 1800 // 360 * 5
 using namespace std;
 
 namespace gazebo
@@ -75,13 +76,13 @@ namespace gazebo
 
 		double diff = dgree - lastDegree;
 		if (diff < 0)
-			diff = diff+360;
+			diff = diff+360.0; //
 
 		if ((diff - angleRes) > 0.000001)
 		{
-			int tick = (int)(dgree);
+			//double tick = dgree;
 			lastDegree = dgree;
-			getRanges(tick);
+			getRanges(dgree);
 
 			boost::thread(&velodyne::thread_RVIZ,this, rangesArray, _info.simTime);
 		}
@@ -107,22 +108,29 @@ namespace gazebo
      }
 
     //getRanges
-    void getRanges(int tick)
+    void getRanges(double dgree)
     {
-    	std::vector<std::vector<double>> ranges;
+//    	std::vector<std::vector<double>> ranges;
+
+    	double tick = dgree * (ANGULAR_STEPS/360);
 
     	for(int i = 0 ; i < NUM_OF_RAY_SENSORS ; i++)
     	{
     		std::vector<double> newVector;
-    		ranges.push_back(newVector);
+//    		ranges.push_back(newVector);
 
-    		myRays[i]->GetRanges(ranges[i]);
+    		myRays[i]->GetRanges(newVector);
 
-    		if(ranges[i].size() == NUM_OF_PLANS)
+    		if(newVector.size() == NUM_OF_PLANS)
     		{
-    			int j = fmod(tick + i*(360/NUM_OF_RAY_SENSORS),360);
+    			// int j = fmod(tick + i*(360/NUM_OF_RAY_SENSORS),360);
+    			int j = fmod(tick + i*(ANGULAR_STEPS/NUM_OF_RAY_SENSORS),ANGULAR_STEPS);
+
+
     			for(int k = 0 ; k < NUM_OF_PLANS ; k++)
-    				rangesArray[j][k] = ranges[i][k];
+    			{
+    				rangesArray[j][k] = newVector[k];
+    			}
     		}
     	}
     }
@@ -237,20 +245,19 @@ namespace gazebo
 	void RVIZ_Publisher(double rangesArray[][NUM_OF_PLANS], ros::Time time)
 	{
 		sensor_msgs::PointCloud points;
-		for(int i = 0 ; i < 360 ; i++)
+		for(int tick = 0 ; tick < ANGULAR_STEPS ; tick++)
 		{
 			for(int j = 0 ; j < NUM_OF_PLANS ; j++)
 			{
-
-				if(rangesArray[i][j] > 69 )
+				if(rangesArray[tick][j] > 69 )
 					continue;
 
 				geometry_msgs::Point32 point;
-				double yaw_ang = i * (3.14159 /180);
-				double pitch_ang((j-23) * verticalAngleResolutionFromSDF * (3.14159 /180));
-				point.x = rangesArray[i][j] * cos(pitch_ang) * cos(yaw_ang);
-				point.y = rangesArray[i][j] * cos(pitch_ang) * sin(yaw_ang);
-				point.z	= rangesArray[i][j] * sin (pitch_ang);
+				double yaw_ang = tick * (2* M_PI/ANGULAR_STEPS); //* (3.14159 /180);
+				double pitch_ang((j-23) * verticalAngleResolutionFromSDF * (M_PI /180));
+				point.x = rangesArray[tick][j] * cos(pitch_ang) * cos(yaw_ang);
+				point.y = rangesArray[tick][j] * cos(pitch_ang) * sin(yaw_ang);
+				point.z	= rangesArray[tick][j] * sin (pitch_ang);
 				//points.points.insert(points.points.begin(), point);
 				points.points.push_back(point);
 			}
@@ -275,7 +282,7 @@ namespace gazebo
 	double angleRes;
 	double velocity;
 	double rate;
-    double rangesArray[360][NUM_OF_PLANS];
+    double rangesArray[ANGULAR_STEPS][NUM_OF_PLANS];
  //   double RVIZPublishRate;
     double verticalAngleResolutionFromSDF;
     double VerticalAngelResolutionReal[NUM_OF_RAY_SENSORS];

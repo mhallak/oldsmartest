@@ -739,42 +739,6 @@
 	</joint>
 
 
-    <include>
-      <uri>model://velodyne</uri>
-      <pose>0 2 3 0 0 0</pose>
-      <name>velodyne</name>
-    </include>
-    <joint name='velodyne_joint' type='revolute'>
-      <child>velodyne::base</child>
-      <parent>body</parent>
-      <axis>
-        <xyz>0 0 0</xyz>
-        <limit>
-          <lower>0</lower>
-          <upper>0</upper>
-        </limit>
-        <dynamics/>
-      </axis>
-    </joint>
-<!--	
-    <include>
-      <uri>model://velodyne2</uri>
-      <pose>-0.5 0 2.5 0 0 0</pose>
-      <name>velodyne2</name>
-    </include>
-    <joint name='velodyne2_joint' type='revolute'>
-      <child>velodyne2::base</child>
-      <parent>body</parent>
-      <axis>
-        <xyz>0 1 0</xyz>
-        <limit>
-          <lower>0</lower>
-          <upper>0</upper>
-        </limit>
-        <dynamics/>
-      </axis>
-    </joint>
--->
 	<!-- loading hammvee_drive_control plugin, enables low level control on the wheel steering -->
 	<plugin name="hammvee_drive_control" filename="libhammvee_drive_plugin.so"/> 
 

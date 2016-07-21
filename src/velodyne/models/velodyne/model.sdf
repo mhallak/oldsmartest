@@ -6,14 +6,14 @@
     
 
  <plugin name="velodyne_control" filename="libvelodyne.so"> 
-       <rate>10.0</rate>       <!-- HZ -->
-       <angleRes>1.0</angleRes> <!-- horiz resolution -->
+       <rate>10</rate>       <!-- HZ -->
+       <angleRes>0.2</angleRes> <!-- horiz resolution -->
        <verticalAngleResolution>1.333355</verticalAngleResolution>   <!-- for validation and RVIZ publish calculate -->
-       <RVIZPublishRate>10.0</RVIZPublishRate>  <!-- HZ -->
+       <!--<RVIZPublishRate>10.0</RVIZPublishRate>   HZ -->
        <topic>/SENSORS/VELODYNE</topic>
        <tf_x>0</tf_x>
-       <tf_y>2</tf_y>
-       <tf_z>3</tf_z>
+       <tf_y>0</tf_y>
+       <tf_z>0</tf_z>
        <tf_roll>0</tf_roll>
        <tf_pitch>0</tf_pitch>
        <tf_yaw>0</tf_yaw>
@@ -99,7 +99,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -121,7 +121,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -143,7 +143,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -165,7 +165,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -187,7 +187,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -209,7 +209,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -231,7 +231,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -253,7 +253,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -275,7 +275,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -297,7 +297,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -319,7 +319,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -341,7 +341,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -363,7 +363,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -385,7 +385,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -408,7 +408,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -430,7 +430,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -452,7 +452,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -474,7 +474,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -496,7 +496,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -518,7 +518,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -540,7 +540,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -562,7 +562,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -584,7 +584,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -606,7 +606,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -628,7 +628,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -650,7 +650,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -672,7 +672,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -694,7 +694,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -716,7 +716,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -738,7 +738,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -760,7 +760,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -782,7 +782,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -804,7 +804,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -826,7 +826,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -848,7 +848,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
@@ -870,7 +870,7 @@
           <range>
             <min>0.1</min>
             <max>70</max>
-            <resolution>0.02</resolution>
+            <resolution>0.01</resolution>
           </range>
         </ray>
       </sensor>
