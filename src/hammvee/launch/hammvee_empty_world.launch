@@ -22,11 +22,8 @@
     <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="headless" value="$(arg headless)"/>
-    <arg name="world_name" value="$(find hammvee)/worlds/empty.world"/>
+    <arg name="world_name" value="$(find hammvee)/worlds/hammvee_empty.world"/>
   </include>
 
- <!-- uploading the robot model information to the parameter server -->
- <param name="robot_description" command="cat $(find hammvee)/sdf_models/hammvee/model.sdf" /> 
 
-  
 </launch>
