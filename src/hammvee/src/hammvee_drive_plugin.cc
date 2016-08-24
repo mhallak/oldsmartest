@@ -23,6 +23,8 @@
 #include <gazebo/transport/transport.hh>
 #include <gazebo/msgs/msgs.hh>
 
+#include <tf/transform_broadcaster.h>
+
 #include <stdio.h>
 
 // ROS Communication
@@ -69,11 +71,10 @@ namespace gazebo
       // Listen to the update event. This event is broadcast every simulation iteration. 
       this->updateConnection = event::Events::ConnectWorldUpdateBegin(boost::bind(&HammveeDrivePlugin::OnUpdate, this, _1));
 
-
     }
 
     // Called by the world update start event, This function is the event that will be called every update
-  public: void OnUpdate(const common::UpdateInfo & /*_info*/)  // we are not using the pointer to the info so its commanted as an option
+  public: void OnUpdate(const common::UpdateInfo & _info)  // we are not using the pointer to the info so its commanted as an option
     {
 	// Applying effort to the wheels , brakes if no message income
 	if (velocity_timer.GetElapsed().Float()>velocity_message_max_time_delay)
@@ -105,7 +106,21 @@ namespace gazebo
           this->steering_joint->SetForce(0,Set_Steering_Angle_Effort(0));
 	}
 
+	tf::Transform transform;
+	transform.setOrigin( tf::Vector3(model->GetWorldPose().pos.x, model->GetWorldPose().pos.y, model->GetWorldPose().pos.z) );
+	transform.setRotation(tf::Quaternion(model->GetWorldPose().rot.x,model->GetWorldPose().rot.y,model->GetWorldPose().rot.z,model->GetWorldPose().rot.w));
+
+	TF_Broadcast(transform, "WORLD", model->GetName(), _info.simTime);
+
     }
+
+	void TF_Broadcast(tf::Transform transform, std::string frame_id, std::string child_frame_id, common::Time time)
+	{
+		 static tf::TransformBroadcaster br;
+		 tf::StampedTransform st(transform, ros::Time::now()/*(time.sec, time.nsec)*/, frame_id, child_frame_id);
+		 br.sendTransform(st);
+
+	}
 
      // Defining private Pointer to model
     private: physics::ModelPtr model;

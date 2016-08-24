@@ -1,6 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!-- -*- mode: XML -*- -->
 <!-- Written By : Sagi Vald -->
-<?xml version="1.0"?>
 <sdf version="1.4">
   <model name="hammvee">   <!-- Defining the model that will be loaded to the gazebo -->
     <static>false</static>  <!-- static value determines wheter the model will move and be effected by forces or will be static in the world -->
@@ -723,7 +723,6 @@
 		</velocity_decay>
 		<self_collide>0</self_collide>
 	</link>
-
 	<joint name='front_right_wheel_joint' type='revolute'>		<!-- setting front right wheel joint, a revolute joint to make the wheel revolve around the connecting link axis -->
 		<child>front_right_wheel</child>
 		<parent>wheel_right_link</parent>
@@ -739,9 +738,6 @@
 		</axis>
 	</joint>
 
-
-
-	
 
 	<!-- loading hammvee_drive_control plugin, enables low level control on the wheel steering -->
 	<plugin name="hammvee_drive_control" filename="libhammvee_drive_plugin.so"/> 

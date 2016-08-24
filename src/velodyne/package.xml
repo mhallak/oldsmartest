@@ -2,7 +2,7 @@
 <package>
   <name>velodyne</name>
   <version>0.0.0</version>
-  <description>The gazebo_ibeo gpu package</description>
+  <description>The velodyne package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->
