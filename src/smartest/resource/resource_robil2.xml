@@ -2,23 +2,20 @@
 
 <robot_PyInterface name="PyInterface_robil2"/>
 
-<robot_components_models name="Sahar" dirPath="/home/dany/robil2/src/Simulation/live_bobcat/sdf_models">
+<robot_components_models name="Sahar" dirPath="/home/robil/robil2/src/Simulation/live_bobcat/sdf_models">
 
-	<platform name="bobcat"/>
-	<sensor name="GPS_INS"/>
+	<platform name="bobcat_static_arm"/>
+	<sensor name="IPON"/>
 	<sensor name="IBEO"/>
-	<sensor name="SICK"/>
 	<sensor name="FLEA3"/>
 	<sensor name="FLEA3_L"/>
 	<sensor name="FLEA3_R"/>
-	<sensor name="wire_sensor"/>
-	<sensor name="wire_sensor_mount"/>
 
 </robot_components_models>
 
 
 
-<world_components_models dirPath="/home/dany/srvss_ws/src/smartest/world_components_models">
+<world_components_models dirPath="/home/robil/srvss/src/smartest/world_components_models">
 
 	<terrain id="0">srvss_terrain0</terrain>
 	<terrain id="1">srvss_terrain1</terrain>

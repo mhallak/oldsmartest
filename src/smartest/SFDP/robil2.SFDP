@@ -201,7 +201,7 @@
 	 </scenario_feature_group>
 
 
-	 <scenario_feature_group type="sensor_link_i" name="gps_ins::link">
+	 <scenario_feature_group type="sensor_link_i" name="IPON::link">
 		<scenario_feature type="sensor_link_i_location_deviation_X">
 			<distribution>normal_continuous</distribution>
 			<dist_param_1>0</dist_param_1>
@@ -236,7 +236,7 @@
 
 
 
-	 <scenario_feature_group type="sensor_link_i" name="ibeo::link">
+	 <scenario_feature_group type="sensor_link_i" name="IBEO::link">
 		<scenario_feature type="sensor_link_i_location_deviation_X">
 			<distribution>normal_continuous</distribution>
 			<dist_param_1>0</dist_param_1>
