@@ -24,9 +24,9 @@
 <!-- start gazebo client -->
 	<node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen" />
 
-
-<!-- Robil2_bobtank framework-->
-	<include file="$(find robil2conf)/frameworkInit.launch" />
+<!-- Robil2 framework -->
+        <node pkg="smartest" type="timed_roslaunch.sh" name="timed_roslaunch" args="5 robil2conf frameworkInit.launch" output="screen"/>
+<!--	<include file="$(find robil2conf)/frameworkInit.launch" /> -->
 
 <!-- Mission -->
 	<node name="mission_bag_player" pkg="rosbag" type="play" args="-d 60 $(arg scenarios_folder_url)/scenarioMission.bag" output="screen" />
@@ -43,9 +43,10 @@
        <node pkg="plp_waypoint" type="PlpWaypointRosHarness.py" name="plp_waypoint" output="screen" args="-monitor -capture $(arg scenarios_folder_url)/capture.txt" />
 -->
 
-<!-- start RosBag recording -->
-	<node name="rosbag_recorder" pkg="rosbag" type="record" args=" --all $(arg record_file_path) --exclude /SENSORS/CAM/(.*)|/Sahar/(.*)|/PER/Map|/WSM/(.*)|/flea3/(.*)|/right_sick/(.*)|/left_sick/(.*)|/gazebo/model_states|/clock" /> 
 
+<!-- start RosBag recording 
+	<node name="rosbag_recorder" pkg="rosbag" type="record" args=" -a $(arg record_file_path) -e /SENSORS/CAM/(.*)|/SENSORS/IBEO/(.*)|/Sahar/(.*)|/PER/Map|/WSM/(.*)|/flea3/(.*)|/right_sick/(.*)|/left_sick/(.*)|/gazebo/model_states|/clock" /> 
+-->
 	
 <!-- start RViZ  -->
 	<node name="robil2rviz" type="robil2rviz" pkg="robil2rviz" output="screen"/>	
