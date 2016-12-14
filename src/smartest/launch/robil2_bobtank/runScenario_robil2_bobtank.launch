@@ -27,8 +27,10 @@
 <!-- bobtank arm controller 
 	<include file="$(find bobcat_model)/launch/bobcat_arm_controler.launch" />
 -->
-<!-- Robil2_bobtank framework-->
-	<include file="$(find robil2conf)/frameworkInit.launch" />
+
+<!-- Robil2 framework -->
+        <node pkg="smartest" type="timed_roslaunch.sh" name="timed_roslaunch" args="5 robil2conf frameworkInit.launch" output="screen"/>
+<!--	<include file="$(find robil2conf)/frameworkInit.launch" /> -->
 
 	
 <!-- Mission -->
