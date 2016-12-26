@@ -37,7 +37,6 @@
 
 	<node pkg="smartest" type="grader_node" name="grader_node" output="screen" args="$(arg scenarios_folder_url) $(arg SFV_file_url)" />
 
-<rosparam command="load" file="$(find robil2conf)/debug.yaml" />
 
 <!-- PLP Monitoring - data gathering 
        <node pkg="plp_waypoint" type="PlpWaypointRosHarness.py" name="plp_waypoint" output="screen" args="-monitor -capture $(arg scenarios_folder_url)/capture.txt" />

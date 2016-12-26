@@ -25,15 +25,8 @@
 	<node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen" />
 
 <!-- Robil2_bobtank -->
-<!---->
-  	 <!--include file="$(find bobcat_model)/launch/bobcat_arm_controler.launch" / -->
-	<!--param name="robot_description" command="cat $(find bobtank)/urdf/BOBCAT_sdf_model_new.URDF" / -->
-	 
-	<!-- include file="$(find bobtank)/launch/bobcat_gazebo_control_sdf_model _with_tracks.launch" / -->   <!-- the blank is needed (I dont know why) -->
-	<!--node name="rate2effort_for_tracks" pkg="rate2effort" type="rate2effort_for_tracks" cwd="node" output="screen" /-->
-
-	<!--include file="$(find smartest)/launch/robil2/runScenario_robil2_bobcat_robot.launch" /-->
 	<node pkg="smartest" type="timed_roslaunch.sh" args="30 smartest runScenario_robil2_bobcat_robot.launch scen:=$(arg scen)" name="timed_roslaunch" output="screen"></node>
+
 </launch>
 
 

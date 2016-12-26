@@ -11,8 +11,8 @@
         <arg name="SFV_file_url" value="$(arg scenarios_folder_url)/scen.SFV"/>
 
 
-        <include file="$(find robil2conf)/frameworkInit.launch" />
-        <rosparam command="load" file="$(find robil2conf)/debug.yaml" />
+        <include file="$(find robil2conf)/launch/frameworkInit.launch" />
+        
 <!-- Mission -->
 	<node name="mission_bag_player" pkg="rosbag" type="play" args="-d 60 $(arg scenarios_folder_url)/scenarioMission.bag" output="screen" />
 
@@ -22,7 +22,6 @@
 
 	<node pkg="smartest" type="grader_node" name="grader_node" output="screen" args="$(arg scenarios_folder_url) $(arg SFV_file_url)" />
 
-<rosparam command="load" file="$(find robil2conf)/debug.yaml" />
 
 <!-- PLP Monitoring - data gathering 
        <node pkg="plp_waypoint" type="PlpWaypointRosHarness.py" name="plp_waypoint" output="screen" args="-monitor -capture $(arg scenarios_folder_url)/capture.txt" />
