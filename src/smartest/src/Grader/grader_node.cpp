@@ -21,17 +21,6 @@
 #include "gazebo_msgs/ModelState.h"
 
 
-#if GAZEBO_MAJOR_VERSION < 3
-    #include <sdformat-1.4/sdf/sdf.hh>  //worked with ros Indigo
-#else
-    #include <sdformat-2.3/sdf/sdf.hh> //working with ros Jade
-#endif
-
-
-
-
-
-
 #include "SFV/SFV.h"
 #include "SFV/SFVobjScattering.h"
 #include "SFV/SFVobsOnPathScattering.h"
@@ -39,6 +28,14 @@
 #include "SFV/SFVwp.h"
 
 #include "Resource/ResourceHandler.h"
+
+
+#include "gazebo/gazebo_config.h"
+#if GAZEBO_MAJOR_VERSION >= 5  
+#include <sdformat-2.3/sdf/sdf.hh> //working with ros Jade
+#else
+#include <sdformat-1.4/sdf/sdf.hh>  //worked with ros Indigo
+#endif
 
 using namespace fcl;
 
