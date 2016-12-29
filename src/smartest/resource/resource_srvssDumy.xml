@@ -3,7 +3,7 @@
  
 <robot_PyInterface name="PyInterface_srvssDumy"/>
 
-<robot_components_models name="srvss_bobcat" dirPath="/home/robil/srvss_ws/src/srvss_dummy/srvss_bobcat/sdf_models">
+<robot_components_models name="srvss_bobcat" dirPath="/home/robil/srvss/src/srvss_dummy/srvss_bobcat/sdf_models">
 
 	<platform name="srvss_bobcat"/>
 	<sensor name="srvss_GPS_INS"/>

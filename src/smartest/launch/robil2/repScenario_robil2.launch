@@ -1,12 +1,12 @@
 <!-- -*- mode: XML -*- -->
 <launch>
 
-	<arg name="scen" default="work_space/scenario_1"/> 
+	<arg name="scen" default="scenario_1"/> 
 	<arg name="st" default="0"/>
 	<arg name="dt" default="900"/>
 	
 	
-	<arg name="scenarios_folder_url" value="$(find smartest)/$(arg scen)"/>
+	<arg name="scenarios_folder_url" value="$(find smartest)/work_space/$(arg scen)"/>
 	<arg name="world_models_folder_url" value="$(find smartest)/world_components_models"/>
 	<arg name="world_name" value="$(arg scenarios_folder_url)/scenarioEnv.world"/>
 	<arg name="pause" value="-u"/>

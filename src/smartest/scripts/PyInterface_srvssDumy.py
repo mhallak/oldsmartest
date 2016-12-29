@@ -49,8 +49,8 @@ class ScenarioLauncher:
 	rospy.set_param('/use_sim_time',True)	#synchronizing ros to gazebo
 
 	rospack = rospkg.RosPack()
-	srvss_pkg_path = rospack.get_path('SRVSS')
-	os.environ["GAZEBO_MODEL_PATH"] = srvss_pkg_path+"/world_components_models/:" + Scenarin_folder + "/scenarioSystemModels/"
+	smartest_pkg_path = rospack.get_path('smartest')
+	os.environ["GAZEBO_MODEL_PATH"] = smartest_pkg_path+"/world_components_models/:" + Scenarin_folder + "/scenarioSystemModels/"
 
 	srvss_bobcat_pkg_path = rospack.get_path('srvss_bobcat')
 	urdf_file = srvss_bobcat_pkg_path +"/urdf/BOBCAT.URDF"
@@ -128,7 +128,7 @@ class ScenarioLauncher:
     def launch_grader(self, Scenarin_folder):
 	arguments = Scenarin_folder + " " + Scenarin_folder+"/scen.SFV"
 	print "I am hear arguments = " + arguments
-	node = ROSNode("SRVSS", "grader_node", name="grader_node", output="screen", args=arguments)
+	node = ROSNode("smartest", "grader_node", name="grader_node", output="screen", args=arguments)
 	self.launcher.launch(node)
         time.sleep(3)	
 

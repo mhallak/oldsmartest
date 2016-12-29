@@ -35,7 +35,7 @@ class ScenarioLauncher:
     def runGazeboServer(self, Scenarin_folder):
  	arguments = "-u " + Scenarin_folder + "/scenarioEnv.world"     # -u starts the simulation in pause mode
 	node = ROSNode("gazebo_ros","gzserver",name="gazebo" ,args=arguments ,output="screen" , respawn="false")      	   # name="gazebo" in order for replay and grader to work (name space)
-	self.launcher.launch(node)	
+	self.launcher.launch(node)
         time.sleep(3)
 	return True
 	
@@ -49,65 +49,60 @@ class ScenarioLauncher:
 	rospy.set_param('/use_sim_time',True)	#synchronizing ros to gazebo
 
 	rospack = rospkg.RosPack()
-	srvss_pkg_path = rospack.get_path('SRVSS')
+	srvss_pkg_path = rospack.get_path('smartest')
 	os.environ["GAZEBO_MODEL_PATH"] = srvss_pkg_path+"/world_components_models/:" + Scenarin_folder + "/scenarioSystemModels/"
-
-	bobcat_pkg_path = rospack.get_path('bobcat')
-	urdf_file = bobcat_pkg_path +"/urdf/BOBCAT_sdf_model.URDF"
-        robot_urdf_file = open(urdf_file)
-	robot_urdf = robot_urdf_file.read()
-	rospy.set_param("/robot_description", robot_urdf )
 	return True
 
 
-    def launch_platform_controls_spawner(self):
-	rospack = rospkg.RosPack()
-	bobcat_pkg_path = rospack.get_path('bobcat_gazebo')
-	bobcat_controllers_yaml = bobcat_pkg_path +"/config/bobcat_gazebo_control_sdf_model.yaml"
-	paramlist=rosparam.load_file(bobcat_controllers_yaml, default_namespace='' ,verbose=True)
-	for params, ns in paramlist:
-    		rosparam.upload_params(ns,params)
-
-	# if the controllers do not load it possible to increase the time of waiting for the server in the spawner
-	# it located in /home/userws3/gz_ros_cws/src/ros_control/controller_manager/scripts			
-	node = ROSNode("controller_manager", "spawner", name="platform_controllers_spawner" ,namespace="/Sahar", output="screen", respawn="false" ,
-				args="joint_state_controller \
-					back_right_wheel_velocity_controller \
-					front_right_wheel_velocity_controller \
-					front_left_wheel_velocity_controller \
-					back_left_wheel_velocity_controller \
-					loader_position_controller \
-					supporter_position_controller \
-                                        brackets_position_controller")	
-	self.launcher.launch(node)	
-        time.sleep(10)
-	
-	node = ROSNode("rate2effort", "rate2effort", name="RateToEffort_node", cwd="node", output="screen") 
-	self.launcher.launch(node)	
-        time.sleep(3)
+    def launch_platform_controls_spawner(self):  #used by the srvss_dummy
+	return True
 
     
-    def launch_platform_controls_unspawner(self):
-	node = ROSNode("controller_manager", "unspawner" ,name="platform_controllers_unspawner" ,namespace="/srvss_bobcat", output="screen", respawn="false" ,
-				args="joint_state_controller \
-					back_right_wheel_velocity_controller \
-					front_right_wheel_velocity_controller \
-					front_left_wheel_velocity_controller \
-					back_left_wheel_velocity_controller \
-					loader_position_controller \
-					supporter_position_controller \
-                                        brackets_position_controller")	
-	self.launcher.launch(node)	
-        time.sleep(10)
+    def launch_platform_controls_unspawner(self): #used by the srvss_dummy
+	return True
     
-
+    
+    
+    
+ 
     def launch_WPdriver(self,Scenarin_folder):
-	rospack = rospkg.RosPack()
-	robil2conf_pkg_path = rospack.get_path('robil2conf')
-	robil2conf_yaml = robil2conf_pkg_path +"/configuration.yaml"
-	paramlist=rosparam.load_file(robil2conf_yaml, default_namespace='' ,verbose=True)
-	for params, ns in paramlist:
-    		rosparam.upload_params(ns,params)	
+	#rospack = rospkg.RosPack()
+	#robil2conf_pkg_path = rospack.get_path('robil2conf')
+	#robil2conf_yaml = robil2conf_pkg_path +"/configuration.yaml"
+	#paramlist=rosparam.load_file(robil2conf_yaml, default_namespace='' ,verbose=True)
+	#for params, ns in paramlist:
+	#	rosparam.upload_params(ns,params)	
+	
+	#<!-- == GENERAL ===== -->
+	print "Loading GENERAL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	arguments = "ODOM	GPS			0.000  0.000  0.000	0.000  0.000  0.000 \
+		     ODOM	INS			0.266  0.155 -1.683	0.000  0.000  0.000 \
+		     ODOM	IBEO			0.310  0.170 -0.230	0.000  0.250  0.107 \
+		     ODOM	TRACKS_BOTTOM		0.000  0.000 -2.260	0.000  0.000  0.000 \
+		     ODOM	ROBOT_CENTER	       -0.380  0.155 -1.683	0.000  0.000  0.000"
+		     
+	node = ROSNode("robil2tf", "robil2TF_node",name="robil2TF_publisher", args=arguments ,output="screen",  respawn="true")
+	self.launcher.launch(node)
+
+	node = ROSNode("robil2tf", "world_gazebo_to_WORLD_TF_pub.py",name="world_gazebo_to_WORLD_TF_pub",output="screen", respawn="true")
+	self.launcher.launch(node)
+	# ================ -->
+
+	
+	#<!-- == SENSORS INTERFACEs == -->
+	node = ROSNode("shiffon2ros", "shiffon2ros_node",name="ipon2ros",args="127.0.0.1", output="screen")
+	self.launcher.launch(node)
+	node = ROSNode("sick_ldmrs", "sickldmrs.py",name="ibeo2ros",args="127.0.0.1", output="screen")
+	self.launcher.launch(node)
+	time.sleep(3)
+	# ================ -->
+
+
+        #<!-- == PLATFORM INTERFACE == -->    
+        #node = ROSNode("lli", "lli_node",name="ros2qinetiq",args="127.0.0.1",output="screen", respawn="true")
+	#self.launcher.launch(node)
+	# ================ -->
+
 
 	# == MONITORING == -->
 	print "Loading MONITORING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -117,23 +112,25 @@ class ScenarioLauncher:
 	self.launcher.launch(node)
 	node = ROSNode("ssm", "ssm_node",name="ssm_node",output="screen")
 	self.launcher.launch(node)
-        #time.sleep(3)	
+	# ================ -->
+
+	
+	#<!-- == LOCALIZATION == -->
+	print "Loading LOCALIZATION node  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	node = ROSNode("loc", "loc_node",name="loc_node",output="screen",respawn="true")
+	self.launcher.launch(node)
+	time.sleep(1)
 	# ================ -->
 
 	# == PERCEPTION == -->
-	#print "Loading PERCEPTION-sensors_node  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"  --  Not Working therefore stuck the loading process, not critical for robil2
-	#node = ROSNode("sensors", "sensors_node",name="sensors_node",output="screen",respawn="true")
-	#self.launcher.launch(node)
-	print "Loading PERCEPTION-iedsim_node  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	node = ROSNode("iedsim", "iedsim_node",name="iedsim_node",output="screen",respawn="true")
-	self.launcher.launch(node)
-	print "Loading PERCEPTION-per_node  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	print "Loading PERCEPTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	node = ROSNode("per", "per_node",name="per_node",output="screen",respawn="true")
 	self.launcher.launch(node)
-	print "Loading PERCEPTION-loc_node  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	node = ROSNode("loc", "loc_node",name="loc_node",output="screen",respawn="true")
+	
+
+	#<!-- == OPERATOR CONTROL UNIT == -->
+	node = ROSNode("ocu", "ocu_node",name="ocu_node",output="screen")
 	self.launcher.launch(node)
-        time.sleep(3)
 	# ================ -->
 
 
@@ -143,13 +140,20 @@ class ScenarioLauncher:
 	self.launcher.launch(node)
 	node = ROSNode("wsm", "wsm_node",name="wsm_node",output="screen",respawn="true")
 	self.launcher.launch(node)
-	node = ROSNode("ocu", "ocu_node",name="ocu_node",output="screen")
-	self.launcher.launch(node)
 	# ================ -->
+	
 
 
-	#-- == NAVIGATION == -->
-	print "Loading NAVIGATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
+	#<!-- == LOW LEVEL CONTROL == -->
+	print "Loading LOW LEVEL CONTROL node  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	node = ROSNode("llc", "llc_node",name="llc_node",output="screen",respawn="true")
+	self.launcher.launch(node)
+        time.sleep(3)
+
+
+	#<!-- == PATH PLANING  +   WAY POINT DRIVER == -->
+	print "Loading PATH PLANING  +   WAY POINT DRIVER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	rospack = rospkg.RosPack()
 	pp_pkg_path = rospack.get_path('pp')
 	costmap_common_params = pp_pkg_path +"/params/costmap_common_params.yaml"
@@ -187,22 +191,47 @@ class ScenarioLauncher:
 
 	node = ROSNode("wpd", "wpd_node",name="wpd_node",output="screen")
 	self.launcher.launch(node)
+        # ================ -->
 
-	node = ROSNode("llc", "llc_node",name="llc_node",output="screen",respawn="true")
-	self.launcher.launch(node)
-        time.sleep(3)
 
-	arguments = "-d 40 "+ Scenarin_folder + "/scenarioMission.bag"
+
+	#<!-- == Navigation Mission Load  == -->
+	arguments = "-d 20 "+ Scenarin_folder + "/scenarioMission.bag"
 	node = ROSNode("rosbag", "play",name="rosbag_Mission_node",output="screen",respawn="true", args=arguments)
 	self.launcher.launch(node)
         # ================ -->
 
 
+
+
+
     def launch_robot_tf_broadcaster(self):
+        print " launch_robot_tf_broadcaster !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            1   "
+      	node = ROSNode("bobcat_model", "world_to_body_TF_pub.py",name="world_to_body_TF_pub", output="screen", respawn="true")
+	self.launcher.launch(node)
+        time.sleep(3)
+        
+        rospack = rospkg.RosPack()
+        print " launch_robot_tf_broadcaster !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            2   "
+      	bobcat_pkg_path = rospack.get_path('bobcat_model')
+        print " launch_robot_tf_broadcaster !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            3   " 
+	urdf_file = bobcat_pkg_path +"/urdf_models/bobcat_urdf_for_static_arm.URDF"
+        print "urdf_file" + urdf_file  + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111111111111111"
+        
+        
+        
+        robot_urdf_file = open(urdf_file)
+	robot_urdf = robot_urdf_file.read()
+	rospy.set_param("/robot_description", robot_urdf )
+      
+        print " launch_robot_tf_broadcaster !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            4   " 
+        
 	remaping = [ ("/joint_states" , "/Sahar/joint_states") ] 
 	node = ROSNode("robot_state_publisher", "robot_state_publisher",name="robot_state_broadcaster_node", remap_args=remaping ,output="screen", respawn="false")
 	self.launcher.launch(node)
         time.sleep(3)	
+        print " launch_robot_tf_broadcaster !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            5   " 
+
 
 
     def launch_recorder(self, Scenarin_folder):
@@ -214,9 +243,11 @@ class ScenarioLauncher:
         time.sleep(3)	
 
 
+
+
     def launch_grader(self, Scenarin_folder):
 	arguments = Scenarin_folder + " " + Scenarin_folder+"/scen.SFV"
-	node = ROSNode("SRVSS", "grader_node", name="grader_node", output="screen", args=arguments)
+	node = ROSNode("smartest", "grader_node", name="grader_node", output="screen", args=arguments)
 	self.launcher.launch(node)
         time.sleep(3)	
 
@@ -224,17 +255,18 @@ class ScenarioLauncher:
 
 
     def Gazebo_UnPause(self):
+        print " i am inside Gazebo_UnPause !!!!!!!!! "
 	name = '/gazebo/unpause_physics'
 	msg_class = std_srvs.srv.Empty()
-	print "wait for service " + name
+	print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! wait for service " + name
      	rospy.wait_for_service(name)
-        print "done wating"
+        print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! done wating"
         try:
             service = rospy.ServiceProxy(name, msg_class)
             resp1 = service()
             return True
         except rospy.ServiceException, e:
-            print "Service call failed: %s"%e
+            print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Service call failed: %s"%e
         return True
 
 

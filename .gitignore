@@ -14,4 +14,5 @@ CTestTestfile.cmake
 Makefile
 cmake_install.cmake
 
+*.user
 *work_space*
