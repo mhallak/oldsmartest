@@ -20,8 +20,14 @@
 #include "gazebo_msgs/GetModelState.h"
 #include "gazebo_msgs/ModelState.h"
 
-#include <sdformat-1.4/sdf/sdf.hh>  //worked with ros Indigo
-//#include <sdformat-2.3/sdf/sdf.hh> //working with ros Jade
+
+#if GAZEBO_MAJOR_VERSION < 3
+    #include <sdformat-1.4/sdf/sdf.hh>  //worked with ros Indigo
+#else
+    #include <sdformat-2.3/sdf/sdf.hh> //working with ros Jade
+#endif
+
+
 
 
 
