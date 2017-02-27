@@ -43,9 +43,9 @@
 -->
 
 
-<!-- start RosBag recording 
-	<node name="rosbag_recorder" pkg="rosbag" type="record" args=" -a $(arg record_file_path) -e /SENSORS/CAM/(.*)|/SENSORS/IBEO/(.*)|/Sahar/(.*)|/PER/Map|/WSM/(.*)|/flea3/(.*)|/right_sick/(.*)|/left_sick/(.*)|/gazebo/model_states|/clock" /> 
--->
+<!-- start RosBag recording -->
+	<node name="rosbag_recorder" pkg="rosbag" type="rosbag" args="record -a $(arg record_file_path) -e '/SENSORS/CAM/(.*)''/SENSORS/IBEO/(.*)''/Sahar/(.*)''/PER/Map|/WSM/(.*)''/flea3/(.*)''/right_sick/(.*)''/left_sick/(.*)''/gazebo/model_states''/clock'" /> 
+
 	
 <!-- start RViZ  -->
 	<node name="robil2rviz" type="robil2rviz" pkg="robil2rviz" output="screen"/>	
