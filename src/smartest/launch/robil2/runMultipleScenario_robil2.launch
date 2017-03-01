@@ -10,7 +10,7 @@
      <!-- setting PYTHON PATH variable to load Python Interfaces scripts -->
      <env name="PYTHONPATH" value="$(env PYTHONPATH):$(find smartest)/scripts"/>
 
-     <node pkg="smartest" type="mainGen" name="smartest_Multiple_Scenarios_GenRun" args="-MultipleScensGenRun $(arg SFDP_file_url) $(arg work_space_folder_url) $(arg resource_file_url) $(arg N)" output="screen"/>
+     <node pkg="smartest" type="mainGen" name="smartest_Multiple_Scenarios_GenRun" args="-MultipleScensGenRun $(arg SFDP_file_url) $(arg work_space_folder_url) $(arg resource_file_url) $(arg n)" output="screen"/>
 
      <node name="robil2rviz" type="robil2rviz" pkg="robil2rviz" output="screen"/>
 
