@@ -184,7 +184,6 @@ void collision_grader(const ros::TimerEvent&)
     BVHModel<RSS> * part_model;
 
     gazebo_msgs::GetModelState ModelState;
-
 	for (std::map<std::string ,BVHModel<RSS> *>::iterator RobotPart_it=robot_models_map->begin(); RobotPart_it!=robot_models_map->end(); ++RobotPart_it)
 	{
     	part_name = RobotPart_it->first;
@@ -248,6 +247,7 @@ void collision_grader(const ros::TimerEvent&)
 									distance(robot_models_map->at(part_name),part_in_the_world,obs_models_map->at(obs_name.c_str()),obs_pose,1,local_result);
 									if (  min_dist > local_result.min_distance )
 										min_dist = local_result.min_distance;
+									//std::cout << "part_name = " << part_name << ", current = " << local_result.min_distance << std::endl;
 								}
 							}
 						}
@@ -288,6 +288,7 @@ void collision_grader(const ros::TimerEvent&)
 									distance(robot_models_map->at(part_name),part_in_the_world,obs_models_map->at(obj_name.c_str()),obj_pose,1,local_result);
 									if (  min_dist > local_result.min_distance )
 										min_dist = local_result.min_distance;
+									//std::cout << "part_name = " << part_name << ", current = " << local_result.min_distance << std::endl;
 								}
 
 							}
@@ -484,11 +485,11 @@ void load_robot_models()
 	sdf::ElementPtr sdfUriPtr ;
 	   for (sdf::ElementPtr sdfLinkPtr=sdfModelPtr->GetElement("link"); sdfLinkPtr ; sdfLinkPtr=sdfLinkPtr->GetNextElement("link"))
 	   {
-		   for (sdf::ElementPtr sdfCollisionPtr=sdfLinkPtr->GetElement("collision"); sdfCollisionPtr; sdfCollisionPtr=sdfCollisionPtr->GetNextElement("collision"))
+		   for (sdf::ElementPtr sdfVisualPtr=sdfLinkPtr->GetElement("visual"); sdfVisualPtr; sdfVisualPtr=sdfVisualPtr->GetNextElement("visual"))
 		   {
-			   if (sdfCollisionPtr->GetElement("geometry")->HasElement("mesh"))
+			   if (sdfVisualPtr->GetElement("geometry")->HasElement("mesh"))
 			   {
-		   sdfUriPtr=sdfCollisionPtr->GetElement("geometry")->GetElement("mesh")->GetElement("uri");
+		   sdfUriPtr=sdfVisualPtr->GetElement("geometry")->GetElement("mesh")->GetElement("uri");
 		   std::string part_obj_uri = sdfUriPtr->GetValue()->GetAsString();
 
 		   unsigned found1 = part_obj_uri.find_last_of("/");
@@ -498,7 +499,6 @@ void load_robot_models()
 		   part_obj_uri = robot_model_folder_url + "/" + part_obj_uri.erase( 0 , 8);
 		   part_obj_uri = part_obj_uri.erase(part_obj_uri.length()-3 , part_obj_uri.length() ) + "obj";
 
-		   //std::cout << "part_name = " << part_name << std::endl;
 		  	mf << part_name.c_str();
 			mf << "\n";
 		   std::vector<Vec3f> p_ver;
@@ -515,7 +515,7 @@ void load_robot_models()
 			   }
 			   else
 			   {
-				  // std::cout << "Grader Warning !!! : part_name = " << sdfCollisionPtr->GetAttribute("name")->GetAsString() << " has no mesh " << std::endl;
+				   std::cout << "Grader Warning !!! : part_name = " << sdfVisualPtr->GetAttribute("name")->GetAsString() << " has no mesh " << std::endl;
 			   }
 		   }
 	   }

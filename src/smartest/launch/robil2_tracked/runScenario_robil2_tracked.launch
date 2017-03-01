@@ -33,7 +33,7 @@
 
 
 <!-- grader -->
-        <include file="$(find bobcat_model)/launch/TF_pub_for_static_arm.launch" />
+        <include file="$(find bobcat_model)/launch/TF_pub_for_static_arm_tracked.launch" />
 
 	<node pkg="smartest" type="grader_node" name="grader_node" output="screen" args="$(arg scenarios_folder_url) $(arg SFV_file_url)" />
 
@@ -44,7 +44,9 @@
 
 
 <!-- start RosBag recording -->
-	<node name="rosbag_recorder" pkg="rosbag" type="record" args=" --all $(arg record_file_path) --exclude /SENSORS/CAM/(.*)|/Sahar/(.*)|/SENSORS/IBEO/(.*)|/Sahar/(.*)|/PER/Map|/WSM/(.*)|/flea3/(.*)|/right_sick/(.*)|/left_sick/(.*)|/gazebo/model_states|/clock" />
+	<node name="rosbag_recorder" pkg="rosbag" type="record" args=" --all $(arg record_file_path) --exclude /SENSORS/CAM/(.*)|/Sahar/(.*)|/PER/Map|/WSM/(.*)|/flea3/(.*)|/right_sick/(.*)|/left_sick/(.*)|/gazebo/model_states|/clock" /> 
+
+	
 <!-- start RViZ  -->
 	<node name="robil2rviz" type="robil2rviz" pkg="robil2rviz" output="screen"/>	
 	
