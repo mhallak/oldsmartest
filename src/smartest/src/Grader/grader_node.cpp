@@ -31,11 +31,14 @@
 
 
 #include "gazebo/gazebo_config.h"
-#if GAZEBO_MAJOR_VERSION >= 5  
-#include <sdformat-2.3/sdf/sdf.hh> //working with ros Jade
-#else
-#include <sdformat-1.4/sdf/sdf.hh>  //worked with ros Indigo
+#if GAZEBO_MAJOR_VERSION == 2  
+#include <sdformat-1.4/sdf/sdf.hh>  //worked with ros Gazebo2
+#elif GAZEBO_MAJOR_VERSION == 5  
+#include <sdformat-2.3/sdf/sdf.hh> //working with ros Gazebo5
+#elif GAZEBO_MAJOR_VERSION == 7  
+#include <sdformat-4.3/sdf/sdf.hh> //working with ros Gazebo7
 #endif
+
 
 using namespace fcl;
 
