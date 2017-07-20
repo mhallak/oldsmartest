@@ -77,7 +77,7 @@ class ScenarioLauncher:
 	print "Loading GENERAL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	arguments = "ODOM	GPS			0.000  0.000  0.000	0.000  0.000  0.000 \
 		     ODOM	INS			0.266  0.155 -1.683	0.000  0.000  0.000 \
-		     ODOM	IBEO			0.310  0.170 -0.230	0.000  0.250  0.107 \
+		     ODOM	IBEO			0.310  0.170 -0.230	0.000  0.215  0.149 \
 		     ODOM	TRACKS_BOTTOM		0.000  0.000 -2.260	0.000  0.000  0.000 \
 		     ODOM	ROBOT_CENTER	       -0.380  0.155 -1.683	0.000  0.000  0.000"
 		     
@@ -212,10 +212,8 @@ class ScenarioLauncher:
         
         rospack = rospkg.RosPack()
       	bobcat_pkg_path = rospack.get_path('bobcat_model')
-	urdf_file = bobcat_pkg_path +"/urdf_models/bobcat_tracked_urdf_for_static_arm.URDF"
-        
-        
-        
+	urdf_file = bobcat_pkg_path +"/urdf_models/bobcat_tracked_urdf_for_dynamic_arm.URDF"
+                
         robot_urdf_file = open(urdf_file)
 	robot_urdf = robot_urdf_file.read()
 	rospy.set_param("/robot_description", robot_urdf )

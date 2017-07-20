@@ -33,7 +33,7 @@
 
 
 <!-- grader -->
-        <include file="$(find bobcat_model)/launch/TF_pub_for_static_arm_tracked.launch" />
+        <include file="$(find bobcat_model)/launch/TF_pub_for_dynamic_arm_tracked.launch" />
 
 	<node pkg="smartest" type="grader_node" name="grader_node" output="screen" args="$(arg scenarios_folder_url) $(arg SFV_file_url)" />
 

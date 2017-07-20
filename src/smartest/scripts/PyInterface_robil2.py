@@ -77,9 +77,10 @@ class ScenarioLauncher:
 	print "Loading GENERAL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	arguments = "ODOM	GPS			0.000  0.000  0.000	0.000  0.000  0.000 \
 		     ODOM	INS			0.266  0.155 -1.683	0.000  0.000  0.000 \
-		     ODOM	IBEO			0.310  0.170 -0.230	0.000  0.250  0.107 \
+		     ODOM	IBEO			0.310  0.170 -0.230	0.000  0.215  0.149 \
 		     ODOM	TRACKS_BOTTOM		0.000  0.000 -2.260	0.000  0.000  0.000 \
 		     ODOM	ROBOT_CENTER	       -0.380  0.155 -1.683	0.000  0.000  0.000"
+		     
 		     
 	node = ROSNode("robil2tf", "robil2TF_node",name="robil2TF_publisher", args=arguments ,output="screen",  respawn="true")
 	self.launcher.launch(node)
@@ -206,17 +207,13 @@ class ScenarioLauncher:
 
 
     def launch_robot_tf_broadcaster(self):
-        print " launch_robot_tf_broadcaster !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            1   "
       	node = ROSNode("bobcat_model", "world_to_body_TF_pub.py",name="world_to_body_TF_pub", output="screen", respawn="true")
 	self.launcher.launch(node)
         time.sleep(3)
         
         rospack = rospkg.RosPack()
-        print " launch_robot_tf_broadcaster !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            2   "
       	bobcat_pkg_path = rospack.get_path('bobcat_model')
-        print " launch_robot_tf_broadcaster !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            3   " 
-	urdf_file = bobcat_pkg_path +"/urdf_models/bobcat_urdf_for_static_arm.URDF"
-        print "urdf_file" + urdf_file  + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111111111111111"
+	urdf_file = bobcat_pkg_path +"/urdf_models/TF_pub_for_dynamic_arm.URDF"
         
         
         
@@ -224,13 +221,11 @@ class ScenarioLauncher:
 	robot_urdf = robot_urdf_file.read()
 	rospy.set_param("/robot_description", robot_urdf )
       
-        print " launch_robot_tf_broadcaster !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            4   " 
         
 	remaping = [ ("/joint_states" , "/Sahar/joint_states") ] 
 	node = ROSNode("robot_state_publisher", "robot_state_publisher",name="robot_state_broadcaster_node", remap_args=remaping ,output="screen", respawn="false")
 	self.launcher.launch(node)
         time.sleep(3)	
-        print " launch_robot_tf_broadcaster !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            5   " 
 
 
 

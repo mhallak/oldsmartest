@@ -24,16 +24,16 @@
 <!-- start gazebo client -->
 	<node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen" />
 
-<!-- Robil2 framework -->
-        <node pkg="smartest" type="timed_roslaunch.sh" name="timed_roslaunch" args="5 robil2conf frameworkInit.launch" output="screen"/>
+<!-- Robil2 framework 
+        <node pkg="smartest" type="timed_roslaunch.sh" name="timed_roslaunch" args="5 robil2conf frameworkInit.launch" output="screen"/>-->
 <!--	<include file="$(find robil2conf)/frameworkInit.launch" /> -->
 
-<!-- Mission -->
-	<node name="mission_bag_player" pkg="rosbag" type="play" args="-d 60 $(arg scenarios_folder_url)/scenarioMission.bag" output="screen" />
+<!-- Mission 
+	<node name="mission_bag_player" pkg="rosbag" type="play" args="-d 60 $(arg scenarios_folder_url)/scenarioMission.bag" output="screen" />-->
 
 
 <!-- grader -->
-        <include file="$(find bobcat_model)/launch/TF_pub_for_static_arm.launch" />
+        <include file="$(find bobcat_model)/launch/TF_pub_for_dynamic_arm.launch" />
 
 	<node pkg="smartest" type="grader_node" name="grader_node" output="screen" args="$(arg scenarios_folder_url) $(arg SFV_file_url)" />
 
@@ -45,9 +45,11 @@
 
 <!-- start RosBag recording -->
 	<node name="rosbag_recorder" pkg="rosbag" type="record" args=" --all $(arg record_file_path) --exclude /SENSORS/CAM/(.*)|/Sahar/(.*)|/SENSORS/IBEO/(.*)|/Sahar/(.*)|/PER/Map|/WSM/(.*)|/flea3/(.*)|/right_sick/(.*)|/left_sick/(.*)|/gazebo/model_states|/clock" />
-<!-- start RViZ  -->
-	<node name="robil2rviz" type="robil2rviz" pkg="robil2rviz" output="screen"/>	
+
 	
+<!-- start RViZ  
+	<node name="robil2rviz" type="robil2rviz" pkg="robil2rviz" output="screen"/>	
+	-->
 	
 	
 </launch>
