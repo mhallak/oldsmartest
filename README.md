@@ -37,7 +37,7 @@ scen can be used to choose any other scenario in the work_space folder
 
 
 ##### To run multiple scenarios :
-`$ roslaunch smartest runMultipleScenario_robil2 n:=10`
+`$ roslaunch smartest runMultipleScenario_robil2_tracked.launch n:=10`
 
 n specifies the numer of scenarios that will generted and performed
 
