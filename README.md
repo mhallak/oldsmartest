@@ -21,6 +21,7 @@ the scenario is stored in the work_space folder in a folder named scenario_1
 
 
 
+
 ##### To run a scenario :
 
 
@@ -31,9 +32,12 @@ scen can be used to choose any other scenario in the work_space folder
 
 
 
+
 ##### To run a replay of a scenario: 
 `$ roslaunch smartest repScenario_robil2_tracked.launch scen:=scenario_1` 
+
 scen can be used to choose any other scenario in the work_space folder
+
 
 
 ##### To run multiple scenarios :
