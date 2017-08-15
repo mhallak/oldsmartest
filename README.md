@@ -1,5 +1,5 @@
 # SmARTest
-This repository contains the code of SmaARTest (Simulated Autonomous Robotic Testing) 
+This repository contains the code of SmARTest (Simulated Autonomous Robotic Testing) 
 a tool for automatic testing and verification of safety of autonomous vehicles.
 
 
