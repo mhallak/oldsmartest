@@ -3,11 +3,11 @@ This repository contains the code of SmaARTest (Simulated Autonomous Robotic Tes
 a tool for automatic testing and verification of safety of autonomous vehicles.
 
 
-This repository had been adjusted to test the Robil2 performances
+This repository had been adjusted to test the performances of Robil2 UGV 
 
 
 To run the pkg, first you need to specify the Robil2 and SmARTest models paths 
-by editing the files in the resources directory: (src/smartest/resource)
+by editing the files in the resources directory: `src/smartest/resource`
 you should onlly update the "robot_components_models" and "world_components_models" tags
 
 
@@ -24,7 +24,7 @@ the scenario is stored in the work_space folder in a folder named scenario_1
 ##### To run a scenario :
 
 
-`$ roslaunch smartest genScenario_robil2_tracked.launch scen:=scenario_1` 
+`$ roslaunch smartest runScenario_robil2_tracked.launch scen:=scenario_1` 
 
 
 scen can be used to choose any other scenario in the work_space folder
