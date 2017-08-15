@@ -8,7 +8,7 @@ This repository had been adjusted to test the performances of Robil2 UGV
 
 To run the pkg, first you need to specify the Robil2 and SmARTest models paths 
 by editing the files in the resources directory: `src/smartest/resource`
-you should onlly update the "robot_components_models" and "world_components_models" tags
+you should onlly update the "<robot_components_models>" and "<world_components_models>" tags
 
 
 ##### To generate a single scenario :
