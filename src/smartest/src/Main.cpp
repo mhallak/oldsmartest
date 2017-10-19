@@ -150,7 +150,7 @@ int main(int argc, char** argv)
 
 			std::string sfv_name = "sfv_" + std::to_string(sfv_i);
 			TiXmlElement * xml_sfv = new TiXmlElement( sfv_name );
-			TiXmlElement * xml_grades = sfv->get_GradesAsXMLElement();
+			TiXmlElement * xml_grades = sfv->get_GradesAsXMLElement(0);
 			xml_sfv->LinkEndChild(xml_grades);
 			sampsXML->LinkEndChild(xml_sfv);
 		}

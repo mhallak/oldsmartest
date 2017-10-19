@@ -313,11 +313,14 @@ void collision_grader(const ros::TimerEvent&)
 		//ROS_INFO(" obj_path = %s " , obj_path.c_str());
 		//std::cout << " Object Path  =  " <<  PATH << std::endl;
 
+		if ( (std::abs(min_dist - scenario_obj_min_dist) > 0.5 ) && ( scenario_obj_min_dist != 100) )  // filtering distance jumps to zero with no explanation
+		 return;
+		
 		collision_mutex.lock();
 			scenario_obj_min_dist = std::min(scenario_obj_min_dist , min_dist);
 		collision_mutex.unlock();
+		
 }
-
 
 
 // variable used by the Grading funtion

@@ -39,6 +39,7 @@ SFV::SFV(SFDPobj * SFDP, std::string ws_folder_url)
 	my_resource_file_url = SFDP->get_Resources_file_url();
 	my_ws_folder_url = ws_folder_url;
 	was_rolled_flag = false;
+	was_executed_flag = false;
 
 	my_sfvSubGroups = new std::vector<sfvSubGroup *>;
 	for (ScenarioFeatureGroup * featureGroup_it : * (my_SFDP->get_FeatureGroups()) )
@@ -310,7 +311,7 @@ int SFV::execute(int argc, char** argv)
 }
 
 
-TiXmlElement *SFV::get_GradesAsXMLElement()
+TiXmlElement *SFV::get_GradesAsXMLElement(int sfv_index)
 {
 	if (! was_executed_flag)
 	{
@@ -318,17 +319,19 @@ TiXmlElement *SFV::get_GradesAsXMLElement()
 		return 0;
 	}
 
-	TiXmlElement * xml_grades = new TiXmlElement( "grades" );
+	TiXmlElement * xml_grades = new TiXmlElement( "Scenario_" + std::to_string(sfv_index) );
 
 	std::stringstream temp_ss;
 	for (int i=0  ; i < my_grades->data.size() ; i++)
 	{
-		temp_ss.str("");
+		temp_ss.str(" ");
 		temp_ss << my_grades->data[i];
-		TiXmlElement * xml_grade = new TiXmlElement( "grade" );
+		TiXmlElement * xml_grade = new TiXmlElement( "grade_" + std::to_string(i) );
 		TiXmlText * xml_grade_val = new TiXmlText( temp_ss.str() );
 		xml_grade->LinkEndChild(xml_grade_val);
 		xml_grades->LinkEndChild(xml_grade);
+
+		temp_ss << " ";
 	}
 	return(xml_grades);
 }
@@ -348,11 +351,11 @@ int SFV::PrintResultsToFile()
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
 	doc.LinkEndChild(decl);
 
-	TiXmlElement * xml_results = new TiXmlElement( "SFV_execution_grades" );
+	TiXmlElement * xml_results = new TiXmlElement("SFV_execution_grades");
 	xml_results->SetAttribute("version","1.0");
 	doc.LinkEndChild(xml_results);
 
-	TiXmlElement * xml_grades = get_GradesAsXMLElement();
+	TiXmlElement * xml_grades = get_GradesAsXMLElement(0);
 	doc.LinkEndChild(xml_grades);
 
 	doc.SaveFile(my_Grades_file_url.c_str());

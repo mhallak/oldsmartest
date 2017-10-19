@@ -194,6 +194,7 @@ int SFDPobj::RunMySFVs(int argc, char** argv)
 				}
 
 			sfv_index++;
+			PrintMyResultsToFile();
 			}
 	}
 
@@ -241,23 +242,27 @@ TiXmlElement * SFDPobj::get_StatisticsInXML()
 
 TiXmlElement * SFDPobj::get_SFVsGradesInXML()
 {
+/*
 	if (! have_been_run)
 	{
 		std::cout << " \033[1;31m can't return SFVs Grades In XML because the SFVs havn't been run yet \033[0m" << std::endl;
 		return 0;
 	}
-
+*/
 	TiXmlElement * SFV_GradesXML = new TiXmlElement("SFV_Grades");
-	int sfv_idex=0;
+	int sfv_index=0;
 	std::string sfv_name;
 	for (SFV * sfv_it : * my_sampled_SFVs )
 		{
-			sfv_idex = sfv_idex + 1;
-			sfv_name = "sfv_" + std::to_string(sfv_idex);
+		if (sfv_it->get_WasExecutedFlag())
+		  {	
+			sfv_index = sfv_index + 1;
+			sfv_name = "sfv_" + std::to_string(sfv_index);
 
-			TiXmlElement * xml_sfv_grades = new TiXmlElement( sfv_name );
-			xml_sfv_grades = sfv_it->get_GradesAsXMLElement();
+			TiXmlElement * xml_sfv_grades = new TiXmlElement(sfv_name);
+			xml_sfv_grades = sfv_it->get_GradesAsXMLElement(sfv_index);
 			SFV_GradesXML->LinkEndChild(xml_sfv_grades);
+		  }	
 		}
 
 	return(SFV_GradesXML);
@@ -267,19 +272,23 @@ TiXmlElement * SFDPobj::get_SFVsGradesInXML()
 
 TiXmlElement * SFDPobj::GetResultsInXML()
 {
+/*	
 	if (! have_been_run)
 	{
 		std::cout << " \033[1;31m can't return results because the SFVs havn't been run yet \033[0m" << std::endl;
 		return 0;
 	}
+*/
 
 	TiXmlElement * resultsXML = new TiXmlElement("subSFDP_results");
 	resultsXML->SetAttribute("dist_param_1", std::to_string(my_ExploretionFeature->get_dist_param_1()));
 	resultsXML->SetAttribute("dist_param_2", std::to_string(my_ExploretionFeature->get_dist_param_2()));
 
-
+	if (have_been_run)
+	  {
 	TiXmlElement * StatisticsXML = get_StatisticsInXML();
 	resultsXML->LinkEndChild(StatisticsXML);
+	  }
 
 	TiXmlElement * SFV_GradesXML = get_SFVsGradesInXML();
 	resultsXML->LinkEndChild(SFV_GradesXML);
@@ -298,11 +307,13 @@ TiXmlElement * SFDPobj::GetResultsInXML()
 
 int SFDPobj::PrintMyResultsToFile()
 {
+	/*
 	if (! have_been_run)
 	{
 		std::cout << " \033[1;31m can't print results file because the SFVs havn't been run yet \033[0m" << std::endl;
 		return 0;
 	}
+	*/
 
 	TiXmlDocument doc(my_Grades_file_url);
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
